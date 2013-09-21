@@ -3,6 +3,9 @@
  * Module dependencies.
  */
 
+// I think we can use the require('os') function to determine the system
+// it's on and redefine the serial ports for you (win8), me (win 7) and Pi (linux). I'll look at it tomorrow
+
 var express = require('express');
 var routes = require('./routes');
 var user = require('./routes/user');
@@ -38,8 +41,8 @@ http.createServer(app).listen(app.get('port'), function(){
 
 // Set the serialport info here
 var serialPort;
-serialPort = new com.SerialPort("COM8", {
-    baudrate: 57600,
+serialPort = new com.SerialPort("COM19", {
+    baudrate: 115200,
 // Set the object to fire an event after a \n (chr 13 I think)  is in the serial buffer
     parser: com.parsers.readline("\n")
 
@@ -47,7 +50,7 @@ serialPort = new com.SerialPort("COM8", {
 // I dont understand this call 0 but it works
 serialPort.on("open", function () {
     console.log('open');
-});
+});  //it's console.log('open');
 
     serialPort.on('data', function(data) {
         console.log(data);
