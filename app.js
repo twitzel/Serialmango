@@ -40,6 +40,7 @@ http.createServer(app).listen(app.get('port'), function(){
 var serialPort;
 serialPort = new com.SerialPort("COM8", {
     baudrate: 57600,
+// Set the object to fire an event after a \n (chr 13 I think)  is in the serial buffer
     parser: com.parsers.readline("\n")
 
 });
@@ -51,6 +52,7 @@ serialPort.on("open", function () {
     serialPort.on('data', function(data) {
         console.log(data);
     });
+// tnis is the serial write command the 2nd paramter is the callback function and is not required
 //   serialPort.write("ls\n", function(err, results) {
  //       console.log('err ' + err);
 //       console.log('results ' + results);
