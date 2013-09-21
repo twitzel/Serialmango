@@ -11,7 +11,7 @@ var routes = require('./routes');
 var user = require('./routes/user');
 var http = require('http');
 var path = require('path');
-
+var os = require('os');
 var app = express();
 
 var com = require("serialport");
@@ -38,15 +38,40 @@ app.get('/users', user.list);
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
 });
-
-// Set the serialport info here
 var serialPort;
+
+console.log("Host System Name: " + os.hostname());
+if(os.hostname() == "SuperFast")
+{
+    serialPort = new com.SerialPort("COM19", {
+    baudrate: 115200,
+// Set the object to fire an event after a \n (chr 13 I think)  is in the serial buffer
+    parser: com.parsers.readline("\n")
+
+});
+    console.log("COM19");
+
+}
+else
+{
+    serialPort = new com.SerialPort("COM8", {
+    baudrate: 57600,
+// Set the object to fire an event after a \n (chr 13 I think)  is in the serial buffer
+    parser: com.parsers.readline("\n")
+
+});
+    console.log("COM8") ;
+}
+// Set the serialport info here
+/*
 serialPort = new com.SerialPort("COM19", {
     baudrate: 115200,
 // Set the object to fire an event after a \n (chr 13 I think)  is in the serial buffer
     parser: com.parsers.readline("\n")
 
 });
+
+*/
 // I dont understand this call 0 but it works
 serialPort.on("open", function () {
     console.log('open');
