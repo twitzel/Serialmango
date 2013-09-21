@@ -36,7 +36,7 @@ http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
 });
 
-
+// Set the serialport info here
 var serialPort;
 serialPort = new com.SerialPort("COM8", {
     baudrate: 57600,
