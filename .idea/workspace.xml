@@ -2,14 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ecd06108-ed70-4170-bff1-b34a9a3793f5" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app.js" afterPath="$PROJECT_DIR$/app.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="Serialmongo.iws" />
     <ignored path=".idea/workspace.xml" />
     <file path="/app.js" changelist="ecd06108-ed70-4170-bff1-b34a9a3793f5" time="1379999837535" ignored="false" />
     <file path="/index.js" changelist="ecd06108-ed70-4170-bff1-b34a9a3793f5" time="1379726466669" ignored="false" />
-    <file path="/Dummy.txt" changelist="ecd06108-ed70-4170-bff1-b34a9a3793f5" time="1379999941349" ignored="false" />
+    <file path="/Dummy.txt" changelist="ecd06108-ed70-4170-bff1-b34a9a3793f5" time="1379999971954" ignored="false" />
     <file path="$USER_HOME$/.IntelliJIdea12/system/extLibs/nodejs-v0.10.17-src/core-modules-sources/lib/net.js" changelist="ecd06108-ed70-4170-bff1-b34a9a3793f5" time="1379797085339" ignored="false" />
     <file path="$USER_HOME$/.IntelliJIdea12/system/extLibs/nodejs-v0.10.17-src/core-modules-sources/lib/http.js" changelist="ecd06108-ed70-4170-bff1-b34a9a3793f5" time="1379797085339" ignored="false" />
     <file path="$USER_HOME$/.IntelliJIdea12/system/extLibs/nodejs-v0.10.17-src/core-modules-sources/lib/string_decoder.js" changelist="ecd06108-ed70-4170-bff1-b34a9a3793f5" time="1379797085339" ignored="false" />
@@ -390,7 +389,11 @@
       <created>1379999943702</created>
       <updated>1379999943702</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Updated to show a little bit of data from the database on start">
+      <created>1379999974951</created>
+      <updated>1379999974951</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="ToolWindowManager">
