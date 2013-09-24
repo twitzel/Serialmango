@@ -107,7 +107,7 @@ MongoClient.connect("mongodb://localhost:27017/exampleDb", function(err, db) {
     var collection = db.collection('todd');
     //   Attach the db.collection objecgt (by reference) to the global object process so its available everywhere
     process.collection =collection;
-
+ // query something to see if we can and show it
     collection.find().toArray(function(err, items) {
         console.log(items[1]);
         console.log(items[1].hello);
