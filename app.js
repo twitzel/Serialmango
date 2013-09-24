@@ -13,7 +13,7 @@ var http = require('http');
 var path = require('path');
 var os = require('os');
 var app = express();
-
+var db;
 var com = require("serialport");
 
 // all environments
@@ -54,8 +54,8 @@ if(os.hostname() == "SuperFast")
 }
 else
 {
-    serialPort = new com.SerialPort("COM8", {
-    baudrate: 57600,
+    serialPort = new com.SerialPort("COM14", {
+    baudrate: 9600,
 // Set the object to fire an event after a \n (chr 13 I think)  is in the serial buffer
     parser: com.parsers.readline("\n")
 
@@ -78,7 +78,14 @@ serialPort.on("open", function () {
 });  //it's console.log('open');
 
     serialPort.on('data', function(data) {
+
+        process.collection.insert(data, {w:1}, function(err, result) {console.log(result);});
         console.log(data);
+        var doc1 = {'Serial':'yes'};
+        doc1.hello = "maybehello"
+        doc1.serialdata = data;
+        process.collection.insert(doc1, {w:1}, function(err, result) {console.log(result);});
+
     });
 // tnis is the serial write command the 2nd paramter is the callback function and is not required
 //   serialPort.write("ls\n", function(err, results) {
@@ -87,5 +94,19 @@ serialPort.on("open", function () {
 //   });
 
 //   Attach the serialPort objecgt (by reference) to the global object process so its available everywhere
-//process.serialport = serialPort;
+process.serialport = serialPort;
 
+// Retrieve
+var MongoClient = require('mongodb').MongoClient;
+
+// Connect to the db
+MongoClient.connect("mongodb://localhost:27017/exampleDb", function(err, db) {
+    if(!err) {
+        console.log("We are connected to mondo exampleDb database todd collection");
+    }
+    var collection = db.collection('todd');
+    //   Attach the db.collection objecgt (by reference) to the global object process so its available everywhere
+    process.collection =collection;
+  //  console.log(doc2.hello)
+  //  collection.insert(doc2, {w:1}, function(err, result) {console.log(result);});
+});
