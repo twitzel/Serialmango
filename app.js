@@ -79,7 +79,7 @@ serialPort.on("open", function () {
 
     serialPort.on('data', function(data) {
 
-        process.collection.insert(data, {w:1}, function(err, result) {console.log(result);});
+    //    process.collection.insert(data, {w:1}, function(err, result) {console.log(result);});
         console.log(data);
         var doc1 = {'Serial':'yes'};
         doc1.hello = "maybehello"
@@ -107,6 +107,10 @@ MongoClient.connect("mongodb://localhost:27017/exampleDb", function(err, db) {
     var collection = db.collection('todd');
     //   Attach the db.collection objecgt (by reference) to the global object process so its available everywhere
     process.collection =collection;
-  //  console.log(doc2.hello)
-  //  collection.insert(doc2, {w:1}, function(err, result) {console.log(result);});
+
+    collection.find().toArray(function(err, items) {
+        console.log(items[1]);
+        console.log(items[1].hello);
+        console.log(items[3].serialdata)
+    });
 });
