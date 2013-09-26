@@ -13,8 +13,10 @@ var http = require('http');
 var path = require('path');
 var os = require('os');
 var app = express();
-var db;
-var com = require("serialport");
+var WebSocketServer = require('ws').Server;
+
+var MongoClient = require('mongodb').MongoClient;
+ global.comlib = require('./comlib');
 
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -24,93 +26,63 @@ app.use(express.favicon());
 app.use(express.logger('dev'));
 app.use(express.bodyParser());
 app.use(express.methodOverride());
+
 app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
 
+console.log("Host System Name: " + os.hostname());
 // development only
 if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
-
+app.get('/com', routes.com);
 app.get('/', routes.index);
 app.get('/users', user.list);
+
+
+
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
 });
-var serialPort;
 
-console.log("Host System Name: " + os.hostname());
-if(os.hostname() == "SuperFast")
-{
-    serialPort = new com.SerialPort("COM19", {
-    baudrate: 115200,
-// Set the object to fire an event after a \n (chr 13 I think)  is in the serial buffer
-    parser: com.parsers.readline("\n")
-
-});
-    console.log("COM19");
-
-}
-else
-{
-    serialPort = new com.SerialPort("COM14", {
-    baudrate: 9600,
-// Set the object to fire an event after a \n (chr 13 I think)  is in the serial buffer
-    parser: com.parsers.readline("\n")
-
-});
-    console.log("COM8") ;
-}
-// Set the serialport info here
-/*
-serialPort = new com.SerialPort("COM19", {
-    baudrate: 115200,
-// Set the object to fire an event after a \n (chr 13 I think)  is in the serial buffer
-    parser: com.parsers.readline("\n")
-
-});
-
-*/
-// I dont understand this call 0 but it works
-serialPort.on("open", function () {
-    console.log('open');
-});  //it's console.log('open');
-
-    serialPort.on('data', function(data) {
-
-    //    process.collection.insert(data, {w:1}, function(err, result) {console.log(result);});
-        console.log(data);
-        var doc1 = {'Serial':'yes'};
-        doc1.hello = "maybehello"
-        doc1.serialdata = data;
-        process.collection.insert(doc1, {w:1}, function(err, result) {console.log(result);});
-
+wss = new WebSocketServer({port: 8080}, function(){
+            console.log("Websocket server Listeninging");
+        });
+wss.on('connection', function(ws) {
+    ws.on('message', function(message) {
+        console.log('received: %s', message);
     });
-// tnis is the serial write command the 2nd paramter is the callback function and is not required
-//   serialPort.write("ls\n", function(err, results) {
- //       console.log('err ' + err);
-//       console.log('results ' + results);
-//   });
+    global.websocket=ws;
+    ws.send('something');
 
-//   Attach the serialPort objecgt (by reference) to the global object process so its available everywhere
-process.serialport = serialPort;
+});
+// This is a hook into the console.log function
+// It sends a copy of the console.log data to the last open websocket
 
-// Retrieve
-var MongoClient = require('mongodb').MongoClient;
+var orig = console.log
+console.log = function(input) {
+   if (global.websocket)  {
+    websocket.send(":"+input)  ;
+   }
+    orig.apply(console, [input]);
+}
+
 
 // Connect to the db
 MongoClient.connect("mongodb://localhost:27017/exampleDb", function(err, db) {
     if(!err) {
         console.log("We are connected to mondo exampleDb database todd collection");
+        comlib.openSerialPort("com5")    ;
     }
-    var collection = db.collection('todd');
+   global.collection = db.collection('todd');
     //   Attach the db.collection objecgt (by reference) to the global object process so its available everywhere
-    process.collection =collection;
+
  // query something to see if we can and show it
-    collection.find().toArray(function(err, items) {
-        console.log(items[1]);
-        console.log(items[1].hello);
-        console.log(items[3].serialdata)
-    });
+   // collection.find().toArray(function(err, items) {
+  //  });
 });
+
+
+
+
