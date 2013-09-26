@@ -47,7 +47,7 @@ http.createServer(app).listen(app.get('port'), function(){
 });
 
 wss = new WebSocketServer({port: 8080}, function(){
-            console.log("Websocket server Listeninging");
+            console.log("Websocket server Listening");
         });
 wss.on('connection', function(ws) {
     ws.on('message', function(message) {
@@ -74,8 +74,10 @@ MongoClient.connect("mongodb://localhost:27017/exampleDb", function(err, db) {
     if(!err) {
         console.log("We are connected to mondo exampleDb database todd collection");
         comlib.openSerialPort("com5")    ;
+  //   comlib.openSerialPort("/dev/ttyAMC0")    ;
+        global.collection = db.collection('todd');
     }
-   global.collection = db.collection('todd');
+
     //   Attach the db.collection objecgt (by reference) to the global object process so its available everywhere
 
  // query something to see if we can and show it
