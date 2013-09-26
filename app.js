@@ -71,7 +71,7 @@ console.log = function(input) {
 
 // Connect to the db
 MongoClient.connect("mongodb://localhost:27017/exampleDb", function(err, db) {
-    if (err) {  Console.log("Connection to mongo failed:"+err)
+    if (err) {  Console.log("Connection to mongo failed:"+err)  ;
     } else {
         console.log("We are connected to mondo exampleDb database todd collection");
         comlib.openSerialPort("com5");
