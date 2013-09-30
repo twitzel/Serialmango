@@ -1,8 +1,12 @@
+var com = require("serialport");
+
+
 
 exports.openSerialPort = function(portname)
 {
-    var com = require("serialport");
+
    // serialport declared with the var to make it module global
+
     serialPort = new com.SerialPort(portname, {
         baudrate: 115200,
 // Set the object to fire an event after a \n (chr 13 I think)  is in the serial buffer
