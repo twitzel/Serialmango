@@ -30,7 +30,7 @@ global.comlib = require('./comlib');
 
 
 //Set up all express stuff
- app = express();
+app = express();
 
 app.set('port', 3000); // This is a default port.  Change here only if necessary
 app.set('views', __dirname + '/views');
@@ -54,7 +54,7 @@ http.createServer(app).listen(app.get('port'), function(){
 
 //Set up the web socket here.. Default port is 8080
 wss = new WebSocketServer({port: 8080}, function(){
-            console.log("Websocket server Listening");
+    console.log("Websocket server Listening");
 });
 
 //Set up Web socket for a connection and make it global
@@ -66,6 +66,7 @@ wss.on('connection', function(ws) {
     ws.send('something');
 });
 
+/*000000000000000000000000000000000000000000000000
 
 // This is a hook into the console.log function
 // It sends a copy of the console.log data to the last open websocket
@@ -77,8 +78,12 @@ console.log = function(input)
    {
     websocket.send(":"+input)  ;
    }
+
     orig.apply(console, [input]);
 }
+//000000000000000000000000000000000000000
+*/
+
 
 
 /*
