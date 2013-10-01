@@ -2,13 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ecd06108-ed70-4170-bff1-b34a9a3793f5" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/cs4.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/twi.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Serialmongo.iml" afterPath="$PROJECT_DIR$/Serialmongo.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app.js" afterPath="$PROJECT_DIR$/app.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/runConfigurations/app_js.xml" afterPath="$PROJECT_DIR$/.idea/runConfigurations/app_js.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/comlib.js" afterPath="$PROJECT_DIR$/comlib.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cs4.js" afterPath="$PROJECT_DIR$/cs4.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/twi.js" afterPath="$PROJECT_DIR$/twi.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="Serialmongo.iws" />
@@ -86,7 +82,7 @@
       <file leaf-file-name="app.js" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="78" column="3" selection-start="2350" selection-end="2350" vertical-scroll-proportion="2.2705479" vertical-offset="0" max-vertical-offset="1972">
+            <state line="47" column="0" selection-start="1562" selection-end="1562" vertical-scroll-proportion="0.66952056" vertical-offset="408" max-vertical-offset="1938">
               <folding />
             </state>
           </provider>
@@ -95,7 +91,7 @@
       <file leaf-file-name="cs4.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/cs4.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="18" column="28" selection-start="379" selection-end="379" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="714">
+            <state line="9" column="36" selection-start="216" selection-end="216" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="850">
               <folding>
                 <element signature="e#0#39#0" expanded="false" />
               </folding>
@@ -115,7 +111,7 @@
       <file leaf-file-name="twi.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/twi.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="31" column="5" selection-start="806" selection-end="806" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="697">
+            <state line="8" column="36" selection-start="215" selection-end="215" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="833">
               <folding>
                 <element signature="e#0#39#0" expanded="false" />
               </folding>
@@ -473,13 +469,18 @@
       <created>1380230993038</created>
       <updated>1380230993038</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Added CS4.js and TWI.js&#10;To change branches - change comment in LINES 11 and 12!!&#10;&#10;Added os functionality back in so automatic switching for comport&#10;&#10;commented more and made it look pretty">
+      <created>1380583918227</created>
+      <updated>1380583918228</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="579" y="242" width="1938" height="1050" extended-state="0" />
     <editor active="true" />
     <layout>
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32990867" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32990867" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -500,7 +501,6 @@
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32990867" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.3996697" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32990867" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -521,7 +521,8 @@
     <MESSAGE value="Updated to show a little bit of data from the database on start" />
     <MESSAGE value="Major changes&#10;Added comlib&#10;Added websoket" />
     <MESSAGE value="changed error when connecting to mongo" />
-    <option name="LAST_COMMIT_MESSAGE" value="changed error when connecting to mongo" />
+    <MESSAGE value="Added CS4.js and TWI.js&#10;To change branches - change comment in LINES 11 and 12!!&#10;&#10;Added os functionality back in so automatic switching for comport&#10;&#10;commented more and made it look pretty" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added CS4.js and TWI.js&#10;To change branches - change comment in LINES 11 and 12!!&#10;&#10;Added os functionality back in so automatic switching for comport&#10;&#10;commented more and made it look pretty" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -612,7 +613,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/cs4.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="18" column="28" selection-start="379" selection-end="379" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="714">
+        <state line="9" column="36" selection-start="216" selection-end="216" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="850">
           <folding>
             <element signature="e#0#39#0" expanded="false" />
           </folding>
@@ -621,7 +622,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/twi.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="31" column="5" selection-start="806" selection-end="806" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="697">
+        <state line="8" column="36" selection-start="215" selection-end="215" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="833">
           <folding>
             <element signature="e#0#39#0" expanded="false" />
           </folding>
@@ -630,7 +631,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="78" column="3" selection-start="2350" selection-end="2350" vertical-scroll-proportion="2.2705479" vertical-offset="0" max-vertical-offset="1972">
+        <state line="47" column="0" selection-start="1562" selection-end="1562" vertical-scroll-proportion="0.66952056" vertical-offset="408" max-vertical-offset="1938">
           <folding />
         </state>
       </provider>

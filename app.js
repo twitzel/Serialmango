@@ -30,7 +30,7 @@ global.comlib = require('./comlib');
 
 
 //Set up all express stuff
-var app = express();
+ app = express();
 
 app.set('port', 3000); // This is a default port.  Change here only if necessary
 app.set('views', __dirname + '/views');
@@ -42,10 +42,8 @@ app.use(express.methodOverride());
 app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
 
-
-app.get('/com', routes.com);
-app.get('/', routes.index);
-app.get('/users', user.list);
+//  All route information now is contined in
+//  TWI.js or CS4.js
 
 
 // Set up the server

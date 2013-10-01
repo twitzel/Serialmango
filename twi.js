@@ -4,6 +4,9 @@
 
 MongoClient = require('mongodb').MongoClient;
 var os = require('os');
+var express = require('express');
+var routes = require('./routes');
+var user = require('./routes/user');
 
 exports.setup = function()
 {
@@ -32,6 +35,11 @@ exports.setup = function()
     {
         comlib.openSerialPort("/dev/ttyAMC0"); //not windows
     }
+
+    //set up all routes HERE
+    app.get('/com', routes.com);
+    app.get('/', routes.index);
+    app.get('/users', user.list);
 
 }
 
