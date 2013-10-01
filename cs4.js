@@ -15,7 +15,7 @@ exports.setup = function()
     {
         if (err)
         {
-            Console.log("Connection to mongo failed:"+err)  ;
+            console.log("Connection to mongo failed:"+err)  ;
         }
         else
         {
