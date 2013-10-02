@@ -16,9 +16,6 @@ exports.openSerialPort = function(portname)
 
 
 
-
-
-
 // I dont understand this call 0 but it works
     serialPort.on("open", function () {
         console.log("Port open success:"+portname);
@@ -32,8 +29,16 @@ exports.openSerialPort = function(portname)
         serialData.Time = new Date(serialData.Time);
         console.log(serialData.Time);
         collectionLog.insert(serialData, {w:1}, function(err, result) {console.log(result);});
+
       //  global.websocket.send(serialData.InData) ;
-        cs4.socketDataOut(serialData.InData, serialData.Source);
+        try{
+        cs4.socketDataOut(serialData);
+        }
+        catch(err){}
+        try{
+        twi.sccketDataOut(serialData);
+        }
+        catch(err){}
       //  collection.find
     });
 }

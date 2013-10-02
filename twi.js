@@ -19,7 +19,7 @@ exports.setup = function()
         else
         {
             console.log("TWI: We are connected to mondo exampleDb database todd collection");
-            global.collection = db.collection('todd');
+            global.collectionLog = db.collection('todd');
         }
     });
 

@@ -46,9 +46,11 @@ exports.setup = function()
 
 }
 
-exports.socketDataOut  = function(indata, source)
+exports.socketDataOut  = function(serialData, source)
 {
     var type = "";
+    var indata = serialData.InData;
+    var source = serialData.Source;
 
    // if cue is MIDI then get light cue number from hex string
     if(source.substr(0,4) == "Midi")
