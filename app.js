@@ -8,8 +8,8 @@
 /*              for Todd's branch or Steve's branch                      */
 /*                                                                       */
 
-                var branch = 'twi';
-               // var branch = 'cs4';
+                //var branch = 'twi';
+                var branch = 'cs4';
 
 /*                                                                       */
 /*                                                                       */
@@ -65,26 +65,6 @@ wss.on('connection', function(ws) {
     global.websocket=ws;
     ws.send('something');
 });
-
-/*000000000000000000000000000000000000000000000000
-
-// This is a hook into the console.log function
-// It sends a copy of the console.log data to the last open websocket
-
-var orig = console.log
-console.log = function(input)
-{
-   if (global.websocket)
-   {
-    websocket.send(":"+input)  ;
-   }
-
-    orig.apply(console, [input]);
-}
-//000000000000000000000000000000000000000
-*/
-
-
 
 /*
     Set up for the desired branch

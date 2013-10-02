@@ -29,11 +29,12 @@ exports.openSerialPort = function(portname)
 
 
         var serialData = JSON.parse(data);
-        serialData.Timestamp = new Date(serialData.Timestamp);
-        console.log(serialData.Timestamp);
-        collection.insert(serialData, {w:1}, function(err, result) {console.log(result);});
+        serialData.Time = new Date(serialData.Time);
+        console.log(serialData.Time);
+        collectionLog.insert(serialData, {w:1}, function(err, result) {console.log(result);});
       //  global.websocket.send(serialData.InData) ;
         cs4.socketDataOut(serialData.InData, serialData.Source);
+      //  collection.find
     });
 }
 exports.write = function(data) {

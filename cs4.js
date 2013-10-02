@@ -11,7 +11,7 @@ var user = require('./routes/user');
 
 exports.setup = function()
 {
-    MongoClient.connect("mongodb://localhost:27017/exampleDb", function(err, db)
+    MongoClient.connect("mongodb://localhost:27017/WizDb", function(err, db)
     {
         if (err)
         {
@@ -20,7 +20,9 @@ exports.setup = function()
         else
         {
             console.log("CS4: We are connected to mondo exampleDb database todd collection");
-            global.collection = db.collection('todd');
+            global.collectionLog = db.collection('log');
+            global.collectionCue = db.collection('cue');
+            global.collectionStartup = db.collection('startup');
         }
     });
 

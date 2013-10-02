@@ -1,80 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="ecd06108-ed70-4170-bff1-b34a9a3793f5" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/mongodb/node_modules/bson/build/Release/obj/bson/vc110.pdb" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/mongodb/node_modules/kerberos/build/Release/obj/kerberos/vc110.pdb" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/ws/build/Release/obj/bufferutil/vc110.pdb" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/ws/build/Release/obj/validation/vc110.pdb" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/mongodb/node_modules/kerberos/build/Release/obj/kerberos/CL.1560.read.1.tlog" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/mongodb/node_modules/kerberos/build/Release/obj/kerberos/CL.1560.write.1.tlog" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/mongodb/node_modules/kerberos/build/Release/obj/kerberos/CL.3288.read.1.tlog" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/mongodb/node_modules/kerberos/build/Release/obj/kerberos/CL.3288.write.1.tlog" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/mongodb/node_modules/kerberos/build/Release/obj/kerberos/CL.4396.read.1.tlog" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/mongodb/node_modules/kerberos/build/Release/obj/kerberos/CL.4396.write.1.tlog" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/mongodb/node_modules/kerberos/build/Release/obj/kerberos/CL.5060.read.1.tlog" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/mongodb/node_modules/kerberos/build/Release/obj/kerberos/CL.5060.write.1.tlog" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/mongodb/node_modules/kerberos/build/Release/obj/kerberos/CL.6096.read.1.tlog" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/mongodb/node_modules/kerberos/build/Release/obj/kerberos/CL.6096.write.1.tlog" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/mongodb/node_modules/kerberos/build/Release/obj/kerberos/CL.7084.read.1.tlog" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/mongodb/node_modules/kerberos/build/Release/obj/kerberos/CL.7084.write.1.tlog" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/mongodb/node_modules/kerberos/build/Release/obj/kerberos/CL.8956.read.1.tlog" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/mongodb/node_modules/kerberos/build/Release/obj/kerberos/CL.8956.write.1.tlog" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/mongodb/node_modules/kerberos/build/Release/obj/kerberos/CL.9960.read.1.tlog" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/mongodb/node_modules/kerberos/build/Release/obj/kerberos/CL.9960.write.1.tlog" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/mongodb/node_modules/kerberos/build/Release/obj/kerberos/CL.read.2.tlog" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/mongodb/node_modules/kerberos/build/Release/obj/kerberos/CL.read.3.tlog" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/mongodb/node_modules/kerberos/build/Release/obj/kerberos/CL.read.4.tlog" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/mongodb/node_modules/kerberos/build/Release/obj/kerberos/CL.read.5.tlog" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/mongodb/node_modules/kerberos/build/Release/obj/kerberos/CL.read.6.tlog" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/mongodb/node_modules/bson/build/Release/obj/bson/link-cvtres.read.1.tlog" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/mongodb/node_modules/kerberos/build/Release/obj/kerberos/link-cvtres.read.1.tlog" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/ws/build/Release/obj/bufferutil/link-cvtres.read.1.tlog" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/ws/build/Release/obj/validation/link-cvtres.read.1.tlog" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/mongodb/node_modules/bson/build/Release/obj/bson/link-cvtres.write.1.tlog" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/mongodb/node_modules/kerberos/build/Release/obj/kerberos/link-cvtres.write.1.tlog" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/ws/build/Release/obj/bufferutil/link-cvtres.write.1.tlog" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/ws/build/Release/obj/validation/link-cvtres.write.1.tlog" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/mongodb/node_modules/bson/build/Release/obj/bson/link-rc.read.1.tlog" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/mongodb/node_modules/kerberos/build/Release/obj/kerberos/link-rc.read.1.tlog" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/ws/build/Release/obj/bufferutil/link-rc.read.1.tlog" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/ws/build/Release/obj/validation/link-rc.read.1.tlog" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/mongodb/node_modules/bson/build/Release/obj/bson/link-rc.write.1.tlog" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/mongodb/node_modules/kerberos/build/Release/obj/kerberos/link-rc.write.1.tlog" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/ws/build/Release/obj/bufferutil/link-rc.write.1.tlog" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/node_modules/ws/build/Release/obj/validation/link-rc.write.1.tlog" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/mongodb/node_modules/bson/build/Release/obj/bson/CL.read.1.tlog" afterPath="$PROJECT_DIR$/node_modules/mongodb/node_modules/bson/build/Release/obj/bson/CL.read.1.tlog" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/mongodb/node_modules/kerberos/build/Release/obj/kerberos/CL.read.1.tlog" afterPath="$PROJECT_DIR$/node_modules/mongodb/node_modules/kerberos/build/Release/obj/kerberos/CL.read.1.tlog" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/ws/build/Release/obj/bufferutil/CL.read.1.tlog" afterPath="$PROJECT_DIR$/node_modules/ws/build/Release/obj/bufferutil/CL.read.1.tlog" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/ws/build/Release/obj/validation/CL.read.1.tlog" afterPath="$PROJECT_DIR$/node_modules/ws/build/Release/obj/validation/CL.read.1.tlog" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/mongodb/node_modules/bson/build/Release/obj/bson/CL.write.1.tlog" afterPath="$PROJECT_DIR$/node_modules/mongodb/node_modules/bson/build/Release/obj/bson/CL.write.1.tlog" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/ws/build/Release/obj/bufferutil/CL.write.1.tlog" afterPath="$PROJECT_DIR$/node_modules/ws/build/Release/obj/bufferutil/CL.write.1.tlog" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/ws/build/Release/obj/validation/CL.write.1.tlog" afterPath="$PROJECT_DIR$/node_modules/ws/build/Release/obj/validation/CL.write.1.tlog" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Serialmongo.iml" afterPath="$PROJECT_DIR$/Serialmongo.iml" />
+    <list default="true" id="ecd06108-ed70-4170-bff1-b34a9a3793f5" name="Default" comment="Changed line 34 of comlib to collectionLog&#10;&#10;">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/websocket2.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app.js" afterPath="$PROJECT_DIR$/app.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/mongodb/node_modules/bson/build/binding.sln" afterPath="$PROJECT_DIR$/node_modules/mongodb/node_modules/bson/build/binding.sln" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/mongodb/node_modules/kerberos/build/binding.sln" afterPath="$PROJECT_DIR$/node_modules/mongodb/node_modules/kerberos/build/binding.sln" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/ws/build/binding.sln" afterPath="$PROJECT_DIR$/node_modules/ws/build/binding.sln" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/mongodb/node_modules/bson/build/Release/obj/bson/cl.command.1.tlog" afterPath="$PROJECT_DIR$/node_modules/mongodb/node_modules/bson/build/Release/obj/bson/cl.command.1.tlog" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/mongodb/node_modules/kerberos/build/Release/obj/kerberos/cl.command.1.tlog" afterPath="$PROJECT_DIR$/node_modules/mongodb/node_modules/kerberos/build/Release/obj/kerberos/cl.command.1.tlog" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/ws/build/Release/obj/bufferutil/cl.command.1.tlog" afterPath="$PROJECT_DIR$/node_modules/ws/build/Release/obj/bufferutil/cl.command.1.tlog" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/ws/build/Release/obj/validation/cl.command.1.tlog" afterPath="$PROJECT_DIR$/node_modules/ws/build/Release/obj/validation/cl.command.1.tlog" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/mongodb/node_modules/kerberos/build/Release/obj/kerberos/cl.write.1.tlog" afterPath="$PROJECT_DIR$/node_modules/mongodb/node_modules/kerberos/build/Release/obj/kerberos/cl.write.1.tlog" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/comlib.js" afterPath="$PROJECT_DIR$/comlib.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cs4.js" afterPath="$PROJECT_DIR$/cs4.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" afterPath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/mongodb/node_modules/bson/build/Release/obj/bson/link.command.1.tlog" afterPath="$PROJECT_DIR$/node_modules/mongodb/node_modules/bson/build/Release/obj/bson/link.command.1.tlog" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/mongodb/node_modules/kerberos/build/Release/obj/kerberos/link.command.1.tlog" afterPath="$PROJECT_DIR$/node_modules/mongodb/node_modules/kerberos/build/Release/obj/kerberos/link.command.1.tlog" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/ws/build/Release/obj/bufferutil/link.command.1.tlog" afterPath="$PROJECT_DIR$/node_modules/ws/build/Release/obj/bufferutil/link.command.1.tlog" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/ws/build/Release/obj/validation/link.command.1.tlog" afterPath="$PROJECT_DIR$/node_modules/ws/build/Release/obj/validation/link.command.1.tlog" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/mongodb/node_modules/bson/build/Release/obj/bson/link.read.1.tlog" afterPath="$PROJECT_DIR$/node_modules/mongodb/node_modules/bson/build/Release/obj/bson/link.read.1.tlog" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/mongodb/node_modules/kerberos/build/Release/obj/kerberos/link.read.1.tlog" afterPath="$PROJECT_DIR$/node_modules/mongodb/node_modules/kerberos/build/Release/obj/kerberos/link.read.1.tlog" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/ws/build/Release/obj/bufferutil/link.read.1.tlog" afterPath="$PROJECT_DIR$/node_modules/ws/build/Release/obj/bufferutil/link.read.1.tlog" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/ws/build/Release/obj/validation/link.read.1.tlog" afterPath="$PROJECT_DIR$/node_modules/ws/build/Release/obj/validation/link.read.1.tlog" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/mongodb/node_modules/bson/build/Release/obj/bson/link.write.1.tlog" afterPath="$PROJECT_DIR$/node_modules/mongodb/node_modules/bson/build/Release/obj/bson/link.write.1.tlog" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/mongodb/node_modules/kerberos/build/Release/obj/kerberos/link.write.1.tlog" afterPath="$PROJECT_DIR$/node_modules/mongodb/node_modules/kerberos/build/Release/obj/kerberos/link.write.1.tlog" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/ws/build/Release/obj/bufferutil/link.write.1.tlog" afterPath="$PROJECT_DIR$/node_modules/ws/build/Release/obj/bufferutil/link.write.1.tlog" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/ws/build/Release/obj/validation/link.write.1.tlog" afterPath="$PROJECT_DIR$/node_modules/ws/build/Release/obj/validation/link.write.1.tlog" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/twi.js" afterPath="$PROJECT_DIR$/twi.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="Serialmongo.iws" />
@@ -152,7 +84,7 @@
       <file leaf-file-name="app.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="10" column="16" selection-start="430" selection-end="430" vertical-scroll-proportion="0.0" vertical-offset="407" max-vertical-offset="2023">
+            <state line="16" column="75" selection-start="792" selection-end="792" vertical-scroll-proportion="0.0" vertical-offset="714" max-vertical-offset="1683">
               <folding />
             </state>
           </provider>
@@ -161,25 +93,46 @@
       <file leaf-file-name="cs4.js" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/cs4.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="14" column="5" selection-start="333" selection-end="333" vertical-scroll-proportion="0.1918736" vertical-offset="153" max-vertical-offset="1955">
+            <state line="92" column="41" selection-start="2353" selection-end="2353" vertical-scroll-proportion="3.0606654" vertical-offset="0" max-vertical-offset="1989">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="twi.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/twi.js">
+      <file leaf-file-name="websocket2.html" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/public/websocket2.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="14" column="16" selection-start="349" selection-end="349" vertical-scroll-proportion="0.0" vertical-offset="136" max-vertical-offset="867">
+            <state line="13" column="57" selection-start="426" selection-end="426" vertical-scroll-proportion="-8.5" vertical-offset="0" max-vertical-offset="816">
+              <folding>
+                <marker date="1380742775188" expanded="true" signature="861:880" placeholder="..." />
+                <marker date="1380742775188" expanded="true" signature="1016:1027" placeholder="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="module.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$USER_HOME$/.WebStorm7/system/extLibs/nodejs-v0.10.18-src/core-modules-sources/lib/module.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="474" column="0" selection-start="13342" selection-end="13342" vertical-scroll-proportion="0.0" vertical-offset="8058" max-vertical-offset="9231">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="package.json" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/package.json">
+      <file leaf-file-name="WebSocketServer.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/node_modules/ws/lib/WebSocketServer.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="4" column="0" selection-start="73" selection-end="73" vertical-scroll-proportion="0.0" vertical-offset="68" max-vertical-offset="340">
+            <state line="82" column="0" selection-start="2620" selection-end="2620" vertical-scroll-proportion="0.0" vertical-offset="1394" max-vertical-offset="7922">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="events.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$USER_HOME$/.WebStorm7/system/extLibs/nodejs-v0.10.18-src/core-modules-sources/lib/events.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="164" column="0" selection-start="5389" selection-end="5389" vertical-scroll-proportion="0.0" vertical-offset="2788" max-vertical-offset="5032">
               <folding />
             </state>
           </provider>
@@ -188,7 +141,19 @@
       <file leaf-file-name="websocket.html" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/websocket.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="3" column="32" selection-start="158" selection-end="158" vertical-scroll-proportion="0.0" vertical-offset="51" max-vertical-offset="816">
+            <state line="38" column="9" selection-start="1397" selection-end="1397" vertical-scroll-proportion="-24.846153" vertical-offset="0" max-vertical-offset="816">
+              <folding>
+                <marker date="1380565484656" expanded="false" signature="855:867" placeholder="..." />
+                <marker date="1380565484656" expanded="false" signature="1003:1014" placeholder="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="options.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/node_modules/ws/node_modules/options/lib/options.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="83" column="0" selection-start="2301" selection-end="2301" vertical-scroll-proportion="0.0" vertical-offset="1411" max-vertical-offset="1564">
               <folding />
             </state>
           </provider>
@@ -197,7 +162,7 @@
       <file leaf-file-name="comlib.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/comlib.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="6" column="0" selection-start="109" selection-end="109" vertical-scroll-proportion="0.0" vertical-offset="102" max-vertical-offset="884">
+            <state line="41" column="55" selection-start="1196" selection-end="1196" vertical-scroll-proportion="0.0" vertical-offset="288" max-vertical-offset="901">
               <folding />
             </state>
           </provider>
@@ -207,15 +172,6 @@
         <entry file="file://$PROJECT_DIR$/routes/user.js">
           <provider selected="true" editor-type-id="text-editor">
             <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="221">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="index.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/routes/index.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="16" column="3" selection-start="487" selection-end="487" vertical-scroll-proportion="0.0" vertical-offset="272" max-vertical-offset="425">
               <folding />
             </state>
           </provider>
@@ -252,18 +208,19 @@
         <option value="$PROJECT_DIR$/routes/index.js" />
         <option value="$PROJECT_DIR$/public/websocket.html" />
         <option value="$PROJECT_DIR$/package.json" />
+        <option value="$PROJECT_DIR$/twi.js" />
+        <option value="$PROJECT_DIR$/public/websocket2.html" />
+        <option value="$PROJECT_DIR$/cs4.js" />
         <option value="$PROJECT_DIR$/comlib.js" />
         <option value="$PROJECT_DIR$/app.js" />
-        <option value="$PROJECT_DIR$/twi.js" />
-        <option value="$PROJECT_DIR$/cs4.js" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="135" />
-    <option name="y" value="85" />
+    <option name="x" value="739" />
+    <option name="y" value="327" />
     <option name="width" value="1938" />
-    <option name="height" value="922" />
+    <option name="height" value="1050" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -394,6 +351,24 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Serialmongo" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Serialmango" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="node_modules" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="mongodb" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
       <pane id="PackagesPane" />
@@ -413,11 +388,12 @@
     <property name="FullScreen" value="false" />
     <property name="MemberChooser.showClasses" value="true" />
     <property name="GoToClass.includeLibraries" value="false" />
-    <property name="options.searchVisible" value="true" />
     <property name="options.splitter.details.proportions" value="0.2" />
+    <property name="options.searchVisible" value="true" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\Dev\Git Projects\Serialmango\Serialmango\public" />
       <recent name="C:\Node\Serialmango\public" />
       <recent name="C:\Node\Serialmango" />
       <recent name="C:\Node\Serialmango\routes" />
@@ -425,6 +401,14 @@
     </key>
   </component>
   <component name="RunManager" selected="Node.js.app.js">
+    <configuration default="true" type="DartUnitRunConfigurationType" factoryName="DartUnit">
+      <option name="VMOptions" />
+      <option name="arguments" />
+      <option name="filePath" />
+      <option name="scope" value="ALL" />
+      <option name="testName" />
+      <method />
+    </configuration>
     <configuration default="true" type="DartCommandLineRunConfigurationType" factoryName="Dart Command Line Application">
       <option name="VMOptions" />
       <option name="arguments" />
@@ -433,14 +417,6 @@
       <option name="saveOutputToFile" value="false" />
       <option name="showConsoleOnStdErr" value="false" />
       <option name="showConsoleOnStdOut" value="false" />
-      <method />
-    </configuration>
-    <configuration default="true" type="DartUnitRunConfigurationType" factoryName="DartUnit">
-      <option name="VMOptions" />
-      <option name="arguments" />
-      <option name="filePath" />
-      <option name="scope" value="ALL" />
-      <option name="testName" />
       <method />
     </configuration>
     <configuration default="true" type="JavaScriptTestRunnerKarma" factoryName="Karma" singleton="true" config-file="">
@@ -530,22 +506,34 @@
       <created>1380583918227</created>
       <updated>1380583918228</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Moved all routing information to CS4 and TWI so all routes and views can be shared if necessary.">
+      <created>1380643350987</created>
+      <updated>1380643350987</updated>
+    </task>
+    <task id="LOCAL-00013" summary="Removed console oputput rediredt to websocket.&#10;Added function call to cs4 from comlib&#10;added parsing of midi types in cs4">
+      <created>1380664159972</created>
+      <updated>1380664159972</updated>
+    </task>
+    <task id="LOCAL-00014" summary="Added .bin to vcs">
+      <created>1380664506561</created>
+      <updated>1380664506561</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="135" y="85" width="1938" height="922" extended-state="0" />
+    <frame x="739" y="327" width="1938" height="1050" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32990867" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.22083333" sideWeight="0.6093144" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4155251" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.21852237" sideWeight="0.5849673" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.41503268" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.39068565" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33551198" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32990867" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32947975" sideWeight="0.66433567" order="3" side_tool="false" content_ui="tabs" />
@@ -579,63 +567,49 @@
     <MESSAGE value="Major changes&#10;Added comlib&#10;Added websoket" />
     <MESSAGE value="changed error when connecting to mongo" />
     <MESSAGE value="Added CS4.js and TWI.js&#10;To change branches - change comment in LINES 11 and 12!!&#10;&#10;Added os functionality back in so automatic switching for comport&#10;&#10;commented more and made it look pretty" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added CS4.js and TWI.js&#10;To change branches - change comment in LINES 11 and 12!!&#10;&#10;Added os functionality back in so automatic switching for comport&#10;&#10;commented more and made it look pretty" />
+    <MESSAGE value="Moved all routing information to CS4 and TWI so all routes and views can be shared if necessary." />
+    <MESSAGE value="Removed console oputput rediredt to websocket.&#10;Added function call to cs4 from comlib&#10;added parsing of midi types in cs4" />
+    <MESSAGE value="Added .bin to vcs" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added .bin to vcs" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="17" />
+      <option name="time" value="38" />
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/routes/index.js">
+    <entry file="file://$PROJECT_DIR$/package.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="16" column="3" selection-start="487" selection-end="487" vertical-scroll-proportion="0.0" vertical-offset="272" max-vertical-offset="425">
-          <folding />
+        <state line="4" column="0" selection-start="73" selection-end="73" vertical-scroll-proportion="-2.6153846" vertical-offset="0" max-vertical-offset="340" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/twi.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="8" column="36" selection-start="215" selection-end="215" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="833">
+          <folding>
+            <element signature="e#0#39#0" expanded="false" />
+          </folding>
         </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/routes/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="16" column="3" selection-start="487" selection-end="487" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/node_modules/express/lib/router/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-2.7617328" vertical-offset="0" max-vertical-offset="0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/node_modules/express/lib/middleware.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="53" selection-start="159" selection-end="159" vertical-scroll-proportion="0.2761733" vertical-offset="0" max-vertical-offset="0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/test.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="45" column="7" selection-start="1494" selection-end="1494" vertical-scroll-proportion="0.9128788" vertical-offset="0" max-vertical-offset="0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views/layout.jade">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/views/com.jade">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="4" column="34" selection-start="76" selection-end="76" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0" />
+        <state line="4" column="34" selection-start="76" selection-end="76" vertical-scroll-proportion="-2.72" vertical-offset="0" max-vertical-offset="170" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/node_modules/serialport/serialport.js">
+    <entry file="file://$PROJECT_DIR$/views/index.jade">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="300" column="0" selection-start="8056" selection-end="8056" vertical-scroll-proportion="6.1366906" vertical-offset="0" max-vertical-offset="0" />
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="584" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/websocket.html">
+    <entry file="file://$PROJECT_DIR$/views/layout.jade">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="3" column="32" selection-start="158" selection-end="158" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-0.0" vertical-offset="0" max-vertical-offset="204" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/routes/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="8" column="31" selection-start="245" selection-end="245" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="425">
           <folding />
         </state>
       </provider>
@@ -647,44 +621,71 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/routes/index.js">
+    <entry file="file://$PROJECT_DIR$/node_modules/ws/node_modules/options/lib/options.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="16" column="3" selection-start="487" selection-end="487" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0">
+        <state line="83" column="0" selection-start="2301" selection-end="2301" vertical-scroll-proportion="0.0" vertical-offset="1002" max-vertical-offset="1513">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/package.json">
+    <entry file="file://$PROJECT_DIR$/node_modules/ws/lib/WebSocketServer.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="4" column="0" selection-start="73" selection-end="73" vertical-scroll-proportion="0.0" vertical-offset="68" max-vertical-offset="340">
+        <state line="82" column="0" selection-start="2620" selection-end="2620" vertical-scroll-proportion="0.0" vertical-offset="1156" max-vertical-offset="7854">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/.WebStorm7/system/extLibs/nodejs-v0.10.18-src/core-modules-sources/lib/events.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="164" column="0" selection-start="5389" selection-end="5389" vertical-scroll-proportion="0.0" vertical-offset="2295" max-vertical-offset="4709">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/.WebStorm7/system/extLibs/nodejs-v0.10.18-src/core-modules-sources/lib/module.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="474" column="0" selection-start="13342" selection-end="13342" vertical-scroll-proportion="0.0" vertical-offset="7565" max-vertical-offset="8908">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/websocket.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="38" column="9" selection-start="1397" selection-end="1397" vertical-scroll-proportion="-24.846153" vertical-offset="0" max-vertical-offset="816">
+          <folding>
+            <marker date="1380565484656" expanded="false" signature="855:867" placeholder="..." />
+            <marker date="1380565484656" expanded="false" signature="1003:1014" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/websocket2.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="13" column="57" selection-start="426" selection-end="426" vertical-scroll-proportion="-8.5" vertical-offset="0" max-vertical-offset="816">
+          <folding>
+            <marker date="1380742775188" expanded="true" signature="861:880" placeholder="..." />
+            <marker date="1380742775188" expanded="true" signature="1016:1027" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="16" column="75" selection-start="792" selection-end="792" vertical-scroll-proportion="0.0" vertical-offset="714" max-vertical-offset="1683">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/comlib.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="6" column="0" selection-start="109" selection-end="109" vertical-scroll-proportion="0.0" vertical-offset="102" max-vertical-offset="884">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="10" column="16" selection-start="430" selection-end="430" vertical-scroll-proportion="0.0" vertical-offset="407" max-vertical-offset="2023">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/twi.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="14" column="16" selection-start="349" selection-end="349" vertical-scroll-proportion="0.0" vertical-offset="136" max-vertical-offset="867">
+        <state line="41" column="55" selection-start="1196" selection-end="1196" vertical-scroll-proportion="0.0" vertical-offset="288" max-vertical-offset="901">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/cs4.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="14" column="5" selection-start="333" selection-end="333" vertical-scroll-proportion="0.1918736" vertical-offset="153" max-vertical-offset="1955">
+        <state line="92" column="41" selection-start="2353" selection-end="2353" vertical-scroll-proportion="3.0606654" vertical-offset="0" max-vertical-offset="1989">
           <folding />
         </state>
       </provider>
