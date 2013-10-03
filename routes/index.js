@@ -18,11 +18,13 @@ exports.com = function(req, res){
 };
 
 exports.data = function(req, res){
-        global.collectionLog.findOne( {},function(err, item){
-               console.log(item);
-            var x = item.UnitID;
-            console.log(x);
-            res.render('data.jade', { title: 'st uff' , item: JSON.stringify(item) });
+       // global.collectionLog.findOne( {UnitID:2} ,{Sort:{_id:1}},function(err, item){
+
+    collectionLog.find({'UnitID':1}).sort( { _id : -1 } ).limit(1000).toArray(function(err,item){
+             console.log(item[0].Time);
+
+
+           res.render('data.jade', { title: 'stuff' , item: item , j:JSON.stringify(item) });
 
         });
 

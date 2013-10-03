@@ -10,7 +10,7 @@ var user = require('./routes/user');
 
 exports.socketDataOut  = function(serialData, source)
 {
-    console.log(serialData);
+   // console.log(serialData);
 }
 exports.setup = function()
 {

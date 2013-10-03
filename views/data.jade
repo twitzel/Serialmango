@@ -3,4 +3,24 @@ extends layout
 block content
   h1= title
   p This is where I open a comport
-      #{item}
+  p #{item[0].Time}
+
+  p UnitID: #{item[0].UnitID}
+  p Outside: #{item[0].oneWire0}
+  p Freezer: #{item[0].oneWire1}
+  p Inside Mid: #{item[0].oneWire2}
+  p Inside Floor: #{item[0].oneWire3}
+  p Refrigerator: #{item[0].oneWire4}
+
+  canvas(id="a",height="1240",width="1000")
+  script.
+      var a_canvas = document.getElementById("a");
+      var c = a_canvas.getContext("2d");
+
+      var dp = !{JSON.stringify(item)};
+
+      for (var i = 0; i<1000; ++i){
+
+      c.lineTo(i,((dp[i].oneWire0)*30)-(55*30));
+        }
+      c.stroke();

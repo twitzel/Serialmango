@@ -22,13 +22,15 @@ exports.openSerialPort = function(portname)
     });  //it's console.log('open');
 
     serialPort.on('data', function(data) {
-        console.log("Incoming Serial");
+       // console.log("Incoming Serial");
 
 
         var serialData = JSON.parse(data);
         serialData.Time = new Date(serialData.Time);
-        console.log(serialData.Time);
-        collectionLog.insert(serialData, {w:1}, function(err, result) {console.log(result);});
+        //console.log(serialData.Time);
+        collectionLog.insert(serialData, {w:1}, function(err, result) {
+         // console.log(result);
+        });
 
       //  global.websocket.send(serialData.InData) ;
         try{
