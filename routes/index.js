@@ -18,7 +18,14 @@ exports.com = function(req, res){
 };
 
 exports.data = function(req, res){
-        res.render('com.jade', { title: 'DATA DATA' });
+        global.collectionLog.findOne( {},function(err, item){
+               console.log(item);
+            var x = item.UnitID;
+            console.log(x);
+            res.render('data.jade', { title: 'stuff', item: JSON.stringify(item) });
+
+        });
+
     };
 
 

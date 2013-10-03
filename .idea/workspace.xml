@@ -2,9 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ecd06108-ed70-4170-bff1-b34a9a3793f5" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/index.jade" afterPath="$PROJECT_DIR$/views/index.jade" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/views/data.jade" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/routes/index.js" afterPath="$PROJECT_DIR$/routes/index.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/twi.js" afterPath="$PROJECT_DIR$/twi.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="Serialmongo.iws" />
@@ -109,47 +108,26 @@
       <file leaf-file-name="twi.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/twi.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="45" column="32" selection-start="1133" selection-end="1133" vertical-scroll-proportion="0.0" vertical-offset="410" max-vertical-offset="969">
+            <state line="45" column="32" selection-start="1133" selection-end="1133" vertical-scroll-proportion="0.0" vertical-offset="428" max-vertical-offset="969">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="index.js" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="index.js" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/routes/index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="24" column="0" selection-start="639" selection-end="639" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="510">
+            <state line="24" column="52" selection-start="783" selection-end="783" vertical-scroll-proportion="0.754159" vertical-offset="0" max-vertical-offset="629">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="index.jade" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/views/index.jade">
+      <file leaf-file-name="data.jade" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/views/data.jade">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="14" column="3" selection-start="233" selection-end="233" vertical-scroll-proportion="0.46124032" vertical-offset="0" max-vertical-offset="516">
+            <state line="5" column="12" selection-start="89" selection-end="89" vertical-scroll-proportion="-3.4" vertical-offset="0" max-vertical-offset="187">
               <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="package.json" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/package.json">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="4" column="0" selection-start="73" selection-end="73" vertical-scroll-proportion="0.0" vertical-offset="68" max-vertical-offset="340">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="websocket.html" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/public/websocket.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="39" column="13" selection-start="1411" selection-end="1411" vertical-scroll-proportion="0.0" vertical-offset="663" max-vertical-offset="816">
-              <folding>
-                <marker date="1380669436918" expanded="false" signature="855:867" placeholder="..." />
-                <marker date="1380669436918" expanded="false" signature="1003:1014" placeholder="..." />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -197,8 +175,9 @@
         <option value="$PROJECT_DIR$/app.js" />
         <option value="$PROJECT_DIR$/comlib.js" />
         <option value="$PROJECT_DIR$/twi.js" />
-        <option value="$PROJECT_DIR$/routes/index.js" />
         <option value="$PROJECT_DIR$/views/index.jade" />
+        <option value="$PROJECT_DIR$/routes/index.js" />
+        <option value="$PROJECT_DIR$/views/data.jade" />
       </list>
     </option>
   </component>
@@ -298,10 +277,10 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Node\Serialmango\views" />
       <recent name="C:\Node\Serialmango\public" />
       <recent name="C:\Node\Serialmango" />
       <recent name="C:\Node\Serialmango\routes" />
-      <recent name="C:\Node\Serialmango\views" />
     </key>
   </component>
   <component name="RunManager" selected="Node.js.app.js">
@@ -418,13 +397,18 @@
       <created>1380773683083</created>
       <updated>1380773683083</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="Changed the index html">
+      <created>1380815789183</created>
+      <updated>1380815789183</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="960" height="1032" extended-state="0" />
     <editor active="true" />
     <layout>
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32990867" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32990867" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -434,7 +418,7 @@
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4155251" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3556059" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3556059" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32963374" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32947975" sideWeight="0.66433567" order="3" side_tool="false" content_ui="tabs" />
@@ -445,7 +429,6 @@
       <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32990867" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.3996697" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32990867" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -469,7 +452,8 @@
     <MESSAGE value="Added CS4.js and TWI.js&#10;To change branches - change comment in LINES 11 and 12!!&#10;&#10;Added os functionality back in so automatic switching for comport&#10;&#10;commented more and made it look pretty" />
     <MESSAGE value="Fixed misspelling of console in the twi and cs4.js error routines" />
     <MESSAGE value="added socketdata function to twi" />
-    <option name="LAST_COMMIT_MESSAGE" value="added socketdata function to twi" />
+    <MESSAGE value="Changed the index html" />
+    <option name="LAST_COMMIT_MESSAGE" value="Changed the index html" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -477,11 +461,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/routes/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="16" column="3" selection-start="487" selection-end="487" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/node_modules/express/lib/middleware.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="9" column="53" selection-start="159" selection-end="159" vertical-scroll-proportion="0.2761733" vertical-offset="0" max-vertical-offset="0" />
@@ -497,21 +476,9 @@
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/views/com.jade">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="4" column="34" selection-start="76" selection-end="76" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/node_modules/serialport/serialport.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="300" column="0" selection-start="8056" selection-end="8056" vertical-scroll-proportion="6.1366906" vertical-offset="0" max-vertical-offset="0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/routes/user.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0">
-          <folding />
-        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/package.json">
@@ -525,8 +492,8 @@
       <provider selected="true" editor-type-id="text-editor">
         <state line="39" column="13" selection-start="1411" selection-end="1411" vertical-scroll-proportion="0.0" vertical-offset="663" max-vertical-offset="816">
           <folding>
-            <marker date="1380669436918" expanded="false" signature="855:867" placeholder="..." />
-            <marker date="1380669436918" expanded="false" signature="1003:1014" placeholder="..." />
+            <marker date="1380669436918" expanded="false" signature="-1:-1" placeholder="..." />
+            <marker date="1380669436918" expanded="false" signature="-1:-1" placeholder="..." />
           </folding>
         </state>
       </provider>
@@ -552,13 +519,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/twi.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="45" column="32" selection-start="1133" selection-end="1133" vertical-scroll-proportion="0.0" vertical-offset="410" max-vertical-offset="969">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/node_modules/express/lib/router/index.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="285" column="12" selection-start="6269" selection-end="6269" vertical-scroll-proportion="0.33273703" vertical-offset="4659" max-vertical-offset="5389">
@@ -566,16 +526,44 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/routes/index.js">
+    <entry file="file://$PROJECT_DIR$/views/index.jade">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="24" column="0" selection-start="639" selection-end="639" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="510">
+        <state line="14" column="3" selection-start="233" selection-end="233" vertical-scroll-proportion="-9.52" vertical-offset="0" max-vertical-offset="357">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/views/index.jade">
+    <entry file="file://$PROJECT_DIR$/views/com.jade">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="14" column="3" selection-start="233" selection-end="233" vertical-scroll-proportion="0.46124032" vertical-offset="0" max-vertical-offset="516">
+        <state line="4" column="34" selection-start="76" selection-end="76" vertical-scroll-proportion="-2.72" vertical-offset="0" max-vertical-offset="170">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/routes/user.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/data.jade">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="5" column="12" selection-start="89" selection-end="89" vertical-scroll-proportion="-3.4" vertical-offset="0" max-vertical-offset="187">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/twi.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="45" column="32" selection-start="1133" selection-end="1133" vertical-scroll-proportion="0.0" vertical-offset="410" max-vertical-offset="969">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/routes/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="24" column="52" selection-start="783" selection-end="783" vertical-scroll-proportion="0.754159" vertical-offset="0" max-vertical-offset="629">
           <folding />
         </state>
       </provider>
