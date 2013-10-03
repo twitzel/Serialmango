@@ -41,9 +41,11 @@ exports.setup = function()
     }
 
     //set up all routes HERE
+
+
     app.get('/com', routes.com);
     app.get('/', routes.index);
     app.get('/users', user.list);
-
+    app.get('/data', routes.data);
 }
 

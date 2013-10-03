@@ -15,6 +15,10 @@ exports.index = function(req, res){
 };
 exports.com = function(req, res){
     res.render('com.jade', { title: 'com.jade' });
-
-
 };
+
+exports.data = function(req, res){
+        res.render('com.jade', { title: 'DATA DATA' });
+    };
+
+
