@@ -22,7 +22,7 @@ exports.data = function(req, res){
                console.log(item);
             var x = item.UnitID;
             console.log(x);
-            res.render('data.jade', { title: 'stuff' , item: JSON.stringify(item) });
+            res.render('data.jade', { title: 'st uff' , item: JSON.stringify(item) });
 
         });
 

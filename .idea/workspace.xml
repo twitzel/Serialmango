@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="ecd06108-ed70-4170-bff1-b34a9a3793f5" name="Default" comment="">
+    <list default="true" id="ecd06108-ed70-4170-bff1-b34a9a3793f5" name="Default" comment="Changed the index html">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/routes/index.js" afterPath="$PROJECT_DIR$/routes/index.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="Serialmongo.iws" />
@@ -115,7 +116,7 @@
       <file leaf-file-name="index.js" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/routes/index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="24" column="52" selection-start="783" selection-end="783" vertical-scroll-proportion="0.754159" vertical-offset="0" max-vertical-offset="629">
+            <state line="24" column="49" selection-start="780" selection-end="780" vertical-scroll-proportion="0.754159" vertical-offset="0" max-vertical-offset="629">
               <folding />
             </state>
           </provider>
@@ -174,8 +175,8 @@
         <option value="$PROJECT_DIR$/comlib.js" />
         <option value="$PROJECT_DIR$/twi.js" />
         <option value="$PROJECT_DIR$/views/index.jade" />
-        <option value="$PROJECT_DIR$/routes/index.js" />
         <option value="$PROJECT_DIR$/views/data.jade" />
+        <option value="$PROJECT_DIR$/routes/index.js" />
       </list>
     </option>
   </component>
@@ -403,7 +404,15 @@
       <created>1380817588221</created>
       <updated>1380817588221</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="Changed the index html">
+      <created>1380817593849</created>
+      <updated>1380817593849</updated>
+    </task>
+    <task id="LOCAL-00017" summary="Changed the index html">
+      <created>1380817719136</created>
+      <updated>1380817719136</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -565,7 +574,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/routes/index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="24" column="52" selection-start="783" selection-end="783" vertical-scroll-proportion="0.754159" vertical-offset="0" max-vertical-offset="629">
+        <state line="24" column="49" selection-start="780" selection-end="780" vertical-scroll-proportion="0.754159" vertical-offset="0" max-vertical-offset="629">
           <folding />
         </state>
       </provider>
