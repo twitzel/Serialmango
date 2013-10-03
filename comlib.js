@@ -36,7 +36,7 @@ exports.openSerialPort = function(portname)
         }
         catch(err){}
         try{
-        twi.sccketDataOut(serialData);
+        twi.socketDataOut(serialData);
         }
         catch(err){}
       //  collection.find

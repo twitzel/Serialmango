@@ -8,6 +8,10 @@ var express = require('express');
 var routes = require('./routes');
 var user = require('./routes/user');
 
+exports.socketDataOut  = function(serialData, source)
+{
+    console.log(serialData);
+}
 exports.setup = function()
 {
     MongoClient.connect("mongodb://localhost:27017/exampleDb", function(err, db)
