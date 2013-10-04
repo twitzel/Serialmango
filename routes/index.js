@@ -20,6 +20,7 @@ exports.com = function(req, res){
 exports.data = function(req, res){
        // global.collectionLog.findOne( {UnitID:2} ,{Sort:{_id:1}},function(err, item){
     // initial graph data
+    // todd added this
     collectionLog.find({'UnitID':1}).sort( { _id : -1 } ).limit(1000).toArray(function(err,item){
              console.log(item[0].Time);
 
