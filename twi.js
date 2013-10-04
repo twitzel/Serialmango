@@ -8,9 +8,16 @@ var express = require('express');
 var routes = require('./routes');
 var user = require('./routes/user');
 
-exports.socketDataOut  = function(serialData, source)
+exports.socketDataOut  = function(serialData)
 {
-   // console.log(serialData);
+ //  console.log("Sending ws");
+    collectionLog.find({'UnitID':1}).sort( { _id : -1 } ).limit(1000).toArray(function(err,item){
+        console.log(item[0].Time);
+    try{
+        global.websocket.send(JSON.stringify(item));
+    }
+catch(err){}
+        });
 }
 exports.setup = function()
 {

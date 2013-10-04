@@ -2,25 +2,108 @@ extends layout
 
 block content
   h1= title
-  p This is where I open a comport
-  p #{item[0].Time}
+  div.myDiv(id="output")
+  div
+      p This is where I open a comport
+      p #{item[0].Time}
 
-  p UnitID: #{item[0].UnitID}
-  p Outside: #{item[0].oneWire0}
-  p Freezer: #{item[0].oneWire1}
-  p Inside Mid: #{item[0].oneWire2}
-  p Inside Floor: #{item[0].oneWire3}
-  p Refrigerator: #{item[0].oneWire4}
+      p UnitID: #{item[0].UnitID}
+      p Outside: #{item[0].oneWire0}
+      p Freezer: #{item[0].oneWire1}
+      p Inside Mid: #{item[0].oneWire2}
+      p Inside Floor: #{item[0].oneWire3}
+      p Refrigerator: #{item[0].oneWire4}
+   div
+      canvas(id="a",height="500",width="1000")
+  style.
+    .myDiv { height: 150px;overflow: scroll; float: right; }
 
-  canvas(id="a",height="1240",width="1000")
+
   script.
+      var dp = !{JSON.stringify(item)};
+      function graph(){
       var a_canvas = document.getElementById("a");
       var c = a_canvas.getContext("2d");
+          c.save();
 
-      var dp = !{JSON.stringify(item)};
+       c.translate(1000,500);
+        c.rotate(Math.PI);
 
+      c.lineWidth = 1;
+        c.beginPath();
       for (var i = 0; i<1000; ++i){
 
-      c.lineTo(i,((dp[i].oneWire0)*30)-(55*30));
+      c.lineTo(i,((dp[i].oneWire0)*10)-(30*10));
         }
+        c.strokeStyle = "#00FFFF";
+        c.stroke();
+        c.moveTo(0,((dp[0].oneWire1)*10)-(-20*10));
+      for (var i = 0; i<1000; ++i){
+
+        c.lineTo(i,((dp[i].oneWire1)*10)-(-20*10));
+            }
+        c.strokeStyle = "#C00000";
+        c.stroke();
+        c.beginPath();
+      c.moveTo(0,((dp[0].oneWire2)*10)-(50*10));
+          for (var i = 0; i<1000; ++i){
+              c.lineTo(i,((dp[i].oneWire2)*10)-(50*10));
+                  }
+        c.strokeStyle = "#0000FF";
+        c.stroke();
+        c.beginPath();
+        c.lineWidth = 3;
+        c.moveTo(0,((dp[0].oneWire3)*10)-(50*10));
+          for (var i = 0; i<1000; ++i){
+              c.lineTo(i,((dp[i].oneWire3)*10)-(50*10));
+                  }
+      c.strokeStyle = "#00FF00";
       c.stroke();
+      c.beginPath();
+      c.moveTo(0,((dp[0].oneWire4)*10)-(30*10));
+          for (var i = 0; i<1000; ++i){
+              c.lineTo(i,((dp[i].oneWire4)*10)-(30*10));
+                 }
+      c.strokeStyle = "#FF0000";
+      c.stroke();
+         }
+      var wsUri = "ws://localhost:8080";
+      var output;
+      function init()
+      {
+          output = document.getElementById("output");
+      testWebSocket();
+      graph();
+      }
+      function testWebSocket()
+      {
+      websocket = new WebSocket(wsUri);
+      websocket.onopen = function(evt) { onOpen(evt) };
+      websocket.onclose = function(evt) { onClose(evt) };
+      websocket.onmessage = function(evt) { onMessage(evt) };
+      websocket.onerror = function(evt) { onError(evt) };
+      }
+      function onOpen(evt) { writeToScreen("CONNECTED");
+          //   doSend("WebSocket rocks");
+      }
+      function onClose(evt) {
+          writeToScreen("DISCONNECTED");
+      }
+      function onMessage(evt)    {
+        dp = JSON.parse(evt.data);
+
+          writeToScreen(dp[0].UnitID);
+            graph();
+          //websocket.close();
+      }
+      function onError(evt) {
+          writeToScreen('<span style="color: red;">ERROR:</span> ' + evt.data);
+      }
+      function doSend(message) {
+          writeToScreen("SENT: " + message);  websocket.send(message);
+      }
+      function writeToScreen(message) {
+
+          output.innerHTML = message+"<BR>"+output.innerHTML;
+      }
+      window.addEventListener("load", init, false);

@@ -1,6 +1,6 @@
 var com = require("serialport");
 var cs4 = require('./cs4');
-
+var twi = require('./twi')
 
 exports.openSerialPort = function(portname)
 {
@@ -34,13 +34,17 @@ exports.openSerialPort = function(portname)
 
       //  global.websocket.send(serialData.InData) ;
         try{
-        cs4.socketDataOut(serialData);
+        cs4.socketDataOut(serialData,"");
         }
         catch(err){}
         try{
+
         twi.socketDataOut(serialData);
+            //console.log("ser data in comlib");
         }
-        catch(err){}
+        catch(err){
+            console.log(err);
+        }
       //  collection.find
     });
 }

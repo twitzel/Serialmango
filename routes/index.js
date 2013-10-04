@@ -24,7 +24,7 @@ exports.data = function(req, res){
              console.log(item[0].Time);
 
 
-           res.render('data.jade', { title: 'stuff' , item: item , j:JSON.stringify(item) });
+           res.render('data.jade', { title: 'stuff' , item: item });
 
         });
 
