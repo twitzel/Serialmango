@@ -20,44 +20,64 @@ block content
 
 
   script.
-   var wsUri = "ws://localhost:8080";
+   var wsUri = "ws://witzel.homeserver.com:8080";
    var output;
 
     var dp = !{JSON.stringify(item)};
         var a_canvas = document.getElementById("a");
       var c = a_canvas.getContext("2d");
-          c.translate(1000,500);
+          c.translate(1000.5,500.5);
           c.rotate(Math.PI);
+            c.font = "14px sans-serif";
       function graph(){
 
        c.clearRect(0, 0, 1000,500);
       c.lineWidth = 1;
-        c.beginPath();
+    c.strokeStyle = "rgb(0,0,0)";
+    c.beginPath();
         var avg0=0;
       for (var i = 0; i<1000; ++i){
-        avg0=avg0+((dp[i].oneWire0*10)-(30*10));
+        avg0=avg0+((dp[i].oneWire0));
       c.lineTo(i,((dp[i].oneWire0)*10)-(30*10));
         }
-        c.strokeStyle = "#00FFFF";
-        c.moveTo(0,avg0/1000);
-        c.lineTo(1000,avg0/1000);
+
+        c.moveTo(0,((avg0/1000)*10)-(30*10));
+        c.lineTo(1000,((avg0/1000)*10)-(30*10));
+        c.save();
+        c.translate(1000,((avg0/1000)*10)-(30*10));
+        c.rotate(Math.PI);
+
+        c.fillText((avg0/1000).toFixed(2),0,-2);
+        c.restore();
         c.stroke();
+      // start oneWire1
+      c.beginPath();
+      c.strokeStyle = "rgb(55,55,255)";
         c.moveTo(0,((dp[0].oneWire1)*10)-(-20*10));
-
+        avg0=0;
     for (var i = 0; i<1000; ++i){
-
+        avg0=avg0+((dp[i].oneWire1));
         c.lineTo(i,((dp[i].oneWire1)*10)-(-20*10));
             }
 
 
-        c.strokeStyle = "#C00000";
+
+    c.moveTo(0,((avg0/1000)*10)-(-20*10));
+        c.lineTo(1000,((avg0/1000)*10)-(-20*10));
+        c.save();
+        c.translate(1000,((avg0/1000)*10)-(-20*10));
+        c.rotate(Math.PI);
+
+        c.fillText((avg0/1000).toFixed(2),0,-2);
+        c.restore();
         c.stroke();
+    c.strokeStyle = "#0000FF";
         c.beginPath();
       c.moveTo(0,((dp[0].oneWire2)*10)-(50*10));
           for (var i = 0; i<1000; ++i){
               c.lineTo(i,((dp[i].oneWire2)*10)-(50*10));
                   }
-        c.strokeStyle = "#0000FF";
+
         c.stroke();
         c.beginPath();
         c.lineWidth = 1;
@@ -65,8 +85,9 @@ block content
           for (var i = 0; i<1000; ++i){
               c.lineTo(i,((dp[i].oneWire3)*10)-(50*10));
                   }
-      c.strokeStyle = "#00FF00";
+        c.strokeStyle = "#00FF00";
       c.stroke();
+
       c.beginPath();
       c.moveTo(0,((dp[0].oneWire4)*10)-(30*10));
           for (var i = 0; i<1000; ++i){
