@@ -20,7 +20,10 @@ block content
 
 
   script.
-      var dp = !{JSON.stringify(item)};
+   var wsUri = "ws://localhost:8080";
+   var output;
+
+    var dp = !{JSON.stringify(item)};
         var a_canvas = document.getElementById("a");
       var c = a_canvas.getContext("2d");
           c.translate(1000,500);
@@ -66,9 +69,8 @@ block content
       c.strokeStyle = "#FF0000";
       c.stroke();
          }
-      var wsUri = "ws://localhost:8080";
-      var output;
-      function init()
+
+        function init()
       {
           output = document.getElementById("output");
       testWebSocket();
