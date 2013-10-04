@@ -18,7 +18,7 @@ block content
   style.
     .myDiv { height: 150px;overflow: scroll; float: right; }
 
-+
+
   script.
    var wsUri = "ws://localhost:8080";
    var output;
@@ -33,17 +33,23 @@ block content
        c.clearRect(0, 0, 1000,500);
       c.lineWidth = 1;
         c.beginPath();
+        var avg0=0;
       for (var i = 0; i<1000; ++i){
-
+        avg0=avg0+((dp[i].oneWire0*10)-(30*10));
       c.lineTo(i,((dp[i].oneWire0)*10)-(30*10));
         }
         c.strokeStyle = "#00FFFF";
+        c.moveTo(0,avg0/1000);
+        c.lineTo(1000,avg0/1000);
         c.stroke();
         c.moveTo(0,((dp[0].oneWire1)*10)-(-20*10));
-      for (var i = 0; i<1000; ++i){
+
+    for (var i = 0; i<1000; ++i){
 
         c.lineTo(i,((dp[i].oneWire1)*10)-(-20*10));
             }
+
+
         c.strokeStyle = "#C00000";
         c.stroke();
         c.beginPath();
@@ -54,7 +60,7 @@ block content
         c.strokeStyle = "#0000FF";
         c.stroke();
         c.beginPath();
-        c.lineWidth = 3;
+        c.lineWidth = 1;
         c.moveTo(0,((dp[0].oneWire3)*10)-(50*10));
           for (var i = 0; i<1000; ++i){
               c.lineTo(i,((dp[i].oneWire3)*10)-(50*10));

@@ -14,7 +14,7 @@ exports.socketDataOut  = function(data)
     serialData.Time = new Date(serialData.Time);
     //console.log(serialData.Time);
     collectionLog.insert(serialData, {w:1}, function(err, result) {
-        console.log(result);
+    //    console.log(result);
     });
 
  //  console.log("Sending ws");

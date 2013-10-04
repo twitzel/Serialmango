@@ -1,6 +1,6 @@
 var com = require("serialport");
 var cs4 = require('./cs4');
-
+var twi = require('./twi');
 
 exports.openSerialPort = function(portname)
 {
