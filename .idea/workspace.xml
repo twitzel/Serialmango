@@ -125,7 +125,7 @@
       <file leaf-file-name="index.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/routes/index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="21" column="25" selection-start="687" selection-end="687" vertical-scroll-proportion="0.0" vertical-offset="357" max-vertical-offset="663">
+            <state line="26" column="68" selection-start="896" selection-end="896" vertical-scroll-proportion="0.0" vertical-offset="102" max-vertical-offset="663">
               <folding />
             </state>
           </provider>
@@ -134,7 +134,7 @@
       <file leaf-file-name="data.jade" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/views/data.jade">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="29" column="28" selection-start="768" selection-end="768" vertical-scroll-proportion="0.2635659" vertical-offset="357" max-vertical-offset="2414">
+            <state line="35" column="6" selection-start="897" selection-end="897" vertical-scroll-proportion="0.93410856" vertical-offset="113" max-vertical-offset="2414">
               <folding />
             </state>
           </provider>
@@ -143,7 +143,7 @@
       <file leaf-file-name="websocket.html" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/websocket.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="38" column="4" selection-start="1345" selection-end="1345" vertical-scroll-proportion="0.0" vertical-offset="646" max-vertical-offset="833">
+            <state line="38" column="4" selection-start="1345" selection-end="1345" vertical-scroll-proportion="-12.615385" vertical-offset="318" max-vertical-offset="833">
               <folding>
                 <marker date="1380856732324" expanded="false" signature="855:867" placeholder="..." />
                 <marker date="1380856732324" expanded="false" signature="1003:1014" placeholder="..." />
@@ -202,7 +202,7 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="width" value="960" />
+    <option name="width" value="1531" />
     <option name="height" value="1032" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
@@ -461,11 +461,15 @@
       <created>1380916840635</created>
       <updated>1380916840635</updated>
     </task>
-    <option name="localTasksCounter" value="25" />
+    <task id="LOCAL-00025" summary="Fixed missing twi in comlib&#10;removed stray + in data.jada&#10;recomment console logging">
+      <created>1380923263494</created>
+      <updated>1380923263494</updated>
+    </task>
+    <option name="localTasksCounter" value="26" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="0" width="960" height="1032" extended-state="0" />
+    <frame x="0" y="0" width="1531" height="1032" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32990867" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -477,8 +481,8 @@
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.22083333" sideWeight="0.6514983" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4155251" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3556059" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3556059" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3556059" sideWeight="0.50033045" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3556059" sideWeight="0.49966952" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32963374" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32947975" sideWeight="0.66433567" order="3" side_tool="false" content_ui="tabs" />
@@ -571,47 +575,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/websocket.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="38" column="4" selection-start="1345" selection-end="1345" vertical-scroll-proportion="0.0" vertical-offset="646" max-vertical-offset="833">
-          <folding>
-            <marker date="1380856732324" expanded="false" signature="855:867" placeholder="..." />
-            <marker date="1380856732324" expanded="false" signature="1003:1014" placeholder="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/routes/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="21" column="25" selection-start="687" selection-end="687" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="663">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cs4.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="59" column="4" selection-start="1541" selection-end="1541" vertical-scroll-proportion="0.0" vertical-offset="697" max-vertical-offset="2227">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/twi.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="7" column="33" selection-start="178" selection-end="178" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1241">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="10" column="14" selection-start="428" selection-end="428" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1683">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/comlib.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="2" column="24" selection-start="85" selection-end="85" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="867">
           <folding />
         </state>
       </provider>
@@ -623,9 +589,47 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/cs4.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="59" column="4" selection-start="1541" selection-end="1541" vertical-scroll-proportion="0.0" vertical-offset="697" max-vertical-offset="2227">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/websocket.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="38" column="4" selection-start="1345" selection-end="1345" vertical-scroll-proportion="-12.615385" vertical-offset="318" max-vertical-offset="833">
+          <folding>
+            <marker date="1380856732324" expanded="false" signature="855:867" placeholder="..." />
+            <marker date="1380856732324" expanded="false" signature="1003:1014" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/comlib.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="2" column="24" selection-start="85" selection-end="85" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="867">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/twi.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="7" column="33" selection-start="178" selection-end="178" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1241">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/routes/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="26" column="68" selection-start="896" selection-end="896" vertical-scroll-proportion="0.0" vertical-offset="102" max-vertical-offset="663">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/views/data.jade">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="29" column="28" selection-start="768" selection-end="768" vertical-scroll-proportion="0.2635659" vertical-offset="357" max-vertical-offset="2414">
+        <state line="35" column="6" selection-start="897" selection-end="897" vertical-scroll-proportion="0.93410856" vertical-offset="113" max-vertical-offset="2414">
           <folding />
         </state>
       </provider>
