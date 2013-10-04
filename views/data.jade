@@ -20,15 +20,17 @@ block content
 
 +
   script.
-      var dp = !{JSON.stringify(item)};
-      function graph(){
-      var a_canvas = document.getElementById("a");
+   var wsUri = "ws://localhost:8080";
+   var output;
+
+    var dp = !{JSON.stringify(item)};
+        var a_canvas = document.getElementById("a");
       var c = a_canvas.getContext("2d");
-          c.save();
+          c.translate(1000,500);
+          c.rotate(Math.PI);
+      function graph(){
 
-       c.translate(1000,500);
-        c.rotate(Math.PI);
-
+       c.clearRect(0, 0, 1000,500);
       c.lineWidth = 1;
         c.beginPath();
       for (var i = 0; i<1000; ++i){
@@ -67,9 +69,8 @@ block content
       c.strokeStyle = "#FF0000";
       c.stroke();
          }
-      var wsUri = "ws://localhost:8080";
-      var output;
-      function init()
+
+        function init()
       {
           output = document.getElementById("output");
       testWebSocket();
