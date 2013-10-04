@@ -8,8 +8,8 @@
 /*              for Todd's branch or Steve's branch                      */
 /*                                                                       */
 
-                var branch = 'twi';
-               // var branch = 'cs4';
+                global.branch = 'twi';
+                global.branch = 'cs4';
 
 /*                                                                       */
 /*                                                                       */

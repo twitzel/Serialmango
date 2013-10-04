@@ -1,8 +1,69 @@
 <!DOCTYPE html>
 <meta charset="utf-8" />
-<title>WebSocket 2 Test</title>  <script language="javascript" type="text/javascript">
+
+
+
+<!-- This textarea box StyleSheet and HTML code generated at http://www.csgnetwork.com/textboxbasicgen.html -->
+<!-- The StyleSheet code begins here. Place it between the HEAD tags of your page. -->
+
+<style type="text/css">
+
+    textarea.mytextboxclass {
+        background-color:ffffff;
+        background-image:url(URL or Relative URL and Name);
+        background-repeat:no-repeat;
+        background-position:center-top;background-attachment:fixed;
+        border-width:1;
+        border-style:solid;
+        border-color:000000;
+        font-family:Arial;
+        font-size:12pt;
+        color:000000;
+    }
+
+</style>
+
+<!-- This ends the StyleSheet Code. -->
+
+
+
+<!-- This textarea box HTML and StyleSheet code generated at http://www.csgnetwork.com/textboxbasicgen.html -->
+<!-- This begins the HTML code for your TextArea box. It should go between the BODY tags of your page. It is usually within a table TD tag pair or within paragraph tags. -->
+
+<form>
+    <br>
+    <div align="center">
+        <br>
+        <textarea name="textLog" id="textLog" title="mytextboxtitle" cols="10" rows="6" class="mytextboxclass" wrap="virtual">
+            Your Data Within
+        </textarea>
+        <br>
+        <br>
+        <input type="submit" value="submit">&nbsp;&nbsp;&nbsp;&nbsp;<input type="reset" value="reset">
+        <br>
+</form>
+<br>
+</div>
+
+<!-- This ends the HTML code for your TextArea box. -->
+
+
+
+
+
+<title>WebSocket Test</title>  <script language="javascript" type="text/javascript">
     var wsUri = "ws://localhost:8080";
     var output;
+
+    var TheTextBox = document.getElementById("consoleLog");
+
+
+
+
+
+
+
+
     function init()
     {
         output = document.getElementById("output");
@@ -16,15 +77,18 @@
         websocket.onmessage = function(evt) { onMessage(evt) };
         websocket.onerror = function(evt) { onError(evt) };
     }
-    function onOpen(evt) { writeToScreen("now CONNECTED");
-     //   doSend("WebSocket rocks");
+    function onOpen(evt) { writeToScreen("CONNECTED");
+        //   doSend("WebSocket rocks");
     }
     function onClose(evt) {
         writeToScreen("DISCONNECTED");
     }
     function onMessage(evt)    {
-        writeToScreen('<span style="color: greenyellow;">RESPONSE: ' + evt.data+'</span>');
+
+        textLog.value = message;
+        writeToScreen('<span style="color: blue;">RESPONSE: ' + evt.data+'</span>');
         //websocket.close();
+
     }
     function onError(evt) {
         writeToScreen('<span style="color: red;">ERROR:</span> ' + evt.data);
@@ -33,10 +97,16 @@
         writeToScreen("SENT: " + message);  websocket.send(message);
     }
     function writeToScreen(message) {
+
+
         var pre = document.createElement("p"); pre.style.wordWrap = "break-word";
         pre.innerHTML = message; output.appendChild(pre);
     }  window.addEventListener("load", init, false);
 </script>
-<h2>WebSocket 2 Test</h2>
-<div id="output"></div>  </html>
+<h2>WebSocket Test</h2>
 
+
+
+
+<div id="output"></div>
+ </html>

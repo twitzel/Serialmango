@@ -8,8 +8,15 @@ var express = require('express');
 var routes = require('./routes');
 var user = require('./routes/user');
 
-exports.socketDataOut  = function(serialData)
+exports.socketDataOut  = function(data)
 {
+    var serialData = JSON.parse(data);
+    serialData.Time = new Date(serialData.Time);
+    //console.log(serialData.Time);
+    collectionLog.insert(serialData, {w:1}, function(err, result) {
+        console.log(result);
+    });
+
  //  console.log("Sending ws");
     collectionLog.find({'UnitID':1}).sort( { _id : -1 } ).limit(1000).toArray(function(err,item){
         console.log(item[0].Time);
@@ -19,6 +26,8 @@ exports.socketDataOut  = function(serialData)
 catch(err){}
         });
 }
+
+
 exports.setup = function()
 {
     MongoClient.connect("mongodb://localhost:27017/exampleDb", function(err, db)

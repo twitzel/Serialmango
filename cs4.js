@@ -19,7 +19,7 @@ exports.setup = function()
         }
         else
         {
-            console.log("CS4: We are connected to mondo exampleDb database todd collection");
+            console.log("CS4: We are now connected to MongoDb, Wiz database, log collection");
             global.collectionLog = db.collection('log');
             global.collectionCue = db.collection('cue');
             global.collectionStartup = db.collection('startup');
@@ -46,11 +46,23 @@ exports.setup = function()
 
 }
 
-exports.socketDataOut  = function(serialData, source)
+exports.socketDataOut  = function(data)
 {
     var type = "";
-    var indata = serialData.InData;
-    var source = serialData.Source;
+    var indata;
+    var source;
+    var serialData;
+
+    serialData = JSON.parse(data);
+    serialData.Time = new Date(serialData.Time);
+    //console.log(serialData.Time);
+    collectionLog.insert(serialData, {w:1}, function(err, result) {
+        console.log(result);
+    });
+
+
+    indata = serialData.InData;
+    source = serialData.Source;
 
    // if cue is MIDI then get light cue number from hex string
     if(source.substr(0,4) == "Midi")

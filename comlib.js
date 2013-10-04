@@ -25,21 +25,27 @@ exports.openSerialPort = function(portname)
        // console.log("Incoming Serial");
 
 
-        var serialData = JSON.parse(data);
-        serialData.Time = new Date(serialData.Time);
-        //console.log(serialData.Time);
-        collectionLog.insert(serialData, {w:1}, function(err, result) {
-         // console.log(result);
-        });
+        if(branch == 'cs4')
+        {
+            cs4.socketDataOut(data,"");
+        }
+        else if(branch == 'twi')
+        {
+            twi.socketDataOut(data);
+        }
 
-      //  global.websocket.send(serialData.InData) ;
+
+
+
+
+
         try{
-        cs4.socketDataOut(serialData,"");
+        cs4.socketDataOut(data,"");
         }
         catch(err){}
         try{
 
-        twi.socketDataOut(serialData);
+       // twi.socketDataOut(data);
             //console.log("ser data in comlib");
         }
         catch(err){
