@@ -2,12 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ecd06108-ed70-4170-bff1-b34a9a3793f5" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app.js" afterPath="$PROJECT_DIR$/app.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/comlib.js" afterPath="$PROJECT_DIR$/comlib.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cs4.js" afterPath="$PROJECT_DIR$/cs4.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/data.jade" afterPath="$PROJECT_DIR$/views/data.jade" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/twi.js" afterPath="$PROJECT_DIR$/twi.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/websocket2.html" afterPath="$PROJECT_DIR$/public/websocket2.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="Serialmongo.iws" />
@@ -130,7 +124,7 @@
       <file leaf-file-name="twi.js" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/twi.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="18" column="4" selection-start="492" selection-end="492" vertical-scroll-proportion="0.3647199" vertical-offset="0" max-vertical-offset="1241">
+            <state line="18" column="0" selection-start="488" selection-end="488" vertical-scroll-proportion="0.3647199" vertical-offset="0" max-vertical-offset="1241">
               <folding />
             </state>
           </provider>
@@ -538,13 +532,18 @@
       <created>1380833189469</created>
       <updated>1380833189469</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="Changed the index html">
+      <created>1380912250133</created>
+      <updated>1380912250133</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="479" y="119" width="1938" height="1473" extended-state="0" />
     <editor active="true" />
     <layout>
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32990867" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32990867" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -565,7 +564,6 @@
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32990867" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.3996697" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32990867" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -719,7 +717,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/twi.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="18" column="4" selection-start="492" selection-end="492" vertical-scroll-proportion="0.3647199" vertical-offset="0" max-vertical-offset="1241">
+        <state line="18" column="0" selection-start="488" selection-end="488" vertical-scroll-proportion="0.3647199" vertical-offset="0" max-vertical-offset="1241">
           <folding />
         </state>
       </provider>
