@@ -10,8 +10,8 @@ block content
 
 
   script.
-      var wsUri = "ws://localhost:8080";
-
+     // var wsUri = "ws://localhost:8080";
+      var wsUri = '#{myuri}'
       function init()
       {
           output = document.getElementById("output");
@@ -28,7 +28,10 @@ block content
       websocket.onerror = function(evt) { onError(evt) };
       }
 
-      function onOpen(evt) { writeToScreen(theText);
+      function onOpen(evt) {
+
+
+      writeToScreen('#{myuri}');
       }
 
       function onClose(evt) {

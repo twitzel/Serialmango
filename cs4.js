@@ -26,6 +26,23 @@ exports.setup = function()
         }
     });
 
+
+    //iterate through all of the system IPv4 addresses
+    // we should connect to address[0] with the webserver
+    //so lets grab it and make a global variable to
+    //use elseware
+    var interfaces = os.networkInterfaces();
+    global.addresses = [];
+    for (k in interfaces) {
+        for (k2 in interfaces[k]) {
+            var address = interfaces[k][k2];
+            if (address.family == 'IPv4' && !address.internal) {
+                addresses.push(address.address)
+            }
+        }
+    }
+    console.log('My IP Address is: ' + addresses[0]);
+
     //now lets find out if we are on a windows system
     // if we are open the required com port
     //if not open the pi port
