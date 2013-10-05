@@ -8,8 +8,8 @@
 /*              for Todd's branch or Steve's branch                      */
 /*                                                                       */
 
-                //global.branch = 'twi';
-                global.branch = 'cs4';
+                global.branch = 'twi';
+              //  global.branch = 'cs4';
 
 /*                                                                       */
 /*                                                                       */
@@ -55,7 +55,10 @@ http.createServer(app).listen(app.get('port'), function(){
 //Set up the web socket here.. Default port is 8080
 wss = new WebSocketServer({port: 8080}, function(){
     console.log("Websocket server Listening");
+    console.log(wss.url);
 });
+
+
 
 //Set up Web socket for a connection and make it global
 wss.on('connection', function(ws) {
