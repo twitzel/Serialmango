@@ -8,6 +8,8 @@ var express = require('express');
 var routes = require('./routes');
 var user = require('./routes/user');
 
+
+
 exports.socketDataOut  = function(data)
 {
     var serialData = JSON.parse(data);
@@ -18,13 +20,18 @@ exports.socketDataOut  = function(data)
     });
 
  //  console.log("Sending ws");
-    collectionLog.find({'UnitID':1}).sort( { _id : -1 } ).limit(1000).toArray(function(err,item){
+    collectionLog.find({'UnitID':1}).sort( { _id : -1 } ).limit(1000).toArray(function(err,item)
+    {
         console.log(item[0].Time);
-    try{
-        global.websocket.send(JSON.stringify(item));
-    }
-catch(err){}
-        });
+        try
+        {
+            global.websocket.send(JSON.stringify(item));
+        }
+        catch(err)
+        {
+
+        }
+      });
 }
 
 

@@ -85,7 +85,7 @@
     }
     function onMessage(evt)    {
 
-        textLog.value = message;
+        textLog.value = evt.data;
         writeToScreen('<span style="color: blue;">RESPONSE: ' + evt.data+'</span>');
         //websocket.close();
 
