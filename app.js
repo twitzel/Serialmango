@@ -63,7 +63,7 @@ wss.on('connection', function(ws) {
     console.log('received: %s', message);
     });
     global.websocket=ws;
-    ws.send('something');
+    ws.send('Log Window Now Active');
 });
 
 /*

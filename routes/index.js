@@ -34,5 +34,5 @@ exports.data = function(req, res){
 
 
 exports.data2 = function(req, res){
-    res.render('data2.jade',{ title: 'DATA2.jade' });
+    res.render('data2.jade',{ title: 'CS-4 Output', myuri:"ws://localhost:8080" });
 };
