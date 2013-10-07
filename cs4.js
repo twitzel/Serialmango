@@ -8,6 +8,29 @@ var os = require('os');
 var express = require('express');
 var routes = require('./routes');
 var user = require('./routes/user');
+var timedOutInterval = 200;  //time to wait between serial transmitts
+var timedOut = true; // set to false will delay transmission;
+var comlib = require('./comlib');
+
+
+
+sendOutput = function (dataToSend)
+{
+    if (timedOut)
+    {
+        timedOut = false;
+        comlib.write(dataToSend);
+
+    }
+    else
+    {
+        setTimeout(function () {
+            sendOutput(dataToSend);
+        }, timedOutInterval);
+    }
+    setTimeout(function(){timedOut = true;}, timedOutInterval);
+};
+
 
 exports.setup = function()
 {
@@ -77,9 +100,34 @@ exports.socketDataOut  = function(data)
     var source;
     var serialData;
 
+
+    // put the time string into proper form
+    // then save it to the log collection
     serialData = JSON.parse(data);
     serialData.Time = new Date(serialData.Time);
-    //console.log(serialData.Time);
+
+
+    //make sure this is incoming cue data
+    //if it is, then search for matching cue
+    //
+    //If matching cue found then iterate through
+    //OutData and send the stuff out
+    if(serialData.InData !=null)
+    {
+        collectionLog.find({'InData' : serialData.InData}).toArray(function(err,item){
+            console.log(item);
+        });
+
+        collectionLog.update({'InData': "F9 7F 05 02 01 01 30 F7 "},{$push: {OutData: [{"Delay":"001", "Port":"Zig1", "Showname":"MamaMia", "Dir":"English", "Dout":"GO slide1.jpg"}]}},function(err,res){
+
+            console.log('changes it')});
+
+        sendOutput('this is a test');
+        setTimeout(function(){sendOutput('this is test 2')},2000);
+
+    }
+
+    //put the data into the collection
     collectionLog.insert(serialData, {w:1}, function(err, result) {
         console.log(result);
     });
@@ -138,12 +186,12 @@ exports.socketDataOut  = function(data)
            type = "Pitch Wheel Control";
        }
 
-       global.websocket.send(type +" ---    "+ indata) ;
+       global.websocket.send(serialData.Time + " " + type +" ---    "+ indata) ;
 
     }
     else // just send data
     {
-        global.websocket.send(indata) ;
+        global.websocket.send(serialData.Time + " " +indata) ;
     }
 
 
