@@ -13,6 +13,7 @@ block content
       p Inside Mid: #{item[0].oneWire2}
       p Inside Floor: #{item[0].oneWire3}
       p Refrigerator: #{item[0].oneWire4}
+      button(onclick = "buttonclick()") Todd Made this form Me!
    div
       canvas(id="a",height="500",width="1000")
   style.
@@ -134,4 +135,8 @@ block content
 
           output.innerHTML = message+"<BR>"+output.innerHTML;
       }
+        function buttonclick(message) {
+
+            output.innerHTML = "Send something out the websocket!";
+        }
       window.addEventListener("load", init, false);

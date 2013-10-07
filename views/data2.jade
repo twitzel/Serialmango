@@ -2,9 +2,11 @@ extends layout
 
 block content
   h1= title
-
+  div
+      button(onclick = "buttonclick()") Todd Made this form Me!
   div.logDiv(id="output")
-
+  div
+      button(onclick = "buttonclick()") I know you really wanted it under the box!
   style.
     .logDiv { height:300px; overflow-y:scroll; width:900px; border:1px solid black;" }
 
@@ -54,5 +56,11 @@ block content
 
           output.innerHTML = message+"<BR>"+output.innerHTML;
       }
+      function buttonclick(message) {
+
+        websocket.send("I got a que request I better do something");
+        output.innerHTML = "Send something out the websocket! - after you order the sensors from amazon<br> This doesnt send until the button is released<br>"
+        +output.innerHTML;
+        }
 
       window.addEventListener("load", init, false);
