@@ -77,10 +77,19 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="index.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/routes/index.js">
+      <file leaf-file-name="app.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="12" column="47" selection-start="445" selection-end="445" vertical-scroll-proportion="0.0" vertical-offset="204" max-vertical-offset="731">
+            <state line="70" column="0" selection-start="2158" selection-end="2158" vertical-scroll-proportion="0.0" vertical-offset="1190" max-vertical-offset="1734">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="comlib.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/comlib.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="40" column="26" selection-start="946" selection-end="946" vertical-scroll-proportion="0.0" vertical-offset="680" max-vertical-offset="901">
               <folding />
             </state>
           </provider>
@@ -89,7 +98,34 @@
       <file leaf-file-name="cs4.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/cs4.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="6" column="4" selection-start="92" selection-end="92" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="3451">
+            <state line="120" column="179" selection-start="3254" selection-end="3360" vertical-scroll-proportion="0.0" vertical-offset="1734" max-vertical-offset="3451">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="collection.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/node_modules/mongodb/lib/mongodb/collection.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="672" column="13" selection-start="26961" selection-end="26961" vertical-scroll-proportion="0.0" vertical-offset="11176" max-vertical-offset="29512">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="events.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$USER_HOME$/.WebStorm7/system/extLibs/nodejs-v0.10.18-src/core-modules-sources/lib/events.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="94" column="16" selection-start="3238" selection-end="3238" vertical-scroll-proportion="0.0" vertical-offset="1598" max-vertical-offset="5032">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="connection_pool.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/node_modules/mongodb/lib/mongodb/connection/connection_pool.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="190" column="12" selection-start="6801" selection-end="6801" vertical-scroll-proportion="0.0" vertical-offset="2365" max-vertical-offset="5117">
               <folding />
             </state>
           </provider>
@@ -98,7 +134,16 @@
       <file leaf-file-name="data.jade" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/views/data.jade">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="137" column="0" selection-start="3931" selection-end="4049" vertical-scroll-proportion="-11.88" vertical-offset="2032" max-vertical-offset="2499">
+            <state line="22" column="9" selection-start="520" selection-end="554" vertical-scroll-proportion="0.0" vertical-offset="374" max-vertical-offset="2499">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="index.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/routes/index.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="28" column="9" selection-start="716" selection-end="933" vertical-scroll-proportion="0.0" vertical-offset="476" max-vertical-offset="731">
               <folding />
             </state>
           </provider>
@@ -107,17 +152,20 @@
       <file leaf-file-name="data2.jade" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/views/data2.jade">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="61" column="64" selection-start="1595" selection-end="1595" vertical-scroll-proportion="0.6359743" vertical-offset="740" max-vertical-offset="1207">
+            <state line="96" column="51" selection-start="2841" selection-end="2841" vertical-scroll-proportion="1.9751037" vertical-offset="204" max-vertical-offset="1734">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="app.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app.js">
+      <file leaf-file-name="websocket2.html" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/public/websocket2.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="11" column="14" selection-start="469" selection-end="469" vertical-scroll-proportion="0.0" vertical-offset="714" max-vertical-offset="1734">
-              <folding />
+            <state line="88" column="36" selection-start="2373" selection-end="2373" vertical-scroll-proportion="0.0" vertical-offset="1069" max-vertical-offset="2006">
+              <folding>
+                <marker date="1380932772868" expanded="false" signature="2373:2385" placeholder="..." />
+                <marker date="1380932772868" expanded="false" signature="2522:2533" placeholder="..." />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -151,23 +199,24 @@
         <option value="$PROJECT_DIR$/routes/comport.js" />
         <option value="$PROJECT_DIR$/routes/com.js" />
         <option value="$PROJECT_DIR$/package.json" />
-        <option value="$PROJECT_DIR$/views/index.jade" />
         <option value="$PROJECT_DIR$/public/websocket.html" />
-        <option value="$PROJECT_DIR$/comlib.js" />
-        <option value="$PROJECT_DIR$/cs4.js" />
+        <option value="$PROJECT_DIR$/views/data.jade" />
+        <option value="$PROJECT_DIR$/views/index.jade" />
+        <option value="$PROJECT_DIR$/public/websocket2.html" />
         <option value="$PROJECT_DIR$/routes/index.js" />
         <option value="$PROJECT_DIR$/twi.js" />
-        <option value="$PROJECT_DIR$/views/data.jade" />
         <option value="$PROJECT_DIR$/app.js" />
+        <option value="$PROJECT_DIR$/comlib.js" />
+        <option value="$PROJECT_DIR$/cs4.js" />
         <option value="$PROJECT_DIR$/views/data2.jade" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-9" />
-    <option name="y" value="-9" />
+    <option name="x" value="634" />
+    <option name="y" value="211" />
     <option name="width" value="1938" />
-    <option name="height" value="1050" />
+    <option name="height" value="1293" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -223,6 +272,28 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="Scope">
+        <subPane subId="Project Files">
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="Serialmango">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+        <subPane subId="Changed Files">
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -285,7 +356,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
       <pane id="PackagesPane" />
     </panes>
   </component>
@@ -298,7 +368,7 @@
     <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder1" value="1" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth0" value="233" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder0" value="0" />
-    <property name="last_opened_file_path" value="$USER_HOME$/node_modules/mongoose" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/app.js" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth2" value="250" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth3" value="1157" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth3" value="1157" />
@@ -317,14 +387,15 @@
     <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder3" value="3" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder1" value="1" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder2" value="2" />
-    <property name="ChangesBrowser.SHOW_FLATTEN" value="false" />
-    <property name="options.lastSelected" value="reference.settingsdialog.IDE.editor.colors.Jade" />
+    <property name="options.lastSelected" value="project.propVCSSupport.Ignored.Files" />
     <property name="DefaultHtmlFileTemplate" value="Html5" />
     <property name="MemberChooser.copyJavadoc" value="false" />
+    <property name="restartRequiresConfirmation" value="true" />
     <property name="options.searchVisible" value="true" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\Dev\Git Projects\Serialmango\Serialmango\views" />
       <recent name="C:\Node\Serialmango\views" />
       <recent name="C:\Node\Serialmango\public" />
       <recent name="C:\Node\Serialmango" />
@@ -332,6 +403,11 @@
     </key>
   </component>
   <component name="RunManager" selected="Node.js.app.js">
+    <configuration default="false" name="websocket2.html" type="JavascriptDebugType" factoryName="JavaScript Debug" singleton="true" temporary="true" uri="http://localhost:63342/Serialmongo/public/websocket2.html">
+      <RunnerSettings RunnerId="JavascriptDebugRunner" />
+      <ConfigurationWrapper RunnerId="JavascriptDebugRunner" />
+      <method />
+    </configuration>
     <configuration default="true" type="DartCommandLineRunConfigurationType" factoryName="Dart Command Line Application">
       <option name="VMOptions" />
       <option name="arguments" />
@@ -361,9 +437,15 @@
       <browser start="false" url="" with-js-debugger="false" />
       <method />
     </configuration>
-    <list size="1">
+    <list size="2">
       <item index="0" class="java.lang.String" itemvalue="Node.js.app.js" />
+      <item index="1" class="java.lang.String" itemvalue="JavaScript Debug.websocket2.html" />
     </list>
+    <recent_temporary>
+      <list size="1">
+        <item index="0" class="java.lang.String" itemvalue="JavaScript Debug.websocket2.html" />
+      </list>
+    </recent_temporary>
     <configuration name="&lt;template&gt;" type="WebApp" default="true" selected="false">
       <Host>localhost</Host>
       <Port>5050</Port>
@@ -465,75 +547,45 @@
       <created>1380817794720</created>
       <updated>1380817794720</updated>
     </task>
-    <task id="LOCAL-00019" summary="Changed the index html">
-      <created>1380833189469</created>
-      <updated>1380833189469</updated>
+    <task id="LOCAL-00019" summary="branch now global&#10;moved data parsing form comlib to twi and cs4&#10;">
+      <created>1380912755092</created>
+      <updated>1380912755092</updated>
     </task>
-    <task id="LOCAL-00020" summary="Added websocket support to graph">
-      <created>1380865966817</created>
-      <updated>1380865966817</updated>
+    <task id="LOCAL-00020" summary="added data2.jade">
+      <created>1380936355173</created>
+      <updated>1380936355173</updated>
     </task>
-    <task id="LOCAL-00021" summary="fixes canvas bug so it doesnt keep transforming">
-      <created>1380866891205</created>
-      <updated>1380866891205</updated>
+    <task id="LOCAL-00021" summary="cleaned up data2&#10;tyring to pass string to javascript with no luck">
+      <created>1380982517902</created>
+      <updated>1380982517902</updated>
     </task>
-    <task id="LOCAL-00022" summary="fixes canvas bug so it doesnt keep transforming">
-      <created>1380866896477</created>
-      <updated>1380866896477</updated>
+    <task id="LOCAL-00022" summary="pass ip address to web page.&#10;twi lines 53-69 added&#10;cs4 lines 53-69 added&#10;line 37 of index - passes variable&#10;lines 14 and 34 of data2.jade receive ip address">
+      <created>1380996874107</created>
+      <updated>1380996874107</updated>
     </task>
-    <task id="LOCAL-00023" summary="fixes canvas bug so it doesnt keep transforming">
-      <created>1380906766271</created>
-      <updated>1380906766271</updated>
+    <task id="LOCAL-00023" summary="added timed writes to serial port in cs4&#10;playing with mongo in cs-4">
+      <created>1381113100477</created>
+      <updated>1381113100477</updated>
     </task>
-    <task id="LOCAL-00024" summary="Fixed missing twi in comlib&#10;removed stray + in data.jada&#10;recomment console logging">
-      <created>1380916840635</created>
-      <updated>1380916840635</updated>
-    </task>
-    <task id="LOCAL-00025" summary="Fixed missing twi in comlib&#10;removed stray + in data.jada&#10;recomment console logging">
-      <created>1380923263494</created>
-      <updated>1380923263494</updated>
-    </task>
-    <task id="LOCAL-00026" summary="Fixed missing twi in comlib&#10;removed stray + in data.jada&#10;recomment console logging">
-      <created>1380930164155</created>
-      <updated>1380930164155</updated>
-    </task>
-    <task id="LOCAL-00027" summary="change index">
-      <created>1380931175161</created>
-      <updated>1380931175161</updated>
-    </task>
-    <task id="LOCAL-00028" summary="change index">
-      <created>1381013764182</created>
-      <updated>1381013764182</updated>
-    </task>
-    <task id="LOCAL-00029" summary="change index">
-      <created>1381013776535</created>
-      <updated>1381013776535</updated>
-    </task>
-    <task id="LOCAL-00030" summary="Added button and function to data2 and data">
-      <created>1381186333616</created>
-      <updated>1381186333616</updated>
-    </task>
-    <option name="localTasksCounter" value="31" />
+    <option name="localTasksCounter" value="24" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-9" y="-9" width="1938" height="1050" extended-state="6" />
+    <frame x="634" y="211" width="1938" height="1293" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32990867" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32990867" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2265625" sideWeight="0.5771365" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4733862" sideWeight="0.8793806" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.11342352" sideWeight="0.6451335" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.38349098" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.42286348" sideWeight="0.5005208" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.42286348" sideWeight="0.49947917" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3548665" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32963374" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32947975" sideWeight="0.66433567" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="CSS Styles" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3295583" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32947975" sideWeight="0.66433567" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
@@ -542,8 +594,9 @@
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32990867" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.3996697" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32990867" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
@@ -566,105 +619,120 @@
     <MESSAGE value="Fixed misspelling of console in the twi and cs4.js error routines" />
     <MESSAGE value="added socketdata function to twi" />
     <MESSAGE value="Changed the index html" />
-    <MESSAGE value="Added websocket support to graph" />
-    <MESSAGE value="fixes canvas bug so it doesnt keep transforming" />
-    <MESSAGE value="Fixed missing twi in comlib&#10;removed stray + in data.jada&#10;recomment console logging" />
-    <MESSAGE value="change index" />
-    <MESSAGE value="Added button and function to data2 and data" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added button and function to data2 and data" />
+    <MESSAGE value="branch now global&#10;moved data parsing form comlib to twi and cs4&#10;" />
+    <MESSAGE value="added data2.jade" />
+    <MESSAGE value="cleaned up data2&#10;tyring to pass string to javascript with no luck" />
+    <MESSAGE value="pass ip address to web page.&#10;twi lines 53-69 added&#10;cs4 lines 53-69 added&#10;line 37 of index - passes variable&#10;lines 14 and 34 of data2.jade receive ip address" />
+    <MESSAGE value="added timed writes to serial port in cs4&#10;playing with mongo in cs-4" />
+    <option name="LAST_COMMIT_MESSAGE" value="added timed writes to serial port in cs4&#10;playing with mongo in cs-4" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="20" />
+      <option name="time" value="34" />
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/node_modules/serialport/serialport.js">
+    <entry file="file://$PROJECT_DIR$/routes/user.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="300" column="0" selection-start="8056" selection-end="8056" vertical-scroll-proportion="6.1366906" vertical-offset="0" max-vertical-offset="0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/package.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="4" column="0" selection-start="73" selection-end="73" vertical-scroll-proportion="0.0" vertical-offset="68" max-vertical-offset="340" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/node_modules/express/lib/router/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="285" column="12" selection-start="6269" selection-end="6269" vertical-scroll-proportion="0.33273703" vertical-offset="4659" max-vertical-offset="5389" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views/com.jade">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="4" column="34" selection-start="76" selection-end="76" vertical-scroll-proportion="-2.72" vertical-offset="0" max-vertical-offset="170" />
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="221" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/views/index.jade">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="14" column="3" selection-start="233" selection-end="233" vertical-scroll-proportion="0.46124032" vertical-offset="0" max-vertical-offset="516" />
+        <state line="8" column="25" selection-start="123" selection-end="123" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="391" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/stylesheets/style.css">
+    <entry file="file://$PROJECT_DIR$/views/layout.jade">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="559" />
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="839" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/test.html">
+    <entry file="file://$USER_HOME$/.WebStorm7/system/extLibs/nodejs-v0.10.18-src/core-modules-sources/lib/module.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="45" column="7" selection-start="1494" selection-end="1494" vertical-scroll-proportion="0.0" vertical-offset="765" max-vertical-offset="867" />
+        <state line="438" column="24" selection-start="12234" selection-end="12234" vertical-scroll-proportion="0.0" vertical-offset="6844" max-vertical-offset="8908" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/comlib.js">
+    <entry file="file://$PROJECT_DIR$/views/com.jade">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="2" column="24" selection-start="85" selection-end="85" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="867" />
+        <state line="4" column="34" selection-start="76" selection-end="76" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="170" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/twi.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="24" column="8" selection-start="636" selection-end="636" vertical-scroll-proportion="-0.2556391" vertical-offset="510" max-vertical-offset="1649" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/websocket.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="38" column="4" selection-start="1345" selection-end="1345" vertical-scroll-proportion="0.87935656" vertical-offset="318" max-vertical-offset="833" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/routes/user.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0" />
+        <state line="61" column="44" selection-start="1580" selection-end="1580" vertical-scroll-proportion="0.0" vertical-offset="521" max-vertical-offset="1649">
+          <folding />
+        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/routes/index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="47" selection-start="445" selection-end="445" vertical-scroll-proportion="0.0" vertical-offset="204" max-vertical-offset="731">
+        <state line="28" column="9" selection-start="716" selection-end="933" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="731">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/views/data.jade">
+    <entry file="file://$PROJECT_DIR$/node_modules/mongodb/lib/mongodb/collection.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="137" column="0" selection-start="3931" selection-end="4049" vertical-scroll-proportion="-11.88" vertical-offset="2032" max-vertical-offset="2499">
+        <state line="672" column="13" selection-start="26961" selection-end="26961" vertical-scroll-proportion="0.0" vertical-offset="11176" max-vertical-offset="29512">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/cs4.js">
+    <entry file="file://$USER_HOME$/.WebStorm7/system/extLibs/nodejs-v0.10.18-src/core-modules-sources/lib/events.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="6" column="4" selection-start="92" selection-end="92" vertical-scroll-proportion="0.0" vertical-offset="612" max-vertical-offset="3451">
+        <state line="94" column="16" selection-start="3238" selection-end="3238" vertical-scroll-proportion="0.0" vertical-offset="1022" max-vertical-offset="4709">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/mongodb/lib/mongodb/connection/connection_pool.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="190" column="12" selection-start="6801" selection-end="6801" vertical-scroll-proportion="0.0" vertical-offset="2365" max-vertical-offset="5117">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="14" selection-start="469" selection-end="469" vertical-scroll-proportion="0.0" vertical-offset="714" max-vertical-offset="1734">
+        <state line="70" column="0" selection-start="2158" selection-end="2158" vertical-scroll-proportion="0.0" vertical-offset="1190" max-vertical-offset="1734">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/comlib.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="40" column="26" selection-start="946" selection-end="946" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="901">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/websocket2.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="88" column="36" selection-start="2373" selection-end="2373" vertical-scroll-proportion="0.0" vertical-offset="1069" max-vertical-offset="2006">
+          <folding>
+            <marker date="1380932772868" expanded="false" signature="2373:2385" placeholder="..." />
+            <marker date="1380932772868" expanded="false" signature="2522:2533" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/data.jade">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="22" column="9" selection-start="520" selection-end="554" vertical-scroll-proportion="0.0" vertical-offset="374" max-vertical-offset="2499">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cs4.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="120" column="179" selection-start="3254" selection-end="3360" vertical-scroll-proportion="0.0" vertical-offset="1734" max-vertical-offset="3451">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/views/data2.jade">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="61" column="64" selection-start="1595" selection-end="1595" vertical-scroll-proportion="0.6359743" vertical-offset="740" max-vertical-offset="1207">
+        <state line="96" column="51" selection-start="2841" selection-end="2841" vertical-scroll-proportion="1.9751037" vertical-offset="204" max-vertical-offset="1734">
           <folding />
         </state>
       </provider>
