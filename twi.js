@@ -37,7 +37,7 @@ exports.socketDataOut  = function(data)
 
 exports.setup = function()
 {
-    MongoClient.connect("mongodb://localhost:27017/exampleDb", function(err, db)
+    MongoClient.connect("mongodb://10.6.1.119:27017/exampleDb", function(err, db)
     {
         if (err)
         {
