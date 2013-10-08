@@ -37,7 +37,9 @@ exports.socketDataOut  = function(data)
    if (global.collectionLog){
     var serialData1=serialData;
        serialData1.Time = serialData.Time;
-       serialData1.Unitid = 5;
+       serialData1.UnitID = 5;
+       serialData1.irTemp0 = 0;
+       serialData1.irTemp1 = 1;
 
 
        collectionLog.insert(serialData1, {w:1}, function(err, result) {
