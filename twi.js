@@ -40,6 +40,7 @@ exports.socketDataOut  = function(data)
        console.log("Serial data rec - no database connections yet;")
    }
  //  console.log("Sending ws");
+    if (global.collectionLog){
     collectionLog.find({'UnitID':1}).sort( { _id : -1 } ).limit(1000).toArray(function(err,item)
     {
      if (err){
@@ -56,6 +57,7 @@ exports.socketDataOut  = function(data)
 
         }
       });
+    }
 }
 
 
