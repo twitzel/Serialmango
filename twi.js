@@ -24,10 +24,15 @@ exports.socketDataOut  = function(data)
         console.log("serialData.tiome not defined");
     }
     //console.log(serialData.Time);
+   if (collectionLog){
     collectionLog.insert(serialData, {w:1}, function(err, result) {
     //    console.log(result);
     });
-
+   }
+    else
+   {
+       console.log("Serial data rec - no database connections yet;")
+   }
  //  console.log("Sending ws");
     collectionLog.find({'UnitID':1}).sort( { _id : -1 } ).limit(1000).toArray(function(err,item)
     {
