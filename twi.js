@@ -14,7 +14,13 @@ exports.socketDataOut  = function(data)
 {
    console.log(data);
 
-    var serialData = JSON.parse(data);
+   try{
+       var serialData = JSON.parse(data);
+   }
+   catch(err)
+   {
+       console.log("parse serial data error"+err)
+   }
     if(serialData.Time)
     {
         serialData.Time = new Date(serialData.Time);
