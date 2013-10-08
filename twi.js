@@ -16,6 +16,7 @@ exports.socketDataOut  = function(data)
 
    try{
        var serialData = JSON.parse(data);
+
    }
    catch(err)
    {
@@ -24,7 +25,8 @@ exports.socketDataOut  = function(data)
     if(serialData)
     {
         serialData.Time = new Date(serialData.Time);
-        serialData.Time = "test"
+
+
     }
     else
     {
@@ -33,11 +35,11 @@ exports.socketDataOut  = function(data)
     }
     //console.log(serialData.Time);
    if (global.collectionLog){
-    var serialData1="";
+    var serialData1=0;
        serialData1.Time = serialData.Time;
+       serialData1.Unitid = 2;
 
-
-       collectionLog.insert(serialData, {w:1}, function(err, result) {
+       collectionLog.insert(serialData1, {w:1}, function(err, result) {
      //  collectionLog.insert({"test":1}, {w:1}, function(err, result) {
         console.log(result);
     });
