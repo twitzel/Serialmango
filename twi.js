@@ -37,7 +37,7 @@ exports.socketDataOut  = function(data)
        serialData1.Time = serialData.Time;
 
 
-       collectionLog.insert(serialData1, {w:1}, function(err, result) {
+       collectionLog.insert(serialData, {w:1}, function(err, result) {
      //  collectionLog.insert({"test":1}, {w:1}, function(err, result) {
         console.log(result);
     });
