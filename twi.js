@@ -33,7 +33,7 @@ exports.socketDataOut  = function(data)
     }
     //console.log(serialData.Time);
    if (global.collectionLog){
-    var serialData1;
+    var serialData1="";
        serialData1.Time = serialData.Time;
 
 
