@@ -54,9 +54,15 @@ http.createServer(app).listen(app.get('port'), function(){
 
 //Set up the web socket here.. Default port is 8080
 wss = new WebSocketServer({port: 8080}, function(err,res){
-    console.log("Websocket server Listening");
+
     console.log(wss.url);
-    console.log("Websocket error:"+err);
+    if (err){
+        console.log("Websocket error:"+err);
+    }
+    else
+    {
+        console.log("Websocket server Listening");
+    }
 });
 
 
