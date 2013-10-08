@@ -33,6 +33,8 @@ exports.openSerialPort = function(portname)
         else if(branch == 'cs4')
         {
             cs4.socketDataOut(data);
+
+
         }
 
     });
