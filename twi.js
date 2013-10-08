@@ -82,7 +82,7 @@ exports.setup = function()
     else
     {
 
-        comlib.openSerialPort("/dev/ttyAMC0"); //not windows
+        comlib.openSerialPort("/dev/ttyACM0"); //not windows
     }
 
     //set up all routes HERE
