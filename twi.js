@@ -101,7 +101,7 @@ exports.setup = function()
     console.log("Host System Name: " + os.type());
     if(os.type() == 'Windows_NT')
     {
-        comlib.openSerialPort('com8'); //windows
+        comlib.openSerialPort('com17'); //windows
     }
     else
     {
