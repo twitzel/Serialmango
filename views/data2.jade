@@ -13,17 +13,22 @@ block content
 
 
   div
-      | Comments:
+      | Next Cue:
       br
-      textarea#comments(name='comments', id = 'text1'   style='width: 460px; height: 200px; background-color: #D0F18F;')
-      text1 = 'Hey... say something!'
+      textarea#comments(name='comments', id = 'text1'  type = 'number' style='width: 50px; height: 50px; background-color: #D0F18F;')
 
+  div
+    button(onmousedown = "cueclick()") GO
 
+  div
+      | Data Sent:
+      br
+      textarea#textData(name='textData', id = 'textData'  type = 'text' style='width: 700px; height: 300px;')
 
   script.
      // var wsUri = "ws://localhost:8080";
-        var counter = 0;
       var wsUri = '#{myuri}'
+        var counter = 0;
       function init()
       {
           output = document.getElementById("output");
@@ -65,6 +70,7 @@ block content
       function writeToScreen(message) {
 
           output.innerHTML = message+"<BR>"+output.innerHTML;
+            //output.value = message+"<BR>"+output.value;
       }
       function buttonclick(message) {
 
@@ -72,10 +78,20 @@ block content
         output.innerHTML = "Sent something out the websocket! -  order the sensors from amazon<br> This doesnt send until the button is released<br>"
         +output.innerHTML;
 
-        //counter = parseInt(text1.HTML)+1;
-        text1.innerHTML = counter + text1.HTML ;
-        counter = parseInt(text1.HTML.trim())+1;
+       // text1.innerHTML = "button pressed " + "again" + text1.innerHTML;
+       // text1.value = 1 + 5 +2;
+        counter = parseInt(text1.value) + 1;
+        if(isNaN(counter))
+        {counter = 100;
+         }
+        text1.value = counter;
 
-        }
+      }
+
+      function cueclick(message){
+        websocket.send("{OutData: [{\"Delay\":\"001\", \"Port\":\"Zig1\", \"Showname\":\"MamaMia\", \"Dir\":\"English\", \"Dout\":\"GO slide1.jpg\"}]}")
+        textData.value = "{OutData: [{\"Delay\":\"001\", \"Port\":\"Zig1\", \"Showname\":\"MamaMia\", \"Dir\":\"English\", \"Dout\":\"GO slide1.jpg\"}]}"<br> + textData.value
+      }
+
 
       window.addEventListener("load", init, false);
