@@ -33,7 +33,8 @@ exports.socketDataOut  = function(data)
     }
     //console.log(serialData.Time);
    if (global.collectionLog){
-    collectionLog.insert(serialData, {w:1}, function(err, result) {
+    //collectionLog.insert(serialData, {w:1}, function(err, result) {
+       collectionLog.insert({"test":1}, {w:1}, function(err, result) {
         console.log(result);
     });
    }
