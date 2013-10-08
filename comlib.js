@@ -26,8 +26,9 @@ exports.openSerialPort = function(portname)
 
         if(branch == 'twi')
         {
+
             twi.socketDataOut(data);
-            Console.log(data);
+            console.log(data);
         }
         else if(branch == 'cs4')
         {
