@@ -24,6 +24,7 @@ exports.socketDataOut  = function(data)
     if(serialData)
     {
         serialData.Time = new Date(serialData.Time);
+        serialData.Time = "test"
     }
     else
     {
