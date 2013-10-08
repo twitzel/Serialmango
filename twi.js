@@ -30,7 +30,7 @@ exports.socketDataOut  = function(data)
         console.log("serialData.tiome not defined");
     }
     //console.log(serialData.Time);
-   if (collectionLog){
+   if (global.collectionLog){
     collectionLog.insert(serialData, {w:1}, function(err, result) {
     //    console.log(result);
     });
