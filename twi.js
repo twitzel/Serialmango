@@ -15,7 +15,14 @@ exports.socketDataOut  = function(data)
    console.log(data);
 
     var serialData = JSON.parse(data);
-    serialData.Time = new Date(serialData.Time);
+    if(serialData.Time)
+    {
+        serialData.Time = new Date(serialData.Time);
+    }
+    else
+    {
+        console.log("serialData.tiome not defined");
+    }
     //console.log(serialData.Time);
     collectionLog.insert(serialData, {w:1}, function(err, result) {
     //    console.log(result);
