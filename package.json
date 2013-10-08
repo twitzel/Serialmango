@@ -10,6 +10,6 @@
     "jade": "*",
     "ws" : "*" ,
     "mongodb": "*" ,
-    "serialport": "1.2.0"
+    "serialport": "1.2.0git"
   }
 }
