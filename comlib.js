@@ -1,4 +1,4 @@
-var com = require("serialport");
+var com = require('serialport');
 var cs4 = require('./cs4');
 var twi = require('./twi');
 
@@ -42,7 +42,8 @@ exports.openSerialPort = function(portname)
 
 
 exports.write = function(data) {
-    serialPort.write(data,function(err, results) {
+    serialPort.write(data,function(err, results)
+    {
           console.log('err (undefined is none)' + err);
         console.log('results (serial bytes sent maybe)' + results);
  //   serialPort.write("settime "+timestamp+"\n",function(err, results) {

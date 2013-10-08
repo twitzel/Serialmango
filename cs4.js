@@ -24,9 +24,9 @@ sendOutput = function (dataToSend)
     }
     else
     {
-        setTimeout(function () {
+    /*    setTimeout(function () {
             sendOutput(dataToSend);
-        }, timedOutInterval);
+        }, timedOutInterval);*/
     }
     setTimeout(function(){timedOut = true;}, timedOutInterval);
 };
