@@ -12,16 +12,43 @@ var user = require('./routes/user');
 
 exports.socketDataOut  = function(data)
 {
-    var serialData = JSON.parse(data);
-    serialData.Time = new Date(serialData.Time);
-    //console.log(serialData.Time);
-    collectionLog.insert(serialData, {w:1}, function(err, result) {
-    //    console.log(result);
-    });
+   //console.log(data);
 
+   try{
+       var serialData = JSON.parse(data);
+   }
+   catch(err)
+   {
+       console.log("parse serial data error"+err)
+   }
+    if(serialData)
+    {
+        serialData.Time = new Date(serialData.Time);
+        serialData.Time = "test"
+    }
+    else
+    {
+        console.log("serialData.time not defined");
+        return;
+    }
+    //console.log(serialData.Time);
+   if (global.collectionLog){
+    collectionLog.insert(serialData, {w:1}, function(err, result) {
+        console.log(result);
+    });
+   }
+    else
+   {
+       console.log("Serial data rec - no database connections yet;")
+   }
  //  console.log("Sending ws");
+    if (global.collectionLog){
     collectionLog.find({'UnitID':1}).sort( { _id : -1 } ).limit(1000).toArray(function(err,item)
     {
+     if (err){
+         console.log("Error in mongo find"+err);
+         return;
+     }
       //  console.log(item[0].Time);
         try
         {
@@ -32,12 +59,13 @@ exports.socketDataOut  = function(data)
 
         }
       });
+    }
 }
 
 
 exports.setup = function()
 {
-    MongoClient.connect("mongodb://localhost:27017/exampleDb", function(err, db)
+    MongoClient.connect("mongodb://localhost:27017/test", function(err, db)
     {
         if (err)
         {
@@ -77,7 +105,8 @@ exports.setup = function()
     }
     else
     {
-        comlib.openSerialPort("/dev/ttyAMC0"); //not windows
+
+        comlib.openSerialPort("/dev/ttyACM0"); //not windows
     }
 
     //set up all routes HERE

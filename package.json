@@ -1,5 +1,5 @@
 {
-  "name": "application-name",
+      "name": "Serialmango",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -10,6 +10,6 @@
     "jade": "*",
     "ws" : "*" ,
     "mongodb": "*" ,
-    "serialport": "*"
+    "serialport": "1.2.0git"
   }
 }

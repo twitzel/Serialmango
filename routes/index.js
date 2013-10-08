@@ -23,7 +23,7 @@ exports.data = function(req, res){
     // initial graph data
     // todd added this
     collectionLog.find({'UnitID':1}).sort( { _id : -1 } ).limit(1000).toArray(function(err,item){
-             console.log(item[0].Time);
+           //  console.log(item[0].Time);
 
 
            res.render('data.jade', { title: 'stuff' , item: item });
