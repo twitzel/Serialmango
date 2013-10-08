@@ -77,6 +77,7 @@ exports.setup = function()
     }
     else
     {
+
         comlib.openSerialPort("/dev/ttyAMC0"); //not windows
     }
 

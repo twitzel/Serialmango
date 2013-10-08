@@ -4,7 +4,7 @@ var twi = require('./twi');
 
 exports.openSerialPort = function(portname)
 {
-
+    console.log("Attempting to open serial port "+portname);
    // serialport declared with the var to make it module global
 
     serialPort = new com.SerialPort(portname, {
@@ -17,7 +17,7 @@ exports.openSerialPort = function(portname)
 
 
 // I dont understand this call 0 but it works
-    serialPort.on("open", function () {
+    serialPort.on("open", function (err,res) {
         console.log("Port open success:"+portname);
     });  //it's console.log('open');
 
