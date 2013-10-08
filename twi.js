@@ -22,6 +22,10 @@ exports.socketDataOut  = function(data)
  //  console.log("Sending ws");
     collectionLog.find({'UnitID':1}).sort( { _id : -1 } ).limit(1000).toArray(function(err,item)
     {
+     if (err){
+         console.log("Error in mongo find"+err);
+         return;
+     }
       //  console.log(item[0].Time);
         try
         {
