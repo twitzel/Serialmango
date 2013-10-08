@@ -13,7 +13,7 @@ var user = require('./routes/user');
 exports.socketDataOut  = function(data)
 {
    console.log(data);
-    return;
+
     var serialData = JSON.parse(data);
     serialData.Time = new Date(serialData.Time);
     //console.log(serialData.Time);
