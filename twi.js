@@ -12,7 +12,7 @@ var user = require('./routes/user');
 
 exports.socketDataOut  = function(data)
 {
-   console.log(data);
+   //console.log(data);
 
    try{
        var serialData = JSON.parse(data);
@@ -33,7 +33,7 @@ exports.socketDataOut  = function(data)
     //console.log(serialData.Time);
    if (global.collectionLog){
     collectionLog.insert(serialData, {w:1}, function(err, result) {
-    //    console.log(result);
+        console.log(result);
     });
    }
     else
