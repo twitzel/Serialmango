@@ -27,7 +27,8 @@ exports.socketDataOut  = function(data)
     }
     else
     {
-        console.log("serialData.tiome not defined");
+        console.log("serialData.time not defined");
+        return;
     }
     //console.log(serialData.Time);
    if (global.collectionLog){
