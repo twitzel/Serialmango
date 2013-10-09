@@ -71,6 +71,14 @@ wss = new WebSocketServer({port: 8080}, function(err,res){
 wss.on('connection', function(ws) {
     ws.on('message', function(message) {
     console.log('received: %s', message);
+    if(branch == 'twi')
+    {
+        twi.websocketDataIn()();
+    }
+    else if(branch == 'cs4')
+    {
+        cs4.websocketDataIn();
+    }
     });
     global.websocket=ws;
     ws.send('Log Window Now Active');

@@ -8,7 +8,9 @@ var express = require('express');
 var routes = require('./routes');
 var user = require('./routes/user');
 
-
+exports.websocketDataIn = function(data){
+    // if you want to get socket data it's here!!
+}
 
 exports.socketDataOut  = function(data)
 {

@@ -102,9 +102,13 @@ exports.websocketDataIn = function(data){
     {
         //now we know something is attached to the incoming cue so put it in Cue collection
         // incoming cue = lastCueReceived
-        collectionCue.update({'InData':lastCueReceived.InData}, {$set: lastCueReceived},{upsert:true});
+        collectionCue.update({'InData':lastCueReceived.InData}, {$set: lastCueReceived},{upsert:true},function(err,res){
 
-        collectionCue.update({'InData': lastCueReceived.InData}, {$push:})
+            console.log('InData to colloection Cue')});
+
+        collectionCue.update({'InData': lastCueReceived.InData}, {$push:serialDataSocket},function(err,res){
+
+            console.log('added Dout to collection Cue')});
 
 
 
