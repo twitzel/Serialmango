@@ -23,12 +23,15 @@ block content
   div
       | Data Sent:
       br
-      textarea#textData(name='textData', id = 'textData'  type = 'text' style='width: 700px; height: 300px;')
+      textarea#textData(name='textData', id = 'textData'  type = 'text' style='width: 1000px; height: 300px;')
 
   script.
      // var wsUri = "ws://localhost:8080";
       var wsUri = '#{myuri}'
-        var counter = 0;
+      var counter = 0;
+      var lastCueTime;
+
+
       function init()
       {
           output = document.getElementById("output");
@@ -69,6 +72,8 @@ block content
 
       function writeToScreen(message) {
 
+          // get time of incoming cue
+           lastCue =
           output.innerHTML = message+"<BR>"+output.innerHTML;
             //output.value = message+"<BR>"+output.value;
       }
@@ -89,9 +94,15 @@ block content
       }
 
       function cueclick(message){
-        websocket.send("{OutData: [{\"Delay\":\"001\", \"Port\":\"Zig1\", \"Showname\":\"MamaMia\", \"Dir\":\"English\", \"Dout\":\"GO slide1.jpg\"}]}")
-        textData.value = "{OutData: [{\"Delay\":\"001\", \"Port\":\"Zig1\", \"Showname\":\"MamaMia\", \"Dir\":\"English\", \"Dout\":\"GO slide1.jpg\"}]}"<br> + textData.value
+         counter = parseInt(text1.value) + 1;
+             if(isNaN(counter))
+                {counter = 10 ;}
+         text1.value = counter;
+
+         websocket.send("{OutData: [{\"Delay\":\"001\", \"Port\":\"Zig1\", \"Showname\":\"MamaMia\", \"Dir\":\"English\", \"Dout\":\"GO slide1.jpg\"}]}")
+
+         textData.value = "{OutData: [{\"Delay\":\"001\", \"Port\":\"Zig1\", \"Showname\":\"MamaMia\", \"Dir\":\"English\", \"Dout\":\"GO slide1.jpg\"}]}" + "\r" + textData.value
       }
 
 
-      window.addEventListener("load", init, false);
+      window.addEventListener("load", init, false);    // keeps javascript from running uptil page is loaded

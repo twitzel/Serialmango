@@ -88,7 +88,7 @@ exports.setup = function()
     app.get('/users', user.list);
     app.get('/data', routes.data);
     app.get('/data2', routes.data2);
-
+    app.get('/data3', routes.data3);
 
 
 }

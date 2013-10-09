@@ -36,3 +36,7 @@ exports.data = function(req, res){
 exports.data2 = function(req, res){
     res.render('data2.jade',{ title: 'CS-4 Output', myuri:"ws://localhost:8080" });
 };
+
+exports.data3 = function(req, res){
+    res.render('data3.jade',{ title: 'CS-4 Output Data 3', myuri:"ws://localhost:8080" });
+};
