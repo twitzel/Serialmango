@@ -35,14 +35,8 @@ exports.socketDataOut  = function(data)
     }
     //console.log(serialData.Time);
    if (global.collectionLog){
-    var serialData1=serialData;
-       serialData1.Time = serialData.Time;
-     //  serialData1.UnitID = 5;
-       serialData1.irTemp0 = 0;
-       serialData1.irTemp1 = 1;
-       serialData1.oneWire0 = 79;
-       serialData1.oneWire1 = 3;
-       collectionLog.insert(serialData1, {w:1}, function(err, result) {
+
+       collectionLog.insert(serialData, {w:1}, function(err, result) {
      //  collectionLog.insert({"test":1}, {w:1}, function(err, result) {
         console.log(result);
     });
