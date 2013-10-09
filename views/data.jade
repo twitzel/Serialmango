@@ -37,18 +37,18 @@ block content
     c.strokeStyle = "rgb(0,0,0)";
     c.beginPath();
         var avg0=0;
-      for (var i = 0; i<1000; ++i){
+      for (var i = 0; i<100; ++i){
         avg0=avg0+((dp[i].oneWire0));
       c.lineTo(i,((dp[i].oneWire0)*10)-(30*10));
         }
 
-        c.moveTo(0,((avg0/1000)*10)-(30*10));
-        c.lineTo(1000,((avg0/1000)*10)-(30*10));
+        c.moveTo(0,((avg0/100)*10)-(30*10));
+        c.lineTo(100,((avg0/100)*10)-(30*10));
         c.save();
-        c.translate(1000,((avg0/1000)*10)-(30*10));
+        c.translate(1000,((avg0/100)*10)-(30*10));
         c.rotate(Math.PI);
 
-        c.fillText((avg0/1000).toFixed(2),0,-2);
+        c.fillText((avg0/100).toFixed(2),0,-2);
         c.restore();
         c.stroke();
       // start oneWire1
