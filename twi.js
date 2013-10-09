@@ -16,6 +16,7 @@ exports.socketDataOut  = function(data)
 
    try{
        var serialData = JSON.parse(data);
+
    }
    catch(err)
    {
@@ -24,7 +25,8 @@ exports.socketDataOut  = function(data)
     if(serialData)
     {
         serialData.Time = new Date(serialData.Time);
-        serialData.Time = "test"
+
+
     }
     else
     {
@@ -33,11 +35,8 @@ exports.socketDataOut  = function(data)
     }
     //console.log(serialData.Time);
    if (global.collectionLog){
-    var serialData1;
-       serialData1.Time = serialData.Time;
 
-
-       collectionLog.insert(serialData1, {w:1}, function(err, result) {
+       collectionLog.insert(serialData, {w:1}, function(err, result) {
      //  collectionLog.insert({"test":1}, {w:1}, function(err, result) {
         console.log(result);
     });
@@ -48,7 +47,7 @@ exports.socketDataOut  = function(data)
    }
  //  console.log("Sending ws");
     if (global.collectionLog){
-    collectionLog.find({'UnitID':1}).sort( { _id : -1 } ).limit(1000).toArray(function(err,item)
+    collectionLog.find({'UnitID':1}).sort( { _id : -1 } ).limit(100).toArray(function(err,item)
     {
      if (err){
          console.log("Error in mongo find"+err);
