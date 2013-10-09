@@ -8,8 +8,8 @@
 /*              for Todd's branch or Steve's branch                      */
 /*                                                                       */
 
-               //global.branch = 'twi';
-                global.branch = 'cs4';
+               global.branch = 'twi';
+                //global.branch = 'cs4';
 
 /*                                                                       */
 /*                                                                       */
@@ -24,7 +24,7 @@ var user = require('./routes/user');
 var http = require('http');
 var path = require('path');
 var WebSocketServer = require('ws').Server;
-var MongoClient = require('mongodb').MongoClient;
+//var MongoClient = require('mongodb').MongoClient;
 
 global.comlib = require('./comlib');
 
@@ -53,7 +53,7 @@ http.createServer(app).listen(app.get('port'), function(){
 
 
 //Set up the web socket here.. Default port is 8080
-wss = new WebSocketServer({port: 8080}, function(err,res){
+wss = new WebSocketServer({port: 8080}, function(err){
 
   //  console.log(wss.url);
     if (err){
@@ -61,7 +61,7 @@ wss = new WebSocketServer({port: 8080}, function(err,res){
     }
     else
     {
-        console.log("Websocket server Listening");
+        console.log("Websocket server Listening ");
     }
 });
 
