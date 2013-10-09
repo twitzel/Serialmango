@@ -12,7 +12,7 @@ var timedOutInterval = 200;  //time to wait between serial transmitts
 var timedOut = true; // set to false will delay transmission;
 var comlib = require('./comlib');
 var lastCueReceived;
-var serialDataSocket;
+var serialDataSocket =  {"Time" : "10/09/13 15:20:04.20", "Source" : "Midi1", "InData" : "F0 7F 05 02 01 01 31 2E 30 30 F7 "};
 
 sendOutput = function (dataToSend)
 {
@@ -95,9 +95,7 @@ exports.setup = function()
 
 exports.websocketDataIn = function(data){
 
-    lastCueReceived = JSON.parse(lastCueReceived);
-
-    serialDataSocket = JSON.parse(data);
+     serialDataSocket = JSON.parse(data);
     if(serialDataSocket.Dout != null) // make sure we have valid Dout
     {
         //now we know something is attached to the incoming cue so put it in Cue collection
