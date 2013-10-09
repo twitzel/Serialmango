@@ -2,36 +2,16 @@ extends layout
 
 block content
   h1= title
-  div
-      button(onmousedown= "buttonclick()") Todd Made this form Me!
+
   div.logDiv(id="output")
-  div
-      button(onmousedown= "buttonclick()") I know you really wanted it under the box!
 
   style.
     .logDiv { height:300px; overflow-y:scroll; width:900px; border:1px solid black;" }
 
 
-  div
-      | Next Cue:
-      br
-      textarea#comments(name='comments', id = 'text1'  type = 'number' style='width: 50px; height: 50px; background-color: #D0F18F;')
-
-  div
-    button(onmousedown = "cueclick()") GO
-
-  div
-      | Data Sent:
-      br
-      textarea#textData(name='textData', id = 'textData'  type = 'text' style='width: 1000px; height: 300px;')
-
   script.
      // var wsUri = "ws://localhost:8080";
       var wsUri = '#{myuri}'
-      var counter = 0;
-      var lastCueTime;
-
-
       function init()
       {
           output = document.getElementById("output");
@@ -72,37 +52,7 @@ block content
 
       function writeToScreen(message) {
 
-          // get time of incoming cue
-           lastCue =
           output.innerHTML = message+"<BR>"+output.innerHTML;
-            //output.value = message+"<BR>"+output.value;
-      }
-      function buttonclick(message) {
-
-        websocket.send("I got a que request I better do something");
-        output.innerHTML = "Sent something out the websocket! -  order the sensors from amazon<br> This doesnt send until the button is released<br>"
-        +output.innerHTML;
-
-       // text1.innerHTML = "button pressed " + "again" + text1.innerHTML;
-       // text1.value = 1 + 5 +2;
-        counter = parseInt(text1.value) + 1;
-        if(isNaN(counter))
-        {counter = 100;
-         }
-        text1.value = counter;
-
       }
 
-      function cueclick(message){
-         counter = parseInt(text1.value) + 1;
-             if(isNaN(counter))
-                {counter = 10 ;}
-         text1.value = counter;
-
-         websocket.send("{OutData: [{\"Delay\":\"001\", \"Port\":\"Zig1\", \"Showname\":\"MamaMia\", \"Dir\":\"English\", \"Dout\":\"GO slide1.jpg\"}]}")
-
-         textData.value = "{OutData: [{\"Delay\":\"001\", \"Port\":\"Zig1\", \"Showname\":\"MamaMia\", \"Dir\":\"English\", \"Dout\":\"GO slide1.jpg\"}]}" + "\r" + textData.value
-      }
-
-
-      window.addEventListener("load", init, false);    // keeps javascript from running uptil page is loaded
+      window.addEventListener("load", init, false);
