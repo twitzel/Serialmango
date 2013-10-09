@@ -11,8 +11,8 @@ var user = require('./routes/user');
 var timedOutInterval = 200;  //time to wait between serial transmitts
 var timedOut = true; // set to false will delay transmission;
 var comlib = require('./comlib');
-
-
+var lastCueReceived;
+var serialDataSocket;
 
 sendOutput = function (dataToSend)
 {
@@ -93,8 +93,33 @@ exports.setup = function()
 
 }
 
+exports.websocketDataIn = function(data){
+
+    lastCueReceived = JSON.parse(lastCueReceived);
+
+    serialDataSocket = JSON.parse(data);
+    if(serialDataSocket.Dout != null) // make sure we have valid Dout
+    {
+        //now we know something is attached to the incoming cue so put it in Cue collection
+        // incoming cue = lastCueReceived
+        collectionCue.update({'InData':lastCueReceived.InData}, {$set: lastCueReceived},{upsert:true});
+
+        collectionCue.update({'InData': lastCueReceived.InData}, {$push:})
+
+
+
+
+
+    }
+
+
+
+
+
+}
+
 exports.socketDataOut  = function(data)
-{
+{  // This routine gets serial cue data, sends it out the web socket and puts it in Log collection
     var type = "";
     var indata;
     var source;
@@ -115,7 +140,14 @@ exports.socketDataOut  = function(data)
     if(serialData.InData !=null)
     {
         collectionLog.find({'InData' : serialData.InData}).toArray(function(err,item){
-            console.log(item);
+            if(item == null)
+            {
+                console.log("not Found");
+            }
+            else
+            {
+                console.log(item);
+            }
         });
 
         collectionLog.update({'InData': "F9 7F 05 02 01 01 30 F7 "},{$push: {OutData: [{"Delay":"001", "Port":"Zig1", "Showname":"MamaMia", "Dir":"English", "Dout":"GO slide1.jpg"}]}},function(err,res){
@@ -127,6 +159,7 @@ exports.socketDataOut  = function(data)
 
     }
 
+    lastCueReceived = serialData; // store the data here
     //put the data into the collection
     collectionLog.insert(serialData, {w:1}, function(err, result) {
         console.log(result);

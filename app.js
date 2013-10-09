@@ -74,6 +74,8 @@ wss.on('connection', function(ws) {
     });
     global.websocket=ws;
     ws.send('Log Window Now Active');
+
+
 });
 
 /*

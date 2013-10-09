@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="ecd06108-ed70-4170-bff1-b34a9a3793f5" name="Default" comment="">
+    <list default="true" id="ecd06108-ed70-4170-bff1-b34a9a3793f5" name="Default" comment="added timed writes to serial port in cs4&#10;playing with mongo in cs-4">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app.js" afterPath="$PROJECT_DIR$/app.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cs4.js" afterPath="$PROJECT_DIR$/cs4.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/data2.jade" afterPath="$PROJECT_DIR$/views/data2.jade" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
@@ -77,10 +79,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="app.js" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="app.js" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="70" column="35" selection-start="2096" selection-end="2096" vertical-scroll-proportion="0.0" vertical-offset="1190" max-vertical-offset="1853">
+            <state line="77" column="0" selection-start="2252" selection-end="2252" vertical-scroll-proportion="1.2691903" vertical-offset="102" max-vertical-offset="1887">
               <folding />
             </state>
           </provider>
@@ -89,16 +91,16 @@
       <file leaf-file-name="comlib.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/comlib.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="40" column="1" selection-start="987" selection-end="987" vertical-scroll-proportion="0.0" vertical-offset="680" max-vertical-offset="986">
+            <state line="38" column="0" selection-start="977" selection-end="977" vertical-scroll-proportion="0.0" vertical-offset="646" max-vertical-offset="986">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="cs4.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/cs4.js">
+      <file leaf-file-name="timers.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$USER_HOME$/.WebStorm7/system/extLibs/nodejs-v0.10.18-src/core-modules-sources/lib/timers.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="25" column="5" selection-start="528" selection-end="561" vertical-scroll-proportion="0.0" vertical-offset="408" max-vertical-offset="3451">
+            <state line="127" column="0" selection-start="3799" selection-end="3799" vertical-scroll-proportion="0.0" vertical-offset="2159" max-vertical-offset="8313">
               <folding />
             </state>
           </provider>
@@ -107,25 +109,16 @@
       <file leaf-file-name="events.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$USER_HOME$/.WebStorm7/system/extLibs/nodejs-v0.10.18-src/core-modules-sources/lib/events.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="94" column="16" selection-start="3238" selection-end="3238" vertical-scroll-proportion="0.0" vertical-offset="1598" max-vertical-offset="5032">
+            <state line="123" column="0" selection-start="3956" selection-end="3956" vertical-scroll-proportion="0.0" vertical-offset="2091" max-vertical-offset="5032">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="connection_pool.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/node_modules/mongodb/lib/mongodb/connection/connection_pool.js">
+      <file leaf-file-name="net.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$USER_HOME$/.WebStorm7/system/extLibs/nodejs-v0.10.18-src/core-modules-sources/lib/net.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="190" column="12" selection-start="6801" selection-end="6801" vertical-scroll-proportion="0.0" vertical-offset="2365" max-vertical-offset="5117">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="data.jade" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/views/data.jade">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="22" column="9" selection-start="520" selection-end="554" vertical-scroll-proportion="0.0" vertical-offset="374" max-vertical-offset="2499">
+            <state line="1068" column="78" selection-start="27521" selection-end="27521" vertical-scroll-proportion="0.0" vertical-offset="18156" max-vertical-offset="22627">
               <folding />
             </state>
           </provider>
@@ -134,7 +127,25 @@
       <file leaf-file-name="data2.jade" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/views/data2.jade">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="57" column="0" selection-start="1267" selection-end="1267" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1071">
+            <state line="107" column="0" selection-start="3023" selection-end="3023" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1921">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="cs4.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/cs4.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="106" column="72" selection-start="3145" selection-end="3145" vertical-scroll-proportion="0.0" vertical-offset="1802" max-vertical-offset="4012">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="twi.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/twi.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="45" column="68" selection-start="926" selection-end="926" vertical-scroll-proportion="0.0" vertical-offset="765" max-vertical-offset="2210">
               <folding />
             </state>
           </provider>
@@ -143,30 +154,18 @@
       <file leaf-file-name="data3.jade" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/views/data3.jade">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="629">
+            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="53" max-vertical-offset="629">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="data2.js" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="data2.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/Scripts/data2.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1411">
+            <state line="66" column="0" selection-start="1580" selection-end="1580" vertical-scroll-proportion="0.0" vertical-offset="36" max-vertical-offset="1428">
               <folding>
-                <marker date="1381297146631" expanded="false" signature="719:730" placeholder="..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="websocket2.html" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/public/websocket2.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="88" column="36" selection-start="2373" selection-end="2373" vertical-scroll-proportion="0.0" vertical-offset="1069" max-vertical-offset="2006">
-              <folding>
-                <marker date="1380932772868" expanded="false" signature="2373:2385" placeholder="..." />
-                <marker date="1380932772868" expanded="false" signature="2522:2533" placeholder="..." />
+                <marker date="1381344072152" expanded="false" signature="729:740" placeholder="..." />
               </folding>
             </state>
           </provider>
@@ -207,18 +206,19 @@
         <option value="$PROJECT_DIR$/public/websocket2.html" />
         <option value="$PROJECT_DIR$/routes/index.js" />
         <option value="$PROJECT_DIR$/twi.js" />
-        <option value="$PROJECT_DIR$/app.js" />
         <option value="$PROJECT_DIR$/comlib.js" />
+        <option value="$PROJECT_DIR$/app.js" />
+        <option value="$PROJECT_DIR$/public/Scripts/data2.js" />
         <option value="$PROJECT_DIR$/cs4.js" />
         <option value="$PROJECT_DIR$/views/data2.jade" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="547" />
-    <option name="y" value="309" />
+    <option name="x" value="567" />
+    <option name="y" value="339" />
     <option name="width" value="1536" />
-    <option name="height" value="1064" />
+    <option name="height" value="1109" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -383,15 +383,15 @@
     <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth0" value="233" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth1" value="250" />
     <property name="options.splitter.main.proportions" value="0.3" />
-    <property name="MemberChooser.sorted" value="false" />
-    <property name="recentsLimit" value="5" />
-    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder1" value="1" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth0" value="233" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder1" value="1" />
+    <property name="recentsLimit" value="5" />
+    <property name="MemberChooser.sorted" value="false" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder0" value="0" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/app.js" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth2" value="250" />
-    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth3" value="1157" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth3" value="1157" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth3" value="1157" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth2" value="250" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth1" value="250" />
     <property name="GoToClass.toSaveIncludeLibraries" value="false" />
@@ -428,6 +428,14 @@
       <ConfigurationWrapper RunnerId="JavascriptDebugRunner" />
       <method />
     </configuration>
+    <configuration default="true" type="DartUnitRunConfigurationType" factoryName="DartUnit">
+      <option name="VMOptions" />
+      <option name="arguments" />
+      <option name="filePath" />
+      <option name="scope" value="ALL" />
+      <option name="testName" />
+      <method />
+    </configuration>
     <configuration default="true" type="DartCommandLineRunConfigurationType" factoryName="Dart Command Line Application">
       <option name="VMOptions" />
       <option name="arguments" />
@@ -436,14 +444,6 @@
       <option name="saveOutputToFile" value="false" />
       <option name="showConsoleOnStdErr" value="false" />
       <option name="showConsoleOnStdOut" value="false" />
-      <method />
-    </configuration>
-    <configuration default="true" type="DartUnitRunConfigurationType" factoryName="DartUnit">
-      <option name="VMOptions" />
-      <option name="arguments" />
-      <option name="filePath" />
-      <option name="scope" value="ALL" />
-      <option name="testName" />
       <method />
     </configuration>
     <configuration default="true" type="JavaScriptTestRunnerKarma" factoryName="Karma" singleton="true" config-file="">
@@ -587,22 +587,26 @@
       <created>1381113100477</created>
       <updated>1381113100477</updated>
     </task>
-    <option name="localTasksCounter" value="24" />
+    <task id="LOCAL-00024" summary="added timed writes to serial port in cs4&#10;playing with mongo in cs-4">
+      <created>1381297555112</created>
+      <updated>1381297555112</updated>
+    </task>
+    <option name="localTasksCounter" value="25" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="547" y="309" width="1536" height="1064" extended-state="0" />
+    <frame x="567" y="339" width="1536" height="1109" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32990867" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.1131579" sideWeight="0.616509" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.1131579" sideWeight="0.6169528" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.38304722" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.35495898" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.35407725" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32963374" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32947975" sideWeight="0.66433567" order="3" side_tool="false" content_ui="tabs" />
@@ -613,7 +617,7 @@
       <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32939914" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32990867" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.3996697" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -648,103 +652,89 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="34" />
+      <breakpoints>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/public/Scripts/data2.js</url>
+          <line>74</line>
+          <option name="timeStamp" value="36" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/twi.js</url>
+          <line>38</line>
+          <option name="timeStamp" value="46" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/cs4.js</url>
+          <line>141</line>
+          <option name="timeStamp" value="47" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/cs4.js</url>
+          <line>163</line>
+          <option name="timeStamp" value="48" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/cs4.js</url>
+          <line>144</line>
+          <option name="timeStamp" value="49" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/cs4.js</url>
+          <line>148</line>
+          <option name="timeStamp" value="50" />
+        </line-breakpoint>
+      </breakpoints>
+      <option name="time" value="51" />
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/views/layout.jade">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="839" />
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/.WebStorm7/system/extLibs/nodejs-v0.10.18-src/core-modules-sources/lib/module.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="438" column="24" selection-start="12234" selection-end="12234" vertical-scroll-proportion="0.0" vertical-offset="6844" max-vertical-offset="8908" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views/com.jade">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="4" column="34" selection-start="76" selection-end="76" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="170">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/twi.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="61" column="44" selection-start="1580" selection-end="1580" vertical-scroll-proportion="0.0" vertical-offset="521" max-vertical-offset="1649">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/routes/index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="28" column="9" selection-start="716" selection-end="933" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="731">
-          <folding />
-        </state>
+        <state line="28" column="9" selection-start="716" selection-end="933" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="731" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/node_modules/mongodb/lib/mongodb/collection.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="672" column="13" selection-start="26961" selection-end="26961" vertical-scroll-proportion="0.0" vertical-offset="11176" max-vertical-offset="29512">
+        <state line="672" column="13" selection-start="26961" selection-end="26961" vertical-scroll-proportion="0.0" vertical-offset="11176" max-vertical-offset="29512" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/mongodb/lib/mongodb/connection/connection_pool.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="190" column="12" selection-start="6801" selection-end="6801" vertical-scroll-proportion="0.0" vertical-offset="2365" max-vertical-offset="5117" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/websocket2.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="88" column="36" selection-start="2373" selection-end="2373" vertical-scroll-proportion="0.0" vertical-offset="1069" max-vertical-offset="2006" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/data.jade">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="22" column="9" selection-start="520" selection-end="554" vertical-scroll-proportion="0.0" vertical-offset="374" max-vertical-offset="2499" />
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/.WebStorm7/system/extLibs/nodejs-v0.10.18-src/core-modules-sources/lib/module.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="499" column="0" selection-start="13986" selection-end="13986" vertical-scroll-proportion="0.0" vertical-offset="7977" max-vertical-offset="8908" />
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/.WebStorm7/system/extLibs/nodejs-v0.10.18-src/core-modules-sources/lib/timers.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="127" column="0" selection-start="3799" selection-end="3799" vertical-scroll-proportion="0.0" vertical-offset="939" max-vertical-offset="7990">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$USER_HOME$/.WebStorm7/system/extLibs/nodejs-v0.10.18-src/core-modules-sources/lib/events.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="94" column="16" selection-start="3238" selection-end="3238" vertical-scroll-proportion="0.0" vertical-offset="1022" max-vertical-offset="4709">
+        <state line="123" column="0" selection-start="3956" selection-end="3956" vertical-scroll-proportion="0.0" vertical-offset="1585" max-vertical-offset="4709">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/node_modules/mongodb/lib/mongodb/connection/connection_pool.js">
+    <entry file="file://$USER_HOME$/.WebStorm7/system/extLibs/nodejs-v0.10.18-src/core-modules-sources/lib/net.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="190" column="12" selection-start="6801" selection-end="6801" vertical-scroll-proportion="0.0" vertical-offset="2365" max-vertical-offset="5117">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="70" column="35" selection-start="2096" selection-end="2096" vertical-scroll-proportion="0.0" vertical-offset="1190" max-vertical-offset="1853">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/comlib.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="40" column="1" selection-start="987" selection-end="987" vertical-scroll-proportion="0.0" vertical-offset="680" max-vertical-offset="986">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/websocket2.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="88" column="36" selection-start="2373" selection-end="2373" vertical-scroll-proportion="0.0" vertical-offset="1069" max-vertical-offset="2006">
-          <folding>
-            <marker date="1380932772868" expanded="false" signature="2373:2385" placeholder="..." />
-            <marker date="1380932772868" expanded="false" signature="2522:2533" placeholder="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views/data.jade">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="22" column="9" selection-start="520" selection-end="554" vertical-scroll-proportion="0.0" vertical-offset="374" max-vertical-offset="2499">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cs4.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="25" column="5" selection-start="528" selection-end="561" vertical-scroll-proportion="0.0" vertical-offset="408" max-vertical-offset="3451">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views/data2.jade">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="57" column="0" selection-start="1267" selection-end="1267" vertical-scroll-proportion="0.0" vertical-offset="165" max-vertical-offset="1071">
+        <state line="1068" column="78" selection-start="27521" selection-end="27521" vertical-scroll-proportion="0.0" vertical-offset="16664" max-vertical-offset="22304">
           <folding />
         </state>
       </provider>
@@ -758,10 +748,45 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/public/Scripts/data2.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1411">
+        <state line="66" column="0" selection-start="1580" selection-end="1580" vertical-scroll-proportion="0.0" vertical-offset="36" max-vertical-offset="1428">
           <folding>
-            <marker date="1381297146631" expanded="false" signature="719:730" placeholder="..." />
+            <marker date="1381344072152" expanded="false" signature="729:740" placeholder="..." />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/comlib.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="38" column="0" selection-start="977" selection-end="977" vertical-scroll-proportion="0.0" vertical-offset="395" max-vertical-offset="986">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/twi.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="45" column="68" selection-start="926" selection-end="926" vertical-scroll-proportion="0.0" vertical-offset="204" max-vertical-offset="2210">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cs4.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="106" column="72" selection-start="3145" selection-end="3145" vertical-scroll-proportion="0.0" vertical-offset="1802" max-vertical-offset="4012">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/data2.jade">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="107" column="0" selection-start="3023" selection-end="3023" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1921">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="77" column="0" selection-start="2252" selection-end="2252" vertical-scroll-proportion="1.2691903" vertical-offset="102" max-vertical-offset="1887">
+          <folding />
         </state>
       </provider>
     </entry>
