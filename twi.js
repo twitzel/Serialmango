@@ -48,24 +48,24 @@ exports.socketDataOut  = function(data)
        console.log("Serial data rec - no database connections yet;")
    }
  //  console.log("Sending ws");
-    if (global.collectionLog){
-    collectionLog.find({'UnitID':1}).sort( { _id : -1 } ).limit(100).toArray(function(err,item)
-    {
-     if (err){
-         console.log("Error in mongo find"+err);
-         return;
-     }
-      //  console.log(item[0].Time);
-        try
-        {
-            global.websocket.send(JSON.stringify(item));
-        }
-        catch(err)
-        {
-
-        }
-      });
-    }
+//    if (global.collectionLog){
+//    collectionLog.find({'UnitID':1}).sort( { _id : -1 } ).limit(100).toArray(function(err,item)
+//    {
+//     if (err){
+//         console.log("Error in mongo find"+err);
+//         return;
+//     }
+//      //  console.log(item[0].Time);
+//        try
+//        {
+//            global.websocket.send(JSON.stringify(item));
+//        }
+//        catch(err)
+//        {
+//
+//        }
+//      });
+//    }
 };
 
 
