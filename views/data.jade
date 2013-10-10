@@ -4,11 +4,16 @@ block content
   h1= title
   div.myDiv(id="output")
   div
+      -for(var prop in item[0]){
+      p
+       =prop
+       |:
+       =item[0][prop]
+      -}
       p This is where I open a comport
       p #{item[0].Time}
-
       p UnitID: #{item[0].UnitID}
-      p Outside: #{item[0].oneWire0}
+      p Outside: #{item[0].Temp_1_0}
       p Freezer: #{item[0].oneWire1}
       p Inside Mid: #{item[0].oneWire2}
       p Inside Floor: #{item[0].oneWire3}
