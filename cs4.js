@@ -12,7 +12,7 @@ var timedOutInterval = 200;  //time to wait between serial transmitts
 var timedOut = true; // set to false will delay transmission;
 var comlib = require('./comlib');
 var lastCueReceived = {"Time" : "10/09/13 15:20:04.20", "Source" : "Midi1", "InData" : "F0 7F 05 02 01 01 31 2E 30 30 F7 "};
-var serialDataSocket
+var serialDataSocket;
 
 sendOutput = function (dataToSend)
 {
@@ -91,7 +91,7 @@ exports.setup = function()
     app.get('/data3', routes.data3);
 
 
-}
+};
 
 exports.websocketDataIn = function(dataSocket){
 
@@ -107,10 +107,9 @@ exports.websocketDataIn = function(dataSocket){
         collectionCue.update({'InData': lastCueReceived.InData}, {$push:serialDataSocket},function(err,res){
 
             console.log('added Dout to collection Cue'+res)});
-}
+};
 
-exports.socketDataOut  = function(data)
-{  // This routine gets serial cue data, sends it out the web socket and puts it in Log collection
+exports.socketDataOut = function (data) {  // This routine gets serial cue data, sends it out the web socket and puts it in Log collection
     var type = "";
     var indata;
     var source;
@@ -128,31 +127,37 @@ exports.socketDataOut  = function(data)
     //
     //If matching cue found then iterate through
     //OutData and send the stuff out
-    if(serialData.InData !=null)
-    {
-        collectionLog.find({'InData' : serialData.InData}).toArray(function(err,item){
-            if(item == null)
-            {
+    if (serialData.InData != null) {
+        collectionLog.find({'InData': serialData.InData}).toArray(function (err, item) {
+            if (item == null) {
                 console.log("not Found");
             }
-            else
-            {
+            else {
                 console.log(item);
             }
         });
 
-        collectionLog.update({'InData': "F9 7F 05 02 01 01 30 F7 "},{$push: {OutData: [{"Delay":"001", "Port":"Zig1", "Showname":"MamaMia", "Dir":"English", "Dout":"GO slide1.jpg"}]}},function(err,res){
+        collectionLog.update({'InData': "F9 7F 05 02 01 01 30 F7 "}, {$push: {OutData: [
+            {"Delay": "001", "Port": "Zig1", "Showname": "MamaMia", "Dir": "English", "Dout": "GO slide1.jpg"}
+        ]}}, function (err, res) {
 
-            console.log('changes it')});
+            console.log('changes it')
+        });
 
         sendOutput('this is a test');
-        setTimeout(function(){sendOutput('this is test 2')},2000);
+        setTimeout(function () {
+            sendOutput('this is test 2')
+        }, 2000);
 
     }
-{OutData: [{"Delay": "858" , "Port":"Zig1", "Showname":"MamaMia", "Dir":"English", "Dout":"GO slide1.jpg"}]}
+    {
+        OutData: [
+            {"Delay": "858", "Port": "Zig1", "Showname": "MamaMia", "Dir": "English", "Dout": "GO slide1.jpg"}
+        ]
+    }
     lastCueReceived = serialData; // store the data here
     //put the data into the collection
-    collectionLog.insert(serialData, {w:1}, function(err, result) {
+    collectionLog.insert(serialData, {w: 1}, function (err, result) {
         console.log(result);
     });
 
@@ -160,63 +165,55 @@ exports.socketDataOut  = function(data)
     indata = serialData.InData;
     source = serialData.Source;
 
-   // if cue is MIDI then get light cue number from hex string
-    if(source.substr(0,4) == "Midi")
-    {
-       if(indata.substr(0,2) == "F0") // this is a light cue
-           {
-            var space = "                                    "
-            var hex ="";
+    // if cue is MIDI then get light cue number from hex string
+    if (source.substr(0, 4) == "Midi") {
+        if (indata.substr(0, 2) == "F0") // this is a light cue
+        {
+            var space = "                                    ";
+            var hex = "";
 
-            for(i = 18; i < indata.length -3; i+=3) // extra space added to data at end of string
+            for (i = 18; i < indata.length - 3; i += 3) // extra space added to data at end of string
             {
-                hex +=   String.fromCharCode(parseInt(indata.substr(i,2),16));
+                hex += String.fromCharCode(parseInt(indata.substr(i, 2), 16));
             }
             type = 'Cue: ' + hex;
-           }
+        }
 
-       else if(indata.substr(0,1) == "8")
-       {
-           type = "Note Off";
-       }
+        else if (indata.substr(0, 1) == "8") {
+            type = "Note Off";
+        }
 
-       else if(indata.substr(0,1) == "9")
-       {
-           type = "Note On";
-       }
+        else if (indata.substr(0, 1) == "9") {
+            type = "Note On";
+        }
 
-       else if(indata.substr(0,1) == "A")
-       {
-           type = "Polyphonic Aftertouch";
-       }
+        else if (indata.substr(0, 1) == "A") {
+            type = "Polyphonic Aftertouch";
+        }
 
-       else if(indata.substr(0,1) == "B")
-       {
-           type = "Control/Mode Change";
-       }
+        else if (indata.substr(0, 1) == "B") {
+            type = "Control/Mode Change";
+        }
 
-       else if(indata.substr(0,1) == "C")
-       {
-           type = "Program Change";
-       }
+        else if (indata.substr(0, 1) == "C") {
+            type = "Program Change";
+        }
 
-       else if(indata.substr(0,1) == "D")
-       {
-           type = "Channel Aftertouch";
-       }
+        else if (indata.substr(0, 1) == "D") {
+            type = "Channel Aftertouch";
+        }
 
-       else if(indata.substr(0,1) == "E")
-       {
-           type = "Pitch Wheel Control";
-       }
+        else if (indata.substr(0, 1) == "E") {
+            type = "Pitch Wheel Control";
+        }
 
-       global.websocket.send(serialData.Time + " " + type +" ---    "+ indata) ;
+        global.websocket.send(serialData.Time + " " + type + " ---    " + indata);
 
     }
     else // just send data
     {
-        global.websocket.send(serialData.Time + " " +indata) ;
+        global.websocket.send(serialData.Time + " " + indata);
     }
 
 
-}
+};
