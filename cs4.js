@@ -11,8 +11,8 @@ var user = require('./routes/user');
 var timedOutInterval = 200;  //time to wait between serial transmitts
 var timedOut = true; // set to false will delay transmission;
 var comlib = require('./comlib');
-var lastCueReceived;
-var serialDataSocket =  {"Time" : "10/09/13 15:20:04.20", "Source" : "Midi1", "InData" : "F0 7F 05 02 01 01 31 2E 30 30 F7 "};
+var lastCueReceived = {"Time" : "10/09/13 15:20:04.20", "Source" : "Midi1", "InData" : "F0 7F 05 02 01 01 31 2E 30 30 F7 "};
+var serialDataSocket
 
 sendOutput = function (dataToSend)
 {
@@ -93,31 +93,20 @@ exports.setup = function()
 
 }
 
-exports.websocketDataIn = function(data){
+exports.websocketDataIn = function(dataSocket){
 
-     serialDataSocket = JSON.parse(data);
-    if(serialDataSocket.Dout != null) // make sure we have valid Dout
-    {
+
         //now we know something is attached to the incoming cue so put it in Cue collection
         // incoming cue = lastCueReceived
-        collectionCue.update({'InData':lastCueReceived.InData}, {$set: lastCueReceived},{upsert:true},function(err,res){
+        //lastCueReceived is a json parsed object from my io board
+       // serialDataSocket is the array data from the websocket
+       collectionCue.update({'InData':lastCueReceived.InData}, {$set: lastCueReceived},{upsert:true, w:1},function(err,res){
 
-            console.log('InData to colloection Cue')});
+            console.log('InData to collection Cue')});
 
         collectionCue.update({'InData': lastCueReceived.InData}, {$push:serialDataSocket},function(err,res){
 
             console.log('added Dout to collection Cue')});
-
-
-
-
-
-    }
-
-
-
-
-
 }
 
 exports.socketDataOut  = function(data)
@@ -160,7 +149,7 @@ exports.socketDataOut  = function(data)
         setTimeout(function(){sendOutput('this is test 2')},2000);
 
     }
-
+{OutData: [{"Delay": "858" , "Port":"Zig1", "Showname":"MamaMia", "Dir":"English", "Dout":"GO slide1.jpg"}]}
     lastCueReceived = serialData; // store the data here
     //put the data into the collection
     collectionLog.insert(serialData, {w:1}, function(err, result) {
