@@ -10,7 +10,7 @@ var user = require('./routes/user');
 
 exports.websocketDataIn = function(data){
     // if you want to get socket data it's here!!
-}
+};
 
 exports.socketDataOut  = function(data)
 {
@@ -26,8 +26,8 @@ exports.socketDataOut  = function(data)
    }
     if(serialData)
     {
-        serialData.Time = new Date(serialData.Time);
-
+        //serialData.Time = new Date(serialData.Time);
+        serialData.Time = new Date();
 
     }
     else
@@ -48,25 +48,25 @@ exports.socketDataOut  = function(data)
        console.log("Serial data rec - no database connections yet;")
    }
  //  console.log("Sending ws");
-    if (global.collectionLog){
-    collectionLog.find({'UnitID':1}).sort( { _id : -1 } ).limit(100).toArray(function(err,item)
-    {
-     if (err){
-         console.log("Error in mongo find"+err);
-         return;
-     }
-      //  console.log(item[0].Time);
-        try
-        {
-            global.websocket.send(JSON.stringify(item));
-        }
-        catch(err)
-        {
-
-        }
-      });
-    }
-}
+//    if (global.collectionLog){
+//    collectionLog.find({'UnitID':1}).sort( { _id : -1 } ).limit(100).toArray(function(err,item)
+//    {
+//     if (err){
+//         console.log("Error in mongo find"+err);
+//         return;
+//     }
+//      //  console.log(item[0].Time);
+//        try
+//        {
+//            global.websocket.send(JSON.stringify(item));
+//        }
+//        catch(err)
+//        {
+//
+//        }
+//      });
+//    }
+};
 
 
 exports.setup = function()
@@ -122,5 +122,5 @@ exports.setup = function()
     app.get('/', routes.index);
     app.get('/users', user.list);
     app.get('/data', routes.data);
-}
+};
 
