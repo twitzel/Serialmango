@@ -11,7 +11,8 @@ MongoClient.connect("mongodb://10.6.1.119:27017/test", function(err, db)
     {
         console.log("TWI: We are connected to mondo exampleDb database todd collection");
         global.collectionLog = db.collection('todd');
-        avgReadings(new Date(2010,10-1,10,21-6,52,0),35);
+        var x = new Date(new Date()-(60*1000));
+        avgReadings(x,60);
     }
 });
 function avgReadings(startTime,seconds)
@@ -49,7 +50,7 @@ collectionLog.find({"Time":{$gte : startTime,$lte : new Date(startTime.getTime()
 
     });
 
-    var returnitem = [];
+
 
     for(var prop in avgitem){
         avgitem[prop]=Math.round((avgitem[prop]/avgitemcount[prop])*100)/100;
