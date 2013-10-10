@@ -10,7 +10,7 @@ var user = require('./routes/user');
 
 exports.websocketDataIn = function(data){
     // if you want to get socket data it's here!!
-}
+};
 
 exports.socketDataOut  = function(data)
 {
@@ -26,8 +26,8 @@ exports.socketDataOut  = function(data)
    }
     if(serialData)
     {
-        serialData.Time = new Date(serialData.Time);
-
+        //serialData.Time = new Date(serialData.Time);
+        serialData.Time = new Date();
 
     }
     else
@@ -66,7 +66,7 @@ exports.socketDataOut  = function(data)
         }
       });
     }
-}
+};
 
 
 exports.setup = function()
@@ -122,5 +122,5 @@ exports.setup = function()
     app.get('/', routes.index);
     app.get('/users', user.list);
     app.get('/data', routes.data);
-}
+};
 
