@@ -1,4 +1,7 @@
 /**
+ * Created by Steve on 10/10/13.
+ */
+/**
  * Created by Steve on 9/30/13.
  */
 
@@ -24,9 +27,9 @@ sendOutput = function (dataToSend)
     }
     else
     {
-    /*    setTimeout(function () {
-            sendOutput(dataToSend);
-        }, timedOutInterval);*/
+        /*    setTimeout(function () {
+         sendOutput(dataToSend);
+         }, timedOutInterval);*/
     }
     setTimeout(function(){timedOut = true;}, timedOutInterval);
 };
@@ -80,9 +83,9 @@ exports.setup = function()
     }
 
     //set up all routes HERE
-                    //set up all routes HERE
-                                    //set up all routes HERE
-                                                    //set up all routes HERE
+    //set up all routes HERE
+    //set up all routes HERE
+    //set up all routes HERE
     app.get('/com', routes.com);
     app.get('/', routes.index);
     app.get('/users', user.list);
@@ -97,18 +100,20 @@ exports.websocketDataIn = function(dataSocket){
 
     serialDataSocket = JSON.parse(dataSocket);
     //now we know something is attached to the incoming cue so put it in Cue collection
-        // incoming cue = lastCueReceived
-        //lastCueReceived is a json parsed object from my io board
-       // serialDataSocket is the array data from the websocket
-      collectionCue.update({'InData':lastCueReceived.InData}, {$set: lastCueReceived},{upsert:true, w:1},function(err,res){
+    // incoming cue = lastCueReceived
+    //lastCueReceived is a json parsed object from my io board
+    // serialDataSocket is the array data from the websocket
+    collectionCue.update({'InData':lastCueReceived.InData}, {$set: lastCueReceived},{upsert:true, w:1},function(err,res){
 
-           console.log('InData to collection Cue'+res)});
+        console.log('InData to collection Cue'+res)});
 
+
+    console.log('added Dout to collection Cue'+res);
 };
-       collectionCue.update({'InData': lastCueReceived.InData}, {$push:serialDataSocket},function(err,res){
+collectionCue.update({'InData': lastCueReceived.InData}, {$push:serialDataSocket},function(err,res){
 
-           console.log('added Dout to collection Cue'+res);
-}
+    console.log('added Dout to collection Cue'+res);
+})
 
 exports.socketDataOut = function (data) {  // This routine gets serial cue data, sends it out the web socket and puts it in Log collection
     var type = "";
