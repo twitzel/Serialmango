@@ -95,18 +95,19 @@ exports.setup = function()
 
 exports.websocketDataIn = function(dataSocket){
 
-
-        //now we know something is attached to the incoming cue so put it in Cue collection
+    serialDataSocket = JSON.parse(dataSocket);
+    //now we know something is attached to the incoming cue so put it in Cue collection
         // incoming cue = lastCueReceived
         //lastCueReceived is a json parsed object from my io board
        // serialDataSocket is the array data from the websocket
-       collectionCue.update({'InData':lastCueReceived.InData}, {$set: lastCueReceived},{upsert:true, w:1},function(err,res){
+      collectionCue.update({'InData':lastCueReceived.InData}, {$set: lastCueReceived},{upsert:true, w:1},function(err,res){
 
-            console.log('InData to collection Cue'+res)});
+           console.log('InData to collection Cue'+res)});
 
-        collectionCue.update({'InData': lastCueReceived.InData}, {$push:serialDataSocket},function(err,res){
 
-            console.log('added Dout to collection Cue'+res)});
+       collectionCue.update({'InData': lastCueReceived.InData}, {$push:serialDataSocket},function(err,res){
+
+           console.log('added Dout to collection Cue'+res)});
 }
 
 exports.socketDataOut  = function(data)
@@ -150,12 +151,11 @@ exports.socketDataOut  = function(data)
 
     }
 {OutData: [{"Delay": "858" , "Port":"Zig1", "Showname":"MamaMia", "Dir":"English", "Dout":"GO slide1.jpg"}]}
-    lastCueReceived = serialData; // store the data here
+    lastCueReceived = (JSON.parse(JSON.stringify(serialData))); // store the data here
     //put the data into the collection
     collectionLog.insert(serialData, {w:1}, function(err, result) {
         console.log(result);
     });
-
 
     indata = serialData.InData;
     source = serialData.Source;
