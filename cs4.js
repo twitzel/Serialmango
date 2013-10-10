@@ -102,11 +102,11 @@ exports.websocketDataIn = function(dataSocket){
        // serialDataSocket is the array data from the websocket
        collectionCue.update({'InData':lastCueReceived.InData}, {$set: lastCueReceived},{upsert:true, w:1},function(err,res){
 
-            console.log('InData to collection Cue')});
+            console.log('InData to collection Cue'+res)});
 
         collectionCue.update({'InData': lastCueReceived.InData}, {$push:serialDataSocket},function(err,res){
 
-            console.log('added Dout to collection Cue')});
+            console.log('added Dout to collection Cue'+res)});
 }
 
 exports.socketDataOut  = function(data)
