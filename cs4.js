@@ -104,12 +104,10 @@ exports.websocketDataIn = function(dataSocket){
 
            console.log('InData to collection Cue'+res)});
 
-
-            console.log('added Dout to collection Cue'+res)});
 };
        collectionCue.update({'InData': lastCueReceived.InData}, {$push:serialDataSocket},function(err,res){
 
-           console.log('added Dout to collection Cue'+res)});
+           console.log('added Dout to collection Cue'+res);
 }
 
 exports.socketDataOut = function (data) {  // This routine gets serial cue data, sends it out the web socket and puts it in Log collection
@@ -150,7 +148,7 @@ exports.socketDataOut = function (data) {  // This routine gets serial cue data,
         }, 2000);
 
     }
-{OutData: [{"Delay": "858" , "Port":"Zig1", "Showname":"MamaMia", "Dir":"English", "Dout":"GO slide1.jpg"}]}
+
     lastCueReceived = (JSON.parse(JSON.stringify(serialData))); // store the data here
     //put the data into the collection
     collectionLog.insert(serialData, {w: 1}, function (err, result) {
