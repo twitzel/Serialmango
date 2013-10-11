@@ -10,27 +10,22 @@ block content
        |:
        =item[0][prop]
 
-               canvas(id=prop,height="50",width="180",style="border:1px solid #000000;")
+               canvas(id=prop,height="50",width=item.length,style="border:1px solid #000000;")
         -}
       button(onclick = "buttonclick()") Todd Made this form Me!
-   div
-      canvas(id="a",height="500",width="1000")
+
   style.
     .myDiv { height: 150px;overflow: scroll; float: right; }
 
-
   script.
-   var wsUri = "ws://10.6.1.119:8080";
-   var output;
+      var wsUri = "ws://10.6.1.119:8080";
+      var output;
 
-    var dp = !{JSON.stringify(item)};
-      var a_canvas = document.getElementById("a");
-      var c = a_canvas.getContext("2d");
-          c.translate(1000.5,500.5);
-          c.rotate(Math.PI);
-            c.font = "14px sans-serif";
-    function graphskeleton(prop)
-    {
+      var dp = !{JSON.stringify(item)};
+
+        //  c.font = "14px sans-serif";
+       function graphskeleton(prop)
+         {
             graph=[]
             var low = 999;
             var high = 0;
@@ -61,7 +56,7 @@ block content
           }
           graph[prop].context.stroke();
 
-    }
+       }
 
 
 
@@ -72,7 +67,7 @@ block content
          graphskeleton(prop);
          }
       //testWebSocket();
-     //graph();
+      //graph();
       }
       function testWebSocket()
       {
