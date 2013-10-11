@@ -1,5 +1,5 @@
 
-var wsUri = "ws://localhost:8080";
+var wsUri = "ws://10.6.1.119:8080";
 var output;
 var graph =[];
 
