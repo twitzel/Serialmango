@@ -5,19 +5,13 @@ block content
   div.myDiv(id="output")
   div
       -for(var prop in item[0]){
-      p
+      div
        =prop
        |:
        =item[0][prop]
-      -}
-      p This is where I open a comport
-      p #{item[0].Time}
-      p UnitID: #{item[0].UnitID}
-      p Outside: #{item[0].Temp_1_0}
-      p Freezer: #{item[0].oneWire1}
-      p Inside Mid: #{item[0].oneWire2}
-      p Inside Floor: #{item[0].oneWire3}
-      p Refrigerator: #{item[0].oneWire4}
+
+               canvas(id=prop,height="50",width="180",style="border:1px solid #000000;")
+        -}
       button(onclick = "buttonclick()") Todd Made this form Me!
    div
       canvas(id="a",height="500",width="1000")
@@ -35,79 +29,50 @@ block content
           c.translate(1000.5,500.5);
           c.rotate(Math.PI);
             c.font = "14px sans-serif";
-      function graph(){
+    function graphskeleton(prop)
+    {
+            graph=[]
+            var low = 999;
+            var high = 0;
+             for (var i =0;i<dp.length;++i){
+                 if (dp[i][prop] > high){
+                high = dp[i][prop];
 
-       c.clearRect(0, 0, 1000,500);
-      c.lineWidth = 1;
-    c.strokeStyle = "rgb(0,0,0)";
-    c.beginPath();
-        var avg0=0;
-      for (var i = 0; i<100; ++i){
-        avg0=avg0+((dp[i].oneWire0));
-      c.lineTo(i,((dp[i].oneWire0)*10)-(30*10));
-        }
+                 }else if (dp[i][prop] < low)
+                {
+               low = dp[i][prop];
+              }
 
-        c.moveTo(0,((avg0/100)*10)-(30*10));
-        c.lineTo(100,((avg0/100)*10)-(30*10));
-        c.save();
-        c.translate(1000,((avg0/100)*10)-(30*10));
-        c.rotate(Math.PI);
+             }
+        graph[prop] =[];
+        graph[prop].low = low;
+        graph[prop].high = high;
+        graph[prop].id=document.getElementById(prop);
+        graph[prop].context = graph[prop].id.getContext("2d");
+        graph[prop].degperpixel = graph[prop].id.height/(high-low);
 
-        c.fillText((avg0/100).toFixed(2),0,-2);
-        c.restore();
-        c.stroke();
-      // start oneWire1
-      c.beginPath();
-      c.strokeStyle = "rgb(55,55,255)";
-        c.moveTo(0,((dp[0].oneWire1)*10)-(-20*10));
-        avg0=0;
-    for (var i = 0; i<1000; ++i){
-        avg0=avg0+((dp[i].oneWire1));
-        c.lineTo(i,((dp[i].oneWire1)*10)-(-20*10));
-            }
+        graph[prop].context.lineWidth = 1;
+        graph[prop].context.strokeStyle = "rgb(0,0,0)";
+        graph[prop].context.beginPath();
+        graph[prop].context.moveTo(0,(dp[0][prop]-low)*graph[prop].degperpixel);
+        for (var i = 0; i<dp.length;++i)
+            {
+          graph[prop].context.lineTo(i,(dp[i][prop]-low)*graph[prop].degperpixel);
+          }
+          graph[prop].context.stroke();
+
+    }
 
 
-
-    c.moveTo(0,((avg0/1000)*10)-(-20*10));
-        c.lineTo(1000,((avg0/1000)*10)-(-20*10));
-        c.save();
-        c.translate(1000,((avg0/1000)*10)-(-20*10));
-        c.rotate(Math.PI);
-
-        c.fillText((avg0/1000).toFixed(2),0,-2);
-        c.restore();
-        c.stroke();
-    c.strokeStyle = "#0000FF";
-        c.beginPath();
-      c.moveTo(0,((dp[0].oneWire2)*10)-(50*10));
-          for (var i = 0; i<1000; ++i){
-              c.lineTo(i,((dp[i].oneWire2)*10)-(50*10));
-                  }
-
-        c.stroke();
-        c.beginPath();
-        c.lineWidth = 1;
-        c.moveTo(0,((dp[0].oneWire3)*10)-(50*10));
-          for (var i = 0; i<1000; ++i){
-              c.lineTo(i,((dp[i].oneWire3)*10)-(50*10));
-                  }
-        c.strokeStyle = "#00FF00";
-      c.stroke();
-
-      c.beginPath();
-      c.moveTo(0,((dp[0].oneWire4)*10)-(30*10));
-          for (var i = 0; i<1000; ++i){
-              c.lineTo(i,((dp[i].oneWire4)*10)-(30*10));
-                 }
-      c.strokeStyle = "#FF0000";
-      c.stroke();
-         }
 
         function init()
       {
           output = document.getElementById("output");
-      testWebSocket();
-      graph();
+         for(var prop in dp[0]){
+         graphskeleton(prop);
+         }
+      //testWebSocket();
+     //graph();
       }
       function testWebSocket()
       {

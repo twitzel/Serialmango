@@ -22,7 +22,7 @@ exports.data = function(req, res){
        // global.collectionLog.findOne( {UnitID:2} ,{Sort:{_id:1}},function(err, item){
     // initial graph data
     // todd added this
-    collectionAvg.find({},{_id:0}).sort( { _id : -1 } ).limit(60).toArray(function(err,item){
+    collectionAvg.find({},{_id:0}).sort( { _id : -1 } ).limit(180).toArray(function(err,item){
            //  console.log(item[0].Time);
 
 
