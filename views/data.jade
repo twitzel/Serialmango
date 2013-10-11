@@ -8,9 +8,9 @@ block content
       div
        =prop
        |:
-       =item[0][prop]
+       =item[item.length-1][prop]
 
-               canvas(id=prop,height="50",width=item.length,style="border:1px solid #000000;")
+               canvas(id=prop,height="75",width=item.length+50,style="border:1px solid #000000;")
         -}
       button(onclick = "buttonclick()") Todd Made this form Me!
 
@@ -30,32 +30,29 @@ block content
             var low = 999;
             var high = 0;
              for (var i =0;i<dp.length;++i){
-                 if (dp[i][prop] > high){
-                high = dp[i][prop];
-
-                 }else if (dp[i][prop] < low)
-                {
-               low = dp[i][prop];
-              }
-
+                 if (dp[i][prop] > high){high = dp[i][prop];}
+                 if (dp[i][prop] < low){low = dp[i][prop];}
              }
+        var loffset = 50;
         graph[prop] =[];
         graph[prop].low = low;
         graph[prop].high = high;
         graph[prop].id=document.getElementById(prop);
         graph[prop].context = graph[prop].id.getContext("2d");
-        graph[prop].degperpixel = graph[prop].id.height/(high-low);
-
+        graph[prop].degperpixel = (graph[prop].id.height)/(high-low);
         graph[prop].context.lineWidth = 1;
         graph[prop].context.strokeStyle = "rgb(0,0,0)";
         graph[prop].context.beginPath();
-        graph[prop].context.moveTo(0,(dp[0][prop]-low)*graph[prop].degperpixel);
+        graph[prop].context.moveTo(loffset,(graph[prop].id.height-(dp[0][prop]-low)*graph[prop].degperpixel));
         for (var i = 0; i<dp.length;++i)
             {
-          graph[prop].context.lineTo(i,(dp[i][prop]-low)*graph[prop].degperpixel);
+          graph[prop].context.lineTo(i+loffset,(graph[prop].id.height-(dp[i][prop]-low)*graph[prop].degperpixel));
           }
           graph[prop].context.stroke();
-
+          graph[prop].context.fillStyle = "blue";
+          graph[prop].context.font = "16px Arial";
+          graph[prop].context.fillText(high,2,13);
+          graph[prop].context.fillText(low,2,graph[prop].id.height-1);
        }
 
 
@@ -64,6 +61,7 @@ block content
       {
           output = document.getElementById("output");
          for(var prop in dp[0]){
+
          graphskeleton(prop);
          }
       //testWebSocket();
