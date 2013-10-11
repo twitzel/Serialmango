@@ -4,7 +4,7 @@ block content
   h1= title
   div.myDiv(id="output")
   div
-      -for(var prop in item[0]){
+      -for(var prop in item[item.length-1]){
       div
        =prop
        |:
