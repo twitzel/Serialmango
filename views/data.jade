@@ -4,6 +4,7 @@ block content
   h1= title
   div.myDiv(id="output")
   div
+
       -for(var prop in item[item.length-1]){
       div
        =prop
@@ -26,7 +27,7 @@ block content
         //  c.font = "14px sans-serif";
        function graphskeleton(prop)
          {
-            graph=[]
+            var graph =[];
             var low = 999;
             var high = 0;
              for (var i =0;i<dp.length;++i){
@@ -46,8 +47,13 @@ block content
         graph[prop].context.moveTo(loffset,(graph[prop].id.height-(dp[0][prop]-low)*graph[prop].degperpixel));
         for (var i = 0; i<dp.length;++i)
             {
+            if (dp[i][prop]){
           graph[prop].context.lineTo(i+loffset,(graph[prop].id.height-(dp[i][prop]-low)*graph[prop].degperpixel));
-          }
+          } else
+            { //no sensor data
+        // graph[prop].context.lineTo(i+loffset,graph[prop].id.height);
+        }
+            }
           graph[prop].context.stroke();
           graph[prop].context.fillStyle = "blue";
           graph[prop].context.font = "16px Arial";
@@ -60,7 +66,7 @@ block content
         function init()
       {
           output = document.getElementById("output");
-         for(var prop in dp[0]){
+         for(var prop in dp[dp.length-1]){
 
          graphskeleton(prop);
          }
