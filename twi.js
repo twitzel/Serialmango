@@ -47,6 +47,17 @@ exports.socketDataOut  = function(data)
    {
        console.log("Serial data rec - no database connections yet;")
    }
+
+
+         try
+        {
+           serialData.datatype="Sensor Update";
+            global.websocket.send(JSON.stringify(serialData));
+        }
+        catch(err)
+        {
+            console.log("ws error"+err);
+        }
  //  console.log("Sending ws");
 //    if (global.collectionLog){
 //    collectionLog.find({'UnitID':1}).sort( { _id : -1 } ).limit(100).toArray(function(err,item)

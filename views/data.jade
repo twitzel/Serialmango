@@ -12,100 +12,13 @@ block content
        =item[item.length-1][prop]
 
                canvas(id=prop,height="75",width=item.length+50,style="border:1px solid #000000;")
-        -}
+               canvas(id=prop+"_rt",height="75",width=100,style="border:1px solid #000000;")
+           -}
       button(onclick = "buttonclick()") Todd Made this form Me!
 
   style.
     .myDiv { height: 150px;overflow: scroll; float: right; }
-
+  script(src="/Scripts/data.js")
   script.
-      var wsUri = "ws://10.6.1.119:8080";
-      var output;
-
       var dp = !{JSON.stringify(item)};
-
-        //  c.font = "14px sans-serif";
-       function graphskeleton(prop)
-         {
-            var graph =[];
-            var low = 999;
-            var high = 0;
-             for (var i =0;i<dp.length;++i){
-                 if (dp[i][prop] > high){high = dp[i][prop];}
-                 if (dp[i][prop] < low){low = dp[i][prop];}
-             }
-        var loffset = 50;
-        graph[prop] =[];
-        graph[prop].low = low;
-        graph[prop].high = high;
-        graph[prop].id=document.getElementById(prop);
-        graph[prop].context = graph[prop].id.getContext("2d");
-        graph[prop].degperpixel = (graph[prop].id.height)/(high-low);
-        graph[prop].context.lineWidth = 1;
-        graph[prop].context.strokeStyle = "rgb(0,0,0)";
-        graph[prop].context.beginPath();
-        graph[prop].context.moveTo(loffset,(graph[prop].id.height-(dp[0][prop]-low)*graph[prop].degperpixel));
-        for (var i = 0; i<dp.length;++i)
-            {
-            if (dp[i][prop]){
-          graph[prop].context.lineTo(i+loffset,(graph[prop].id.height-(dp[i][prop]-low)*graph[prop].degperpixel));
-          } else
-            { //no sensor data
-        // graph[prop].context.lineTo(i+loffset,graph[prop].id.height);
-        }
-            }
-          graph[prop].context.stroke();
-          graph[prop].context.fillStyle = "blue";
-          graph[prop].context.font = "16px Arial";
-          graph[prop].context.fillText(high,2,13);
-          graph[prop].context.fillText(low,2,graph[prop].id.height-1);
-       }
-
-
-
-        function init()
-      {
-          output = document.getElementById("output");
-         for(var prop in dp[dp.length-1]){
-
-         graphskeleton(prop);
-         }
-      //testWebSocket();
-      //graph();
-      }
-      function testWebSocket()
-      {
-      websocket = new WebSocket(wsUri);
-      websocket.onopen = function(evt) { onOpen(evt) };
-      websocket.onclose = function(evt) { onClose(evt) };
-      websocket.onmessage = function(evt) { onMessage(evt) };
-      websocket.onerror = function(evt) { onError(evt) };
-      }
-      function onOpen(evt) { writeToScreen("CONNECTED");
-          //   doSend("WebSocket rocks");
-      }
-      function onClose(evt) {
-          writeToScreen("DISCONNECTED");
-      }
-      function onMessage(evt)    {
-        dp = JSON.parse(evt.data);
-
-          writeToScreen(dp[0].UnitID);
-            graph();
-          //websocket.close();
-      }
-      function onError(evt) {
-          writeToScreen('<span style="color: red;">ERROR:</span> ' + evt.data);
-      }
-      function doSend(message) {
-          writeToScreen("SENT: " + message);  websocket.send(message);
-      }
-      function writeToScreen(message) {
-
-          output.innerHTML = message+"<BR>"+output.innerHTML;
-      }
-        function buttonclick(message) {
-
-            output.innerHTML = "Send something out the websocket!";
-        }
       window.addEventListener("load", init, false);
