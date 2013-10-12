@@ -1,5 +1,5 @@
 
-var wsUri = "ws://witzel.homeserver.com:8080";
+var wsUri = "ws://localhost:8080";
 var output;
 var graph =[];
 
@@ -84,6 +84,7 @@ function onMessage(evt)    {
             if (graph[prop].data.length > 100)
             {
                 graph[prop].data.shift();
+                graph[prop].context_rt.clearRect (0 , 0 , graph[prop].id_rt.width , graph[prop].id_rt.height );
             }
             graph[prop].context_rt.beginPath();
             graph[prop].context_rt.moveTo(loffset,(graph[prop].id_rt.height-(graph[prop].data[0]-graph[prop].low)*graph[prop].degperpixel));
