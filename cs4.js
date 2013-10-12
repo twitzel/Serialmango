@@ -16,6 +16,10 @@ var timedOut = true; // set to false will delay transmission;
 var comlib = require('./comlib');
 var lastCueReceived = {"Time" : "10/09/13 15:20:04.20", "Source" : "Midi1", "InData" : "F0 7F 05 02 01 01 31 2E 30 30 F7 "};
 var serialDataSocket;
+var timerStartTime;
+var dataToSend = new Array();
+var delay = new Array();
+var count;
 
 sendOutput = function (dataToSend)
 {
@@ -23,15 +27,16 @@ sendOutput = function (dataToSend)
     {
         timedOut = false;
         comlib.write(dataToSend);
-
+        setTimeout(function(){timedOut = true;}, timedOutInterval);
+        timerStartTime = new Date();
+        console.log(dataToSend);
     }
     else
     {
-        /*    setTimeout(function () {
-         sendOutput(dataToSend);
-         }, timedOutInterval);*/
+        //since we are not ready for this to go out (or we wouldn't be here) -- reset a timer with actual time left.
+        setTimeout(function(){sendOutput(dataToSend);}, ( timedOutInterval -(timerStartTime - Date())))
     }
-    setTimeout(function(){timedOut = true;}, timedOutInterval);
+
 };
 
 
@@ -103,20 +108,36 @@ exports.websocketDataIn = function(dataSocket){
     // incoming cue = lastCueReceived
     //lastCueReceived is a json parsed object from my io board
     // serialDataSocket is the array data from the websocket
+
+    //
     collectionCue.update({'InData':lastCueReceived.InData}, {$set: lastCueReceived},{upsert:true, w:1},function(err,res){
 
         console.log('InData to collection Cue'+res);
     });
 
-
-
-
     collectionCue.update({'InData': lastCueReceived.InData}, {$push:serialDataSocket},function(err,res){
 
     console.log('added Dout to collection Cue'+res);
     });
+
+
+
+
+
+
+
 };
-exports.socketDataOut = function (data) {  // This routine gets serial cue data, sends it out the web socket and puts it in Log collection
+
+// This routine receives serial cue data,
+// parses it and sends it out the web socket
+// puts it in Log collection.
+//
+// Then checks to Cue file to see if there any matching cues.
+// If so, goes thrugh all outgoing cues.
+// sets output timers to send data back to CS-4 IO via serial.
+
+
+exports.socketDataOut = function (data) {
     var type = "";
     var indata;
     var source;
@@ -124,39 +145,41 @@ exports.socketDataOut = function (data) {  // This routine gets serial cue data,
 
 
     // put the time string into proper form
-    // then save it to the log collection
+
     serialData = JSON.parse(data);
     serialData.Time = new Date(serialData.Time);
 
 
-    //make sure this is incoming cue data
-    //if it is, then search for matching cue
+    // make sure this is incoming cue data
+    // if it is, then search for matching cue
     //
-    //If matching cue found then iterate through
-    //OutData and send the stuff out
+    // If matching cue found then iterate through
+    // OutData and send the stuff out
+    // and send output data to log file
     if (serialData.InData != null) {
-        collectionLog.find({'InData': serialData.InData}).toArray(function (err, item) {
-            if (item == null) {
+        collectionCue.find({'InData': serialData.InData}).toArray(function (err, item) {
+            if (item.length == 0) {
                 console.log("not Found");
             }
             else {
-                console.log(item);
+
+               for(count = 0; count< item[0].OutData.length; count++)
+               {
+                    dataToSend[count] = item[0].OutData[count][0].Dout;
+                    delay[count] = item[0].OutData[count][0].Delay;
+                    setTimeout(function() {sendOutput(dataToSend[count]);}, delay[count]);
+                    console.log(item[0].OutData[count][0].Dout + "  Delay "+item[0].OutData[count][0].Delay);
+                }
+
             }
         });
 
-        collectionLog.update({'InData': "F9 7F 05 02 01 01 30 F7 "},{$push: {OutData: [{"Delay":"001", "Port":"Zig1", "Showname":"MamaMia", "Dir":"English", "Dout":"GO slide1.jpg"}]}},function(err,res){
-
-            console.log('changes it')});
-
-        sendOutput('this is a test');
-        setTimeout(function () {
-            sendOutput('this is test 2')
-        }, 2000);
 
     }
 
-    lastCueReceived = (JSON.parse(JSON.stringify(serialData))); // store the data here
-    //put the data into the collection
+    lastCueReceived = (JSON.parse(JSON.stringify(serialData))); // store the data here in case of Cue file generation
+
+    //Log the data into the collection
     collectionLog.insert(serialData, {w: 1}, function (err, result) {
         console.log(result);
     });

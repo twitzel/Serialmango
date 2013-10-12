@@ -170,7 +170,7 @@ function avgReadings(startTime,seconds)
     {
 
         if (err){
-            console.log("Error in mongo find"+err);
+            console.log("Error in mongo find: "+err);
             return;
         }
         item.forEach(function(initem)

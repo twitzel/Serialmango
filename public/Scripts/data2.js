@@ -22,7 +22,7 @@ function testWebSocket()
 
 function onOpen(evt) {
 
-
+    writeToScreen("CONNECTED");
     writeToScreen('#{myuri}');
 }
 
@@ -72,7 +72,7 @@ function cueclick(message){
     text1.value = counter;
     delay = (new Date()-lastCueTime);
    // delay = 6;
-    websocket.send("{\"OutData\": [{\"Delay\": \""+delay+"\" , \"Port\":\"Zig1\", \"Showname\":\"MamaMia\", \"Dir\":\"English\", \"Dout\":\"GO slide1.jpg\"}]}");
+    websocket.send("{\"OutData\": [{\"Delay\": "+delay+" , \"Port\":\"Zig1\", \"Showname\":\"MamaMia\", \"Dir\":\"English\", \"Dout\":\"GO slide" + counter +".jpg NEXT slide"+(counter +1) +".jpg\"}]}");
 
-    textData.value = "{\"OutData\": [{\"Delay\":\"" +delay+ "\",\"Port\":\"Zig1\", \"Showname\":\"MamaMia\", \"Dir\":\"English\", \"Dout\":\"GO slide1.jpg\"}]}" + "\r" + textData.value;
+    textData.value = "{\"OutData\": [{\"Delay\": "+delay+" , \"Port\":\"Zig1\", \"Showname\":\"MamaMia\", \"Dir\":\"English\", \"Dout\":\"GO slide" + counter +".jpg NEXT slide"+(counter +1) +".jpg\"}]}";
 }
