@@ -168,7 +168,7 @@ exports.socketDataOut = function (data) {
                    // dataToSend[count] = item[0].OutData[count][0].Dout;
                    var x= item[0].OutData[count][0].Dout;
                     delay[count] = item[0].OutData[count][0].Delay;
-                    setTimeout(function() {console.log(x);}, delay[count]);
+                    setTimeout(function() {console.log(count);}, delay[count]);
                     console.log(item[0].OutData[count][0].Dout + "  Delay "+item[0].OutData[count][0].Delay);
                 }
 
