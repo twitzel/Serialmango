@@ -168,7 +168,7 @@ exports.socketDataOut = function (data) {
                    // dataToSend[count] = item[0].OutData[count][0].Dout;
                    dataToSend[count] = item[0].OutData[count][0].Dout;
                     delay[count] = item[0].OutData[count][0].Delay;
-                    setTimeout(function() {console.log;}, delay[count],dataToSend[count]);
+                    setTimeout(console.log, delay[count],dataToSend[count]);
                    //http://arguments.callee.info/2008/11/10/passing-arguments-to-settimeout-and-setinterval/
                     console.log(item[0].OutData[count][0].Dout + "  Delay "+item[0].OutData[count][0].Delay);
                 }
