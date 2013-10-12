@@ -22,13 +22,12 @@ exports.openSerialPort = function(portname)
     });  //it's console.log('open');
 
     serialPort.on('data', function(data) {
-       // console.log("Incoming Serial");
 
         if(branch == 'twi')
         {
 
-            twi.socketDataOut(data);
-           // console.log(data);
+            twi.serialDataIn(data);
+
         }
         else if(branch == 'cs4')
         {

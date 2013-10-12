@@ -29,8 +29,11 @@ exports.data = function(req, res){
     collectionAvg.find({"Time":{$gt:x}},{_id:0,"Time":0}).sort( { "Time": 1 } ).toArray(function(err,item){
            //  console.log(item[0].Time);
 
+           collectionSettings.find().toArray(function(err,settings){
 
-           res.render('data.jade', { title: 'stuff' , item: item });
+               res.render('data.jade', { title: 'stuff' , item: item , settings:settings });
+
+           });
 
         });
 

@@ -7,18 +7,25 @@ block content
   div
 
       -for(var prop in item[item.length-1]){
+       -var displayname = prop;
+       -for (var i = 0; i<settings.length; ++i){if(settings[i].sensor == prop){displayname=settings[i].name;break;}  }
        div
-           p(id=prop+"_name" data-sensor=prop)
-             =prop
-             |:
-             =item[item.length-1][prop]
-           script.
-            var temp = document.getElementById("!{prop+"_name"}");
-            temp.addEventListener("click",nameclick,false);
-           canvas(id=prop,height="75",width=item.length+50,style="border:1px solid #000000;")
-           canvas(id=prop+"_rt",height="75",width=100,style="border:1px solid #000000;")
+           div(id=prop+"_name" data-sensor=prop data-name=displayname )
 
-           -}
+               p
+
+                =displayname
+                 |:
+
+                 =item[item.length-1][prop]
+               script.
+                var temp = document.getElementById("!{prop+"_name"}");
+                temp.addEventListener("click",nameclick,false);
+           div
+               canvas(id=prop,height="75",width=item.length+50,style="border:1px solid #000000;")
+               canvas(id=prop+"_rt",height="75",width=100,style="border:1px solid #000000;")
+
+               -}
       button(onclick = "buttonclick()") Todd Made this form Me!
 
   style.

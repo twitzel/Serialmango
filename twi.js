@@ -10,9 +10,31 @@ var user = require('./routes/user');
 
 exports.websocketDataIn = function(data){
     // if you want to get socket data it's here!!
+    try{
+        var webData = JSON.parse(data);
+
+    }
+    catch(err)
+    {
+        console.log("parse web data error"+err)
+    }
+
+    console.log(webData.packettype);
+    if (webData.packettype == "Sensor name update"){
+        delete webData.packettype;
+        collectionSettings.update({'sensor':webData.sensor}, webData,{upsert:true, w:1},function(err,res){
+
+            console.log('Setting collection updated'+res);
+        });
+
+
+    }
+
+
+
 };
 
-exports.socketDataOut  = function(data)
+exports.serialDataIn  = function(data)
 {
    //console.log(data);
 
@@ -40,7 +62,7 @@ exports.socketDataOut  = function(data)
 
        collectionLog.insert(serialData, {w:1}, function(err, result) {
      //  collectionLog.insert({"test":1}, {w:1}, function(err, result) {
-        console.log(result);
+
     });
    }
     else
@@ -48,7 +70,7 @@ exports.socketDataOut  = function(data)
        console.log("Serial data rec - no database connections yet;")
    }
 
-
+// send to the websock - should be somewhere else
          try
         {
            serialData.datatype="Sensor Update";
@@ -93,6 +115,7 @@ exports.setup = function()
             console.log("TWI: We are connected to mondo test database");
             global.collectionLog = db.collection('todd');
             global.collectionAvg = db.collection('avg');
+            global.collectionSettings = db.collection('settings')
            setInterval(function(){updateAvg();},60000);
            // updateAvg();
             console.log("average updates set to 60 seconds");

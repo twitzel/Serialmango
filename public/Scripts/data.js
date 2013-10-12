@@ -1,5 +1,5 @@
 
-var wsUri = "ws://10.6.1.119:8080";
+var wsUri = "ws://localhost:8080";
 var output;
 var graph =new Object;
 
@@ -49,7 +49,8 @@ function graphskeleton(prop)
 function nameclick(){
    // alert(this);
     tempwhatwasclicked=this;
-    this.innerHTML=("<input type='text' onkeydown='if (event.keyCode == 13) blurtest()' onBlur='blurtest()' name = 'valvar' autofocus='autofocus' value="+this.innerHTML+"> " );
+
+    this.innerHTML=("<input type='text' onkeydown='if (event.keyCode == 13) blurtest()' onBlur='blurtest()' autofocus='autofocus' value='"+this.dataset.name+"'> "+this.dataset.sensor );
 
 }function blurtest(par){
     tempwhatwasclicked.innerHTML= tempwhatwasclicked.firstChild.value;
@@ -57,8 +58,9 @@ function nameclick(){
     sendobj.packettype="Sensor name update";
     sendobj.sensor =tempwhatwasclicked.dataset.sensor;
     sendobj.name = tempwhatwasclicked.innerHTML;
-
-    doSend(JSON.stringify(sendobj));
+    if (tempwhatwasclicked.dataset.name != sendobj.name) {
+        tempwhatwasclicked.dataset.name = sendobj.name;
+        doSend(JSON.stringify(sendobj));}
     }
 function init()
 {

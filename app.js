@@ -71,13 +71,14 @@ wss = new WebSocketServer({port: 8080}, function(err,res){
 //Set up Web socket for a connection and make it global
 wss.on('connection', function(ws) {
     ws.on('message', function(message) {
-    console.log('received: %s', message);
+
     if(branch == 'twi')
     {
         twi.websocketDataIn(message);
     }
     else if(branch == 'cs4')
     {
+        console.log('received: %s', message);
         cs4.websocketDataIn(message);
     }
     });
