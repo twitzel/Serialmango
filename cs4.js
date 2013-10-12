@@ -17,9 +17,8 @@ var comlib = require('./comlib');
 var lastCueReceived = {"Time" : "10/09/13 15:20:04.20", "Source" : "Midi1", "InData" : "F0 7F 05 02 01 01 31 2E 30 30 F7 "};
 var serialDataSocket;
 var timerStartTime;
-var dataToSend = new Array();
-var delay = new Array();
-var count;
+
+
 
 sendOutput = function (dataToSend)
 {
@@ -142,7 +141,8 @@ exports.socketDataOut = function (data) {
     var indata;
     var source;
     var serialData;
-
+    var dataToSend;
+    var delay;
 
     // put the time string into proper form
 
@@ -163,14 +163,12 @@ exports.socketDataOut = function (data) {
             }
             else {
 
-               for(count = 0; count< item[0].OutData.length; count++)
+               for(var i = 0; i< item[0].OutData.length; i++)
                {
-                   // dataToSend[count] = item[0].OutData[count][0].Dout;
-                   dataToSend[count] = item[0].OutData[count][0].Dout;
-                    delay[count] = item[0].OutData[count][0].Delay;
-                    setTimeout(console.log, delay[count],dataToSend[count]);
-                   //http://arguments.callee.info/2008/11/10/passing-arguments-to-settimeout-and-setinterval/
-                    console.log(item[0].OutData[count][0].Dout + "  Delay "+item[0].OutData[count][0].Delay);
+                    dataToSend = item[0].OutData[i][0].Dout;
+                    delay = item[0].OutData[i][0].Delay;
+                    setTimeout(sendOutput, delay, dataToSend);
+                    console.log(item[0].OutData[i][0].Dout + "  Delay "+item[0].OutData[i][0].Delay);
                 }
 
             }
