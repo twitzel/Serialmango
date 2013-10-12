@@ -8,8 +8,8 @@
 /*              for Todd's branch or Steve's branch                      */
 /*                                                                       */
 
-               //global.branch = 'twi';
-                global.branch = 'cs4';
+              global.branch = 'twi';
+            //   global.branch = 'cs4';
 
 /*                                                                       */
 /*                                                                       */
@@ -74,7 +74,7 @@ wss.on('connection', function(ws) {
     console.log('received: %s', message);
     if(branch == 'twi')
     {
-        twi.websocketDataIn(message)();
+        twi.websocketDataIn(message);
     }
     else if(branch == 'cs4')
     {

@@ -1,7 +1,7 @@
 
-var wsUri = "ws://localhost:8080";
+var wsUri = "ws://10.6.1.119:8080";
 var output;
-var graph =[];
+var graph =new Object;
 
 
 //  c.font = "14px sans-serif";
@@ -15,7 +15,7 @@ function graphskeleton(prop)
         if (dp[i][prop] < low){low = dp[i][prop];}
     }
     var loffset = 50;
-    graph[prop] =[];
+    graph[prop] = new Object;
     graph[prop].low = low;
     graph[prop].high = high;
     graph[prop].id=document.getElementById(prop);
@@ -46,7 +46,20 @@ function graphskeleton(prop)
 }
 
 
+function nameclick(){
+   // alert(this);
+    tempwhatwasclicked=this;
+    this.innerHTML=("<input type='text' onkeydown='if (event.keyCode == 13) blurtest()' onBlur='blurtest()' name = 'valvar' autofocus='autofocus' value="+this.innerHTML+"> " );
 
+}function blurtest(par){
+    tempwhatwasclicked.innerHTML= tempwhatwasclicked.firstChild.value;
+    var sendobj = new Object;
+    sendobj.packettype="Sensor name update";
+    sendobj.sensor =tempwhatwasclicked.dataset.sensor;
+    sendobj.name = tempwhatwasclicked.innerHTML;
+
+    doSend(JSON.stringify(sendobj));
+    }
 function init()
 {
     output = document.getElementById("output");
