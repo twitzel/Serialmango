@@ -1,5 +1,5 @@
 
-var wsUri = "ws://localhost:8080";
+var wsUri = "ws://witzel.homeserver.com:8080";
 var output;
 var graph ={};
 
@@ -70,7 +70,7 @@ function graphclick(){
             5,0,2*Math.PI);
             graph[prop].context.stroke();
             graph[prop].context.fillStyle = "green";
-            graph[prop].context.fillText(dp[event.offsetX-graph[prop].loffset][prop],event.offsetX,13);
+            graph[prop].context.fillText(dp[event.offsetX-graph[prop].loffset][prop],event.offsetX-20,13);
         }
 
     }
