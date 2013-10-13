@@ -51,6 +51,7 @@ function graphskeleton(prop)
 function graphclick(){
     var prop = this.id;
     graphskeleton(prop);
+    graph[prop].context.strokeStyle = "grey";
     graph[prop].context.beginPath();
     graph[prop].context.moveTo(graph[prop].loffset,event.offsetY);
     graph[prop].context.lineTo(this.width,event.offsetY);
