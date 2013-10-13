@@ -22,7 +22,7 @@ function graphskeleton(prop)
     graph[prop].id=document.getElementById(prop);
     graph[prop].id_rt=document.getElementById(prop+"_rt"); // realtime graph
     graph[prop].context = graph[prop].id.getContext("2d");
-    graph[prop].context_rt = graph[prop].id_rt.getContext("2d");
+  //  graph[prop].context_rt = graph[prop].id_rt.getContext("2d");
     graph[prop].degperpixel = (graph[prop].id.height-toffset)/(high-low);
     graph[prop].context.lineWidth = 1;
     graph[prop].context.strokeStyle = "rgb(0,0,0)";
@@ -102,7 +102,9 @@ function init()
 {
     output = document.getElementById("output");
     for(var prop in dp[dp.length-1]){
+
         graph[prop] = {};
+        graph[prop].context_rt = graph[prop].id_rt.getContext("2d");
         graphskeleton(prop);
     }
     testWebSocket();
@@ -132,10 +134,11 @@ function onMessage(evt)    {
 
         if (prop.substr(0,4) == 'Temp'){
             graph[prop].data.push(indata[prop]);
+            graph[prop].context_rt.clearRect (0 , 0 , graph[prop].id_rt.width , graph[prop].id_rt.height );
             if (graph[prop].data.length > 100)
             {
                 graph[prop].data.shift();
-                graph[prop].context_rt.clearRect (0 , 0 , graph[prop].id_rt.width , graph[prop].id_rt.height );
+
             }
             graph[prop].context_rt.beginPath();
             graph[prop].context_rt.moveTo(loffset,(graph[prop].id_rt.height-(graph[prop].data[0]-graph[prop].low)*graph[prop].degperpixel));
