@@ -16,7 +16,7 @@ function graphskeleton(prop)
     }
     var loffset = 50;
     var toffset=20;
-    if (!graph[prop].created)graph[prop] = {};
+    if (graph[prop].created != true) {graph[prop] = {};}
     graph[prop].low = low;
     graph[prop].high = high;
     graph[prop].id=document.getElementById(prop);
