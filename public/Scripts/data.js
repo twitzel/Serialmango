@@ -16,7 +16,8 @@ function graphskeleton(prop)
     }
     var loffset = 50;
     var toffset=20;
-    graph[prop] = {};
+   if (!graph[prop]){    graph[prop] = {};   }
+
     graph[prop].low = low;
     graph[prop].high = high;
     graph[prop].id=document.getElementById(prop);
@@ -139,13 +140,13 @@ function onMessage(evt)    {
             graph[prop].context_rt.lineWidth = 1;
             graph[prop].context_rt.strokeStyle = "rgb(0,0,0)";
             var loffset = 0;
-            for (var i = 0; i<graph[prop].data.length;++i)
+            for (var i = 0; i<graph[prop].data.length; ++i)
             {
 
                     graph[prop].context_rt.lineTo(i+loffset,(graph[prop].id_rt.height-(graph[prop].data[i]-graph[prop].low)*graph[prop].degperpixel));
                 //graph[prop].context_rt.lineTo(i+loffset,20);
             }
-            graph[prop].context.lineWidth = 1;
+
             graph[prop].context_rt.stroke();
 
         }
@@ -162,8 +163,4 @@ function doSend(message) {
 function writeToScreen(message) {
 
     output.innerHTML = message+"<BR>"+output.innerHTML;
-}
-function buttonclick(message) {
-
-    output.innerHTML = "Send something out the websocket!";
 }
