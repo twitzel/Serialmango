@@ -22,7 +22,10 @@ block content
                 var temp = document.getElementById("!{prop+"_name"}");
                 temp.addEventListener("click",nameclick,false);
            div
-               canvas(id=prop,height="75",width=item.length+50,style="border:1px solid #000000;")
+               canvas(id=prop,height="85",width=item.length+50,style="border:1px solid #000000;")
+               script.
+                var temp = document.getElementById("!{prop}");
+                temp.addEventListener("click",graphclick,false);
                canvas(id=prop+"_rt",height="75",width=100,style="border:1px solid #000000;")
 
                -}
