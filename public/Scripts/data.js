@@ -47,7 +47,10 @@ function graphskeleton(prop)
     graph[prop].context.font = "16px Arial";
     graph[prop].context.fillText(high,2,13+toffset);
     graph[prop].context.fillText(low,2,graph[prop].id.height-1);
-    graph[prop].data = [];
+   if (!graph[prop].data){
+       graph[prop].data = []
+   }
+   ;
 }
 function graphclick(){
     var prop = this.id;
