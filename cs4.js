@@ -16,9 +16,8 @@ var timedOut = true; // set to false will delay transmission;
 var comlib = require('./comlib');
 var lastCueReceived = {"Time" : "10/09/13 15:20:04.20", "Source" : "Midi1", "InData" : "F0 7F 05 02 01 01 31 2E 30 30 F7 "};
 var serialDataSocket;
-var timerStartTime;
-
-
+var lastCueReceivedInternalTime;
+var lastCueReceivedExternalTime;
 
 
 //routine to ensure that serial data is not sent more than
@@ -28,7 +27,9 @@ var timerStartTime;
 
 sendOutput = function (dataToSend)
 {
-   var addTime = "{\"OutTime\":";
+   var addTime = "{\"Time\":";
+   var timerStartTime;
+   var lastconverted;
 
     if (timedOut)
     {
@@ -45,14 +46,16 @@ sendOutput = function (dataToSend)
         setTimeout(function(){sendOutput(dataToSend);}, ( timedOutInterval -(timerStartTime - Date())))
     }
 
-    addTime = addTime + "\""+new Date()+"\", \"Dout \" : \"" + dataToSend + "\"}";
-  //  var temptemp = addTime + dataToSend + "\"}";
+    //change the time of data sent to corolate with CS-4 I/O clock
+    lastconverted   = new Date(lastCueReceived.Time);
+    addTime = addTime + "\""+  (new Date( lastconverted.setMilliseconds(lastconverted.getMilliseconds() + (timerStartTime -lastCueReceivedInternalTime)))) +"\", \"Dout \" : \"" + dataToSend + "\"}";
+
     //Log the data into the collection
     addTime = JSON.parse(addTime);
     collectionLog.insert(addTime, {w: 1}, function (err, result) {
         console.log(result);
     });
-    console.log("New - " + addTime);
+    console.log("Time difference & New data stored  -->> "+ (timerStartTime -lastCueReceivedInternalTime)+ "---" + addTime);
 };
 
 
@@ -166,9 +169,7 @@ exports.socketDataOut = function (data) {
     serialData = JSON.parse(data);
     serialData.Time = new Date(serialData.Time);
 
-    //set system clock based on incoming timestamp from CD4 I/O.
-    //
-    //  *******ADD IT HERE*********
+
 
     // make sure this is incoming cue data
     // if it is, then search for matching cue
@@ -203,6 +204,9 @@ exports.socketDataOut = function (data) {
     }
 
     lastCueReceived = (JSON.parse(JSON.stringify(serialData))); // store the data here in case of Cue file generation
+    //get the internal system time or this event so we and keep track of it
+    lastCueReceivedInternalTime = new Date();
+    lastCueReceivedExternalTime = new Date(lastCueReceived);
 
     //Log the data into the collection
     collectionLog.insert(serialData, {w: 1}, function (err, result) {
