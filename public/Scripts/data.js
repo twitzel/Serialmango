@@ -74,6 +74,8 @@ function graphclick(){
             graph[prop].context.beginPath();
             graph[prop].context.arc(event.offsetX,(graph[prop].id.height-(dp[event.offsetX-graph[prop].loffset][prop]-graph[prop].low)*graph[prop].degperpixel),
             5,0,2*Math.PI);
+            graph[prop].context.moveTo(event.offsetX,(graph[prop].id.height-(dp[event.offsetX-graph[prop].loffset][prop]-graph[prop].low)*graph[prop].degperpixel)-3);
+            graph[prop].context.lineTo(event.offsetX,event.offsetY)
             graph[prop].context.stroke();
             graph[prop].context.fillStyle = "green";
             graph[prop].context.fillText(dp[event.offsetX-graph[prop].loffset][prop],event.offsetX-20,13);
