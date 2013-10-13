@@ -16,7 +16,7 @@ function graphskeleton(prop)
     }
     var loffset = 50;
     var toffset=20;
-    graph[prop] = {};
+    //graph[prop] = {}; // moved to init routine
     graph[prop].low = low;
     graph[prop].high = high;
     graph[prop].id=document.getElementById(prop);
@@ -31,6 +31,8 @@ function graphskeleton(prop)
     graph[prop].context.moveTo(loffset,(graph[prop].id.height-(dp[0][prop]-low)*graph[prop].degperpixel));
     graph[prop].loffset = loffset;
     graph[prop].toffset = toffset;
+
+
     for (var i = 0; i<dp.length;++i)
     {
         if (dp[i][prop]){
@@ -45,11 +47,15 @@ function graphskeleton(prop)
     graph[prop].context.font = "16px Arial";
     graph[prop].context.fillText(high,2,13+toffset);
     graph[prop].context.fillText(low,2,graph[prop].id.height-1);
-    graph[prop].data = [];
+   if (!graph[prop].data){
+       graph[prop].data = []
+   }
+   ;
 }
 function graphclick(){
     var prop = this.id;
     graphskeleton(prop);
+    graph[prop].context.strokeStyle = "grey";
     graph[prop].context.beginPath();
     graph[prop].context.moveTo(graph[prop].loffset,event.offsetY);
     graph[prop].context.lineTo(this.width,event.offsetY);
@@ -68,6 +74,8 @@ function graphclick(){
             graph[prop].context.beginPath();
             graph[prop].context.arc(event.offsetX,(graph[prop].id.height-(dp[event.offsetX-graph[prop].loffset][prop]-graph[prop].low)*graph[prop].degperpixel),
             5,0,2*Math.PI);
+            graph[prop].context.moveTo(event.offsetX,(graph[prop].id.height-(dp[event.offsetX-graph[prop].loffset][prop]-graph[prop].low)*graph[prop].degperpixel)-3);
+            graph[prop].context.lineTo(event.offsetX,13)
             graph[prop].context.stroke();
             graph[prop].context.fillStyle = "green";
             graph[prop].context.fillText(dp[event.offsetX-graph[prop].loffset][prop],event.offsetX-20,13);
@@ -100,6 +108,7 @@ function init()
     output = document.getElementById("output");
     for(var prop in dp[dp.length-1]){
 
+        graph[prop] = {};
         graphskeleton(prop);
     }
     testWebSocket();
@@ -129,23 +138,24 @@ function onMessage(evt)    {
 
         if (prop.substr(0,4) == 'Temp'){
             graph[prop].data.push(indata[prop]);
+            graph[prop].context_rt.clearRect (0 , 0 , graph[prop].id_rt.width , graph[prop].id_rt.height );
             if (graph[prop].data.length > 100)
             {
                 graph[prop].data.shift();
-                graph[prop].context_rt.clearRect (0 , 0 , graph[prop].id_rt.width , graph[prop].id_rt.height );
+
             }
             graph[prop].context_rt.beginPath();
             graph[prop].context_rt.moveTo(loffset,(graph[prop].id_rt.height-(graph[prop].data[0]-graph[prop].low)*graph[prop].degperpixel));
             graph[prop].context_rt.lineWidth = 1;
             graph[prop].context_rt.strokeStyle = "rgb(0,0,0)";
             var loffset = 0;
-            for (var i = 0; i<graph[prop].data.length;++i)
+            for (var i = 0; i<graph[prop].data.length; ++i)
             {
 
                     graph[prop].context_rt.lineTo(i+loffset,(graph[prop].id_rt.height-(graph[prop].data[i]-graph[prop].low)*graph[prop].degperpixel));
                 //graph[prop].context_rt.lineTo(i+loffset,20);
             }
-            graph[prop].context.lineWidth = 1;
+
             graph[prop].context_rt.stroke();
 
         }
@@ -162,8 +172,4 @@ function doSend(message) {
 function writeToScreen(message) {
 
     output.innerHTML = message+"<BR>"+output.innerHTML;
-}
-function buttonclick(message) {
-
-    output.innerHTML = "Send something out the websocket!";
 }
