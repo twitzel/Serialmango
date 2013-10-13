@@ -17,7 +17,6 @@ function graphskeleton(prop)
     var loffset = 50;
     var toffset=20;
     graph[prop] = {};
-    graph[prop]="graph";
     graph[prop].low = low;
     graph[prop].high = high;
     graph[prop].id=document.getElementById(prop);
@@ -32,7 +31,7 @@ function graphskeleton(prop)
     graph[prop].context.moveTo(loffset,(graph[prop].id.height-(dp[0][prop]-low)*graph[prop].degperpixel));
     graph[prop].loffset = loffset;
     graph[prop].toffset = toffset;
-    graph[prop].created = true;
+
     for (var i = 0; i<dp.length;++i)
     {
         if (dp[i][prop]){
