@@ -20,15 +20,24 @@ var timerStartTime;
 
 
 
+
+//routine to ensure that serial data is not sent more than
+// every timedOutInterval
+//
+// adds time stamp to Outgoing data and puts it in Log collection
+
 sendOutput = function (dataToSend)
 {
+   var addTime = "{\"OutTime\":";
+
     if (timedOut)
     {
         timedOut = false;
-        comlib.write(dataToSend);
+        comlib.write("         " + dataToSend); // add spaces at beginning for R4 zigbee stuff
         setTimeout(function(){timedOut = true;}, timedOutInterval);
         timerStartTime = new Date();
         console.log(dataToSend);
+        //
     }
     else
     {
@@ -36,6 +45,14 @@ sendOutput = function (dataToSend)
         setTimeout(function(){sendOutput(dataToSend);}, ( timedOutInterval -(timerStartTime - Date())))
     }
 
+    addTime = addTime + "\""+new Date()+"\", \"Dout \" : \"" + dataToSend + "\"}";
+  //  var temptemp = addTime + dataToSend + "\"}";
+    //Log the data into the collection
+    addTime = JSON.parse(addTime);
+    collectionLog.insert(addTime, {w: 1}, function (err, result) {
+        console.log(result);
+    });
+    console.log("New - " + addTime);
 };
 
 
@@ -96,9 +113,9 @@ exports.setup = function()
     app.get('/data', routes.data);
     app.get('/data2', routes.data2);
     app.get('/data3', routes.data3);
-
-
 };
+
+
 
 exports.websocketDataIn = function(dataSocket){
 
@@ -119,13 +136,9 @@ exports.websocketDataIn = function(dataSocket){
     console.log('added Dout to collection Cue'+res);
     });
 
-
-
-
-
-
-
 };
+
+
 
 // This routine receives serial cue data,
 // parses it and sends it out the web socket
@@ -143,12 +156,19 @@ exports.socketDataOut = function (data) {
     var serialData;
     var dataToSend;
     var delay;
+    var port;
+    var showname;
+    var outstring;
+    var dir; // ****** needs to ba added to R4-4 Receiver Parsing ****** //
 
     // put the time string into proper form
 
     serialData = JSON.parse(data);
     serialData.Time = new Date(serialData.Time);
 
+    //set system clock based on incoming timestamp from CD4 I/O.
+    //
+    //  *******ADD IT HERE*********
 
     // make sure this is incoming cue data
     // if it is, then search for matching cue
@@ -165,9 +185,14 @@ exports.socketDataOut = function (data) {
 
                for(var i = 0; i< item[0].OutData.length; i++)
                {
+                   // dir = item[0].OutData[i][0].Dir;    // ****** needs to ba added to R4-4 Receiver Parsing ****** //
+                    dir = "";
+                    port = item[0].OutData[i][0].Port;
+                    showname = item[0].OutData[i][0].Showname;
                     dataToSend = item[0].OutData[i][0].Dout;
                     delay = item[0].OutData[i][0].Delay;
-                    setTimeout(sendOutput, delay, dataToSend);
+                    outstring = port + " " + showname + " " + dir + " " + dataToSend;
+                    setTimeout(sendOutput, delay, outstring);
                     console.log(item[0].OutData[i][0].Dout + "  Delay "+item[0].OutData[i][0].Delay);
                 }
 
