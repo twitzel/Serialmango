@@ -1,10 +1,9 @@
 
-var wsUri = "ws://witzel.homeserver.com:8080";
+//var wsUri = "ws://witzel.homeserver.com:8080";
+var wsUri = "ws://localhost:8080";
 var output;
 var graph ={};
 
-
-//  c.font = "14px sans-serif";
 function graphskeleton(prop)
 {
 
@@ -48,9 +47,9 @@ function graphskeleton(prop)
     graph[prop].context.fillText(high,2,13+toffset);
     graph[prop].context.fillText(low,2,graph[prop].id.height-1);
    if (!graph[prop].data){
-       graph[prop].data = []
+       graph[prop].data = [];
    }
-   ;
+
 }
 function graphclick(){
     var prop = this.id;
@@ -75,7 +74,7 @@ function graphclick(){
             graph[prop].context.arc(event.offsetX,(graph[prop].id.height-(dp[event.offsetX-graph[prop].loffset][prop]-graph[prop].low)*graph[prop].degperpixel),
             5,0,2*Math.PI);
             graph[prop].context.moveTo(event.offsetX,(graph[prop].id.height-(dp[event.offsetX-graph[prop].loffset][prop]-graph[prop].low)*graph[prop].degperpixel)-3);
-            graph[prop].context.lineTo(event.offsetX,13)
+            graph[prop].context.lineTo(event.offsetX,13);
             graph[prop].context.stroke();
             graph[prop].context.fillStyle = "green";
             graph[prop].context.fillText(dp[event.offsetX-graph[prop].loffset][prop],event.offsetX-20,13);
@@ -87,20 +86,24 @@ function graphclick(){
 
 function nameclick(){
    // alert(this);
-    tempwhatwasclicked=this;
 
-    this.innerHTML=("<input type='text' onkeydown='if (event.keyCode == 13) blurtest()'" +
-        " onBlur='blurtest()' autofocus='autofocus' value='"+this.dataset.name+"'> "+
-        this.dataset.sensor );
 
-}function blurtest(){
-    tempwhatwasclicked.innerHTML= tempwhatwasclicked.firstChild.value;
+    this.innerHTML=("<div contenteditable='true' onblur='blurtest() '> <input  type='text' onkeydown='if (event.keyCode == 13) blurtest()'" +
+        " onBlur='blurtest()'  value='"+this.dataset.name+"'> "+
+        this.dataset.sensor )+"</div>";
+
+}function savesensorname(){
+
+    var name = window.event.currentTarget.innerHTML;
+
     var sendobj = {};
+    sendobj[window.event.currentTarget.dataset.sensor]= {};
     sendobj.packettype="Sensor name update";
-    sendobj.sensor =tempwhatwasclicked.dataset.sensor;
-    sendobj.name = tempwhatwasclicked.innerHTML;
-    if (tempwhatwasclicked.dataset.name != sendobj.name) {
-        tempwhatwasclicked.dataset.name = sendobj.name;
+    sendobj[window.event.currentTarget.dataset.sensor].name=name;
+   // dataset.name is the name from when the page loaded passed as data-name
+    // just send if the name changed
+    if (window.event.currentTarget.dataset.name != name) {
+        window.event.currentTarget.dataset.name = name;
         doSend(JSON.stringify(sendobj));}
     }
 function init()

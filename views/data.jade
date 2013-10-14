@@ -5,23 +5,23 @@ block content
   h1= title
   div.myDiv(id="output")
   div
-
+      -var position = 0;
       -for(var prop in item[item.length-1]){
-       -var displayname = prop;
-       -for (var i = 0; i<settings.length; ++i){if(settings[i].sensor == prop){displayname=settings[i].name;break;}  }
-       div
-           div(id=prop+"_name" data-sensor=prop data-name=displayname )
 
-               p
+       div(id="position"+position)
 
-                =displayname
-                 |:
+          -if (!sensors[prop]){sensors[prop] = {};sensors[prop].name=prop;}
+          div(id=prop+"_name" style="width:200px;float:left;" contenteditable='true' onblur='savesensorname()' data-sensor=prop data-name=sensors[prop].name data-position=position onkeydown='if (event.keyCode == 13) return false')
 
-                 =item[item.length-1][prop]
-               script.
-                var temp = document.getElementById("!{prop+"_name"}");
-                temp.addEventListener("click",nameclick,false);
-           div
+               -position++;
+
+
+                =sensors[prop].name
+
+          div(style="width:200px;float:right;")
+                ="Current Temperature:"+item[item.length-1][prop]
+
+          div
                canvas(id=prop,height="85",width=item.length+50,style="border:1px solid #000000;")
                script.
                 var temp = document.getElementById("!{prop}");

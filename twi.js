@@ -22,7 +22,8 @@ exports.websocketDataIn = function(data){
     console.log(webData.packettype);
     if (webData.packettype == "Sensor name update"){
         delete webData.packettype;
-        collectionSettings.update({'sensor':webData.sensor}, webData,{upsert:true, w:1},function(err,res){
+        webData.type='sensors';
+        collectionSettings.update({'type':'sensors'}, {$set:webData},{upsert:true, w:1},function(err,res){
 
             console.log('Setting collection updated'+res);
         });
