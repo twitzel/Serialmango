@@ -14,8 +14,8 @@ exports.index = function(req, res){
 
 };
 exports.com = function(req, res){
-    res.render('com.jade', { title: 'com.jade' });
-
+//    res.render('com.jade', { title: 'com.jade' });
+    res.render('test.ejs');
 };
 
 exports.data = function(req, res){
