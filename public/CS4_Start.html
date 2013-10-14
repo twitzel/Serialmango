@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title>CS-4 Start Page</title>
+    <h1> <center>Welcome to the CS-4 System</center></h1>
+    <h1 id="blank">.</h1>
+</head>
+
+<body>
+
+    <p id="loglabel"   > Event Log </p>
+
+
+    <style>
+        #blank{
+            color:#ffffff; /* just to get spacing right - turn text to white*/
+        }
+        #loglabel {
+           color: #666;
+           text-align: center;
+        }
+
+        .log{
+            width: 90vw;
+            height: 50vh;
+            background-color: #ececec;
+            margin-top: 1px;
+            border-bottom-left-radius: 15px;
+            border-top-left-radius: 15px;
+            box-shadow: 3px 3px 3px #333;
+        }
+
+        #websocket{
+            margin: auto;
+            border: 1px solid #333333;
+            overflow-y: scroll;
+        }
+
+    </style>
+
+    <div id="websocket" class="log">
+        <p> test text</p>
+    </div>
+
+
+
+</body>
+
+</html>

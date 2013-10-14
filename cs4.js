@@ -199,9 +199,8 @@ exports.socketDataOut = function (data) {
 
             }
         });
-
-
     }
+
 
     lastCueReceived = (JSON.parse(JSON.stringify(serialData))); // store the data here in case of Cue file generation
     //get the internal system time or this event so we and keep track of it
