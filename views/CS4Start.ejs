@@ -1,18 +1,15 @@
 <!DOCTYPE html>
 <html>
-
-
-
 <head>
 
     <title>CS-4 Start Page</title>
     <h1> <center>Welcome to the CS-4 System</center></h1>
-    <h1 id="blank">.</h1>
+
 </head>
 
 <body>
 
-<p id="loglabel"   > Event Log </p>
+<h3 id="loglabel"   > Event Log </h3>
 
 
 
@@ -20,11 +17,9 @@
 
 
 <style>
-    #blank{
-        color:#ffffff; /* just to get spacing right - turn text to white*/
-    }
+    /*  NOTE:  . = id;   # = class  */
     #loglabel {
-        color: #666;
+        color: #0000ff;
         text-align: center;
     }
 
@@ -33,15 +28,31 @@
         height: 50vh;
         background-color: #ececec;
         margin-top: 1px;
-        border-bottom-left-radius: 15px;
-        border-top-left-radius: 15px;
+        border-radius: 5px;
+    /*    border-top-left-radius: 5px;*/
         box-shadow: 3px 3px 3px #333;
+        padding: 10px;
+        padding-bottom: 20px;
     }
 
     #websocketlog{
         margin: auto;
-        border: 1px solid #333333;
-        overflow-y: scroll;
+        border: 2px solid #333333;
+        overflow-y: auto;
+    }
+
+    #goButton{
+        width:20vw;
+        height:20vw;
+        background-color: #881b33;
+        font-size:200%;
+        font-weight: bolder;
+        float:left;
+        margin-left: 2vw;
+        margin-top: 2vh;
+
+    }
+    #goButton:hover{background-color: #4d8856
     }
 
 </style>
@@ -50,12 +61,18 @@
     <p> test text</p>
 </div>
 
-<script src='/scripts/cs4Start.js'></script>
+<div id="cueFunctions" >
+    <button id = "goButton"  onmousedown = "cueclick()"> GO
+
+    </button>
+
+</div>
+<script  src="/Scripts/cs4Start.js">  </script>
 
 
 
-<script onload = "init"></script>
-
+<body onload="init()"
 </body>
+
 
 </html>

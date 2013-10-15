@@ -1,13 +1,10 @@
-/**
- * Created by Steve on 10/15/13.
- */
+
 var wsUri = "ws://localhost:8080";
 //var wsUri ='#{myuri}'
 var counter = 0;
 var lastCueTime;
 var delay;
 
-window.onload = function(){'init'};
 
 function init()
 {
