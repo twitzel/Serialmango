@@ -7,6 +7,7 @@ var os = require('os');
 var express = require('express');
 var routes = require('./routes');
 var user = require('./routes/user');
+var sensorSettings = {}; //setting from the settins database
 
 exports.websocketDataIn = function(data){
     // if you want to get socket data it's here!!
@@ -22,10 +23,14 @@ exports.websocketDataIn = function(data){
     console.log(webData.packettype);
     if (webData.packettype == "Sensor name update"){
         delete webData.packettype;
-        webData.type='sensors';
-        collectionSettings.update({'type':'sensors'}, {$addToSet:webData},{upsert:true, w:1},function(err,res){
+        for(var prop in webData)
+        {
+            sensorSettings[prop].name = webData[prop].name;
+        }
 
-            console.log('Setting collection updated'+res);
+        collectionSettings.update({'type':'sensors'}, sensorSettings ,{upsert:true, w:1},function(err,res){
+
+            console.log('Sensors settings name updated'+res);
         });
 
 
@@ -33,10 +38,14 @@ exports.websocketDataIn = function(data){
 
     if (webData.packettype == "Sensor order update"){
         delete webData.packettype;
-        webData.type='sensors';
-        collectionSettings.update({'type':'sensors'},  {$addToSet:webData},{upsert:true, w:1},function(err,res){
+        for(var prop in webData)
+        {
+            sensorSettings[prop].order = webData[prop].order;
+        }
 
-            console.log('Setting collection updated'+res);
+        collectionSettings.update({'type':'sensors'},sensorSettings,{upsert:true, w:1},function(err,res){
+
+            console.log('Sensor Setting order updated'+res);
         });
 
 
@@ -131,6 +140,17 @@ exports.setup = function()
            setInterval(function(){updateAvg();},60000);
            // updateAvg();
             console.log("average updates set to 60 seconds");
+            collectionSettings.findOne({"type":"sensors"},function(err,sensors){
+                if (sensors){
+                    sensorSettings=sensors;
+                } else
+                {
+                    console.error(" Sensor Settings missing");
+                    //to-do create sensor settings
+                }
+
+
+            });
         }
     });
 

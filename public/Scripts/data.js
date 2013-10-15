@@ -236,3 +236,12 @@ function writeToScreen(message) {
 
     output.innerHTML = message+"<BR>"+output.innerHTML;
 }
+function findpropbysortorder(inorder){
+    for(var prop in item[item.length-1])
+    {
+        if (sensors[prop].order == inorder){
+           break;
+        }
+        return prop;
+    }
+}

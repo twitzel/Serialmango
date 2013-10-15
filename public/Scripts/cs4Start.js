@@ -7,10 +7,12 @@ var counter = 0;
 var lastCueTime;
 var delay;
 
-window.onload = function(){'init'};
+
+window.onload = init;
 
 function init()
 {
+    debugger;
     output = document.getElementById("websocketlog");
     testWebSocket();
 
