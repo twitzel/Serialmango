@@ -237,7 +237,8 @@ function writeToScreen(message) {
     output.innerHTML = message+"<BR>"+output.innerHTML;
 }
 function findpropbysortorder(inorder){
-    for(var prop in item[item.length-1])
+    debugger;
+    for(var prop in sensors)
     {
         if (sensors[prop].order == inorder){
            break;
@@ -245,3 +246,4 @@ function findpropbysortorder(inorder){
         return prop;
     }
 }
+//-for(var prop in item[item.length-1]){

@@ -6,8 +6,11 @@ block content
   div.myDiv(id="output")
   div
       -var position = 0;
-      -for(var prop in item[item.length-1]){
 
+      -for(var i = 0; true ;i++){
+      -prop = false;
+      -for(var prop1 in sensors){if (sensors[prop1].order == i){prop =prop1;break;    }      }
+      -if (prop == false){break;}
        div(id="position"+position data-sensor=prop data-position=position )
 
           -if (!sensors[prop]){sensors[prop] = {};sensors[prop].name=prop;}
