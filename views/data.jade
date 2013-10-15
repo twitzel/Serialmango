@@ -8,26 +8,28 @@ block content
       -var position = 0;
       -for(var prop in item[item.length-1]){
 
-       div(id="position"+position)
+       div(id="position"+position data-sensor=prop data-position=position )
 
           -if (!sensors[prop]){sensors[prop] = {};sensors[prop].name=prop;}
-          div(id=prop+"_name" style="width:200px;float:left;" contenteditable='true' onblur='savesensorname()' data-sensor=prop data-name=sensors[prop].name data-position=position onkeydown='if (event.keyCode == 13) return false')
-
-               -position++;
-
-
-                =sensors[prop].name
-
-          div(style="width:200px;float:right;")
-                ="Current Temperature:"+item[item.length-1][prop]
-
+          div(id="r" style="width:200px; float:left;")
+              div(id=prop+"_name" style="width:200px;" contenteditable='true' onblur='savesensorname()' data-sensor=prop data-name=sensors[prop].name data-position=position onkeydown='if (event.keyCode == 13) return false')
+                    =sensors[prop].name
+              div(style="width:200px;")
+                    ="Current Temperature:"+item[item.length-1][prop]
+              button(id="moveButton"+position data-id="position"+position) Move
           div
-               canvas(id=prop,height="85",width=item.length+50,style="border:1px solid #000000;")
-               script.
+              canvas(id=prop,height="85",width=item.length+50,style="border:1px solid #000000;")
+              canvas(id=prop+"_rt",height="85",width=100,style="border:1px solid #000000;")
+              script.
                 var temp = document.getElementById("!{prop}");
                 temp.addEventListener("click",graphclick,false);
-               canvas(id=prop+"_rt",height="85",width=100,style="border:1px solid #000000;")
+                temp = document.getElementById("moveButton!{position}");
+                temp.addEventListener("click",startmoving,false);
+                temp = document.getElementById("position!{position}");
+                temp.addEventListener("click",stopmoving,false);
 
+
+               -position++;
                -}
       button(onclick = "buttonclick()") Todd Made this form Me!
 

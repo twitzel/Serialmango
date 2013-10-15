@@ -3,7 +3,67 @@
 var wsUri = "ws://localhost:8080";
 var output;
 var graph ={};
+var moving = false;
+var movingid = '';
 
+function startmoving()
+{
+
+
+    movingid = this.parentNode.parentNode.id;
+
+    moving=true;
+
+
+}
+function stopmoving()
+{
+    if (moving && this.id != movingid)
+    {
+
+        var htmlsave = this.innerHTML;
+        var sensorsave = this.dataset.sensor;
+
+        this.dataset.sensor = document.getElementById(movingid).dataset.sensor;
+        this.innerHTML = document.getElementById(movingid).innerHTML;
+
+        document.getElementById(movingid).innerHTML = htmlsave;
+        document.getElementById(movingid).dataset.sensor = sensorsave;
+
+
+         graphskeleton(this.dataset.sensor);
+        graphskeleton(document.getElementById(movingid).dataset.sensor);
+        moving = false;
+        movingid = '';
+
+        var sendobj = {};
+
+        sendobj.packettype="Sensor order update";
+
+        // dataset.name is the name from when the page loaded passed as data-name
+        // just send if the name changed
+
+
+       //reset event listeners
+        var i = 0;
+        for(var prop in dp[dp.length-1]){
+
+            var temp = document.getElementById("position"+i);
+            sendobj[temp.dataset.sensor]={};
+            temp.addEventListener("click",stopmoving,false);
+            sendobj[temp.dataset.sensor].order = temp.dataset.position;
+
+            temp = document.getElementById(prop);
+            temp.addEventListener("click",graphclick,false);
+            temp = document.getElementById("moveButton"+i);
+            temp.addEventListener("click",startmoving,false);
+          i++;
+
+
+        }
+        doSend(JSON.stringify(sendobj));
+    }
+}
 function graphskeleton(prop)
 {
 
