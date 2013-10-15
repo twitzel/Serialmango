@@ -4,6 +4,48 @@
 
     <title>CS-4 Start Page</title>
     <h1> <center>Welcome to the CS-4 System</center></h1>
+    <script  src="/Scripts/cs4Start.js">  </script>
+
+    <style>
+            /*  NOTE:  . = id;   # = class  */
+        #loglabel {
+            color: #0000ff;
+            text-align: center;
+        }
+
+        .log{
+            width: 90vw;
+            height: 50vh;
+            background-color: #ececec;
+            margin-top: 1px;
+            border-radius: 5px;
+            /*    border-top-left-radius: 5px;*/
+            box-shadow: 3px 3px 3px #333;
+            padding: 10px;
+            padding-bottom: 20px;
+        }
+
+        #websocketlog{
+            margin: auto;
+            border: 2px solid #333333;
+            overflow-y: auto;
+        }
+
+        #goButton{
+            width:20vw;
+            height:20vw;
+            background-color: #881b33;
+            font-size:200%;
+            font-weight: bolder;
+            float:left;
+            margin-left: 2vw;
+            margin-top: 2vh;
+
+        }
+        #goButton:hover{background-color: #4d8856
+        }
+
+    </style>
 
 </head>
 
@@ -16,47 +58,6 @@
 
 
 
-<style>
-    /*  NOTE:  . = id;   # = class  */
-    #loglabel {
-        color: #0000ff;
-        text-align: center;
-    }
-
-    .log{
-        width: 90vw;
-        height: 50vh;
-        background-color: #ececec;
-        margin-top: 1px;
-        border-radius: 5px;
-    /*    border-top-left-radius: 5px;*/
-        box-shadow: 3px 3px 3px #333;
-        padding: 10px;
-        padding-bottom: 20px;
-    }
-
-    #websocketlog{
-        margin: auto;
-        border: 2px solid #333333;
-        overflow-y: auto;
-    }
-
-    #goButton{
-        width:20vw;
-        height:20vw;
-        background-color: #881b33;
-        font-size:200%;
-        font-weight: bolder;
-        float:left;
-        margin-left: 2vw;
-        margin-top: 2vh;
-
-    }
-    #goButton:hover{background-color: #4d8856
-    }
-
-</style>
-
 <div id="websocketlog" class="log">
     <p> test text</p>
 </div>
@@ -67,11 +68,11 @@
     </button>
 
 </div>
-<script  src="/Scripts/cs4Start.js">  </script>
 
 
 
-<body onload="init()"
+
+
 </body>
 
 

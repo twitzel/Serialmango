@@ -5,7 +5,7 @@ var counter = 0;
 var lastCueTime;
 var delay;
 
-
+window.onload = init;
 function init()
 {
     output = document.getElementById("websocketlog");
