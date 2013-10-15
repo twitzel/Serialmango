@@ -23,7 +23,18 @@ exports.websocketDataIn = function(data){
     if (webData.packettype == "Sensor name update"){
         delete webData.packettype;
         webData.type='sensors';
-        collectionSettings.update({'type':'sensors'}, {$set:webData},{upsert:true, w:1},function(err,res){
+        collectionSettings.update({'type':'sensors'}, {$addToSet:webData},{upsert:true, w:1},function(err,res){
+
+            console.log('Setting collection updated'+res);
+        });
+
+
+    }
+
+    if (webData.packettype == "Sensor order update"){
+        delete webData.packettype;
+        webData.type='sensors';
+        collectionSettings.update({'type':'sensors'},  {$addToSet:webData},{upsert:true, w:1},function(err,res){
 
             console.log('Setting collection updated'+res);
         });

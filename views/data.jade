@@ -8,17 +8,12 @@ block content
       -var position = 0;
       -for(var prop in item[item.length-1]){
 
-       div(id="position"+position data-sensor=prop data-position=position)
+       div(id="position"+position data-sensor=prop data-position=position )
 
           -if (!sensors[prop]){sensors[prop] = {};sensors[prop].name=prop;}
           div(id="r" style="width:200px; float:left;")
               div(id=prop+"_name" style="width:200px;" contenteditable='true' onblur='savesensorname()' data-sensor=prop data-name=sensors[prop].name data-position=position onkeydown='if (event.keyCode == 13) return false')
-
-
-
-
                     =sensors[prop].name
-
               div(style="width:200px;")
                     ="Current Temperature:"+item[item.length-1][prop]
               button(id="moveButton"+position data-id="position"+position) Move
