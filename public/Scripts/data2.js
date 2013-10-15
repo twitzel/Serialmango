@@ -46,7 +46,7 @@ function writeToScreen(message) {
 
     // get time of incoming cue
        lastCueTime = new Date();
-        output.innerHTML = message+" xxx "+"<BR>"+output.innerHTML;
+       output.innerHTML = message +"<BR>" + output.innerHTML;
     //output.value = message+"<BR>"+output.value;
 }
 function buttonclick(message) {

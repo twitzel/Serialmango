@@ -45,6 +45,13 @@ exports.data2 = function(req, res){
 };
 
 exports.data3 = function(req, res){
-   //res.render('data3.jade',{ title: 'CS-4 Output Data 3', myuri:"ws://localhost:8080" });
-    res.render('cs4Start.ejs',{ title: 'CS-4 Output Data 3', myuri:"ws://localhost:8080" });
+   res.render('data3.jade',{ title: 'CS-4 Output Data 3', myuri:"ws://localhost:8080" });
+};
+
+exports.data2 = function(req, res){
+   res.render('cs4Start.ejs',{ title: 'CS-4 Output Data 3', myuri:"ws://localhost:8080" });
+};
+
+exports.cs4Start = function(req, res){
+   res.render('cs4Start.ejs',{ title: 'CS-4 Output Data 3', myuri:"ws://localhost:8080" });
 };

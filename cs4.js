@@ -39,6 +39,23 @@ sendOutput = function (dataToSend)
         timerStartTime = new Date();
         console.log(dataToSend);
         //
+
+
+    //change the time of data sent to corolate with CS-4 I/O clock
+    lastconverted   = new Date(lastCueReceived.Time);
+    addTime = addTime + "\""+  (new Date( lastconverted.setMilliseconds(lastconverted.getMilliseconds() + (timerStartTime -lastCueReceivedInternalTime)))).toISOString() +"\", \"Dout \" : \"" + dataToSend + "\"}";
+
+    //send it out the socket
+    global.websocket.send(".    Sent: " + addTime) ;
+
+    //Log the data into the collection
+    addTime = JSON.parse(addTime);
+    collectionLog.insert(addTime, {w: 1}, function (err, result) {
+        console.log(result);
+    });
+       //log the time difference for testing
+    console.log("Time difference & New data stored  -->> "+ (timerStartTime -lastCueReceivedInternalTime)+ "---" + addTime);
+
     }
     else
     {
@@ -46,16 +63,6 @@ sendOutput = function (dataToSend)
         setTimeout(function(){sendOutput(dataToSend);}, ( timedOutInterval -(timerStartTime - Date())))
     }
 
-    //change the time of data sent to corolate with CS-4 I/O clock
-    lastconverted   = new Date(lastCueReceived.Time);
-    addTime = addTime + "\""+  (new Date( lastconverted.setMilliseconds(lastconverted.getMilliseconds() + (timerStartTime -lastCueReceivedInternalTime)))) +"\", \"Dout \" : \"" + dataToSend + "\"}";
-
-    //Log the data into the collection
-    addTime = JSON.parse(addTime);
-    collectionLog.insert(addTime, {w: 1}, function (err, result) {
-        console.log(result);
-    });
-    console.log("Time difference & New data stored  -->> "+ (timerStartTime -lastCueReceivedInternalTime)+ "---" + addTime);
 };
 
 
@@ -116,6 +123,7 @@ exports.setup = function()
     app.get('/data', routes.data);
     app.get('/data2', routes.data2);
     app.get('/data3', routes.data3);
+    app.get('/cs4Start', routes.cs4Start);
 };
 
 
@@ -227,7 +235,7 @@ exports.socketDataOut = function (data) {
             {
                 hex += String.fromCharCode(parseInt(indata.substr(i, 2), 16));
             }
-            type = 'Cue: ' + hex;
+            type = 'Sysex Cue: ' + hex;
         }
 
         else if (indata.substr(0, 1) == "8") {
@@ -258,12 +266,12 @@ exports.socketDataOut = function (data) {
             type = "Pitch Wheel Control";
         }
 
-        global.websocket.send(serialData.Time + " " + type + " ---    " + indata);
+        global.websocket.send(serialData.Time.toISOString() + " " + type + " ---    " + indata) ;
 
     }
     else // just send data
     {
-        global.websocket.send(serialData.Time + " " + indata);
+        global.websocket.send(serialData.Time.toISOString() + " " + indata);
     }
 
 
