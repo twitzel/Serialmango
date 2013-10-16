@@ -8,8 +8,8 @@
 /*              for Todd's branch or Steve's branch                      */
 /*                                                                       */
 
-                global.branch = 'twi';
-               // global.branch = 'cs4';
+                //global.branch = 'twi';
+                global.branch = 'cs4';
 
 /*                                                                       */
 /*                                                                       */
@@ -43,7 +43,7 @@ app.use(express.methodOverride());
 app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
 
-//  All route information now is contined in
+//  All route information now is contained in
 //  TWI.js or CS4.js
 
 
