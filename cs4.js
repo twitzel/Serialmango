@@ -69,7 +69,8 @@ sendOutput = function (dataToSend)
 exports.setup = function()
 {
     //MongoClient.connect("mongodb://localhost:27017/WizDb", function(err, db)
-    MongoClient.connect("mongodb://192.168.2.10:27017/WizDb", function(err, db)
+   // MongoClient.connect("mongodb://192.168.2.10:27017/WizDb", function(err, db)
+    MongoClient.connect("mongodb://" + address[0] + ":27017/WizDb", function(err, db)
     {
         if (err)
         {
