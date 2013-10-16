@@ -245,11 +245,13 @@ function onMessage(evt)
         dp.shift();
         newlen = dp.length;
         dp.push({});
+        dp[newlen].Time=indata[Time];
         for(var prop in sensors)
 
         {
 
             dp[newlen][prop]=indata[prop];
+
             if (indata[prop]){
                 //maybe allow this to work to draw blank for non reports
                 console.log('redrew'+prop);
