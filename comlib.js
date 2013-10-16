@@ -39,6 +39,18 @@ exports.openSerialPort = function(portname)
     });
 }
 
+//enumerate the serial ports
+exports.listPorts = function()
+{
+    serialPort.listPorts(function (err, ports) {
+        ports.forEach(function(port) {
+            console.log(port.comName);
+            console.log(port.pnpId);
+            console.log(port.manufacturer);
+        });
+    });
+}
+
 
 exports.write = function(data) {
     serialPort.write(data,function(err, results)

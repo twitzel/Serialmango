@@ -101,14 +101,8 @@ exports.setup = function()
     }
     console.log('My IP Address is: ' + addresses[0]);
 
-    //enumerate the serial ports
-    serialPort.list(function (err, ports) {
-        ports.forEach(function(port) {
-            console.log(port.comName);
-            console.log(port.pnpId);
-            console.log(port.manufacturer);
-        });
-    });
+    //find all serial ports on system
+    comlib.listPorts();
 
     //now lets find out if we are on a windows system
     // if we are open the required com port
