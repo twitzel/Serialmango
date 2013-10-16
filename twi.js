@@ -281,6 +281,7 @@ function avgReadings(startTime,seconds)
             avgitem.datatype="Sensor Avg Update";
             console.log(avgitem);
             global.websocket.send(JSON.stringify(avgitem));
+            delete avgitem.datatype;
         }
         catch(err)
         {

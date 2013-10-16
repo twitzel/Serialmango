@@ -8,9 +8,11 @@
 /*              for Todd's branch or Steve's branch                      */
 /*                                                                       */
 
-                //global.branch = 'twi';
-                global.branch = 'cs4';
 
+                global.branch = process.argv[2];
+//          ** put cs4 in the edit configuration app parameters
+//                global.branch = 'cs4';
+            console.info ("Branch set to "+global.branch);
 /*                                                                       */
 /*                                                                       */
 /*                                                                       */
