@@ -86,6 +86,7 @@ wss.on('connection', function(ws) {
     }
     });
     global.websocket=ws;
+    console.log('df');
    //this line sends to twi and cs4 and causes an error on Todds webpage
    // ws.send('Log Window Now Active');
 
