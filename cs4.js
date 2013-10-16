@@ -102,7 +102,7 @@ exports.setup = function()
     console.log('My IP Address is: ' + addresses[0]);
 
     //enumerate the serial ports
-    serialport.list(function (err, ports) {
+    serialPort.list(function (err, ports) {
         ports.forEach(function(port) {
             console.log(port.comName);
             console.log(port.pnpId);
