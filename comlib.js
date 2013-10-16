@@ -40,9 +40,10 @@ exports.openSerialPort = function(portname)
 }
 
 //enumerate the serial ports
-exports.listPorts = function()
+exports.listallports = function()
 {
-    serialPort.listPorts(function (err, ports) {
+
+    com.list(function (err, ports) {
         ports.forEach(function(port) {
             console.log(port.comName);
             console.log(port.pnpId);
