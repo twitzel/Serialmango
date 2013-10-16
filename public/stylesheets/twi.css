@@ -1,0 +1,10 @@
+.graphfadeformove
+ {
+     transition-property: opacity;
+     transition-duration: .5s;
+ }
+
+body {
+    padding: 50px;
+    font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}

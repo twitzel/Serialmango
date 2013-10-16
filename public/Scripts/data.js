@@ -1,6 +1,6 @@
 
 //var wsUri = "ws://witzel.homeserver.com:8080";
-var wsUri = "ws://localhost:8080";
+var wsUri = "ws://witzel.homeserver.com:8080";
 var output;
 var graph ={};
 var moving = false;
@@ -13,14 +13,14 @@ function startmoving()
     movingid = this.parentNode.parentNode.id;
 
     moving=true;
-
+    document.getElementById(movingid).style.opacity = "0.4";
 
 }
 function stopmoving()
 {
     if (moving && this.id != movingid)
     {
-
+        this.style.opacity = ".4";
         var htmlsave = this.innerHTML;
         var sensorsave = this.dataset.sensor;
 
@@ -33,8 +33,7 @@ function stopmoving()
 
          graphskeleton(this.dataset.sensor);
         graphskeleton(document.getElementById(movingid).dataset.sensor);
-        moving = false;
-        movingid = '';
+
 
         var sendobj = {};
 
@@ -62,6 +61,16 @@ function stopmoving()
 
         }
         doSend(JSON.stringify(sendobj));
+        x=this;
+        setTimeout(callback(this),250);
+        document.getElementById(movingid).style.opacity="1";
+        moving = false;
+        movingid = '';
+    }
+}
+function callback(a){
+    return function(){
+        a.style.opacity="1";
     }
 }
 function graphskeleton(prop)
@@ -191,39 +200,67 @@ function onOpen(evt) { writeToScreen("CONNECTED");
 function onClose(evt) {
     writeToScreen("DISCONNECTED");
 }
-function onMessage(evt)    {
-    if (evt.data){
+function onMessage(evt)
+{
+    if (evt.data)
+    {
         var indata = JSON.parse(evt.data);
     }
-
+    if (indata.datatype=="Sensor Update")
+    {
     writeToScreen(indata.datatype);
-    for(var prop in indata){
+        for(var prop in indata)
+        {
 
-        if (prop.substr(0,4) == 'Temp'){
-            graph[prop].data.push(indata[prop]);
-            graph[prop].context_rt.clearRect (0 , 0 , graph[prop].id_rt.width , graph[prop].id_rt.height );
-            if (graph[prop].data.length > 100)
+            if (prop.substr(0,4) == 'Temp')
             {
-                graph[prop].data.shift();
+                graph[prop].data.push(indata[prop]);
+                graph[prop].context_rt.clearRect (0 , 0 , graph[prop].id_rt.width , graph[prop].id_rt.height );
+                if (graph[prop].data.length > 100)
+                {
+                    graph[prop].data.shift();
+
+                }
+                graph[prop].context_rt.beginPath();
+                graph[prop].context_rt.moveTo(loffset,(graph[prop].id_rt.height-(graph[prop].data[0]-graph[prop].low)*graph[prop].degperpixel));
+                graph[prop].context_rt.lineWidth = 1;
+                graph[prop].context_rt.strokeStyle = "rgb(0,0,0)";
+                var loffset = 0;
+                for (var i = 0; i<graph[prop].data.length; ++i)
+                {
+
+                        graph[prop].context_rt.lineTo(i+loffset,(graph[prop].id_rt.height-(graph[prop].data[i]-graph[prop].low)*graph[prop].degperpixel));
+                    //graph[prop].context_rt.lineTo(i+loffset,20);
+                }
+
+                graph[prop].context_rt.stroke();
 
             }
-            graph[prop].context_rt.beginPath();
-            graph[prop].context_rt.moveTo(loffset,(graph[prop].id_rt.height-(graph[prop].data[0]-graph[prop].low)*graph[prop].degperpixel));
-            graph[prop].context_rt.lineWidth = 1;
-            graph[prop].context_rt.strokeStyle = "rgb(0,0,0)";
-            var loffset = 0;
-            for (var i = 0; i<graph[prop].data.length; ++i)
-            {
-
-                    graph[prop].context_rt.lineTo(i+loffset,(graph[prop].id_rt.height-(graph[prop].data[i]-graph[prop].low)*graph[prop].degperpixel));
-                //graph[prop].context_rt.lineTo(i+loffset,20);
-            }
-
-            graph[prop].context_rt.stroke();
-
         }
     }
 
+    if (indata.datatype=="Sensor Avg Update")
+    {
+
+        dp.shift();
+        newlen = dp.length;
+        dp.push({});
+        for(var prop in sensors)
+
+        {
+
+            dp[newlen][prop]=indata[prop];
+            if (indata[prop]){
+                //maybe allow this to work to draw blank for non reports
+                console.log('redrew'+prop);
+                graphskeleton(prop);
+            }
+    else
+                {console.log("property"+prop)}
+
+        }
+
+    }
     //websocket.close();
 }
 function onError(evt) {
@@ -234,16 +271,13 @@ function doSend(message) {
 }
 function writeToScreen(message) {
 
-    output.innerHTML = message+"<BR>"+output.innerHTML;
+    output.innerHTML = message;
 }
-function findpropbysortorder(inorder){
-    debugger;
-    for(var prop in sensors)
-    {
-        if (sensors[prop].order == inorder){
-           break;
-        }
-        return prop;
-    }
+
+
+function buttonclick(){
+
+    var element = document.getElementById('position10');
+    element.style.opacity = "0.1";
+
 }
-//-for(var prop in item[item.length-1]){

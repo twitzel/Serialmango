@@ -31,6 +31,7 @@ exports.websocketDataIn = function(data){
         collectionSettings.update({'type':'sensors'}, sensorSettings ,{upsert:true, w:1},function(err,res){
 
             console.log('Sensors settings name updated'+res);
+
         });
 
 
@@ -138,7 +139,7 @@ exports.setup = function()
             global.collectionAvg = db.collection('avg');
             global.collectionSettings = db.collection('settings')
            setInterval(function(){updateAvg();},60000);
-           // updateAvg();
+            // updateAvg();
             console.log("average updates set to 60 seconds");
             collectionSettings.findOne({"type":"sensors"},function(err,sensors){
                 if (sensors){
@@ -201,11 +202,24 @@ function updateAvg()
         console.log("latest item "+item[0].Time);
         var curPeriod = item[0].Time.setSeconds(0)-60000;
 
-        collectionAvg.find({},{Time : 1 ,_id: 0 }).sort( { _id : -1 } ).limit(1).toArray(function(err,aitem){
+        collectionAvg.find({},{_id: 0 }).sort( { _id : -1 } ).limit(1).toArray(function(err,aitem){
             // now find the most recent avg time entry
             console.log("Last avg entry"+aitem[0].Time);
             var lastavg = aitem[0].Time.getTime();
-            console.log("lastavg"+lastavg);
+            // why not check if all the sensors are in the settings collection here? - ok
+            for(var prop in aitem[0])
+            {
+                    if (!sensorSettings[prop] &&(prop != "Time") && (prop != "datatype")){
+                    sensorSettings[prop]={};
+                        console.log("Found new sensor:"+prop);
+                        collectionSettings.update({'type':'sensors'}, sensorSettings ,{upsert:true, w:1},function(err,res){
+
+                            console.log('Saved new sensor');
+                        });
+                    }
+            }
+
+
             for (var i = lastavg+60000; i <= curPeriod; i=i+60000){
 
                 console.log("Running Sensor averages for:"+new Date(i));
@@ -219,8 +233,8 @@ function avgReadings(startTime,seconds)
 {
     startTime.setSeconds(0);
     console.log(startTime);
-    var avgitem = [];
-    var avgitemcount = [];
+    var avgitem = {};
+    var avgitemcount = {};
     collectionLog.find({"Time":{$gte : startTime,$lte : new Date(startTime.getTime()+(seconds*1000))}}).toArray(function(err,item)
     {
 
@@ -255,11 +269,29 @@ function avgReadings(startTime,seconds)
 
         for(var prop in avgitem){
             avgitem[prop]=Math.round((avgitem[prop]/avgitemcount[prop])*100)/100;
+            // check for any new sensors not in the settings.sensor
+
+
         }
         avgitem.Time = startTime;
-        //console.log(avgitem);
+
+        try
+        {
+            console.log("sending sensor avg update");
+            avgitem.datatype="Sensor Avg Update";
+            console.log(avgitem);
+            global.websocket.send(JSON.stringify(avgitem));
+        }
+        catch(err)
+        {
+            console.log("ws error"+err);
+        }
+
         global.collectionAvg.update({"Time":startTime} ,avgitem ,{ upsert: true },function (err,res){
+
        //     console.log("res"+res);
+
+
         });
 
 
