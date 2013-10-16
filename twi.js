@@ -209,7 +209,7 @@ function updateAvg()
             // why not check if all the sensors are in the settings collection here? - ok
             for(var prop in aitem[0])
             {
-                    if (!sensorSettings[prop] &&(prop != "Time")){
+                    if (!sensorSettings[prop] &&(prop != "Time") && (prop != "datatype")){
                     sensorSettings[prop]={};
                         console.log("Found new sensor:"+prop);
                         collectionSettings.update({'type':'sensors'}, sensorSettings ,{upsert:true, w:1},function(err,res){
