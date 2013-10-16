@@ -36,7 +36,7 @@ app = express();
 
 app.set('port', 3000); // This is a default port.  Change here only if necessary
 app.set('views', __dirname + '/views');
-app.set('view engine', 'jade');
+//app.set('view engine', 'jade');
 app.set('view engine', 'ejs');
 app.use(express.favicon());
 app.use(express.logger('dev'));
