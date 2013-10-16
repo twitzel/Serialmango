@@ -101,9 +101,6 @@ exports.setup = function()
     }
     console.log('My IP Address is: ' + addresses[0]);
 
-    //find all serial ports on system
-    comlib.listallports();
-
     //now lets find out if we are on a windows system
     // if we are open the required com port
     //if not open the pi port
