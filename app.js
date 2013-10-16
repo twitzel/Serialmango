@@ -29,7 +29,7 @@ var WebSocketServer = require('ws').Server;
 //var MongoClient = require('mongodb').MongoClient;
 
 global.comlib = require('./comlib');
-
+global.myuri;
 
 //Set up all express stuff
 app = express();

@@ -20,6 +20,7 @@ var lastCueReceivedInternalTime;
 var lastCueReceivedExternalTime;
 
 
+
 //routine to ensure that serial data is not sent more than
 // every timedOutInterval
 //
@@ -68,24 +69,7 @@ sendOutput = function (dataToSend)
 
 exports.setup = function()
 {
-    //MongoClient.connect("mongodb://localhost:27017/WizDb", function(err, db)
-   // MongoClient.connect("mongodb://192.168.2.10:27017/WizDb", function(err, db)
-    MongoClient.connect("mongodb://" + address[0] + ":27017/WizDb", function(err, db)
-    {
-        if (err)
-        {
-            console.log("Connection to mongo failed:"+err)  ;
-        }
-        else
-        {
-            console.log("CS4: We are now connected to MongoDb, Wiz database, log collection");
-            global.collectionLog = db.collection('log');
-            global.collectionCue = db.collection('cue');
-            global.collectionStartup = db.collection('startup');
-        }
-    });
-
-
+    var myIPAddress;
     //iterate through all of the system IPv4 addresses
     // we should connect to address[0] with the webserver
     //so lets grab it and make a global variable to
@@ -100,7 +84,28 @@ exports.setup = function()
             }
         }
     }
+    global.myuri = addresses[0];
     console.log('My IP Address is: ' + addresses[0]);
+
+
+
+
+    //MongoClient.connect("mongodb://localhost:27017/WizDb", function(err, db)
+   // MongoClient.connect("mongodb://192.168.2.10:27017/WizDb", function(err, db)
+    MongoClient.connect("mongodb://" + global.myuri + ":27017/WizDb", function(err, db)
+    {
+        if (err)
+        {
+            console.log("Connection to mongo failed:"+err)  ;
+        }
+        else
+        {
+            console.log("CS4: We are now connected to MongoDb, Wiz database, log collection");
+            global.collectionLog = db.collection('log');
+            global.collectionCue = db.collection('cue');
+            global.collectionStartup = db.collection('startup');
+        }
+    });
 
     //now lets find out if we are on a windows system
     // if we are open the required com port
