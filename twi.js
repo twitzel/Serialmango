@@ -138,7 +138,7 @@ exports.setup = function()
             global.collectionLog = db.collection('todd');
             global.collectionAvg = db.collection('avg');
             global.collectionSettings = db.collection('settings')
-           setInterval(function(){updateAvg();},20000);
+           setInterval(function(){updateAvg();},60000);
             // updateAvg();
             console.log("average updates set to 60 seconds");
             collectionSettings.findOne({"type":"sensors"},function(err,sensors){
