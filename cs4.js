@@ -114,7 +114,7 @@ exports.setup = function()
     }
     else
     {
-        comlib.openSerialPort("/dev/ttyAMC0"); //not windows
+        comlib.openSerialPort("/dev/ttyUSB0"); //not windows
     }
 
     //set up all routes HERE
