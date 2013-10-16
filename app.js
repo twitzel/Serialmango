@@ -10,7 +10,7 @@
 
 
                 global.branch = process.argv[2];
-//          ** put cs4 in the edit configuration app parameters
+//          ** put cs4 ot twi in the edit configuration app parameters
 //                global.branch = 'cs4';
             console.info ("Branch set to "+global.branch);
 /*                                                                       */

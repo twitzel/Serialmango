@@ -101,6 +101,15 @@ exports.setup = function()
     }
     console.log('My IP Address is: ' + addresses[0]);
 
+    //enumerate the serial ports
+    serialport.list(function (err, ports) {
+        ports.forEach(function(port) {
+            console.log(port.comName);
+            console.log(port.pnpId);
+            console.log(port.manufacturer);
+        });
+    });
+
     //now lets find out if we are on a windows system
     // if we are open the required com port
     //if not open the pi port
