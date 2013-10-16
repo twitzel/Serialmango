@@ -1,9 +1,10 @@
 
 //var wsUri = "ws://localhost:8080";//
+var wsUri = "ws://192.168.2.10:8080";//
 var counter = 0;
 var lastCueTime;
 var delay;
-var wsUri = "ws://" + window.location.hostname + ":8080";
+//var wsUri = "ws://" + window.location.hostname + ":8080";
 
 
 
