@@ -84,6 +84,8 @@ function graphskeleton(prop)
     }
     var loffset = 50;
     var toffset=20;
+    var boffset = 20;
+    console.log(prop);
     //graph[prop] = {}; // moved to init routine
     graph[prop].low = low;
     graph[prop].high = high;
@@ -91,7 +93,7 @@ function graphskeleton(prop)
     graph[prop].id_rt=document.getElementById(prop+"_rt"); // realtime graph
     graph[prop].context = graph[prop].id.getContext("2d");
     graph[prop].context_rt = graph[prop].id_rt.getContext("2d");
-    graph[prop].degperpixel = (graph[prop].id.height-toffset)/(high-low);
+    graph[prop].degperpixel = (graph[prop].id.height-toffset-boffset)/(high-low);
     graph[prop].context.lineWidth = 1;
     graph[prop].context.strokeStyle = "rgb(0,0,0)";
     graph[prop].context.clearRect (0 , 0 , graph[prop].id.width , graph[prop].id.height );
@@ -99,22 +101,31 @@ function graphskeleton(prop)
     graph[prop].context.moveTo(loffset,(graph[prop].id.height-(dp[0][prop]-low)*graph[prop].degperpixel));
     graph[prop].loffset = loffset;
     graph[prop].toffset = toffset;
+    graph[prop].boffset = boffset;
 
 
     for (var i = 0; i<dp.length;++i)
     {
         if (dp[i][prop]){
-            graph[prop].context.lineTo(i+graph[prop].loffset,(graph[prop].id.height-(dp[i][prop]-graph[prop].low)*graph[prop].degperpixel));
+            graph[prop].context.lineTo(i+graph[prop].loffset,((graph[prop].id.height-graph[prop].boffset)-(dp[i][prop]-graph[prop].low)*graph[prop].degperpixel));
         } else
         { //no sensor data
             // graph[prop].context.lineTo(i+loffset,graph[prop].id.height);
         }
     }
     graph[prop].context.stroke();
+    graph[prop].context.beginPath();
+    graph[prop].context.strokeStyle ="rgb(100,100,100)";
+    graph[prop].context.moveTo(graph[prop].loffset,graph[prop].toffset);
+    graph[prop].context.lineTo(graph[prop].id.width,graph[prop].toffset);
+    graph[prop].context.moveTo(graph[prop].loffset,graph[prop].id.height-graph[prop].boffset);
+    graph[prop].context.lineTo(graph[prop].id.width,graph[prop].id.height-graph[prop].boffset);
+    graph[prop].context.stroke();
+
     graph[prop].context.fillStyle = "blue";
-    graph[prop].context.font = "16px Arial";
-    graph[prop].context.fillText(high,2,13+toffset);
-    graph[prop].context.fillText(low,2,graph[prop].id.height-1);
+    graph[prop].context.font = "12px Arial";
+    graph[prop].context.fillText(high,2,6+toffset);
+    graph[prop].context.fillText(low,2,graph[prop].id.height-graph[prop].boffset+7);
    if (!graph[prop].data){
        graph[prop].data = [];
    }
@@ -129,7 +140,7 @@ function graphclick(){
     graph[prop].context.lineTo(this.width,event.offsetY);
     graph[prop].context.stroke();
 
-    var lineval = ((((graph[prop].id.height-event.offsetY)/graph[prop].degperpixel)+graph[prop].low)*100);
+    var lineval = ((((graph[prop].id.height-graph[prop].boffset-event.offsetY)/graph[prop].degperpixel)+graph[prop].low)*100);
     lineval = Math.round(lineval)/100;
     //*graph[prop].degperpixel
     graph[prop].context.fillStyle = "red";
@@ -140,13 +151,13 @@ function graphclick(){
         if (dp[event.offsetX-graph[prop].loffset][prop]) {
             graph[prop].context.strokeStyle = "green";
             graph[prop].context.beginPath();
-            graph[prop].context.arc(event.offsetX,(graph[prop].id.height-(dp[event.offsetX-graph[prop].loffset][prop]-graph[prop].low)*graph[prop].degperpixel),
+            graph[prop].context.arc(event.offsetX,(graph[prop].id.height-graph[prop].boffset-(dp[event.offsetX-graph[prop].loffset][prop]-graph[prop].low)*graph[prop].degperpixel),
             5,0,2*Math.PI);
-            graph[prop].context.moveTo(event.offsetX,(graph[prop].id.height-(dp[event.offsetX-graph[prop].loffset][prop]-graph[prop].low)*graph[prop].degperpixel)-3);
+            graph[prop].context.moveTo(event.offsetX,(graph[prop].id.height-graph[prop].boffset-(dp[event.offsetX-graph[prop].loffset][prop]-graph[prop].low)*graph[prop].degperpixel)-3);
             graph[prop].context.lineTo(event.offsetX,13);
             graph[prop].context.stroke();
             graph[prop].context.fillStyle = "green";
-            graph[prop].context.fillText(dp[event.offsetX-graph[prop].loffset][prop],event.offsetX-20,13);
+            graph[prop].context.fillText(dp[event.offsetX-graph[prop].loffset][prop],event.offsetX-17,13);
         }
 
     }
