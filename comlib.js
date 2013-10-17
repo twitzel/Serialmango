@@ -37,7 +37,7 @@ exports.openSerialPort = function(portname)
         }
 
     });
-}
+};
 
 
 exports.write = function(data) {
@@ -49,7 +49,7 @@ exports.write = function(data) {
    //     console.log("set new time"+timestamp);
 
     });
-}
+};
 
 //Set up the web socket here.. Default port is 8080
 wss = new WebSocketServer({port: 8080}, function(err,res){
@@ -125,7 +125,7 @@ exports.websocketsend = function(data,id)
                 if (websocket[i])
                 {
                     websocket[i].send(data);
-                    console.log("websocket sending to client "+i);
+                    console.info("websocket sending to client "+i);
                 }
 
 
