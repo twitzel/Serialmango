@@ -118,7 +118,8 @@ exports.websocketsend = function(data,id)
         {
 //            console.log('keys'+ Object.keys(websocket));
 //            console.log('len'+websocket.length);
-            for (var i=0; i < Object.keys(websocket).length; i++)
+            //Object.keys(websocket).length -
+            for (var i=0; i < 10; i++)
             {
                 if (websocket[i])
                 {
