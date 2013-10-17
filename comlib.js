@@ -81,7 +81,6 @@ wss.on('connection', function(ws) {
     websocket[i]=ws;
     console.log('Websocket Connected Id:'+i);
     var thisId= i;
-    comlib.websocketsend("{test:yes}");
 
     //this line sends to twi and cs4 and causes an error on Todds webpage
     // ws.send('Log Window Now Active');
@@ -117,6 +116,8 @@ exports.websocketsend = function(data,id)
             websocket[id].send(data);
         } else
         {
+            console.log('keys'+ Object.keys(websocket));
+            console.log('len'+websocket.length);
             for (var i=0; i < Object.keys(websocket); i++)
             {
                 if (websocket[i])
