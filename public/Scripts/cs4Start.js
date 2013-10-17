@@ -1,15 +1,17 @@
 
-//var wsUri = "ws://localhost:8080";
-var wsUri = '<% myuri %>';
-//var wsUri ='#{myuri}'
+//var wsUri = "ws://localhost:8080";//
 var counter = 0;
 var lastCueTime;
 var delay;
+var wsUri = "ws://" + window.location.hostname + ":8080";
+
+
 
 window.onload = init;
 function init()
 {
     output = document.getElementById("websocketlog");
+
     testWebSocket();
 
 }

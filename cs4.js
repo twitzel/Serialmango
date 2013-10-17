@@ -69,7 +69,6 @@ sendOutput = function (dataToSend)
 
 exports.setup = function()
 {
-    var myIPAddress;
     //iterate through all of the system IPv4 addresses
     // we should connect to address[0] with the webserver
     //so lets grab it and make a global variable to

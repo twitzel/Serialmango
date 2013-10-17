@@ -53,5 +53,5 @@ exports.data2 = function(req, res){
 };
 
 exports.cs4Start = function(req, res){
-   res.render('cs4Start.ejs',{ title: 'CS-4 Output Data 3', myuri: global.myuri });
+   res.render('CS4Start.ejs',{ title: 'CS-4 Output Data 3', myuri: global.myuri });
 };
