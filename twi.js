@@ -97,7 +97,7 @@ exports.serialDataIn  = function(data)
          try
         {
            serialData.datatype="Sensor Update";
-            websocketsend(JSON.stringify(serialData));
+            commlib.websocketsend(JSON.stringify(serialData));
         }
         catch(err)
         {
@@ -281,7 +281,7 @@ function avgReadings(startTime,seconds)
             console.log("sending sensor avg update");
             avgitem.datatype="Sensor Avg Update";
             console.log(avgitem);
-            websocketsend(JSON.stringify(avgitem));
+            commlib.websocketsend(JSON.stringify(avgitem));
             delete avgitem.datatype;
         }
         catch(err)
