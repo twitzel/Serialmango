@@ -47,7 +47,7 @@ sendOutput = function (dataToSend)
     addTime = addTime + "\""+  (new Date( lastconverted.setMilliseconds(lastconverted.getMilliseconds() + (timerStartTime -lastCueReceivedInternalTime)))).toISOString() +"\", \"Dout \" : \"" + dataToSend + "\"}";
 
     //send it out the socket
-    global.websocket.send(".    Sent: " + addTime) ;
+    comlib.websocketsend(".    Sent: " + addTime) ;
 
     //Log the data into the collection
     addTime = JSON.parse(addTime);
@@ -272,12 +272,12 @@ exports.socketDataOut = function (data) {
             type = "Pitch Wheel Control";
         }
 
-        global.websocket.send(serialData.Time.toISOString() + " " + type + " ---    " + indata) ;
+        comlib.websocketsend(serialData.Time.toISOString() + " " + type + " ---    " + indata) ;
 
     }
     else // just send data
     {
-        global.websocket.send(serialData.Time.toISOString() + " " + indata);
+        comlib.websocketsend(serialData.Time.toISOString() + " " + indata);
     }
 
 
