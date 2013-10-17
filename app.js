@@ -25,7 +25,7 @@ var routes = require('./routes');
 var user = require('./routes/user');
 var http = require('http');
 var path = require('path');
-var WebSocketServer = require('ws').Server;
+
 //var MongoClient = require('mongodb').MongoClient;
 
 global.comlib = require('./comlib');
@@ -52,45 +52,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Set up the server
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
-});
-
-
-//Set up the web socket here.. Default port is 8080
-wss = new WebSocketServer({port: 8080}, function(err,res){
-
-  //  console.log(wss.url);
-    if (err){
-        console.log("Websocket error:"+err);
-    }
-    else
-    {
-
-        console.log("Websocket server Listening");
-    }
-});
-
-
-
-//Set up Web socket for a connection and make it global
-wss.on('connection', function(ws) {
-    ws.on('message', function(message) {
-
-    if(branch == 'twi')
-    {
-        twi.websocketDataIn(message);
-    }
-    else if(branch == 'cs4')
-    {
-        console.log('received: %s', message);
-        cs4.websocketDataIn(message);
-    }
-    });
-    global.websocket=ws;
-    console.log('df');
-   //this line sends to twi and cs4 and causes an error on Todds webpage
-   // ws.send('Log Window Now Active');
-
-
 });
 
 /*

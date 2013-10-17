@@ -1,6 +1,6 @@
 
 //var wsUri = "ws://witzel.homeserver.com:8080";
-var wsUri = "ws://witzel.homeserver.com:8080";
+var wsUri = "ws://localhost:8080";
 var output;
 var graph ={};
 var moving = false;
@@ -179,10 +179,13 @@ function init()
 {
     output = document.getElementById("output");
     for(var prop in dp[dp.length-1]){
-
+        if (prop !="Time" && prop !="datatype"){
         graph[prop] = {};
+        console.log("initial drawing of :"+prop);
+
         graphskeleton(prop);
     }
+}
     testWebSocket();
     //graph();
 }

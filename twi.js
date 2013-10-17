@@ -30,7 +30,8 @@ exports.websocketDataIn = function(data){
 
         collectionSettings.update({'type':'sensors'}, sensorSettings ,{upsert:true, w:1},function(err,res){
 
-            console.log('Sensors settings name updated'+res);
+            console.log('Sensors settings name updated:'+res);
+
 
         });
 
@@ -96,7 +97,7 @@ exports.serialDataIn  = function(data)
          try
         {
            serialData.datatype="Sensor Update";
-            global.websocket.send(JSON.stringify(serialData));
+            websocketsend(JSON.stringify(serialData));
         }
         catch(err)
         {
@@ -280,7 +281,7 @@ function avgReadings(startTime,seconds)
             console.log("sending sensor avg update");
             avgitem.datatype="Sensor Avg Update";
             console.log(avgitem);
-            global.websocket.send(JSON.stringify(avgitem));
+            websocketsend(JSON.stringify(avgitem));
             delete avgitem.datatype;
         }
         catch(err)

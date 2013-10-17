@@ -1,7 +1,7 @@
 var com = require('serialport');
 var cs4 = require('./cs4');
 var twi = require('./twi');
-
+var WebSocketServer = require('ws').Server;
 exports.openSerialPort = function(portname)
 {
     console.log("Attempting to open serial port "+portname);
@@ -50,3 +50,85 @@ exports.write = function(data) {
 
     });
 }
+
+//Set up the web socket here.. Default port is 8080
+wss = new WebSocketServer({port: 8080}, function(err,res){
+
+    //  console.log(wss.url);
+    if (err){
+        console.log("Websocket error:"+err);
+    }
+    else
+    {
+
+        console.log("Websocket server Listening");
+    }
+});
+
+
+websocket = {};
+//Set up Web socket for a connection and make it global
+wss.on('connection', function(ws) {
+
+    var i = 0;
+    while (true)
+    {
+        if (!websocket[i]){
+            break;
+        }
+        i++;
+    }
+    websocket[i]=ws;
+    console.log('Websocket Connected Id:'+i);
+    var thisId= i;
+    comlib.websocketsend("{test:yes}");
+
+    //this line sends to twi and cs4 and causes an error on Todds webpage
+    // ws.send('Log Window Now Active');
+
+    ws.on('message', function(message) {
+
+        if(branch == 'twi')
+        {
+            twi.websocketDataIn(message,thisId);
+        }
+        else if(branch == 'cs4')
+        {
+            console.log('received: %s', message,thisId);
+            cs4.websocketDataIn(message);
+        }
+    });
+    ws.on('close', function(ws){
+        console.log('Websocket disconnected Id:'+thisId);
+        delete websocket[thisId];
+    });
+    ws.on('error', function(ws){
+        console.log('Websocket Error Id:'+thisId);
+        delete websocket[thisId];
+    });
+});
+console.log('herehere')
+
+exports.websocketsend = function(data,id)
+    {
+
+        if (websocket[id])
+        {
+            websocket[id].send(data);
+        } else
+        {
+            var i = 0;
+            while (true)
+            {
+                if (!websocket[i])
+                {
+                    break;
+                }
+                websocket[i].send(data);
+                console.log("websocket sending to client "+i);
+                i++;
+            }
+
+        }
+
+    };
