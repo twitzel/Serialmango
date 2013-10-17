@@ -117,8 +117,7 @@ exports.websocketsend = function(data,id)
             websocket[id].send(data);
         } else
         {
-            var i = 0;
-            while (true)
+            for (var i=0; i < websocket.length; i++)
             {
                 if (!websocket[i])
                 {
