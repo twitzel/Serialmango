@@ -71,13 +71,14 @@ function buttonclick(message) {
 }
 
 function cueclick(message){
-    counter = parseInt(text1.value) + 1;
-    if(isNaN(counter))
-    {counter = 10 ;}
-    text1.value = counter;
-    delay = (new Date()-lastCueTime);
+    document.getElementById("body").style.backgroundColor =  '#550000';
+ //   counter = parseInt(text1.value) + 1;
+//    if(isNaN(counter))
+//    {counter = 10 ;}
+//    text1.value = counter;
+//    delay = (new Date()-lastCueTime);
     // delay = 6;
-    websocket.send("{\"OutData\": [{\"Delay\": "+delay+" , \"Port\":\"Zig1\", \"Showname\":\"MamaMia\", \"Dir\":\"English\", \"Dout\":\"GO slide" + counter +".jpg NEXT slide"+(counter +1) +".jpg\"}]}");
+//    websocket.send("{\"OutData\": [{\"Delay\": "+delay+" , \"Port\":\"Zig1\", \"Showname\":\"MamaMia\", \"Dir\":\"English\", \"Dout\":\"GO slide" + counter +".jpg NEXT slide"+(counter +1) +".jpg\"}]}");
 
-    textData.value = "{\"OutData\": [{\"Delay\": "+delay+" , \"Port\":\"Zig1\", \"Showname\":\"MamaMia\", \"Dir\":\"English\", \"Dout\":\"GO slide" + counter +".jpg NEXT slide"+(counter +1) +".jpg\"}]}";
+//    textData.value = "{\"OutData\": [{\"Delay\": "+delay+" , \"Port\":\"Zig1\", \"Showname\":\"MamaMia\", \"Dir\":\"English\", \"Dout\":\"GO slide" + counter +".jpg NEXT slide"+(counter +1) +".jpg\"}]}";
 }
