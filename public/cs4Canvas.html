@@ -18,6 +18,7 @@
 <script>
     var canvas = document.getElementById('myCanvas');
     var context = canvas.getContext('2d');
+    context.translate(-.5,-.5);
     var offset=0;
   //  context.beginPath();
 /*
@@ -43,7 +44,7 @@
     context.fillText("14:34",50-14,192)
     context.fillText("14:43",50*11-14,192)
  */
-    setInterval(function(){movedata()},1000);
+    setInterval(function(){movedata()},10);
 
 
 
@@ -51,7 +52,7 @@
     function movedata(){
         var canvas = document.getElementById('myCanvas');
         context.clearRect(0,0,canvas.width,canvas.height);
-        context.translate(-10,0);
+
         context.beginPath();
         offset -=1;
         for(var i=1; i*10<document.getElementById('myCanvas').width; i++)

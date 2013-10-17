@@ -89,6 +89,10 @@ function graphskeleton(prop)
     //graph[prop] = {}; // moved to init routine
     graph[prop].low = low;
     graph[prop].high = high;
+    graph[prop].loffset = loffset;
+    graph[prop].toffset = toffset;
+    graph[prop].boffset = boffset;
+
     graph[prop].id=document.getElementById(prop);
     graph[prop].id_rt=document.getElementById(prop+"_rt"); // realtime graph
     graph[prop].context = graph[prop].id.getContext("2d");
@@ -98,10 +102,7 @@ function graphskeleton(prop)
     graph[prop].context.strokeStyle = "rgb(0,0,0)";
     graph[prop].context.clearRect (0 , 0 , graph[prop].id.width , graph[prop].id.height );
     graph[prop].context.beginPath();
-    graph[prop].context.moveTo(loffset,(graph[prop].id.height-(dp[0][prop]-low)*graph[prop].degperpixel));
-    graph[prop].loffset = loffset;
-    graph[prop].toffset = toffset;
-    graph[prop].boffset = boffset;
+    graph[prop].context.moveTo(loffset,(graph[prop].id.height-graph[prop].boffset)-(dp[0][prop]-low)*graph[prop].degperpixel);
 
 
     for (var i = 0; i<dp.length;++i)
@@ -237,14 +238,14 @@ function onMessage(evt)
 
                 }
                 graph[prop].context_rt.beginPath();
-                graph[prop].context_rt.moveTo(loffset,(graph[prop].id_rt.height-(graph[prop].data[0]-graph[prop].low)*graph[prop].degperpixel));
+                graph[prop].context_rt.moveTo(loffset,(graph[prop].id_rt.height-graph[prop].boffset-(graph[prop].data[0]-graph[prop].low)*graph[prop].degperpixel));
                 graph[prop].context_rt.lineWidth = 1;
                 graph[prop].context_rt.strokeStyle = "rgb(0,0,0)";
                 var loffset = 0;
                 for (var i = 0; i<graph[prop].data.length; ++i)
                 {
 
-                        graph[prop].context_rt.lineTo(i+loffset,(graph[prop].id_rt.height-(graph[prop].data[i]-graph[prop].low)*graph[prop].degperpixel));
+                        graph[prop].context_rt.lineTo(i+loffset,(graph[prop].id_rt.height-graph[prop].boffset-(graph[prop].data[i]-graph[prop].low)*graph[prop].degperpixel));
                     //graph[prop].context_rt.lineTo(i+loffset,20);
                 }
 
