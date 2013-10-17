@@ -107,7 +107,7 @@ wss.on('connection', function(ws) {
         delete websocket[thisId];
     });
 });
-console.log('herehere')
+
 
 exports.websocketsend = function(data,id)
     {
@@ -119,13 +119,13 @@ exports.websocketsend = function(data,id)
         {
             for (var i=0; i < websocket.length; i++)
             {
-                if (!websocket[i])
+                if (websocket[i])
                 {
-                    break;
+                    websocket[i].send(data);
+                    console.log("websocket sending to client "+i);
                 }
-                websocket[i].send(data);
-                console.log("websocket sending to client "+i);
-                i++;
+
+
             }
 
         }
