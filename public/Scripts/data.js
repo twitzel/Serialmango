@@ -46,7 +46,7 @@ function stopmoving()
        //reset event listeners
         var i = 0;
         for(var prop in dp[dp.length-1]){
-
+            if (prop != 'Time' && prop != 'dataset'){
             var temp = document.getElementById("position"+i);
             sendobj[temp.dataset.sensor]={};
             temp.addEventListener("click",stopmoving,false);
@@ -57,7 +57,7 @@ function stopmoving()
             temp = document.getElementById("moveButton"+i);
             temp.addEventListener("click",startmoving,false);
           i++;
-
+        }
 
         }
         doSend(JSON.stringify(sendobj));
@@ -213,6 +213,7 @@ function onMessage(evt)
     {
     writeToScreen(indata.datatype);
         for(var prop in indata)
+
         {
 
             if (prop.substr(0,4) == 'Temp')
@@ -244,14 +245,15 @@ function onMessage(evt)
 
     if (indata.datatype=="Sensor Avg Update")
     {
-
         dp.shift();
         newlen = dp.length;
         dp.push({});
-        dp[newlen].Time=indata[Time];
+        dp[newlen].Time=indata.Time;
         for(var prop in sensors)
 
+
         {
+            if (prop.substr(0,4) == 'Temp'){
 
             dp[newlen][prop]=indata[prop];
 
@@ -263,6 +265,7 @@ function onMessage(evt)
     else
                 {console.log("property"+prop)}
 
+        }
         }
 
     }
