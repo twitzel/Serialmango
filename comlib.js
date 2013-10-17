@@ -119,6 +119,7 @@ exports.websocketsend = function(data,id)
 //            console.log('keys'+ Object.keys(websocket));
 //            console.log('len'+websocket.length);
             //Object.keys(websocket).length -
+            //someday fix this so it tracks the number of connections
             for (var i=0; i < 10; i++)
             {
                 if (websocket[i])
