@@ -35,7 +35,7 @@ sendOutput = function (dataToSend)
     if (timedOut)
     {
         timedOut = false;
-        comlib.write("         " + dataToSend); // add spaces at beginning for R4 zigbee stuff
+        comlib.write("         " + dataToSend + "\n\r"); // add spaces at beginning for R4 zigbee stuff and terminate\n\r
         setTimeout(function(){timedOut = true;}, timedOutInterval);
         timerStartTime = new Date();
         console.log(dataToSend);
@@ -116,7 +116,7 @@ exports.setup = function()
     }
     else
     {
-        comlib.openSerialPort("/dev/ttyUSB0"); //not windows
+        comlib.openSerialPort("/dev/ttyUSB0"); //not windows - Raspberry PI
     }
 
     //set up all routes HERE
@@ -272,6 +272,7 @@ exports.socketDataOut = function (data) {
             type = "Pitch Wheel Control";
         }
 
+        //comlib.websocketsend(JSON.stringify(serialData)) ;
         comlib.websocketsend(serialData.Time.toISOString() + " " + type + " ---    " + indata) ;
 
     }

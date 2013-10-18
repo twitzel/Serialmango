@@ -18,47 +18,32 @@
 <script>
     var canvas = document.getElementById('myCanvas');
     var context = canvas.getContext('2d');
- //   context.translate(-.5,-.5);
+    var canvas = document.getElementById('myCanvas');
+    var canvasWidth = canvas.width;
+    var canvasStart = canvasWidth*.8;
+    var canvasHeight = canvas.height;
+    var pixelData = new Array(); //time: ,line: , data,
+
+    var numberLoops;
+  //  context.translate(-.5,-.5);
     var offset=0;
-  //  context.beginPath();
-/*
-    for(var i=1; i<document.getElementById('myCanvas').width; i++)
-    {
 
-
-        if(i%5 ==0)
-        {
-            context.moveTo(i*10,140);
-            context.lineTo(i*10, 180);
-        }
-        else
-        {
-            context.moveTo(i*10,160);
-            context.lineTo(i*10, 180);
-        }
-        context.lineWidth = 2;
-
-    }
-    context.stroke();
-    context.font="10px Arial";
-    context.fillText("14:34",50-14,192)
-    context.fillText("14:43",50*11-14,192)
- */
-    setInterval(function(){movedata()},100);
-
-
+    setInterval(function(){movedata()},10);
 
 
     function movedata(){
-        var canvas = document.getElementById('myCanvas');
+
+        numberLoops++;
+
         context.clearRect(0,0,canvas.width,canvas.height);
 
         context.beginPath();
-        offset -=.7;
-        for(var i=1; i*10<document.getElementById('myCanvas').width; i++)
+
+
+
+         offset -=.3;
+        for(var i=1; i*10<canvasStart; i++)
         {
-
-
             if(i%5 ==0)
             {
                 context.moveTo(i*10+offset,140);
@@ -69,10 +54,18 @@
                 context.moveTo(i*10+offset,160);
                 context.lineTo(i*10+offset, 180);
             }
-            context.lineWidth = .7;
-
+            context.lineWidth = 1;
         }
         context.stroke();
+
+        //add starting line
+        context.beginPath();
+        context.strokeStyle = 'red';
+        context.moveTo(canvasStart, 0);
+        context.lineTo(canvasStart, canvasHeight);
+        context.stroke();
+        context.strokeStyle = 'black';
+
         context.font="10px Arial";
         context.fillText("14:34",50-14+offset,192)
         context.fillText("14:43",50*11-14+offset,192)
