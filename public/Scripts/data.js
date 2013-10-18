@@ -222,7 +222,7 @@ function init()
     }
 }
     testWebSocket();
-    setInterval('timestampRealtime()',10000);
+    setInterval('timestampRealtime()',1000);
     //graph();
 }
 function testWebSocket()
@@ -283,6 +283,7 @@ function onMessage(evt)
                 graph[prop].context_rt.font = "10px Arial";
                 for (var i = 0; i<graph[prop].data.length; ++i){
                     if (graph[prop].Time[i]>0){
+
                         graph[prop].context_rt.moveTo(i*2,graph[prop].toffset);
                         graph[prop].context_rt.lineTo(i*2,graph[prop].id.height);
 
@@ -344,15 +345,24 @@ function buttonclick(){
 }
 function timestampRealtime()
 {
-    console.log('timestamprealtime');
-    var temp = new Date();
 
-    for(var prop in sensors)
+    var temp = new Date();
+    if (temp.getSeconds()%30 == 0)
+    {
+        for(var prop in sensors)
 
      {
+
         if (prop.substr(0,4) == 'Temp'){
-            console.log(graph[prop].Time.length-1);
+           //console.log((temp.getSeconds()/sensors[prop].interval)%10);
+         //   if ((temp.getSeconds()/sensors[prop].interval)%15 == 0) {
+
          graph[prop].Time[graph[prop].Time.length-1]=temp.getSeconds();
+
+
+
+       // }
         }
+     }
      }
 }
