@@ -4,14 +4,23 @@ var counter = 0;
 var lastCueTime;
 var delay;
 var wsUri = "ws://" + window.location.hostname + ":8080";
-
+//below from scroll
+var canvas = document.getElementById('myCanvas');
+var context = canvas.getContext('2d');
+var canvasWidth = canvas.width;
+var canvasStart = canvasWidth*.8;
+var canvasHeight = canvas.height;
+var pixelData = new Array(); //time: ,line: , data,
+var numberLoops = 0;
+var ticIncrement = 10; // this gives a time increment of 1 ms per pixel //
+var lineStart = 180; // bottom of tic line
 
 
 window.onload = init;
 function init()
 {
     output = document.getElementById("websocketlog");
-
+    initScroll();
     testWebSocket();
 
 }
@@ -52,6 +61,8 @@ function writeToScreen(message) {
     // get time of incoming cue
     lastCueTime = new Date();
     output.innerHTML = message + "<BR>" + output.innerHTML;
+    pixelData(lineStart) = {data : message};
+
     //output.value = message+"<BR>"+output.value;
 }
 function buttonclick(message) {

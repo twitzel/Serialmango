@@ -4,7 +4,12 @@
 
     <title>CS-4 Start Page</title>
     <h1> <center>Welcome to the CS-4 System</center></h1>
+
+
+    <canvas id="myCanvas" width="800px" height="200px"></canvas>
+
     <script  src="/Scripts/cs4Start.js">  </script>
+    <script  src="/Scripts/cs4Scroll.js"> </script>
 
     <style>
             /*  NOTE:  . = id;   # = class  */
@@ -49,6 +54,11 @@
         #goButton:hover{background-color: #4d8856
         }
 
+        #myCanvas{
+            float: right;
+            border: 1px solid #333333;
+
+
     </style>
 
 </head>
@@ -66,6 +76,8 @@
 <div id="websocketlog" class="log">
     <p> test text</p>
 </div>
+
+
 
 <div id="cueFunctions" >
     <button id = "goButton"  onmousedown = "cueclick()"> GO
