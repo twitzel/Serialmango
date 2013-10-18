@@ -63,9 +63,9 @@
         }
         context.beginPath();
 
-        for(var i = 0; i< pixelData.length; i++ ){
-            if(pixelData[i].line != "undefined"){
-              if(pixelData[i].line != "undefined"){
+        for(var i = 0; i< 300; i++ ){
+            if(pixelData[i]){
+              if(pixelData[i].line){
                   context.moveTo(i,lineStart);
                   context.lineTo(i,lineStart -pixelData[i].line);
               }
