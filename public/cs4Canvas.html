@@ -55,8 +55,8 @@
         pixelData.shift();
 
         context.clearRect(0,0,canvas.width,canvas.height);
-        if(numberLoops%50 == 0){
-            pixelData[canvasStart] = {line : 40, time : new Date()};
+        if(numberLoops%100 == 0){
+            pixelData[canvasStart] = {line : 40, time : new Date().toLocaleTimeString().substring(0,8)};//pixelData[canvasStart] = {line : 40, time : new Date()};
         }
         else if(numberLoops % ticIncrement == 0){
             pixelData[canvasStart] = {line : 20};
@@ -69,13 +69,21 @@
                   context.moveTo(i,lineStart);
                   context.lineTo(i,lineStart -pixelData[i].line);
               }
-              if(pixelData[i].time != "undefined") {
-                  context.fillText(pixelData[i].time,lineStart-14 ,192)
+              if(pixelData[i].time) {
+                  context.fillText(pixelData[i].time,i-21 ,192)
 
               }
 
             }
         }
+        context.stroke();
+        //add starting line
+        context.beginPath();
+        context.strokeStyle = 'blue';
+        context.moveTo(canvasStart, 0);
+        context.lineTo(canvasStart, canvasHeight);
+        context.stroke();
+        context.strokeStyle = 'black';
 
         context.stroke();
 /*
