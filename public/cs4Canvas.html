@@ -54,7 +54,7 @@
         numberLoops++;
         pixelData.shift();
 
-      //  context.clearRect(0,0,canvas.width,canvas.height);
+        context.clearRect(0,0,canvas.width,canvas.height);
         if(numberLoops%50 == 0){
             pixelData[canvasStart] = {line : 40, time : new Date()};
         }
@@ -63,11 +63,11 @@
         }
         context.beginPath();
 
-        for(var i = 0; i< pixelData.length; i++){
-            if(pixelData[i] != "undefined"){ //make sure there is something there
+        for(var i = 0; i< pixelData.length; i++ ){
+            if(pixelData[i].line != "undefined"){
               if(pixelData[i].line != "undefined"){
                   context.moveTo(i,lineStart);
-                  context.lineTo(i,lineStart -pixelData.line);
+                  context.lineTo(i,lineStart -pixelData[i].line);
               }
               if(pixelData[i].time != "undefined") {
                   context.fillText(pixelData[i].time,lineStart-14 ,192)
@@ -75,9 +75,6 @@
               }
 
             }
-
-
-
         }
 
         context.stroke();
