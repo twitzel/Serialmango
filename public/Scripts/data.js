@@ -85,7 +85,7 @@ function graphskeleton(prop)
     var loffset = 50;
     var toffset=20;
     var boffset = 20;
-    console.log(prop);
+
     //graph[prop] = {}; // moved to init routine
     graph[prop].low = low;
     graph[prop].high = high;
@@ -109,10 +109,30 @@ function graphskeleton(prop)
     {
         if (dp[i][prop]){
             graph[prop].context.lineTo(i+graph[prop].loffset,((graph[prop].id.height-graph[prop].boffset)-(dp[i][prop]-graph[prop].low)*graph[prop].degperpixel));
+
+
+
         } else
         { //no sensor data
             // graph[prop].context.lineTo(i+loffset,graph[prop].id.height);
         }
+    }
+    graph[prop].context.stroke();
+    graph[prop].context.beginPath();
+ //draw time lines
+    graph[prop].context.strokeStyle ="rgb(220,200,220)";
+    graph[prop].context.fillStyle = "black";
+    graph[prop].context.font = "10px Arial";
+    for (var i = 0; i<dp.length;++i){
+    if ((new Date(dp[i].Time).getMinutes() % 60) == 0){
+        graph[prop].context.moveTo(i+graph[prop].loffset,graph[prop].toffset);
+        graph[prop].context.lineTo(i+graph[prop].loffset,graph[prop].id.height);
+        var curtime = new Date(dp[i].Time);
+
+        graph[prop].context.fillText(curtime.getHours()+' 00',i+graph[prop].loffset-14,graph[prop].id.height);
+
+
+    }
     }
     graph[prop].context.stroke();
     graph[prop].context.beginPath();
@@ -130,7 +150,9 @@ function graphskeleton(prop)
    if (!graph[prop].data){
        graph[prop].data = [];
    }
-
+    if (!graph[prop].Time){
+        graph[prop].Time = [];
+    }
 }
 function graphclick(){
     var prop = this.id;
@@ -159,6 +181,7 @@ function graphclick(){
             graph[prop].context.stroke();
             graph[prop].context.fillStyle = "green";
             graph[prop].context.fillText(dp[event.offsetX-graph[prop].loffset][prop],event.offsetX-17,13);
+            graph[prop].context.fillText(new Date(dp[event.offsetX-graph[prop].loffset].Time).toLocaleTimeString(),event.offsetX-17,graph[prop].id.height-8);
         }
 
     }
@@ -199,6 +222,7 @@ function init()
     }
 }
     testWebSocket();
+    setInterval('timestampRealtime()',10000);
     //graph();
 }
 function testWebSocket()
@@ -231,10 +255,12 @@ function onMessage(evt)
             if (prop.substr(0,4) == 'Temp')
             {
                 graph[prop].data.push(indata[prop]);
+                graph[prop].Time.push(indata.Time);
                 graph[prop].context_rt.clearRect (0 , 0 , graph[prop].id_rt.width , graph[prop].id_rt.height );
                 if (graph[prop].data.length > 100)
                 {
                     graph[prop].data.shift();
+                    graph[prop].Time.shift();
 
                 }
                 graph[prop].context_rt.beginPath();
@@ -245,12 +271,29 @@ function onMessage(evt)
                 for (var i = 0; i<graph[prop].data.length; ++i)
                 {
 
-                        graph[prop].context_rt.lineTo(i+loffset,(graph[prop].id_rt.height-graph[prop].boffset-(graph[prop].data[i]-graph[prop].low)*graph[prop].degperpixel));
+                        graph[prop].context_rt.lineTo((i*2)+loffset,(graph[prop].id_rt.height-graph[prop].boffset-(graph[prop].data[i]-graph[prop].low)*graph[prop].degperpixel));
                     //graph[prop].context_rt.lineTo(i+loffset,20);
                 }
 
                 graph[prop].context_rt.stroke();
+                // draw time marks
+                graph[prop].context_rt.beginPath();
+                graph[prop].context_rt.strokeStyle ="rgb(220,200,220)";
+                graph[prop].context_rt.fillStyle = "black";
+                graph[prop].context_rt.font = "10px Arial";
+                for (var i = 0; i<graph[prop].data.length; ++i){
+                    if (graph[prop].Time[i]>0){
+                        graph[prop].context_rt.moveTo(i*2,graph[prop].toffset);
+                        graph[prop].context_rt.lineTo(i*2,graph[prop].id.height);
 
+
+                        graph[prop].context_rt.fillText(graph[prop].Time[i],(i*2)-14,graph[prop].id.height);
+
+
+                    }
+                }
+                graph[prop].context_rt.stroke();
+                //
             }
         }
     }
@@ -298,4 +341,18 @@ function buttonclick(){
     var element = document.getElementById('position10');
     element.style.opacity = "0.1";
 
+}
+function timestampRealtime()
+{
+    console.log('timestamprealtime');
+    var temp = new Date();
+
+    for(var prop in sensors)
+
+     {
+        if (prop.substr(0,4) == 'Temp'){
+            console.log(graph[prop].Time.length-1);
+         graph[prop].Time[graph[prop].Time.length-1]=temp.getSeconds();
+        }
+     }
 }

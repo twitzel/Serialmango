@@ -24,8 +24,8 @@ html
                         ="Current Temperature:"+item[item.length-1][prop]
                   button(id="moveButton"+position data-id="position"+position) Move
               div
-                  canvas(id=prop,height="85",width=item.length+50,style="border:1px solid #000000;")
-                  canvas(id=prop+"_rt",height="85",width=100,style="border:1px solid #000000;")
+                  canvas(id=prop,height="150",width=item.length+50,style="border:1px solid #000000;")
+                  canvas(id=prop+"_rt",height="150",width=200,style="border:1px solid #000000;")
                   script.
                     var temp = document.getElementById("!{prop}");
                     temp.addEventListener("click",graphclick,false);
