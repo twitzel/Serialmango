@@ -23,10 +23,28 @@
     var canvasStart = canvasWidth*.8;
     var canvasHeight = canvas.height;
     var pixelData = new Array(); //time: ,line: , data,
-
-    var numberLoops;
+    var numberLoops = 0;
+    var ticIncrement = 10;
+    var lineStart = 180; // bottom of tic line
   //  context.translate(-.5,-.5);
     var offset=0;
+
+    //setup origional time marks and time in the array
+
+    for(var i = 0; i  < canvasStart; i+=ticIncrement){
+       if(i%50 == 0){
+           pixelData[i] = {line : 40};
+       }
+        else{
+           pixelData[i] = {line : 20};
+       }
+
+    }
+
+ //   pixelData.push('{time : new Date()}');  //put current time at starting position
+  //  pixelData[0] = {time : new Date(), line : 10} ;
+
+ //   pixelData[1] = {line : 5};
 
     setInterval(function(){movedata()},10);
 
@@ -34,13 +52,36 @@
     function movedata(){
 
         numberLoops++;
+        pixelData.shift();
 
-        context.clearRect(0,0,canvas.width,canvas.height);
-
+      //  context.clearRect(0,0,canvas.width,canvas.height);
+        if(numberLoops%50 == 0){
+            pixelData[canvasStart] = {line : 40, time : new Date()};
+        }
+        else if(numberLoops % ticIncrement == 0){
+            pixelData[canvasStart] = {line : 20};
+        }
         context.beginPath();
 
+        for(var i = 0; i< pixelData.length; i++){
+            if(pixelData[i] != "undefined"){ //make sure there is something there
+              if(pixelData[i].line != "undefined"){
+                  context.moveTo(i,lineStart);
+                  context.lineTo(i,lineStart -pixelData.line);
+              }
+              if(pixelData[i].time != "undefined") {
+                  context.fillText(pixelData[i].time,lineStart-14 ,192)
+
+              }
+
+            }
 
 
+
+        }
+
+        context.stroke();
+/*
          offset -=.3;
         for(var i=1; i*10<canvasStart; i++)
         {
@@ -69,6 +110,8 @@
         context.font="10px Arial";
         context.fillText("14:34",50-14+offset,192)
         context.fillText("14:43",50*11-14+offset,192)
+
+*/
 
     }
 </script>
