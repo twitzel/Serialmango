@@ -13,7 +13,7 @@ function move(units){
     units = units + (fromElement.dataset.position * 1);
     var   toElement  = document.getElementById('position'+units);
 
-//***
+//*** h
     var htmlsave = fromElement.innerHTML;
     var sensorsave = fromElement.dataset.sensor;
 
