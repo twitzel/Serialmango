@@ -35,6 +35,28 @@ function initScroll(){
     setInterval(function(){movedata()},10); //refresh the chart ever 10ms
 }
 
+function wrapText(context, text, x, y, maxWidth, lineHeight) {
+    var words = text.split(" ");
+    var line = "";
+
+    for(var n = 0; n < words.length; n++) {
+        var testLine = line + words[n] + " ";
+        var metrics = context.measureText(testLine);
+        var testWidth = metrics.width;
+        if(testWidth > maxWidth) {
+            context.fillText(line, x, y);
+            line = words[n] + " ";
+            y += lineHeight;
+        }
+        else {
+            line = testLine;
+        }
+    }
+    context.fillText(line, x, y);
+}
+
+
+
 function movedata(){
 
     numberLoops++;
@@ -60,9 +82,24 @@ function movedata(){
 
             }
             if(pixelData[i].data){
-                context.moveTo(i,canvasStart);
-                context.lineTo(i,100);
-                context.fillText('Real Data', 1,100);
+                if(pixelData[i].data.substring(0,1) == ".")
+                {
+                    context.fillStyle = 'blue';
+                    context.fillRect(i,20,2,130);
+                    context.fillStyle='rgba(0,0,200,.2)';
+                    context.fillRect(i,20,140,45);
+                    context.fillStyle = 'black';
+                    wrapText(context,pixelData[i].data.substring(57),i+5,30,130,10);
+                }
+                else
+                {
+                    context.fillStyle = 'red';
+                    context.fillRect(i,80,2,70);
+                    context.fillStyle='rgba(200,0,0,.2)';
+                    context.fillRect(i,80,140,45);
+                    context.fillStyle = 'black';
+                    wrapText(context,pixelData[i].data.substring(25),i+5,90,130,10);
+                }
             }
         }
     }
@@ -75,5 +112,5 @@ function movedata(){
     context.stroke();
     context.strokeStyle = 'black';
 
-    context.stroke();
+  //  context.stroke();
 }

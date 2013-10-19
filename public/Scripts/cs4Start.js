@@ -54,7 +54,6 @@ function onError(evt) {
 
 function doSend(message) {
     writeToScreen("SENT: " + message);  websocket.send(message);
-
 }
 
 function writeToScreen(message) {
@@ -62,8 +61,7 @@ function writeToScreen(message) {
     // get time of incoming cue
     lastCueTime = new Date();
     output.innerHTML = message + "<BR>" + output.innerHTML;
-
-    pixelData[canvasStart]   = {data : message};
+    pixelData[canvasStart] = {data : message};
 
     //output.value = message+"<BR>"+output.value;
 }
