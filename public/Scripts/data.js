@@ -5,15 +5,59 @@ var output;
 var graph ={};
 var moving = false;
 var movingid = '';
+function moveup(){move(-1);}
+function movedown(){move(1);}
+function move(units){
 
+    var   fromElement =this.event.target.parentNode.parentNode;
+    units = units + (fromElement.dataset.position * 1);
+    var   toElement  = document.getElementById('position'+units);
+
+//*** h
+    var htmlsave = fromElement.innerHTML;
+    var sensorsave = fromElement.dataset.sensor;
+
+    fromElement.dataset.sensor =toElement.dataset.sensor;
+    fromElement.innerHTML = toElement.innerHTML;
+
+    toElement.dataset.sensor = sensorsave;
+    toElement.innerHTML = htmlsave;
+
+
+
+    graphskeleton(fromElement.dataset.sensor);
+    graphskeleton(toElement.dataset.sensor);
+
+    addEventListeners();
+    var sendobj = {};
+
+    sendobj.packettype="Sensor order update";
+    //reset event listeners
+    var i = 0;
+    for(var prop in dp[dp.length-1]){
+        if (prop.substr(0,4) == 'Temp'){
+            var temp = document.getElementById("position"+i);
+            sendobj[temp.dataset.sensor]={};
+            sendobj[temp.dataset.sensor].order = temp.dataset.position;
+            i++;
+        }
+
+    }
+    doSend(JSON.stringify(sendobj));
+
+
+ //   ***
+}
 function startmoving()
 {
 
 
-    movingid = this.parentNode.parentNode.id;
+ var   fromId = this.parentNode.parentNode.id;
+  var   toId  = document.getElementById('position'+fromId.dataset.position);
+    debugger;
 
-    moving=true;
-    document.getElementById(movingid).style.opacity = "0.4";
+
+   fromid.style.opacity = "0.4";
 
 }
 function stopmoving()
@@ -342,6 +386,27 @@ function buttonclick(){
     var element = document.getElementById('position10');
     element.style.opacity = "0.1";
 
+}
+function addEventListeners()
+{
+var i = 0;
+    for(var prop in dp[dp.length-1]){
+        if (prop.substr(0,4) == 'Temp')   {
+            var temp = document.getElementById("position"+i);
+
+            temp.addEventListener("click",stopmoving,false);
+
+
+            temp = document.getElementById(prop);
+            temp.addEventListener("click",graphclick,false);
+            temp = document.getElementById("moveButton"+i);
+            temp.addEventListener("click",moveup,false);
+            temp = document.getElementById("moveButtonDown"+i);
+            temp.addEventListener("click",movedown,false);
+            i++;
+        }
+
+    }
 }
 function timestampRealtime()
 {

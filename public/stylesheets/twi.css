@@ -2,6 +2,7 @@
  {
      transition-property: opacity;
      transition-duration: .5s;
+    transition-timing-function: ease-in;
  }
 
 body {
