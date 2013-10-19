@@ -12,7 +12,7 @@ var canvasStart = canvasWidth*.8;
 var canvasHeight = canvas.height;
 var pixelData = new Array(); //time: ,line: , data,
 var numberLoops = 0;
-var ticIncrement = 10; // this gives a time increment of 1 ms per pixel //
+var ticIncrement = 12; // this gives a time increment of 1 ms per pixel //
 var lineStart = 180; // bottom of tic line
 
 
@@ -61,6 +61,11 @@ function writeToScreen(message) {
     // get time of incoming cue
     lastCueTime = new Date();
     output.innerHTML = message + "<BR>" + output.innerHTML;
+
+
+
+
+
     pixelData[canvasStart] = {data : message};
 
     //output.value = message+"<BR>"+output.value;
