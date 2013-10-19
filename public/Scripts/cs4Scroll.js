@@ -60,7 +60,7 @@ function movedata(){
 
             }
             if(pixelData[i].data){
-                context.moveTo(i,linestart);
+                context.moveTo(i,canvasStart);
                 context.lineTo(i,100);
                 context.fillText('Real Data', 1,100);
             }

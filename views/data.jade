@@ -22,18 +22,11 @@ html
                         =sensors[prop].name
                   div(style="width:200px;")
                         ="Current Temperature:"+item[item.length-1][prop]
-                  button(id="moveButton"+position data-id="position"+position) Move
+                  button(id="moveButton"+position data-id="position"+position) Move Up
+                  button(id="moveButtonDown"+position data-id="position"+position) Move Down
               div
                   canvas(id=prop,height="150",width=item.length+50,style="border:1px solid #000000;")
                   canvas(id=prop+"_rt",height="150",width=200,style="border:1px solid #000000;")
-                  script.
-                    var temp = document.getElementById("!{prop}");
-                    temp.addEventListener("click",graphclick,false);
-                    temp = document.getElementById("moveButton!{position}");
-                    temp.addEventListener("click",startmoving,false);
-                    temp = document.getElementById("position!{position}");
-                    temp.addEventListener("click",stopmoving,false);
-
            -}
           button(onclick = "buttonclick()") Todd Made this form Me!
 
@@ -43,4 +36,5 @@ html
       script.
           var dp = !{JSON.stringify(item)};
           var sensors = !{JSON.stringify(sensors)};
+          addEventListeners();
           window.addEventListener("load", init, false);
