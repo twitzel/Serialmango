@@ -33,9 +33,11 @@ function initScroll(){
         }
     }
     context.lineWidth = 1.1;
+    context.translate(.3,.3);
 
 
-    setInterval(function(){movedata()},30); //refresh the chart ever 10ms
+    setInterval(function(){movedataNew()},30); //refresh the chart ever 10ms
+
 }
 
 function wrapText(context, text, x, y, maxWidth, lineHeight) {
@@ -67,7 +69,7 @@ function movedataNew(){
     context.clearRect(0,0,canvas.width,canvas.height);
     context.putImageData(imageData, 0,0);
 
-    if(numberLoops%100 == 0){
+    if(numberLoops%(ticIncrement*10) == 0){
      //   pixelData[canvasStart] = {line : 40, time : new Date().toLocaleTimeString().substring(0,8)};
         context.moveTo(canvasStart,lineStart);
         context.lineTo(canvasStart,lineStart -40);
