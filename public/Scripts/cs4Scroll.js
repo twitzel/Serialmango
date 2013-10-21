@@ -2,7 +2,7 @@
  * Created by Steve on 10/18/13.
  */
 
-    /*
+
 var canvas = document.getElementById('myCanvas');
 var context = canvas.getContext('2d');
 var canvas = document.getElementById('myCanvas');
@@ -14,7 +14,7 @@ var numberLoops = 0;
 var ticIncrement = 10; // this gives a time increment of 1 ms per pixel //
 var lineStart = 180; // bottom of tic line
 
-*/
+
 
 //setup origional time marks and time in the array
 
@@ -31,12 +31,24 @@ function initScroll(){
         else{
             pixelData[i] = {line : 20};
         }
+
+   //     draw();
+
     }
     context.lineWidth = 1.1;
     context.translate(.3,.3);
+/*
+    var fps = 5;
+    function draw() {
+        setTimeout(function() {
+            requestAnimationFrame(draw);
+            movedata();
+        }, 400);
+    }
+*/
 
 
-    setInterval(function(){movedataNew()},30); //refresh the chart ever 10ms
+   setTimeout(function(){movedata()},20); //refresh the chart ever 10ms
 
 }
 
@@ -49,7 +61,11 @@ function wrapText(context, text, x, y, maxWidth, lineHeight) {
         var metrics = context.measureText(testLine);
         var testWidth = metrics.width;
         if(testWidth > maxWidth) {
-            context.fillText(line, x, y);
+            context.save();
+            context.rotate(Math.PI/2);
+            context.translate(0,0);
+            context.fillText(line, 0, 0);//context.fillText(line, x, y);
+            context.restore();
             line = words[n] + " ";
             y += lineHeight;
         }
@@ -57,7 +73,12 @@ function wrapText(context, text, x, y, maxWidth, lineHeight) {
             line = testLine;
         }
     }
-    context.fillText(line, x, y);
+   // context.fillText(line, x, y);
+    context.save();
+    context.rotate(Math.PI/2);
+    context.translate(0,0);
+    context.fillText(line, 10, 10);
+    context.restore();
 }
 
 
@@ -119,7 +140,7 @@ function movedataNew(){
 */
 }
 function movedata(){
-
+ //   setTimeout(function(){movedata()},30);
     numberLoops++;
     pixelData.shift();  //movers everything over 1 px
 
@@ -143,8 +164,7 @@ function movedata(){
 
             }
             if(pixelData[i].data){
-               context.save();
-                context.rotate(Math.PI);
+
                 if(pixelData[i].data.substring(0,1) == ".")
                 {
                     context.fillStyle = 'blue';
@@ -163,10 +183,10 @@ function movedata(){
                     context.fillStyle = 'black';
                     wrapText(context,pixelData[i].data.substring(25),i+5,90,130,10);
                 }
-                context.restore();
+
             }
         }
-    }
+    } setTimeout(function(){movedata()},100);
     context.stroke();
     //add starting line
     context.beginPath();
