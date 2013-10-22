@@ -2,6 +2,10 @@
     text-align: center;
 }
 
+.titles{
+    text-align: center;
+}
+
 /*  NOTE:  # = id;   . = class  */
 #loglabel {
     color: #0000ff;
