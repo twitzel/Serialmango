@@ -1,8 +1,8 @@
 .graphfadeformove
  {
      transition-property: opacity;
-     transition-duration: .5s;
-    transition-timing-function: ease-in;
+     transition-duration: 2s;
+
  }
 
 body {

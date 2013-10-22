@@ -13,7 +13,7 @@ function move(units){
     units = units + (fromElement.dataset.position * 1);
     var   toElement  = document.getElementById('position'+units);
 
-//*** h
+//***
     var htmlsave = fromElement.innerHTML;
     var sensorsave = fromElement.dataset.sensor;
 
@@ -22,7 +22,11 @@ function move(units){
 
     toElement.dataset.sensor = sensorsave;
     toElement.innerHTML = htmlsave;
+    fromElement.style.transitionDuration = '0';
+    toElement.style.transitionDuration = '0';
 
+    fromElement.style.opacity = '.05';
+    toElement.style.opacity = '.05';
 
 
     graphskeleton(fromElement.dataset.sensor);
@@ -44,74 +48,82 @@ function move(units){
 
     }
     doSend(JSON.stringify(sendobj));
+    fromElement.style.transitionDuration = '3.5s';
+    toElement.style.transitionDuration = '3.5s';
+
+    fromElement.style.opacity = '1';
+    toElement.style.opacity = '1';
+
+//            setTimeout(callback(toElement),1250);
+//            setTimeout(callback(fromElement),1250);
 
 
  //   ***
 }
-function startmoving()
-{
-
-
- var   fromId = this.parentNode.parentNode.id;
-  var   toId  = document.getElementById('position'+fromId.dataset.position);
-    debugger;
-
-
-   fromid.style.opacity = "0.4";
-
-}
-function stopmoving()
-{
-    if (moving && this.id != movingid)
-    {
-        this.style.opacity = ".4";
-        var htmlsave = this.innerHTML;
-        var sensorsave = this.dataset.sensor;
-
-        this.dataset.sensor = document.getElementById(movingid).dataset.sensor;
-        this.innerHTML = document.getElementById(movingid).innerHTML;
-
-        document.getElementById(movingid).innerHTML = htmlsave;
-        document.getElementById(movingid).dataset.sensor = sensorsave;
-
-
-         graphskeleton(this.dataset.sensor);
-        graphskeleton(document.getElementById(movingid).dataset.sensor);
-
-
-        var sendobj = {};
-
-        sendobj.packettype="Sensor order update";
-
-        // dataset.name is the name from when the page loaded passed as data-name
-        // just send if the name changed
-
-
-       //reset event listeners
-        var i = 0;
-        for(var prop in dp[dp.length-1]){
-            if (prop != 'Time' && prop != 'dataset'){
-            var temp = document.getElementById("position"+i);
-            sendobj[temp.dataset.sensor]={};
-            temp.addEventListener("click",stopmoving,false);
-            sendobj[temp.dataset.sensor].order = temp.dataset.position;
-
-            temp = document.getElementById(prop);
-            temp.addEventListener("click",graphclick,false);
-            temp = document.getElementById("moveButton"+i);
-            temp.addEventListener("click",startmoving,false);
-          i++;
-        }
-
-        }
-        doSend(JSON.stringify(sendobj));
-        x=this;
-        setTimeout(callback(this),250);
-        document.getElementById(movingid).style.opacity="1";
-        moving = false;
-        movingid = '';
-    }
-}
+//function startmoving()
+//{
+//
+//
+// var   fromId = this.parentNode.parentNode.id;
+//  var   toId  = document.getElementById('position'+fromId.dataset.position);
+//    debugger;
+//
+//
+//   fromid.style.opacity = "0.4";
+//
+//}
+//function stopmoving()
+//{
+//    if (moving && this.id != movingid)
+//    {
+//        this.style.opacity = ".4";
+//        var htmlsave = this.innerHTML;
+//        var sensorsave = this.dataset.sensor;
+//
+//        this.dataset.sensor = document.getElementById(movingid).dataset.sensor;
+//        this.innerHTML = document.getElementById(movingid).innerHTML;
+//
+//        document.getElementById(movingid).innerHTML = htmlsave;
+//        document.getElementById(movingid).dataset.sensor = sensorsave;
+//
+//
+//         graphskeleton(this.dataset.sensor);
+//        graphskeleton(document.getElementById(movingid).dataset.sensor);
+//
+//
+//        var sendobj = {};
+//
+//        sendobj.packettype="Sensor order update";
+//
+//        // dataset.name is the name from when the page loaded passed as data-name
+//        // just send if the name changed
+//
+//
+//       //reset event listeners
+//        var i = 0;
+//        for(var prop in dp[dp.length-1]){
+//            if (prop != 'Time' && prop != 'dataset'){
+//            var temp = document.getElementById("position"+i);
+//            sendobj[temp.dataset.sensor]={};
+//            temp.addEventListener("click",stopmoving,false);
+//            sendobj[temp.dataset.sensor].order = temp.dataset.position;
+//
+//            temp = document.getElementById(prop);
+//            temp.addEventListener("click",graphclick,false);
+//            temp = document.getElementById("moveButton"+i);
+//            temp.addEventListener("click",startmoving,false);
+//          i++;
+//        }
+//
+//        }
+//        doSend(JSON.stringify(sendobj));
+//        x=this;
+//        setTimeout(callback(this),250);
+//        document.getElementById(movingid).style.opacity="1";
+//        moving = false;
+//        movingid = '';
+//    }
+//}
 function callback(a){
     return function(){
         a.style.opacity="1";
@@ -394,7 +406,7 @@ var i = 0;
         if (prop.substr(0,4) == 'Temp')   {
             var temp = document.getElementById("position"+i);
 
-            temp.addEventListener("click",stopmoving,false);
+            //temp.addEventListener("click",stopmoving,false);
 
 
             temp = document.getElementById(prop);
