@@ -5,7 +5,7 @@
 
 var canvas = document.getElementById('myCanvas');
 var context = canvas.getContext('2d');
-var canvas = document.getElementById('myCanvas');
+/*var canvas = document.getElementById('myCanvas');*/
 var canvasWidth = canvas.width;
 var canvasStart = canvasWidth*.8;
 var canvasHeight = canvas.height;
