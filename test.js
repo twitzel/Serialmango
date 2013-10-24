@@ -79,7 +79,7 @@ if (!period){period = 1;}
 //                }
 //            }
 
-            var maxupdates = 60*48;
+            var maxupdates = 60*4;
             for (var i = lastavg+(60000*period); i <= item[0].Time; i=i+(60000*period)){
 
                 console.log("Running Sensor averages for:"+new Date(i));
