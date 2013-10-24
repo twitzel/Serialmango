@@ -140,6 +140,7 @@ exports.setup = function()
             global.collectionAvg = db.collection('avg');
             global.collectionSettings = db.collection('settings');
            setInterval(function(){updateAvg();},60000);
+            setInterval(function(){updateAvgLong();},600000);
 
             // updateAvg();
             console.log("average updates set to 60 seconds");
@@ -148,13 +149,20 @@ exports.setup = function()
                     sensorSettings=sensors;
                 } else
                 {
+
                     console.error(" Sensor Settings missing");
-                    //to-do create sensor settings
+                    collectionSettings.update({"type":"sensors"} ,{"type":"sensors"} ,{ upsert: true },function (err,res){
+                        console.log("sensor settings created "+res);
+                    });
+
                 }
+
+
 
 
             });
         }
+
     });
 
 
@@ -202,6 +210,8 @@ function updateAvg(){
     updateAvgPeriod(2);
     updateAvgPeriod(3);
     updateAvgPeriod(5);
+}
+function updateAvgLong(){
     updateAvgPeriod(10);
     updateAvgPeriod(15);
     updateAvgPeriod(30);
