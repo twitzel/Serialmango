@@ -197,36 +197,88 @@ exports.setup = function()
     app.get('/data', routes.data);
     app.get('/graph',routes.graph);
 };
-
-function updateAvg()
+function updageAvg(){
+    updateAvgPeriod(1);
+    updateAvgPeriod(2);
+    updateAvgPeriod(3);
+    updateAvgPeriod(5);
+    updateAvgPeriod(10);
+    updateAvgPeriod(15);
+    updateAvgPeriod(30);
+    updateAvgPeriod(60);
+    updateAvgPeriod(120);
+    updateAvgPeriod(60*6);
+    updateAvgPeriod(60*12);
+    updateAvgPeriod(60*24);
+}
+function updateAvgPeriod(period)
 {
+    if (!period){period = 1;}
+    console.log('period minutes '+period);
     // update the average temp collection
     collectionLog.find({},{Time : 1 ,_id: 0 }).sort( { _id : -1 } ).limit(1).toArray(function(err,item){
         console.log("latest item "+item[0].Time);
-        var curPeriod = item[0].Time.setSeconds(0)-60000;
 
-        collectionAvg.find({},{_id: 0 }).sort( { _id : -1 } ).limit(1).toArray(function(err,aitem){
+        if (period == 1){item[0].Time = new Date(item[0].Time.setSeconds(0)-60000);}
+        if (period > 1 && period < 60){
+            item[0].Time.setMinutes((~~(item[0].Time.getMinutes()/period)*period)-period);
+        }
+        if (period >= 60){
+            // ~~ truncates the integer eg ~~1.22 = 1
+            var hourperiod = period / 60;
+            item[0].Time.setMinutes(0);
+            item[0].Time.setHours((~~(item[0].Time.getHours()/hourperiod)*hourperiod)-hourperiod);
+        }
+        console.log('Current Period'+item[0].Time);
+
+        collectionAvg.find({period  :period}).sort( { Time : -1 } ).limit(1).toArray(function(err,aitem){
             // now find the most recent avg time entry
+            if (!aitem[0])
+            {
+                console.log("Creating First Entry in Avg for period of "+period);
+                collectionLog.find({},{Time : 1 ,_id: 0 }).sort( { _id : 1 } ).limit(1).toArray(function(err,item){
+                    var avgitem = {};
+                    avgitem.Time=item[0].Time;
+                    avgitem.Time.setHours(0);
+                    avgitem.Time.setMinutes(0);
+                    avgitem.Time.setSeconds(0);
+                    avgitem.period = period;
+                    collectionAvg.update({"Time":avgitem.startTime} ,avgitem ,{ upsert: true },function (err,res){
+
+                        //     console.log("res"+res);
+
+
+                    });
+
+
+                });
+
+                return;
+
+            }
             console.log("Last avg entry"+aitem[0].Time);
+
             var lastavg = aitem[0].Time.getTime();
             // why not check if all the sensors are in the settings collection here? - ok
             for(var prop in aitem[0])
             {
-                    if (!sensorSettings[prop] &&(prop != "Time") && (prop != "datatype")){
+                if (!sensorSettings[prop] &&(prop != "Time") && (prop != "datatype")){
                     sensorSettings[prop]={};
-                        console.log("Found new sensor:"+prop);
-                        collectionSettings.update({'type':'sensors'}, sensorSettings ,{upsert:true, w:1},function(err,res){
+                    console.log("Found new sensor:"+prop);
+                    collectionSettings.update({'type':'sensors'}, sensorSettings ,{upsert:true, w:1},function(err,res){
 
-                            console.log('Saved new sensor');
-                        });
-                    }
+                        console.log('Saved new sensor');
+                    });
+                }
             }
 
-
-            for (var i = lastavg+60000; i <= curPeriod; i=i+60000){
+            var maxupdates = 60*1;
+            for (var i = lastavg+(60000*period); i <= item[0].Time; i=i+(60000*period)){
 
                 console.log("Running Sensor averages for:"+new Date(i));
-                avgReadings(new Date(i),60);
+                avgReadings(new Date(i),60*period);
+                if (maxupdates < 2){break;}
+                maxupdates--;
             }
         });
 
@@ -235,7 +287,7 @@ function updateAvg()
 function avgReadings(startTime,seconds)
 {
     startTime.setSeconds(0);
-    console.log(startTime);
+    //  console.log(startTime);
     var avgitem = {};
     var avgitemcount = {};
     collectionLog.find({"Time":{$gte : startTime,$lte : new Date(startTime.getTime()+(seconds*1000))}}).toArray(function(err,item)
@@ -277,24 +329,25 @@ function avgReadings(startTime,seconds)
 
         }
         avgitem.Time = startTime;
-        avgitem.length = seconds;
-        avgitem.period = 1;
+        avgitem.period = seconds/60;
+
         try
         {
-            console.log("sending sensor avg update");
+            //console.log("sending sensor avg update");
             avgitem.datatype="Sensor Avg Update";
-            console.log(avgitem);
+            //console.log(avgitem);
             comlib.websocketsend(JSON.stringify(avgitem));
-            delete avgitem.datatype;
+
         }
         catch(err)
         {
-            console.log("ws error"+err);
+            //  console.log("ws error"+err);
         }
+        delete avgitem.datatype;
+        collectionAvg.update({"Time":startTime} ,avgitem ,{ upsert: true },function (err,res){
 
-        global.collectionAvg.update({"Time":startTime} ,avgitem ,{ upsert: true },function (err,res){
-
-       //     console.log("res"+res);
+            //console.log("count:"+global.x);
+            //++x;
 
 
         });
@@ -302,5 +355,4 @@ function avgReadings(startTime,seconds)
 
 
     });
-
 }
