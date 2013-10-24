@@ -1,7 +1,7 @@
 var MongoClient = require('mongodb').MongoClient;
 global.x = 0;
 
-MongoClient.connect("mongodb://10.6.1.119:27017/test", function(err, db)
+MongoClient.connect("mongodb://localhost:27017/test", function(err, db)
 {
     if (err)
     {
@@ -52,7 +52,7 @@ if (!period){period = 1;}
                     avgitem.period = period;
                     collectionAvg.update({"Time":avgitem.startTime} ,avgitem ,{ upsert: true },function (err,res){
 
-                        //     console.log("res"+res);
+                           console.log("Creation results:"+res);
 
 
                     });
@@ -79,7 +79,7 @@ if (!period){period = 1;}
 //                }
 //            }
 
-            var maxupdates = 60*1;
+            var maxupdates = 5500;
             for (var i = lastavg+(60000*period); i <= item[0].Time; i=i+(60000*period)){
 
                 console.log("Running Sensor averages for:"+new Date(i));

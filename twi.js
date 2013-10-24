@@ -151,7 +151,7 @@ exports.setup = function()
                 {
 
                     console.error(" Sensor Settings missing");
-                    collectionSettings.update({"type":"sensors"} ,{"type":"sensors"} ,{ upsert: true },function (err,res){
+                    collectionSettings.update({"type":"sensors"} ,{"type":"sensors","position" : 0} ,{ upsert: true },function (err,res){
                         console.log("sensor settings created "+res);
                     });
 
@@ -272,7 +272,7 @@ function updateAvgPeriod(period)
             // why not check if all the sensors are in the settings collection here? - ok
             for(var prop in aitem[0])
             {
-                if (!sensorSettings[prop] &&(prop != "Time") && (prop != "datatype")){
+                if (!sensorSettings[prop] && prop.substr(0,4) == 'Temp'){
                     sensorSettings[prop]={};
                     console.log("Found new sensor:"+prop);
                     collectionSettings.update({'type':'sensors'}, sensorSettings ,{upsert:true, w:1},function(err,res){
