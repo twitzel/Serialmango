@@ -197,7 +197,7 @@ exports.setup = function()
     app.get('/data', routes.data);
     app.get('/graph',routes.graph);
 };
-function updageAvg(){
+function updateAvg(){
     updateAvgPeriod(1);
     updateAvgPeriod(2);
     updateAvgPeriod(3);
