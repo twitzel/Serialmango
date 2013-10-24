@@ -138,8 +138,9 @@ exports.setup = function()
             console.log("TWI: We are connected to mondo test database");
             global.collectionLog = db.collection('todd');
             global.collectionAvg = db.collection('avg');
-            global.collectionSettings = db.collection('settings')
+            global.collectionSettings = db.collection('settings');
            setInterval(function(){updateAvg();},60000);
+
             // updateAvg();
             console.log("average updates set to 60 seconds");
             collectionSettings.findOne({"type":"sensors"},function(err,sensors){
@@ -194,6 +195,7 @@ exports.setup = function()
     app.get('/', routes.index);
     app.get('/users', user.list);
     app.get('/data', routes.data);
+    app.get('/graph',routes.graph);
 };
 
 function updateAvg()
@@ -275,6 +277,7 @@ function avgReadings(startTime,seconds)
 
         }
         avgitem.Time = startTime;
+        avgitem.length = seconds;
 
         try
         {
