@@ -278,7 +278,7 @@ function avgReadings(startTime,seconds)
         }
         avgitem.Time = startTime;
         avgitem.length = seconds;
-
+        avgitem.period = 1;
         try
         {
             console.log("sending sensor avg update");
