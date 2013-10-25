@@ -138,10 +138,11 @@ exports.setup = function()
             global.collectionLog = db.collection('log');
             global.collectionAvg = db.collection('avg');
             global.collectionSettings = db.collection('settings');
-            collectionLog.ensureIndex({"UnitID":1});
-            collectionLog.ensureIndex({"Time":1});
-            collectionAvg.ensureIndex({"Time":1});
-            collectionAvg.ensureIndex({"period":1});
+            collectionLog.ensureIndex({"UnitID":1},function (err,res){});
+            collectionLog.ensureIndex({"Time":1},function (err,res){});
+            collectionAvg.ensureIndex({"Time":1},function (err,res){});
+            collectionAvg.ensureIndex({"period":1},function (err,res){});
+
            setInterval(function(){updateAvg();}, 60000);
             setInterval(function(){updateAvgLong();},600000);
 
