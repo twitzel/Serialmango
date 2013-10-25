@@ -354,7 +354,7 @@ function buttonclick(){
 function addEventListeners()
 {
 var i = 0;
-    for(var prop in dp[dp.length-1]){
+    for(var prop in sensors){
         if (prop.substr(0,4) == 'Temp')   {
             var temp = document.getElementById("position"+i);
 
