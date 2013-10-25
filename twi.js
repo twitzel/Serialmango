@@ -139,7 +139,7 @@ exports.setup = function()
             global.collectionLog = db.collection('todd');
             global.collectionAvg = db.collection('avg');
             global.collectionSettings = db.collection('settings');
-           setInterval(function(){updateAvg();},10000);
+           setInterval(function(){updateAvg();}, 10000);
             setInterval(function(){updateAvgLong();},600000);
 
             // updateAvg();
