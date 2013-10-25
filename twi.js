@@ -136,7 +136,7 @@ exports.setup = function()
         else
         {
             console.log("TWI: We are connected to mondo test database");
-            global.collectionLog = db.collection('todd');
+            global.collectionLog = db.collection('log');
             global.collectionAvg = db.collection('avg');
             global.collectionSettings = db.collection('settings');
             collectionLog.ensureIndex({"UnitID":1});
