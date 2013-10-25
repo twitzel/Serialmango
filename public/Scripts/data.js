@@ -308,6 +308,7 @@ function onMessage(evt)
 
     if (indata.datatype=="Sensor Avg Update")
     {
+       if (indata.period == 1) {
         dp.shift();
         newlen = dp.length;
         dp.push({});
@@ -329,6 +330,7 @@ function onMessage(evt)
         }
         }
 
+        }
     }
     //websocket.close();
 }
