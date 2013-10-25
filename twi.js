@@ -287,10 +287,11 @@ function updateAvgPeriod(period)
                             }
 
                         }
-                        sensorSettings[prop].order = maxorder ;
+
 
                     }
                     sensorSettings[prop].name = prop;
+                    sensorSettings[prop].order = maxorder+1 ;
                     console.log("Found new sensor:"+prop);
                     collectionSettings.update({'type':'sensors'}, sensorSettings ,{upsert:true, w:1},function(err,res){
 
