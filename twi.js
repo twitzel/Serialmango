@@ -151,7 +151,7 @@ exports.setup = function()
                 {
 
                     console.error(" Sensor Settings missing");
-                    collectionSettings.update({"type":"sensors"} ,{"type":"sensors","position" : 0} ,{ upsert: true },function (err,res){
+                    collectionSettings.insert({"type":"sensors"},function (err,res){
                         console.log("sensor settings created "+res);
                     });
 
@@ -274,6 +274,7 @@ function updateAvgPeriod(period)
             {
                 if (!sensorSettings[prop] && prop.substr(0,4) == 'Temp'){
                     sensorSettings[prop]={};
+                    sensorSettings[prop].position = 0;
                     console.log("Found new sensor:"+prop);
                     collectionSettings.update({'type':'sensors'}, sensorSettings ,{upsert:true, w:1},function(err,res){
 
