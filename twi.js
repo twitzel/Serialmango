@@ -7,7 +7,7 @@ var os = require('os');
 var express = require('express');
 var routes = require('./routes');
 var user = require('./routes/user');
-var sensorSettings = {}; //setting from the settins database
+global.sensorSettings = {}; //setting from the settins database
 
 exports.websocketDataIn = function(data){
     // if you want to get socket data it's here!!
