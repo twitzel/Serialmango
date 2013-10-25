@@ -31,7 +31,7 @@ exports.data = function(req, res){
 
            collectionSettings.findOne({"type":"sensors"},function(err,sensors){
                 if (!sensors){ sensors={};}
-               res.render('data.jade', { title: 'stuff' , item: item , sensors:sensors });
+               res.render('data.jade', { title: 'stuff' , item: item , sensors: sensorSettings });
 
            });
 
