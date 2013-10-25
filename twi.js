@@ -287,7 +287,7 @@ function updateAvgPeriod(period)
                             }
 
                         }
-                        sensorSettings[prop].order = maxorder + 1;
+                        sensorSettings[prop].order = maxorder ;
 
                     }
                     sensorSettings[prop].name = prop;
