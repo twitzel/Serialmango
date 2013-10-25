@@ -275,14 +275,19 @@ function updateAvgPeriod(period)
                 if (!sensorSettings[prop] && prop.substr(0,4) == 'Temp'){
                     sensorSettings[prop]={};
                     sensorSettings[prop].order = 0;
-                    for(var max in aitem[0]){
-                        if (sensorSettings[max]){
-                            if (sensorSettings[prop].order == sensorSettings[max].order){
+                    var maxorder = 0;
+                    for(var max in aitem[0])
+                    {
+                        if (sensorSettings[max])
+                        {
+                            if (sensorSettings[max].order > maxorder)
+                            {
 
-                                sensorSettings[prop].order = sensorSettings[max].order + 1;
+                                maxorder = sensorSettings[max].order;
                             }
 
                         }
+                        sensorSettings[prop].order = maxorder + 1;
 
                     }
                     sensorSettings[prop].name = prop;
