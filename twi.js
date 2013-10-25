@@ -139,7 +139,7 @@ exports.setup = function()
             global.collectionLog = db.collection('todd');
             global.collectionAvg = db.collection('avg');
             global.collectionSettings = db.collection('settings');
-           setInterval(function(){updateAvg();},60000);
+           setInterval(function(){updateAvg();},10000);
             setInterval(function(){updateAvgLong();},600000);
 
             // updateAvg();
@@ -276,7 +276,7 @@ function updateAvgPeriod(period)
                     sensorSettings[prop]={};
                     sensorSettings[prop].order = 0;
                     var maxorder = 0;
-                    for(var max in settings)
+                    for(var max in sensorSettings)
                     {
                         if (sensorSettings[max])
                         {
