@@ -28,7 +28,6 @@ function move(units){
     fromElement.style.opacity = '.05';
     toElement.style.opacity = '.05';
 
-
     graphskeleton(fromElement.dataset.sensor);
     graphskeleton(toElement.dataset.sensor);
 
