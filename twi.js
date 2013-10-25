@@ -277,9 +277,9 @@ function updateAvgPeriod(period)
                     sensorSettings[prop].order = 0;
                     for(var max in aitem[0]){
                         if (sensorSettings[max]){
-                            if (sensorSettings[max] >= sensorSettings[prop]){
+                            if (sensorSettings[max].order >= sensorSettings[prop].order){
 
-                                sensorSettings[prop] = sensorSettings[max] + 1;
+                                sensorSettings[prop].order = sensorSettings[max].order + 1;
                             }
 
                         }
