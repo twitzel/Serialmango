@@ -149,9 +149,9 @@ exports.setup = function()
                     sensorSettings=sensors;
                 } else
                 {
-
+                    sensorSettings.type = "sensors";
                     console.error(" Sensor Settings missing");
-                    collectionSettings.insert({"type":"sensors"},function (err,res){
+                    collectionSettings.insert(sensorSettings,function (err,res){
                         console.log("sensor settings created "+res);
                     });
 
