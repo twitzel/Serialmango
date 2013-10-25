@@ -139,6 +139,10 @@ exports.setup = function()
             global.collectionLog = db.collection('todd');
             global.collectionAvg = db.collection('avg');
             global.collectionSettings = db.collection('settings');
+            collectionLog.ensureIndex({"UnitID":1});
+            collectionLog.ensureIndex({"Time":1});
+            collectionAvg.ensureIndex({"Time":1});
+            collectionAvg.ensureIndex({"period":1});
            setInterval(function(){updateAvg();}, 60000);
             setInterval(function(){updateAvgLong();},600000);
 
@@ -226,7 +230,7 @@ function updateAvgPeriod(period)
     if (!period){period = 1;}
     console.log('period minutes '+period);
     // update the average temp collection
-    collectionLog.find({},{Time : 1 ,_id: 0 }).sort( { _id : -1 } ).limit(1).toArray(function(err,item){
+    collectionLog.find({},{Time : 1 ,_id: 0 }).sort( { Time : -1 } ).limit(1).toArray(function(err,item){
         console.log("latest item "+item[0].Time);
 
         if (period == 1){item[0].Time = new Date(item[0].Time.setSeconds(0)-60000);}
@@ -249,9 +253,9 @@ function updateAvgPeriod(period)
                 collectionLog.find({},{Time : 1 ,_id: 0 }).sort( { _id : 1 } ).limit(1).toArray(function(err,item){
                     var avgitem = {};
                     avgitem.Time=item[0].Time;
-                    avgitem.Time.setHours(0);
-                    avgitem.Time.setMinutes(0);
-                    avgitem.Time.setSeconds(0);
+                    //avgitem.Time.setHours(0);
+                    //avgitem.Time.setMinutes(0);
+                    //avgitem.Time.setSeconds(0);
                     avgitem.period = period;
                     collectionAvg.update({"Time":avgitem.startTime} ,avgitem ,{ upsert: true },function (err,res){
 
@@ -373,7 +377,7 @@ function avgReadings(startTime,seconds)
             //  console.log("ws error"+err);
         }
         delete avgitem.datatype;
-        collectionAvg.update({"Time":startTime} ,avgitem ,{ upsert: true },function (err,res){
+        collectionAvg.update({"Time":startTime,"period":avgitem.period} ,avgitem ,{ upsert: true },function (err,res){
 
             //console.log("count:"+global.x);
             //++x;
