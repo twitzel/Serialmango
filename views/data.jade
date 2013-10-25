@@ -11,7 +11,7 @@ html
       h1= title
       div.myDiv(id="output")
       div
-          -for(var position = 0; position<Object.keys(sensors).length -2 ;position++){
+          -for(var position = 0; position<Object.keys(sensors).length -1 ;position++){
 
           -for(var prop in sensors){if (sensors[prop].order == position){break;    }      }
 
