@@ -124,7 +124,6 @@ exports.serialDataIn  = function(data)
 //    }
 };
 
-
 exports.setup = function()
 {
     MongoClient.connect("mongodb://10.6.1.119:27017/test", function(err, db)
