@@ -274,7 +274,7 @@ function updateAvgPeriod(period)
             {
                 if (!sensorSettings[prop] && prop.substr(0,4) == 'Temp'){
                     sensorSettings[prop]={};
-                    sensorSettings[prop].position = 0;
+                    sensorSettings[prop].order = 0;
                     console.log("Found new sensor:"+prop);
                     collectionSettings.update({'type':'sensors'}, sensorSettings ,{upsert:true, w:1},function(err,res){
 
