@@ -1,0 +1,24 @@
+doctype 5
+html
+    head
+        title= title
+        link(rel='stylesheet', href='/stylesheets/twi.css')
+        script(src="/Scripts/data.js")
+    body
+
+    block content
+
+      h1= title
+      div.websocketInfo(id="output")
+      -for (var i = 0; i < 1; i++){
+      div(width = "100%")
+
+          canvas(id="graph"+i,height="150",style="border:1px solid #000000;")
+      -}
+
+      script.
+          var dp = !{JSON.stringify(item)};
+          var sensors = !{JSON.stringify(sensors)};
+          window.addEventListener("load", graphInit, false);
+
+          window.addEventListener("resize",resize,false);

@@ -26,19 +26,38 @@ exports.data = function(req, res){
     x= new Date();
     x=new Date(x-(3600000*6)); // 6 hours age
     //collectionAvg.find({"Time":{$gt:x}},{_id:0,"Time":0}).sort( { "Time": 1 } ).toArray(function(err,item)
-    collectionAvg.find({"Time":{$gt:x}},{_id:0}).sort( { "Time": 1 } ).toArray(function(err,item){
+    collectionAvg.find({"Time":{$gt:x},"period":1},{_id:0}).sort( { "Time": 1 } ).toArray(function(err,item){
            //  console.log(item[0].Time);
 
            collectionSettings.findOne({"type":"sensors"},function(err,sensors){
                 if (!sensors){ sensors={};}
-               res.render('data.jade', { title: 'stuff' , item: item , sensors:sensors });
+               res.render('data.jade', { title: 'stuff' , item: item , sensors: sensorSettings });
 
            });
 
         });
 
 };
+exports.graph = function(req, res){
+    // global.collectionLog.findOne( {UnitID:2} ,{Sort:{_id:1}},function(err, item){
+    // initial graph data
+    // todd added this
+    //    collectionAvg.find({},{_id:0,"Time":0}).sort( { "Time": 1 } ).limit(300).toArray(function(err,item)
+    x= new Date();
+    x=new Date(x-(3600000*6)); // 6 hours age
+    //collectionAvg.find({"Time":{$gt:x}},{_id:0,"Time":0}).sort( { "Time": 1 } ).toArray(function(err,item)
+    collectionAvg.find({"Time":{$gt:x},"period":1},{_id:0}).sort( { "Time": 1 } ).toArray(function(err,item){
+        //  console.log(item[0].Time);
 
+        collectionSettings.findOne({"type":"sensors"},function(err,sensors){
+            if (!sensors){ sensors={};}
+            res.render('graph.jade', { title: 'Sensor Graph' , item: item , sensors:sensors });
+
+        });
+
+    });
+
+};
 
 exports.data2 = function(req, res){
     res.render('data2.jade',{ title: 'CS-4 Output', myuri:"ws://localhost:8080" });

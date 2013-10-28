@@ -28,7 +28,6 @@ function move(units){
     fromElement.style.opacity = '.05';
     toElement.style.opacity = '.05';
 
-
     graphskeleton(fromElement.dataset.sensor);
     graphskeleton(toElement.dataset.sensor);
 
@@ -60,70 +59,6 @@ function move(units){
 
  //   ***
 }
-//function startmoving()
-//{
-//
-//
-// var   fromId = this.parentNode.parentNode.id;
-//  var   toId  = document.getElementById('position'+fromId.dataset.position);
-//    debugger;
-//
-//
-//   fromid.style.opacity = "0.4";
-//
-//}
-//function stopmoving()
-//{
-//    if (moving && this.id != movingid)
-//    {
-//        this.style.opacity = ".4";
-//        var htmlsave = this.innerHTML;
-//        var sensorsave = this.dataset.sensor;
-//
-//        this.dataset.sensor = document.getElementById(movingid).dataset.sensor;
-//        this.innerHTML = document.getElementById(movingid).innerHTML;
-//
-//        document.getElementById(movingid).innerHTML = htmlsave;
-//        document.getElementById(movingid).dataset.sensor = sensorsave;
-//
-//
-//         graphskeleton(this.dataset.sensor);
-//        graphskeleton(document.getElementById(movingid).dataset.sensor);
-//
-//
-//        var sendobj = {};
-//
-//        sendobj.packettype="Sensor order update";
-//
-//        // dataset.name is the name from when the page loaded passed as data-name
-//        // just send if the name changed
-//
-//
-//       //reset event listeners
-//        var i = 0;
-//        for(var prop in dp[dp.length-1]){
-//            if (prop != 'Time' && prop != 'dataset'){
-//            var temp = document.getElementById("position"+i);
-//            sendobj[temp.dataset.sensor]={};
-//            temp.addEventListener("click",stopmoving,false);
-//            sendobj[temp.dataset.sensor].order = temp.dataset.position;
-//
-//            temp = document.getElementById(prop);
-//            temp.addEventListener("click",graphclick,false);
-//            temp = document.getElementById("moveButton"+i);
-//            temp.addEventListener("click",startmoving,false);
-//          i++;
-//        }
-//
-//        }
-//        doSend(JSON.stringify(sendobj));
-//        x=this;
-//        setTimeout(callback(this),250);
-//        document.getElementById(movingid).style.opacity="1";
-//        moving = false;
-//        movingid = '';
-//    }
-//}
 function callback(a){
     return function(){
         a.style.opacity="1";
@@ -266,17 +201,33 @@ function nameclick(){
         window.event.currentTarget.dataset.name = name;
         doSend(JSON.stringify(sendobj));}
     }
+function graphInit()
+{
+    output = document.getElementById("output");
+
+    testWebSocket();
+
+    document.getElementById('graph0').width =  document.getElementById('graph0').parentElement.clientWidth;
+    //graph();
+}
+function resize()
+{
+    //document.getElementById('graph0').width =  document.getElementById('graph0').parentElement.clientWidth;
+
+
+}
 function init()
 {
     output = document.getElementById("output");
     for(var prop in dp[dp.length-1]){
-        if (prop !="Time" && prop !="datatype"){
-        graph[prop] = {};
-        console.log("initial drawing of :"+prop);
+        if (prop.substr(0,4) == 'Temp')
+        {
+            graph[prop] = {};
+            // console.log("initial drawing of :"+prop);
 
-        graphskeleton(prop);
+            graphskeleton(prop);
+        }
     }
-}
     testWebSocket();
     setInterval('timestampRealtime()',1000);
     //graph();
@@ -357,6 +308,7 @@ function onMessage(evt)
 
     if (indata.datatype=="Sensor Avg Update")
     {
+       if (indata.period == 1) {
         dp.shift();
         newlen = dp.length;
         dp.push({});
@@ -378,6 +330,7 @@ function onMessage(evt)
         }
         }
 
+        }
     }
     //websocket.close();
 }
@@ -402,7 +355,7 @@ function buttonclick(){
 function addEventListeners()
 {
 var i = 0;
-    for(var prop in dp[dp.length-1]){
+    for(var prop in sensors){
         if (prop.substr(0,4) == 'Temp')   {
             var temp = document.getElementById("position"+i);
 
