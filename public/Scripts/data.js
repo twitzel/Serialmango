@@ -482,18 +482,46 @@ function sy(val,id){
 }
 function bigGraphClick(id){
     id = 0
-    //this g[0] needs to be changed to get the graph number
+    //this g[id] needs to be changed to get the graph number
+    //scale the click to match the time scale
 var clickx = (event.offsetX-g[id].offLeft)/g[id].xScale;
-    for (var i = 0; i < (dp.length) ; ++i) { if (((new Date(dp[i].Time).getTime())-g[id].startTime)/1000 > clickx) { break; } }
-        //todo check if the dp before is closer
-    console.log("x,y:"+event.offsetX+","+event.offsetY);
+var clicky = ((g[id].bottom-event.offsetY)/g[id].yScale)+g[id].min;
+    //find the first point in time after the click
 
-    console.log("datapoint:"+i);
+    for (var i = 0; i < (dp.length) ; ++i) { if (((new Date(dp[i].Time).getTime())-g[id].startTime)/1000 > clickx) { break; } }
+      // check if the point before in time is closer and if it is use it
+       if ((clickx-((new Date(dp[i-1].Time).getTime())-g[id].startTime)/1000)< (((new Date(dp[i].Time).getTime())-g[id].startTime)/1000)-clickx)
+       {
+           i--;
+       }
+// now find the closest plot - this will have to change to check only the visible plots
+    var difference = 9999;
+    var closestTemp = '';
+    for(var prop in dp[dp.length-1]){
+
+        if (prop.substr(0,4) == 'Temp'){
+            if (Math.abs(dp[i][prop]-clicky)< difference){
+                difference = Math.abs(dp[i][prop]-clicky);
+                closestTemp = prop;
+             }
+
+        }
+
+    }
+    console.log('Temperate clicked'+clicky);
+    console.log('Closest temperature'+closestTemp);
+    document.getElementById('selectedtemp'+id).value=sensors[closestTemp].name;
+        //todo check if the dp before is closer
+    //console.log("x,y:"+event.offsetX+","+event.offsetY);
+
+    //console.log("datapoint:"+i);
     var c = g[0].context;
     var xpos =  ((new Date(dp[i].Time).getTime())-g[id].startTime)/1000;
+
     c.strokeStyle = 'green';
     c.lineWidth = 1;
     c.beginPath();
+    c.arc(sx(xpos,id),sy(dp[i][closestTemp],id),5,0,2*Math.PI);
     c.moveTo(sx(xpos,id),g[id].top);
 
     c.lineTo(sx(xpos,id),g[id].bottom);

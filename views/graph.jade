@@ -18,6 +18,11 @@ html
         input(type="range",min=-20,max=120)
         |Graph settings
         input(type="color")
+        select(id="selectedtemp"+i)
+         -for(var prop in sensors)
+            option #{sensors[prop].name}
+
+
       -}
 
       div.websocketInfo(id="output")
