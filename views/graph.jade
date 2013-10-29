@@ -9,16 +9,21 @@ html
     block content
 
       h1= title
-      div.websocketInfo(id="output")
+
       -for (var i = 0; i < 1; i++){
       div(width = "100%")
 
-          canvas(id="graph"+i,height="150",style="border:1px solid #000000;")
+          canvas(id="graph"+i,height="400",style="border:1px solid #000000;")
+      div(width = "80%",id="graphsettings"+i,height="5px",style="border:1px solid #000000;")
+        input(type="range",min=-20,max=120)
+        |Graph settings
+        input(type="color")
       -}
 
+      div.websocketInfo(id="output")
       script.
           var dp = !{JSON.stringify(item)};
           var sensors = !{JSON.stringify(sensors)};
-          window.addEventListener("load", graphInit, false);
+          window.addEventListener("load", bigGraphInit, false);
 
           window.addEventListener("resize",resize,false);

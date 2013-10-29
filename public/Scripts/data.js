@@ -114,7 +114,7 @@ function graphskeleton(prop)
     graph[prop].context.strokeStyle ="rgb(220,200,220)";
     graph[prop].context.fillStyle = "black";
     graph[prop].context.font = "10px Arial";
-    for (var i = 0; i<dp.length;++i){
+    for (var i = 0; i<dp.length-1;++i){
     if ((new Date(dp[i].Time).getMinutes() % 60) == 0){
         graph[prop].context.moveTo(i+graph[prop].loffset,graph[prop].toffset);
         graph[prop].context.lineTo(i+graph[prop].loffset,graph[prop].id.height);
@@ -201,21 +201,7 @@ function nameclick(){
         window.event.currentTarget.dataset.name = name;
         doSend(JSON.stringify(sendobj));}
     }
-function graphInit()
-{
-    output = document.getElementById("output");
 
-    testWebSocket();
-
-    document.getElementById('graph0').width =  document.getElementById('graph0').parentElement.clientWidth;
-    //graph();
-}
-function resize()
-{
-    //document.getElementById('graph0').width =  document.getElementById('graph0').parentElement.clientWidth;
-
-
-}
 function init()
 {
     output = document.getElementById("output");
@@ -377,6 +363,7 @@ function timestampRealtime()
 {
 
     var temp = new Date();
+
     if (temp.getSeconds()%30 == 0)
     {
         for(var prop in sensors)
@@ -395,4 +382,135 @@ function timestampRealtime()
         }
      }
      }
+}
+function bigGraphInit()
+{
+    output = document.getElementById("output");
+
+    //testWebSocket();
+
+    document.getElementById('graph0').width =  document.getElementById('graph0').parentElement.clientWidth;
+    //graph();
+    g = {};
+    g[0]={};
+    g[0].id = document.getElementById('graph0');
+    g[0].context = g[0].id.getContext("2d");
+    g[0].min = 60
+    g[0].max = 80
+    g[0].id.addEventListener("click",bigGraphClick(),false);
+    resize();
+
+}
+
+function resize()
+{
+    document.getElementById('graph0').width =  document.getElementById('graph0').parentElement.clientWidth;
+    g[0].offTop = 10
+    g[0].offBottom = 50;
+    g[0].offLeft = 50
+    g[0].offRight = 10;
+    g[0].top = g[0].offTop
+    g[0].bottom = g[0].id.height - g[0].offBottom;
+    g[0].left = g[0].offLeft;
+    g[0].right = g[0].id.width - g[0].offRight;
+    g[0].startTime = new Date(dp[0].Time).getTime()/1000;
+    g[0].endTime = new Date(dp[dp.length-1].Time).getTime()/1000;
+    g[0].width = g[0].endTime-g[0].startTime;
+    g[0].xScale = (g[0].id.width-(g[0].offLeft+g[0].offRight ))/g[0].width;
+    g[0].yScale = (g[0].id.height-(g[0].offTop+g[0].offBottom ))/(g[0].max-g[0].min);
+    g[0].lineWidth = 1;
+    console.log('right:'+g[0].right);
+    console.log('right:'+g[0].left);
+    console.log('right:'+g[0].top);
+   // console.log('yScale:'+g[0].yScale);
+    bigGraph(0);
+
+}
+function bigGraph(id)
+{
+    var startTime = new Date(dp[0].Time).getTime();
+    var xpos = 0;
+    var c = g[0].context;
+   // maybe tempory - draw graph offset borders
+    c.strokeStyle = 'red';
+    c.lineWidth = 1;
+    c.beginPath();
+    c.moveTo(g[id].left,g[id].top);
+    c.lineTo(g[id].right,g[id].top);
+    c.lineTo(g[id].right,g[id].bottom);
+    c.lineTo(g[id].left,g[id].bottom);
+    c.lineTo(g[id].left,g[id].top);
+    c.stroke();
+
+
+
+    c.strokeStyle = "black";
+    c.lineWidth = g[0].lineWidth;
+
+    //graph[prop].context.moveTo(graph[prop].loffset,event.offsetY);
+
+//debugger;
+    for(var prop in dp[dp.length-1]){
+
+        if (prop.substr(0,4) == 'Temp')
+        {
+            c.beginPath();
+            for (var i = 0; i < (dp.length-1) ; ++i)
+           {
+            xpos =  ((new Date(dp[i].Time).getTime())-startTime)/1000;
+            c.lineTo(sx(xpos,id),sy(dp[i][prop],id))
+            }
+            c.stroke();
+        }
+
+    }
+
+
+}
+function sx(val,id){
+    return (val*g[id].xScale)+g[id].offLeft;
+}
+function sy(val,id){
+
+    val = (val - g[id].min)*g[id].yScale;
+
+
+
+    return g[id].bottom -  val;
+
+}
+function bigGraphClick(){
+    console.log("x,y:"+event.offsetX+","+event.offsetY);
+  return;
+    var prop = this.id;
+    graphskeleton(prop);
+    graph[prop].context.strokeStyle = "grey";
+    graph[prop].context.beginPath();
+    graph[prop].context.moveTo(graph[prop].loffset,event.offsetY);
+    graph[prop].context.lineTo(this.width,event.offsetY);
+    graph[prop].context.stroke();
+
+    var lineval = ((((graph[prop].id.height-graph[prop].boffset-event.offsetY)/graph[prop].degperpixel)+graph[prop].low)*100);
+    lineval = Math.round(lineval)/100;
+    //*graph[prop].degperpixel
+    graph[prop].context.fillStyle = "red";
+    graph[prop].context.fillText(lineval,2,event.offsetY+6);
+    if (event.offsetX > graph[prop].loffset){
+
+
+        if (dp[event.offsetX-graph[prop].loffset][prop]) {
+            graph[prop].context.strokeStyle = "green";
+            graph[prop].context.beginPath();
+            graph[prop].context.arc(event.offsetX,(graph[prop].id.height-graph[prop].boffset-(dp[event.offsetX-graph[prop].loffset][prop]-graph[prop].low)*graph[prop].degperpixel),
+                5,0,2*Math.PI);
+            graph[prop].context.moveTo(event.offsetX,(graph[prop].id.height-graph[prop].boffset-(dp[event.offsetX-graph[prop].loffset][prop]-graph[prop].low)*graph[prop].degperpixel)-3);
+            graph[prop].context.lineTo(event.offsetX,13);
+            graph[prop].context.stroke();
+            graph[prop].context.fillStyle = "green";
+            graph[prop].context.fillText(dp[event.offsetX-graph[prop].loffset][prop],event.offsetX-17,13);
+            graph[prop].context.fillText(new Date(dp[event.offsetX-graph[prop].loffset].Time).toLocaleTimeString(),event.offsetX-17,graph[prop].id.height-8);
+        }
+
+    }
+
 }
