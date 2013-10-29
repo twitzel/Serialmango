@@ -397,7 +397,7 @@ function bigGraphInit()
     g[0].context = g[0].id.getContext("2d");
     g[0].min = 60
     g[0].max = 80
-    g[0].id.addEventListener("click",bigGraphClick(),false);
+
     resize();
 
 }
@@ -405,6 +405,7 @@ function bigGraphInit()
 function resize()
 {
     document.getElementById('graph0').width =  document.getElementById('graph0').parentElement.clientWidth;
+    g[0].id.addEventListener("click",bigGraphClick,false);
     g[0].offTop = 10
     g[0].offBottom = 50;
     g[0].offLeft = 50
@@ -413,9 +414,9 @@ function resize()
     g[0].bottom = g[0].id.height - g[0].offBottom;
     g[0].left = g[0].offLeft;
     g[0].right = g[0].id.width - g[0].offRight;
-    g[0].startTime = new Date(dp[0].Time).getTime()/1000;
-    g[0].endTime = new Date(dp[dp.length-1].Time).getTime()/1000;
-    g[0].width = g[0].endTime-g[0].startTime;
+    g[0].startTime = new Date(dp[0].Time).getTime();
+    g[0].endTime = new Date(dp[dp.length-1].Time).getTime();
+    g[0].width = (g[0].endTime-g[0].startTime)/1000;
     g[0].xScale = (g[0].id.width-(g[0].offLeft+g[0].offRight ))/g[0].width;
     g[0].yScale = (g[0].id.height-(g[0].offTop+g[0].offBottom ))/(g[0].max-g[0].min);
     g[0].lineWidth = 1;
@@ -455,7 +456,7 @@ function bigGraph(id)
         if (prop.substr(0,4) == 'Temp')
         {
             c.beginPath();
-            for (var i = 0; i < (dp.length-1) ; ++i)
+            for (var i = 0; i < (dp.length) ; ++i)
            {
             xpos =  ((new Date(dp[i].Time).getTime())-startTime)/1000;
             c.lineTo(sx(xpos,id),sy(dp[i][prop],id))
@@ -479,9 +480,25 @@ function sy(val,id){
     return g[id].bottom -  val;
 
 }
-function bigGraphClick(){
+function bigGraphClick(id){
+    id = 0
+    //this g[0] needs to be changed to get the graph number
+var clickx = (event.offsetX-g[id].offLeft)/g[id].xScale;
+    for (var i = 0; i < (dp.length) ; ++i) { if (((new Date(dp[i].Time).getTime())-g[id].startTime)/1000 > clickx) { break; } }
+        //todo check if the dp before is closer
     console.log("x,y:"+event.offsetX+","+event.offsetY);
-  return;
+
+    console.log("datapoint:"+i);
+    var c = g[0].context;
+    var xpos =  ((new Date(dp[i].Time).getTime())-g[id].startTime)/1000;
+    c.strokeStyle = 'green';
+    c.lineWidth = 1;
+    c.beginPath();
+    c.moveTo(sx(xpos,id),g[id].top);
+
+    c.lineTo(sx(xpos,id),g[id].bottom);
+        c.stroke();
+    return;
     var prop = this.id;
     graphskeleton(prop);
     graph[prop].context.strokeStyle = "grey";
