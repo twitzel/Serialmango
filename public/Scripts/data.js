@@ -399,6 +399,8 @@ function bigGraphInit(id)
     g[id].id.addEventListener("click",bigGraphClick,false);
     document.getElementById("selectedtempcolor"+id).addEventListener('change',selectedcolor,false);
     document.getElementById("test").addEventListener('change',test,false);
+    document.getElementById("test1").addEventListener('change',test1,false);
+
     g[id].context = g[id].id.getContext("2d");
     g[id].min = 60
     g[id].max = 80
@@ -578,6 +580,11 @@ function selectedcolor(){
 }
 function test(){
     sensors[document.getElementById('selectedtemp'+id).value].g[0].max = this.value;
+    resize(0);
+
+}
+function test1(){
+    sensors[document.getElementById('selectedtemp'+id).value].g[0].min = this.value;
     resize(0);
 
 }
