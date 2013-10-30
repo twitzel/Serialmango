@@ -398,20 +398,20 @@ function bigGraphInit(id)
     g[id].id = document.getElementById('graph0');
     g[id].id.addEventListener("click",bigGraphClick,false);
     document.getElementById("selectedtempcolor"+id).addEventListener('change',selectedcolor,false);
-    document.getElementById("test").addEventListener('change',test,false);
-    document.getElementById("test1").addEventListener('change',test1,false);
+    document.getElementById("min"+id).addEventListener('change',minchange,false);
+    document.getElementById("max"+id).addEventListener('change',maxchange,false);
+    document.getElementById("selectedtemp"+id).addEventListener('change',selectedchange,false);
 
     g[id].context = g[id].id.getContext("2d");
-    g[id].min = 60
-    g[id].max = 80
+
     for(var prop in sensors){
         if (prop.substr(0,4) == 'Temp')   {
             if (!sensors[prop].g)
             {
                 sensors[prop].g = [];
                 sensors[prop].g[id]={};
-                sensors[prop].g[id].min = 40;
-                sensors[prop].g[id].max = 80;
+                sensors[prop].g[id].min = 60;
+                sensors[prop].g[id].max = 70;
                 sensors[prop].g[id].lineWidth= 1;
                 sensors[prop].g[id].style = 'Black';
             }
@@ -452,10 +452,8 @@ function resize()
         }
         }
     g[id].lineWidth = 1;
-    console.log('right:'+g[id].right);
-    console.log('right:'+g[id].left);
-    console.log('right:'+g[id].top);
-   // console.log('yScale:'+g[id].yScale);
+
+  // console.log('yScale:'+g[id].yScale);
     bigGraph(id);
 
 }
@@ -466,7 +464,7 @@ function bigGraph(id)
     var c = g[id].context;
     c.clearRect (0 , 0 , g[id].id.width , g[id].id.height );
    // maybe tempory - draw graph offset borders
-    c.strokeStyle = 'red';
+    c.strokeStyle = 'grey';
     c.lineWidth = 1;
     c.beginPath();
     c.moveTo(g[id].left,g[id].top);
@@ -490,10 +488,11 @@ function bigGraph(id)
         if (prop.substr(0,4) == 'Temp')
         {
            // highlight if selected
-            if (sensors[prop].name ==   document.getElementById('selectedtemp'+id).value){
+            if (prop ==   document.getElementById('selectedtemp'+id).value){
                c.strokeStyle='yellow';
                c.lineWidth=4;
-
+                document.getElementById('max'+id).value = sensors[prop].g[id].max;
+                document.getElementById('min'+id).value = sensors[prop].g[id].min;
            }
 
             c.beginPath();
@@ -545,6 +544,7 @@ var clicky ;
 
         if (prop.substr(0,4) == 'Temp'){
             clicky = ((g[id].bottom-event.offsetY)/sensors[prop].g[id].yScale)+sensors[prop].g[id].min;
+            console.log('Temperate clicked'+clicky+'for '+prop);
             if (Math.abs(dp[i][prop]-clicky)< difference){
                 difference = Math.abs(dp[i][prop]-clicky);
                 closestTemp = prop;
@@ -553,13 +553,9 @@ var clicky ;
         }
 
     }
-    console.log('Temperate clicked'+clicky);
-    console.log('Closest temperature'+closestTemp);
-    document.getElementById('selectedtemp'+id).value=closestTemp;
-        //todo check if the dp before is closer
-    //console.log("x,y:"+event.offsetX+","+event.offsetY);
 
-    //console.log("datapoint:"+i);
+
+    document.getElementById('selectedtemp'+id).value=closestTemp;
 
     var xpos =  ((new Date(dp[i].Time).getTime())-g[id].startTime)/1000;
     var ypos = dp[i][closestTemp];
@@ -578,13 +574,17 @@ var clicky ;
 function selectedcolor(){
     console.log('adf' + this);
 }
-function test(){
-    sensors[document.getElementById('selectedtemp'+id).value].g[0].max = this.value;
+function maxchange(){
+    //add *1 to force to number instead of string - was messing up calculations
+    sensors[document.getElementById('selectedtemp'+id).value].g[0].max = (this.value*1);
     resize(0);
 
 }
-function test1(){
-    sensors[document.getElementById('selectedtemp'+id).value].g[0].min = this.value;
+function minchange(){
+    sensors[document.getElementById('selectedtemp'+id).value].g[0].min = (this.value*1);
     resize(0);
 
+}
+function selectedchange(){
+    bigGraph(0);
 }

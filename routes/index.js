@@ -44,9 +44,9 @@ exports.graph = function(req, res){
     // todd added this
     //    collectionAvg.find({},{_id:0,"Time":0}).sort( { "Time": 1 } ).limit(300).toArray(function(err,item)
     x= new Date();
-    x=new Date(x-(3600000*1)); // 6 hours age
+    x=new Date(x-(3600000*12*12)); // 6 hours age
     //collectionAvg.find({"Time":{$gt:x}},{_id:0,"Time":0}).sort( { "Time": 1 } ).toArray(function(err,item)
-    collectionAvg.find({"Time":{$gt:x},"period":1},{_id:0}).sort( { "Time": 1 } ).toArray(function(err,item){
+    collectionAvg.find({"Time":{$gt:x},"period":60},{_id:0}).sort( { "Time": 1} ).toArray(function(err,item){
         //  console.log(item[0].Time);
 
         collectionSettings.findOne({"type":"sensors"},function(err,sensors){
