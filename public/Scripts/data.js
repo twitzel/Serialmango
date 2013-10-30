@@ -383,7 +383,7 @@ function timestampRealtime()
      }
      }
 }
-function bigGraphInit()
+function bigGraphInit(id)
 {
     output = document.getElementById("output");
 
@@ -392,11 +392,32 @@ function bigGraphInit()
     document.getElementById('graph0').width =  document.getElementById('graph0').parentElement.clientWidth;
     //graph();
     g = {};
-    g[0]={};
-    g[0].id = document.getElementById('graph0');
-    g[0].context = g[0].id.getContext("2d");
-    g[0].min = 60
-    g[0].max = 80
+    id = 0
+
+    g[id]={};
+    g[id].id = document.getElementById('graph0');
+    g[id].id.addEventListener("click",bigGraphClick,false);
+    document.getElementById("selectedtempcolor"+id).addEventListener('change',selectedcolor,false);
+    document.getElementById("test").addEventListener('change',test,false);
+    g[id].context = g[id].id.getContext("2d");
+    g[id].min = 60
+    g[id].max = 80
+    for(var prop in sensors){
+        if (prop.substr(0,4) == 'Temp')   {
+            if (!sensors[prop].g)
+            {
+                sensors[prop].g = [];
+                sensors[prop].g[id]={};
+                sensors[prop].g[id].min = 40;
+                sensors[prop].g[id].max = 80;
+                sensors[prop].g[id].lineWidth= 1;
+                sensors[prop].g[id].style = 'Black';
+            }
+
+        }
+    }
+
+
 
     resize();
 
@@ -404,34 +425,44 @@ function bigGraphInit()
 
 function resize()
 {
+    id=0;
     document.getElementById('graph0').width =  document.getElementById('graph0').parentElement.clientWidth;
-    g[0].id.addEventListener("click",bigGraphClick,false);
-    g[0].offTop = 10
-    g[0].offBottom = 50;
-    g[0].offLeft = 50
-    g[0].offRight = 10;
-    g[0].top = g[0].offTop
-    g[0].bottom = g[0].id.height - g[0].offBottom;
-    g[0].left = g[0].offLeft;
-    g[0].right = g[0].id.width - g[0].offRight;
-    g[0].startTime = new Date(dp[0].Time).getTime();
-    g[0].endTime = new Date(dp[dp.length-1].Time).getTime();
-    g[0].width = (g[0].endTime-g[0].startTime)/1000;
-    g[0].xScale = (g[0].id.width-(g[0].offLeft+g[0].offRight ))/g[0].width;
-    g[0].yScale = (g[0].id.height-(g[0].offTop+g[0].offBottom ))/(g[0].max-g[0].min);
-    g[0].lineWidth = 1;
-    console.log('right:'+g[0].right);
-    console.log('right:'+g[0].left);
-    console.log('right:'+g[0].top);
-   // console.log('yScale:'+g[0].yScale);
-    bigGraph(0);
+
+
+    g[id].offTop = 10
+    g[id].offBottom = 50;
+    g[id].offLeft = 50
+    g[id].offRight = 10;
+    g[id].top = g[id].offTop
+    g[id].bottom = g[id].id.height - g[id].offBottom;
+    g[id].left = g[id].offLeft;
+    g[id].right = g[id].id.width - g[id].offRight;
+    g[id].startTime = new Date(dp[id].Time).getTime();
+    g[id].endTime = new Date(dp[dp.length-1].Time).getTime();
+    g[id].width = (g[id].endTime-g[id].startTime)/1000;
+    g[id].xScale = (g[id].id.width-(g[id].offLeft+g[id].offRight ))/g[id].width;
+    for(var prop in sensors){
+        if (prop.substr(0,4) == 'Temp')   {
+
+
+    sensors[prop].g[id].yScale = (g[id].id.height-(g[id].offTop+g[id].offBottom ))/(sensors[prop].g[id].max-sensors[prop].g[id].min);
+
+        }
+        }
+    g[id].lineWidth = 1;
+    console.log('right:'+g[id].right);
+    console.log('right:'+g[id].left);
+    console.log('right:'+g[id].top);
+   // console.log('yScale:'+g[id].yScale);
+    bigGraph(id);
 
 }
 function bigGraph(id)
 {
     var startTime = new Date(dp[0].Time).getTime();
     var xpos = 0;
-    var c = g[0].context;
+    var c = g[id].context;
+    c.clearRect (0 , 0 , g[id].id.width , g[id].id.height );
    // maybe tempory - draw graph offset borders
     c.strokeStyle = 'red';
     c.lineWidth = 1;
@@ -452,14 +483,22 @@ function bigGraph(id)
 
 //debugger;
     for(var prop in dp[dp.length-1]){
-
+        c.strokeStyle = "black";
+        c.lineWidth = g[0].lineWidth;
         if (prop.substr(0,4) == 'Temp')
         {
+           // highlight if selected
+            if (sensors[prop].name ==   document.getElementById('selectedtemp'+id).value){
+               c.strokeStyle='yellow';
+               c.lineWidth=4;
+
+           }
+
             c.beginPath();
             for (var i = 0; i < (dp.length) ; ++i)
            {
             xpos =  ((new Date(dp[i].Time).getTime())-startTime)/1000;
-            c.lineTo(sx(xpos,id),sy(dp[i][prop],id))
+            c.lineTo(sx(xpos,id),sy(dp[i][prop],id,prop))
             }
             c.stroke();
         }
@@ -471,9 +510,9 @@ function bigGraph(id)
 function sx(val,id){
     return (val*g[id].xScale)+g[id].offLeft;
 }
-function sy(val,id){
+function sy(val,id,prop){
 
-    val = (val - g[id].min)*g[id].yScale;
+    val = (val - sensors[prop].g[id].min)*sensors[prop].g[id].yScale;
 
 
 
@@ -482,10 +521,13 @@ function sy(val,id){
 }
 function bigGraphClick(id){
     id = 0
+    var c = g[0].context;
+
+
     //this g[id] needs to be changed to get the graph number
     //scale the click to match the time scale
 var clickx = (event.offsetX-g[id].offLeft)/g[id].xScale;
-var clicky = ((g[id].bottom-event.offsetY)/g[id].yScale)+g[id].min;
+var clicky ;
     //find the first point in time after the click
 
     for (var i = 0; i < (dp.length) ; ++i) { if (((new Date(dp[i].Time).getTime())-g[id].startTime)/1000 > clickx) { break; } }
@@ -500,6 +542,7 @@ var clicky = ((g[id].bottom-event.offsetY)/g[id].yScale)+g[id].min;
     for(var prop in dp[dp.length-1]){
 
         if (prop.substr(0,4) == 'Temp'){
+            clicky = ((g[id].bottom-event.offsetY)/sensors[prop].g[id].yScale)+sensors[prop].g[id].min;
             if (Math.abs(dp[i][prop]-clicky)< difference){
                 difference = Math.abs(dp[i][prop]-clicky);
                 closestTemp = prop;
@@ -515,47 +558,26 @@ var clicky = ((g[id].bottom-event.offsetY)/g[id].yScale)+g[id].min;
     //console.log("x,y:"+event.offsetX+","+event.offsetY);
 
     //console.log("datapoint:"+i);
-    var c = g[0].context;
-    var xpos =  ((new Date(dp[i].Time).getTime())-g[id].startTime)/1000;
 
+    var xpos =  ((new Date(dp[i].Time).getTime())-g[id].startTime)/1000;
+    var ypos = dp[i][closestTemp];
+    bigGraph(id);
     c.strokeStyle = 'green';
     c.lineWidth = 1;
     c.beginPath();
-    c.arc(sx(xpos,id),sy(dp[i][closestTemp],id),5,0,2*Math.PI);
+    c.arc(sx(xpos,id),sy(ypos,id,closestTemp),5,0,2*Math.PI);
     c.moveTo(sx(xpos,id),g[id].top);
 
     c.lineTo(sx(xpos,id),g[id].bottom);
         c.stroke();
     return;
-    var prop = this.id;
-    graphskeleton(prop);
-    graph[prop].context.strokeStyle = "grey";
-    graph[prop].context.beginPath();
-    graph[prop].context.moveTo(graph[prop].loffset,event.offsetY);
-    graph[prop].context.lineTo(this.width,event.offsetY);
-    graph[prop].context.stroke();
 
-    var lineval = ((((graph[prop].id.height-graph[prop].boffset-event.offsetY)/graph[prop].degperpixel)+graph[prop].low)*100);
-    lineval = Math.round(lineval)/100;
-    //*graph[prop].degperpixel
-    graph[prop].context.fillStyle = "red";
-    graph[prop].context.fillText(lineval,2,event.offsetY+6);
-    if (event.offsetX > graph[prop].loffset){
-
-
-        if (dp[event.offsetX-graph[prop].loffset][prop]) {
-            graph[prop].context.strokeStyle = "green";
-            graph[prop].context.beginPath();
-            graph[prop].context.arc(event.offsetX,(graph[prop].id.height-graph[prop].boffset-(dp[event.offsetX-graph[prop].loffset][prop]-graph[prop].low)*graph[prop].degperpixel),
-                5,0,2*Math.PI);
-            graph[prop].context.moveTo(event.offsetX,(graph[prop].id.height-graph[prop].boffset-(dp[event.offsetX-graph[prop].loffset][prop]-graph[prop].low)*graph[prop].degperpixel)-3);
-            graph[prop].context.lineTo(event.offsetX,13);
-            graph[prop].context.stroke();
-            graph[prop].context.fillStyle = "green";
-            graph[prop].context.fillText(dp[event.offsetX-graph[prop].loffset][prop],event.offsetX-17,13);
-            graph[prop].context.fillText(new Date(dp[event.offsetX-graph[prop].loffset].Time).toLocaleTimeString(),event.offsetX-17,graph[prop].id.height-8);
-        }
-
-    }
+}
+function selectedcolor(){
+    console.log('adf' + this);
+}
+function test(){
+    sensors[document.getElementById('selectedtemp'+id).value].g[0].max = this.value;
+    resize(0);
 
 }
