@@ -6,9 +6,10 @@ window.onload = init;
 function init(){
     wsUri = "ws://" + window.location.hostname + ":8080";
     output = document.getElementById("websocketlog");
-
+    //    context.canvas.width  = window.innerWidth;
     canvas = document.getElementById('myCanvas');
     context = canvas.getContext('2d');
+
     canvasWidth = canvas.width;
     canvasStart = canvasWidth*.8;
     canvasHeight = canvas.height;
