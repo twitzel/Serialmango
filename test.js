@@ -1,3 +1,44 @@
+console.log('\033[5;10r')
+console.log('start');
+for (var i= 1;i < 15; ++i){
+   console.log('line '+i);
+   // console.log('\033[1;10H****************');
+
+
+}
+console.log('\033[s');
+console.log('line 1');
+console.log('line 2');
+console.log('line 3');
+console.log('line 4');
+console.log('\033[u');
+console.log('line 11');
+console.log('line 211');
+console.log('line 3');
+console.log('line 41');
+return;
+console.log('line 1');
+console.log('line 2');
+console.log('line 3');
+console.log('line 4');
+console.log('line 5');
+console.log('line 6');
+console.log('\033[s\033[0;0fZ,Z');
+
+console.log('\033[0;0fZ,Z\033[u');
+
+return;
+//console.log('\033[2J');
+console.log(' \033[5A up five');
+console.log('\033[3A\033[1;35m BASH \033[1B\033[1D down one');
+console.log('\033[4A\033[1;35m BASH2 \033[7B\033[6D');
+console.log(' \033[2J???');
+console.log ('0,0');
+console.log('\033[0;0fZ,Z')
+console.log('\033[5;5f5,5')
+return;
+
+
 var MongoClient = require('mongodb').MongoClient;
 global.x = 0;
 
