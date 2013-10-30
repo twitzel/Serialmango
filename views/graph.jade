@@ -20,7 +20,7 @@ html
         input(id="selectedtempcolor"+i,type="color")
         select(id="selectedtemp"+i)
          -for(var prop in sensors)
-            option #{sensors[prop].name}
+            option(value=prop) #{sensors[prop].name}
 
 
       -}

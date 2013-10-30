@@ -553,7 +553,7 @@ var clicky ;
     }
     console.log('Temperate clicked'+clicky);
     console.log('Closest temperature'+closestTemp);
-    document.getElementById('selectedtemp'+id).value=sensors[closestTemp].name;
+    document.getElementById('selectedtemp'+id).value=closestTemp;
         //todo check if the dp before is closer
     //console.log("x,y:"+event.offsetX+","+event.offsetY);
 
