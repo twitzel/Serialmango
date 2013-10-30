@@ -1,10 +1,108 @@
 <!DOCTYPE html>
+
+    <script  src = "./Scripts/cs4Timing.js"> </script>
+    <link rel='stylesheet'  href='./stylesheets/cs4Timing.css'>
+
 <html>
 <head>
     <title>CS4 Timings</title>
     <h1>CS4 Timings Screen</h1>
 </head>
-<body>
 
+<body>
+    <div id="wraper">
+        <h3 >Event Log</h3>
+        <div id="websocketlog" class="log">
+            <p> test text</p>
+        </div>
+
+
+
+    </div>
+
+    <form id=payment>
+        <fieldset>
+            <legend>Timing 1</legend>
+
+
+
+
+
+
+
+
+
+                   Show Name: <input id=showname name=showname type=text placeholder="Show Name" required autofocus>
+
+
+
+                    <legend>Output Type</legend>
+
+                        <fieldset id = radiobutton1>
+                            R4 Slides <input id=r4slides name=output value= "r4slides" type=radio checked>
+
+                            R4 Audio<input id=r4audio name=output value = "r4audio" type=radio >
+
+                            Both  <input id=r4both name=output value= "both" type=radio>
+
+                         </fieldset>
+
+
+                   Directory:     <input id=directory name=directory type=text placeholder="English" required>
+
+
+                    <label for=phone>Phone</label>
+                    <input id=phone name=phone type=tel placeholder="Eg. +447500000000" required>
+
+
+
+
+
+
+
+
+
+        </fieldset>
+        <fieldset>
+            <legend>Delivery address</legend>
+            <ol>
+                <li>
+                    <label for=address>Address</label>
+                    <textarea id=address name=address rows=5 required></textarea>
+                </li>
+                <li>
+                    <label for=postcode>Post code</label>
+                    <input id=postcode name=postcode type=text required>
+                </li>
+                <li>
+                    <label for=country>Country</label>
+                    <input id=country name=country type=text required>
+                </li>
+            </ol>
+        </fieldset>
+        <fieldset>
+            <legend>Card details</legend>
+            <ol>
+                <li>
+
+                </li>
+                <li>
+                    <label for=cardnumber>Card number</label>
+                    <input id=cardnumber name=cardnumber type=number required>
+                </li>
+                <li>
+                    <label for=secure>Security code</label>
+                    <input id=secure name=secure type=number required>
+                </li>
+                <li>
+                    <label for=namecard>Name on card</label>
+                    <input id=namecard name=namecard type=text placeholder="Exact name as on the card" required>
+                </li>
+            </ol>
+        </fieldset>
+        <fieldset>
+            <button type=submit>Buy it!</button>
+        </fieldset>
+    </form>
 </body>
 </html>
