@@ -55,15 +55,30 @@ h1{
 
 #goButton{
     width:20vw;
-    height:20vw;
-    background-color: #881b33;
-    font-size:200%;
+    height:10vw;
+    background-color: #06b00a;
+    font-size:3em;
     font-weight: bolder;
     float:left;
-    margin-left: 2vw;
-    margin-top: 2vh;
+   margin: 0 auto;
+    border-radius: 10px;
+    box-shadow: 3px 3px 3px #333;
 }
 
+#goButton2{
+    width:20vw;
+    height:10vw;
+    background-color: #06b00a;
+    font-size:3em;
+    font-weight: bolder;
+    float:left;
+    margin: 0 auto;
+    border-radius: 10px;
+    box-shadow: 3px 3px 3px #333;
+}
+#go1div{
+    margin:0 auto;
+}
 
 
 #canvasDiv{
@@ -83,4 +98,20 @@ h1{
     border: 3px solid #333333;
     padding: 10px;
 
+}
+
+#timing1{
+    margin-top: 20px;
+    width: 400px;
+    background-color: #adffb4;
+}
+
+form#timing1 fieldset {
+    color: #ff0000;
+}
+
+#timing2{
+    margin-top: 20px;
+    width: 400px;
+    background-color: #839dff;
 }
