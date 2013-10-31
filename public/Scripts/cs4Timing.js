@@ -6,15 +6,21 @@ var counter = 0;
 var lastCueTime;
 var delay;
 var wsUri = "ws://" + window.location.hostname + ":8080";
-
+var cuevalue1;
+var cuevalue2;
+var cuevalue3;
 
 
 window.onload = init;
 function init()
 {
     output = document.getElementById("websocketlog");
-    initScroll();
     testWebSocket();
+    cuevalue1 = document.getElementById("cue1");
+    cuevalue2 = document.getElementById("cue2");
+    cuevalue3 = document.getElementById("cue3");
+
+
 
 }
 
@@ -55,35 +61,20 @@ function writeToScreen(message) {
     lastCueTime = new Date();
     output.innerHTML = message + "<BR>" + output.innerHTML;
 
-
-
-
-
     pixelData[canvasStart] = {data : message};
 
     //output.value = message+"<BR>"+output.value;
 }
-function buttonclick(message) {
-
-    websocket.send("I got a que request I better do something");
-    output.innerHTML = "Sent something out the websocket! -  order the sensors from amazon<br> This doesnt send until the button is released<br>"
-        +output.innerHTML;
-// text1.innerHTML = "button pressed " + "again" + text1.innerHTML;
-    // text1.value = 1 + 5 +2;
-    counter = parseInt(text1.value) + 1;
-    if(isNaN(counter))
-    {counter = 100;
-    }
-    text1.value = counter;
 
 
-}
+function cueclick1(message){
 
-function cueclick(message){
-    document.getElementById("body").style.backgroundColor =  '#550000';
+    cuevalue1.value = parseInt(cuevalue1.value) +1;
+    if(isNaN(cuevalue1.value))
+    {cuevalue1.value = 10 ;}
+   // document.getElementById("body").style.backgroundColor =  '#550000';
     //   counter = parseInt(text1.value) + 1;
-//    if(isNaN(counter))
-//    {counter = 10 ;}
+
 //    text1.value = counter;
 //    delay = (new Date()-lastCueTime);
 
