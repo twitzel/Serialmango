@@ -35,8 +35,8 @@ function testWebSocket()
 
 function onOpen(evt) {
 
-    writeToScreen("CONNECTED");
-    writeToScreen('#{myuri}');
+    writeToScreen("CONNECTED TO CS4");
+
 }
 
 function onClose(evt) {
@@ -58,10 +58,13 @@ function doSend(message) {
 function writeToScreen(message) {
 
     // get time of incoming cue
-    lastCueTime = new Date();
+    if(message.substring(0,1) != ".") //make sure it's an incoming cue
+    {
+        lastCueTime = new Date();
+    }
+
     output.innerHTML = message + "<BR>" + output.innerHTML;
 
-    pixelData[canvasStart] = {data : message};
 
     //output.value = message+"<BR>"+output.value;
 }
@@ -70,8 +73,18 @@ function writeToScreen(message) {
 function cueclick1(message){
 
     cuevalue1.value = parseInt(cuevalue1.value) +1;
-    if(isNaN(cuevalue1.value))
-    {cuevalue1.value = 10 ;}
+    var dataFormat;
+    var radioButtons = document.getElementsByName('output');
+    for (var i = 0, length = radioButtons.length; i < length; i++) {
+        if (radioButtons[i].checked) {
+
+           dataFormat = (radioButtons[i].value);
+
+            // get out of loop now that we have value
+            break;
+        }
+    }
+
    // document.getElementById("body").style.backgroundColor =  '#550000';
     //   counter = parseInt(text1.value) + 1;
 
@@ -79,6 +92,7 @@ function cueclick1(message){
 //    delay = (new Date()-lastCueTime);
 
 //    websocket.send("{\"OutData\": [{\"Delay\": "+delay+" , \"Port\":\"Zig1\", \"Showname\":\"MamaMia\", \"Dir\":\"English\", \"Dout\":\"GO slide" + counter +".jpg NEXT slide"+(counter +1) +".jpg\"}]}");
+    websocket.send("{\"OutData\": [{\"Delay\": "+delay+" , \"Port\":\"Zig1\", \"Showname\":\"MamaMia\", \"Dir\":\"English\", \"Dout\":\"GO slide" + counter +".jpg NEXT slide"+(counter +1) +".jpg\"}]}");
 
 //    textData.value = "{\"OutData\": [{\"Delay\": "+delay+" , \"Port\":\"Zig1\", \"Showname\":\"MamaMia\", \"Dir\":\"English\", \"Dout\":\"GO slide" + counter +".jpg NEXT slide"+(counter +1) +".jpg\"}]}";
 }
