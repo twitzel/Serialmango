@@ -63,7 +63,7 @@ function writeToScreen(message) {
         lastCueTime = new Date();
     }
 
-    output.innerHTML = message + "<BR>" + output.innerHTML;
+    output.innerHTML = message + "<BR>" + output.innerHTML.substr(0, 20000);
 
 
     //output.value = message+"<BR>"+output.value;
@@ -71,7 +71,6 @@ function writeToScreen(message) {
 
 
 function cueclick1(message){
-
     var counter = parseInt(cuevalue1.value);
     var showName = document.getElementById('showname1').value.trim();
     var directory = document.getElementById('directory1').value.trim();
@@ -96,10 +95,71 @@ function cueclick1(message){
       dataOut = "GO audio" + counter + ".mp3";
     }
     cuevalue1.value = counter +1; //update the cue count
+    delay = (new Date()-lastCueTime);
+    websocket.send("{\"OutData\": [{\"Delay\": "+delay+" , \"Port\":\"Zig1\", \"Showname\":\""+ showName +"\", \"Dir\":\""+ directory +"\", \"Dout\":\"" + dataOut + "\"}]}");
 
-   delay = (new Date()-lastCueTime);
+}
 
-   websocket.send("{\"OutData\": [{\"Delay\": "+delay+" , \"Port\":\"Zig1\", \"Showname\":\""+ showName +"\", \"Dir\":\""+ directory +"\", \"Dout\":\"" + dataOut + "\"}]}");
+function cueclick2(message){
+    var counter = parseInt(cuevalue2.value);
+    var showName = document.getElementById('showname2').value.trim();
+    var directory = document.getElementById('directory2').value.trim();
+    var radioButtons = document.getElementsByName('output2');
+    var dataFormat;
+    var dataOut;
 
-//    textData.value = "{\"OutData\": [{\"Delay\": "+delay+" , \"Port\":\"Zig1\", \"Showname\":\"MamaMia\", \"Dir\":\"English\", \"Dout\":\"GO slide" + counter +".jpg NEXT slide"+(counter +1) +".jpg\"}]}";
+    for (var i = 0, length = radioButtons.length; i < length; i++) {
+        if (radioButtons[i].checked) {
+
+            dataFormat = (radioButtons[i].value);
+
+            // get out of loop now that we have value
+            break;
+        }
+    }
+
+    if(dataFormat == 'r4slides'){
+        dataOut =  "GO slide" + counter +".jpg NEXT slide"+(counter +1) +".jpg";
+    }
+    else if(dataFormat == 'r4audio'){
+        dataOut = "GO audio" + counter + ".mp3";
+    }
+    cuevalue2.value = counter +1; //update the cue count
+    delay = (new Date()-lastCueTime);
+    websocket.send("{\"OutData\": [{\"Delay\": "+delay+" , \"Port\":\"Zig1\", \"Showname\":\""+ showName +"\", \"Dir\":\""+ directory +"\", \"Dout\":\"" + dataOut + "\"}]}");
+
+}
+
+function cueclick3(message){
+    var counter = parseInt(cuevalue3.value);
+    var showName = document.getElementById('showname3').value.trim();
+    var directory = document.getElementById('directory3').value.trim();
+    var radioButtons = document.getElementsByName('output3');
+    var dataFormat;
+    var dataOut;
+
+    for (var i = 0, length = radioButtons.length; i < length; i++) {
+        if (radioButtons[i].checked) {
+
+            dataFormat = (radioButtons[i].value);
+
+            // get out of loop now that we have value
+            break;
+        }
+    }
+
+    if(dataFormat == 'r4slides'){
+        dataOut =  "GO slide" + counter +".jpg NEXT slide"+(counter +1) +".jpg";
+    }
+    else if(dataFormat == 'r4audio'){
+        dataOut = "GO audio" + counter + ".mp3";
+    }
+    cuevalue3.value = counter +1; //update the cue count
+    delay = (new Date()-lastCueTime);
+    websocket.send("{\"OutData\": [{\"Delay\": "+delay+" , \"Port\":\"Zig1\", \"Showname\":\""+ showName +"\", \"Dir\":\""+ directory +"\", \"Dout\":\"" + dataOut + "\"}]}");
+
+}
+
+function buttonClear(){
+    output.innerHTML = "";
 }
