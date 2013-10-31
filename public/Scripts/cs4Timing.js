@@ -72,9 +72,13 @@ function writeToScreen(message) {
 
 function cueclick1(message){
 
-    cuevalue1.value = parseInt(cuevalue1.value) +1;
+    var counter = parseInt(cuevalue1.value);
+    var showName = document.getElementById('showname1').value.trim();
+    var directory = document.getElementById('directory1').value.trim();
+    var radioButtons = document.getElementsByName('output1');
     var dataFormat;
-    var radioButtons = document.getElementsByName('output');
+    var dataOut;
+
     for (var i = 0, length = radioButtons.length; i < length; i++) {
         if (radioButtons[i].checked) {
 
@@ -85,14 +89,17 @@ function cueclick1(message){
         }
     }
 
-   // document.getElementById("body").style.backgroundColor =  '#550000';
-    //   counter = parseInt(text1.value) + 1;
+    if(dataFormat == 'r4slides'){
+      dataOut =  "GO slide" + counter +".jpg NEXT slide"+(counter +1) +".jpg";
+    }
+    else if(dataFormat == 'r4audio'){
+      dataOut = "GO audio" + counter + ".mp3";
+    }
+    cuevalue1.value = counter +1; //update the cue count
 
-//    text1.value = counter;
-//    delay = (new Date()-lastCueTime);
+   delay = (new Date()-lastCueTime);
 
-//    websocket.send("{\"OutData\": [{\"Delay\": "+delay+" , \"Port\":\"Zig1\", \"Showname\":\"MamaMia\", \"Dir\":\"English\", \"Dout\":\"GO slide" + counter +".jpg NEXT slide"+(counter +1) +".jpg\"}]}");
-    websocket.send("{\"OutData\": [{\"Delay\": "+delay+" , \"Port\":\"Zig1\", \"Showname\":\"MamaMia\", \"Dir\":\"English\", \"Dout\":\"GO slide" + counter +".jpg NEXT slide"+(counter +1) +".jpg\"}]}");
+   websocket.send("{\"OutData\": [{\"Delay\": "+delay+" , \"Port\":\"Zig1\", \"Showname\":\""+ showName +"\", \"Dir\":\""+ directory +"\", \"Dout\":\"" + dataOut + "\"}]}");
 
 //    textData.value = "{\"OutData\": [{\"Delay\": "+delay+" , \"Port\":\"Zig1\", \"Showname\":\"MamaMia\", \"Dir\":\"English\", \"Dout\":\"GO slide" + counter +".jpg NEXT slide"+(counter +1) +".jpg\"}]}";
 }
