@@ -19,10 +19,9 @@
 
 h3{
     color: #0000ff;
+
     text-align: center;
     margin:0;
-
-
 }
 
 h1{
@@ -165,4 +164,8 @@ form#timing1 fieldset {
 
 #buttondiv3{
     text-align:center;
+}
+
+#buttonClear{
+    float: right;
 }
