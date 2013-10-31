@@ -1,8 +1,11 @@
 
-var wsUri = "ws://witzel.homeserver.com:8080";
-//var wsUri = "ws://10.6.1.119:8080";
+//var wsUri = "ws://witzel.homeserver.com:8080";
+var wsUri = "ws://10.6.1.14:8080";
 var output;
 var graph ={};
+var query = {};
+query.lastHours = 2;
+query.period = 1;
 var moving = false;
 var movingid = '';
 function moveup(){move(-1);}
@@ -15,12 +18,12 @@ function move(units){
 
 //***
     var htmlsave = fromElement.innerHTML;
-    var sensorsave = fromElement.dataset.sensor;
+    var sensornamesave = fromElement.dataset.sensor;
 
     fromElement.dataset.sensor =toElement.dataset.sensor;
     fromElement.innerHTML = toElement.innerHTML;
 
-    toElement.dataset.sensor = sensorsave;
+    toElement.dataset.sensor = sensornamesave;
     toElement.innerHTML = htmlsave;
     fromElement.style.transitionDuration = '0';
     toElement.style.transitionDuration = '0';
@@ -187,20 +190,7 @@ function nameclick(){
         " onBlur='blurtest()'  value='"+this.dataset.name+"'> "+
         this.dataset.sensor )+"</div>";
 
-}function savesensorname(){
-
-    var name = window.event.currentTarget.innerHTML;
-
-    var sendobj = {};
-    sendobj[window.event.currentTarget.dataset.sensor]= {};
-    sendobj.packettype="Sensor name update";
-    sendobj[window.event.currentTarget.dataset.sensor].name=name;
-   // dataset.name is the name from when the page loaded passed as data-name
-    // just send if the name changed
-    if (window.event.currentTarget.dataset.name != name) {
-        window.event.currentTarget.dataset.name = name;
-        doSend(JSON.stringify(sendobj));}
-    }
+}
 
 function init()
 {
@@ -224,6 +214,14 @@ function testWebSocket()
     websocket.onopen = function(evt) { onOpen(evt) };
     websocket.onclose = function(evt) { onClose(evt) };
     websocket.onmessage = function(evt) { onMessage(evt) };
+    websocket.onerror = function(evt) { onError(evt) };
+}
+function bigGraphWebSocket()
+{
+    websocket = new WebSocket(wsUri);
+    websocket.onopen = function(evt) { onOpen(evt) };
+    websocket.onclose = function(evt) { onClose(evt) };
+    websocket.onmessage = function(evt) { bigGraphMessage(evt) };
     websocket.onerror = function(evt) { onError(evt) };
 }
 function onOpen(evt) { writeToScreen("CONNECTED");
@@ -387,7 +385,7 @@ function bigGraphInit(id)
 {
     output = document.getElementById("output");
 
-    //testWebSocket();
+    bigGraphWebSocket();
 
     document.getElementById('graph0').width =  document.getElementById('graph0').parentElement.clientWidth;
     //graph();
@@ -401,7 +399,10 @@ function bigGraphInit(id)
     document.getElementById("min"+id).addEventListener('change',minchange,false);
     document.getElementById("max"+id).addEventListener('change',maxchange,false);
     document.getElementById("selectedtemp"+id).addEventListener('change',selectedchange,false);
-
+    document.getElementById("period"+id).addEventListener('change',newperiod,false);
+    document.getElementById("lastHours"+id).addEventListener('change',newlastHours,false);
+    document.getElementById("save"+id).addEventListener('click',sensorsave,false);
+    document.getElementById("hide"+id).addEventListener('change',hide,false);
     g[id].context = g[id].id.getContext("2d");
 
     for(var prop in sensors){
@@ -485,15 +486,21 @@ function bigGraph(id)
     for(var prop in dp[dp.length-1]){
         c.strokeStyle = "black";
         c.lineWidth = g[0].lineWidth;
-        if (prop.substr(0,4) == 'Temp')
+        if ((prop.substr(0,4) == 'Temp') && (!sensors[prop].g[id].hide ))
         {
            // highlight if selected
             if (prop ==   document.getElementById('selectedtemp'+id).value){
                c.strokeStyle='yellow';
                c.lineWidth=4;
-                document.getElementById('max'+id).value = sensors[prop].g[id].max;
-                document.getElementById('min'+id).value = sensors[prop].g[id].min;
-           }
+            // moved to updatetempvalues
+            //    document.getElementById('max'+id).value = sensors[prop].g[id].max;
+            //    document.getElementById('min'+id).value = sensors[prop].g[id].min;
+            }
+           else
+                if (sensors[prop].g[id].style){
+                    c.strokeStyle = sensors[prop].g[id].style;
+                }
+
 
             c.beginPath();
             for (var i = 0; i < (dp.length) ; ++i)
@@ -556,7 +563,7 @@ var clicky ;
 
 
     document.getElementById('selectedtemp'+id).value=closestTemp;
-
+    updatetempvalues(id);
     var xpos =  ((new Date(dp[i].Time).getTime())-g[id].startTime)/1000;
     var ypos = dp[i][closestTemp];
     bigGraph(id);
@@ -572,19 +579,84 @@ var clicky ;
 
 }
 function selectedcolor(){
-    console.log('adf' + this);
+    sensors[document.getElementById('selectedtemp'+this.dataset.graph).value].g[this.dataset.graph].style = this.value;
+    bigGraph(this.id)
 }
 function maxchange(){
-    //add *1 to force to number instead of string - was messing up calculations
-    sensors[document.getElementById('selectedtemp'+id).value].g[0].max = (this.value*1);
-    resize(0);
+    //add *1 to force to number instead of string - was messing up calcul
+    sensors[document.getElementById('selectedtemp'+this.dataset.graph).value].g[this.dataset.graph].max = (this.value*1);
+    resize(this.id);
 
 }
 function minchange(){
-    sensors[document.getElementById('selectedtemp'+id).value].g[0].min = (this.value*1);
-    resize(0);
+    sensors[document.getElementById('selectedtemp'+this.dataset.graph).value].g[this.dataset.graph].min = (this.value*1);
+    resize(this.id);
 
 }
 function selectedchange(){
-    bigGraph(0);
+    updatetempvalues(this.dataset.graph);
+    bigGraph(this.dataset.graph);
+}
+function newperiod()
+{
+
+    query.packettype='query';
+    query.period = this.value;
+    doSend(JSON.stringify(query ));
+}
+function newlastHours()
+{
+
+    query.packettype='query';
+    query.lastHours = this.value;
+   debugger;
+    doSend(JSON.stringify(query ));
+}
+
+function bigGraphMessage(evt)
+{
+
+    if (evt.data)
+    {
+        var indata = JSON.parse(evt.data);
+    }
+    if (indata.datatype=="query")
+    {
+       dp=indata.data;
+        resize();
+    } //websocket.close();
+}
+function sensorsave(){
+
+    console.log ('Saving sensors')
+    var sendobj = {};
+    sendobj.packettype="Sensor save";
+    sendobj.data = sensors;
+
+        doSend(JSON.stringify(sendobj));
+}
+function hide(){
+    //console.log (this.checked);
+
+    if (  sensors[document.getElementById('selectedtemp'+this.dataset.graph).value].g[this.dataset.graph])
+    {
+        sensors[document.getElementById('selectedtemp'+this.dataset.graph).value].g[this.dataset.graph].hide = this.checked;
+        bigGraph(this.dataset.graph);
+    }
+
+
+
+}
+function updatetempvalues(id){
+  var prop= document.getElementById('selectedtemp'+id).value;
+    document.getElementById("selectedtempcolor"+id).value = sensors[prop].g[id].style;
+
+    document.getElementById("selectedtemp"+id).addEventListener('change',selectedchange,false);
+ //   document.getElementById("period"+id).addEventListener('change',newperiod,false);
+//    document.getElementById("lastHours"+id).addEventListener('change',newlastHours,false);
+
+    document.getElementById("hide"+id).checked = sensors[prop].g[id].hide;
+    document.getElementById('max'+id).value = sensors[prop].g[id].max;
+    document.getElementById('min'+id).value = sensors[prop].g[id].min;
+
 }

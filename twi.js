@@ -20,22 +20,16 @@ exports.websocketDataIn = function(data){
         console.log("parse web data error"+err)
     }
 
-    console.log(webData.packettype);
+   console.log('Packettype '+webData.packettype);
     if (webData.packettype == "Sensor name update"){
         delete webData.packettype;
         for(var prop in webData)
         {
             sensorSettings[prop].name = webData[prop].name;
         }
-
         collectionSettings.update({'type':'sensors'}, sensorSettings ,{upsert:true, w:1},function(err,res){
-
             console.log('Sensors settings name updated:'+res);
-
-
         });
-
-
     }
 
     if (webData.packettype == "Sensor order update"){
@@ -52,7 +46,44 @@ exports.websocketDataIn = function(data){
 
 
     }
+    if (webData.packettype == "query"){
+        console.log('query request');
+        console.log('period:'+webData.period);
 
+        var update = {};
+        x= new Date();
+
+        x=new Date(x-(3600000*webData.lastHours)); // 2 hours age
+        //collectionAvg.find({"Time":{$gt:x}},{_id:0,"Time":0}).sort( { "Time": 1 } ).toArray(function(err,item)
+        collectionAvg.find({"Time":{$gt:x},"period":(webData.period*1)},{_id:0}).sort( { "Time": 1} ).toArray(function(err,resultdata){
+
+            try
+            {
+                update.datatype="query";
+                update.data = resultdata;
+
+                comlib.websocketsend(JSON.stringify(update));
+            }
+            catch(err)
+            {
+                console.log("ws error from incoming query"+err);
+            }
+
+        });
+    }
+    if (webData.packettype == "Sensor save"){
+
+        sensors = webData.data;
+        sensors.type = 'sensors';
+        delete sensors._id;
+
+        collectionSettings.update({'type':'sensors'},sensors,{upsert:true, w:1},function(err,res){
+
+            console.log('Sensor Setting updated'+err+res);
+        });
+
+
+    }
 
 
 };
