@@ -1,6 +1,5 @@
-
-//var wsUri = "ws://witzel.homeserver.com:8080";
-var wsUri = "ws://10.6.1.14:8080";
+var wsUri = "ws://witzel.homeserver.com:8080";
+//var wsUri = "ws://10.6.1.14:8080";
 var output;
 var graph ={};
 var query = {};
