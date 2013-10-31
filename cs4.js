@@ -153,6 +153,15 @@ exports.websocketDataIn = function(dataSocket){
     console.log('added Dout to collection Cue'+res);
     });
 
+    //send the data out to the CS4 I/O
+     var dir = serialDataSocket.OutData[0].Dir;    // ****** needs to ba added to R4-4 Receiver Parsing ****** //
+   // dir = "";
+    var port = serialDataSocket.OutData[0].Port;
+    var showname = serialDataSocket.OutData[0].Showname;
+    var dataToSend = serialDataSocket.OutData[0].Dout;
+
+    var outstring = port + " " + showname + " " + dir + " " + dataToSend;
+    sendOutput(outstring);
 };
 
 

@@ -53,16 +53,15 @@ h1{
     overflow-y: auto;
 }
 
-#goButton{
+#goButton1{
     width:20vw;
     height:10vw;
     background-color: #06b00a;
     font-size:3em;
     font-weight: bolder;
-    float:left;
-   margin: 0 auto;
     border-radius: 10px;
     box-shadow: 3px 3px 3px #333;
+    margin-top: 3px;
 }
 
 #goButton2{
@@ -71,11 +70,22 @@ h1{
     background-color: #06b00a;
     font-size:3em;
     font-weight: bolder;
-    float:left;
-    margin: 0 auto;
     border-radius: 10px;
     box-shadow: 3px 3px 3px #333;
+    margin-top: 3px;
 }
+
+#goButton3{
+    width:20vw;
+    height:10vw;
+    background-color: #06b00a;
+    font-size:3em;
+    font-weight: bolder;
+    border-radius: 10px;
+    box-shadow: 3px 3px 3px #333;
+    margin-top: 3px;
+}
+
 #go1div{
     margin:0 auto;
 }
@@ -93,25 +103,66 @@ h1{
     width: 90%;
     /*   *  margin-left: auto;
        margin-right: auto;*/
-    height: 200px;
+    height: 26%;
     /* float: right;*/
     border: 3px solid #333333;
     padding: 10px;
 
 }
 
-#timing1{
-    margin-top: 20px;
-    width: 400px;
-    background-color: #adffb4;
-}
-
 form#timing1 fieldset {
     color: #ff0000;
 }
 
+#timing1{
+    background-color: #adffb4;
+    margin-left: 40px;
+}
+
 #timing2{
-    margin-top: 20px;
-    width: 400px;
     background-color: #839dff;
+}
+
+#timing3{
+    background-color: #8decff;
+}
+
+
+.timing{
+    margin-top: 20px;
+    width: 30%;
+    height: 26%;
+    margin-left: 20px;
+    float:left;
+}
+
+#bigdiv{
+    height: 26%;
+
+
+}
+
+#legend1{
+    height: 26%;
+}
+
+#fieldsettest{
+    height:26%;
+    width:50%;
+}
+
+#testdiv{
+    height:26%;
+    width:50%;
+}
+
+#buttondiv1{
+    text-align:center;
+}
+#buttondiv2{
+    text-align:center;
+}
+
+#buttondiv3{
+    text-align:center;
 }

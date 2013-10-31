@@ -6,15 +6,21 @@ var counter = 0;
 var lastCueTime;
 var delay;
 var wsUri = "ws://" + window.location.hostname + ":8080";
-
+var cuevalue1;
+var cuevalue2;
+var cuevalue3;
 
 
 window.onload = init;
 function init()
 {
     output = document.getElementById("websocketlog");
-    initScroll();
     testWebSocket();
+    cuevalue1 = document.getElementById("cue1");
+    cuevalue2 = document.getElementById("cue2");
+    cuevalue3 = document.getElementById("cue3");
+
+
 
 }
 
@@ -29,8 +35,8 @@ function testWebSocket()
 
 function onOpen(evt) {
 
-    writeToScreen("CONNECTED");
-    writeToScreen('#{myuri}');
+    writeToScreen("CONNECTED TO CS4");
+
 }
 
 function onClose(evt) {
@@ -52,42 +58,48 @@ function doSend(message) {
 function writeToScreen(message) {
 
     // get time of incoming cue
-    lastCueTime = new Date();
+    if(message.substring(0,1) != ".") //make sure it's an incoming cue
+    {
+        lastCueTime = new Date();
+    }
+
     output.innerHTML = message + "<BR>" + output.innerHTML;
 
 
-
-
-
-    pixelData[canvasStart] = {data : message};
-
     //output.value = message+"<BR>"+output.value;
 }
-function buttonclick(message) {
 
-    websocket.send("I got a que request I better do something");
-    output.innerHTML = "Sent something out the websocket! -  order the sensors from amazon<br> This doesnt send until the button is released<br>"
-        +output.innerHTML;
-// text1.innerHTML = "button pressed " + "again" + text1.innerHTML;
-    // text1.value = 1 + 5 +2;
-    counter = parseInt(text1.value) + 1;
-    if(isNaN(counter))
-    {counter = 100;
+
+function cueclick1(message){
+
+    var counter = parseInt(cuevalue1.value);
+    var showName = document.getElementById('showname1').value.trim();
+    var directory = document.getElementById('directory1').value.trim();
+    var radioButtons = document.getElementsByName('output1');
+    var dataFormat;
+    var dataOut;
+
+    for (var i = 0, length = radioButtons.length; i < length; i++) {
+        if (radioButtons[i].checked) {
+
+           dataFormat = (radioButtons[i].value);
+
+            // get out of loop now that we have value
+            break;
+        }
     }
-    text1.value = counter;
 
+    if(dataFormat == 'r4slides'){
+      dataOut =  "GO slide" + counter +".jpg NEXT slide"+(counter +1) +".jpg";
+    }
+    else if(dataFormat == 'r4audio'){
+      dataOut = "GO audio" + counter + ".mp3";
+    }
+    cuevalue1.value = counter +1; //update the cue count
 
-}
+   delay = (new Date()-lastCueTime);
 
-function cueclick(message){
-    document.getElementById("body").style.backgroundColor =  '#550000';
-    //   counter = parseInt(text1.value) + 1;
-//    if(isNaN(counter))
-//    {counter = 10 ;}
-//    text1.value = counter;
-//    delay = (new Date()-lastCueTime);
-
-//    websocket.send("{\"OutData\": [{\"Delay\": "+delay+" , \"Port\":\"Zig1\", \"Showname\":\"MamaMia\", \"Dir\":\"English\", \"Dout\":\"GO slide" + counter +".jpg NEXT slide"+(counter +1) +".jpg\"}]}");
+   websocket.send("{\"OutData\": [{\"Delay\": "+delay+" , \"Port\":\"Zig1\", \"Showname\":\""+ showName +"\", \"Dir\":\""+ directory +"\", \"Dout\":\"" + dataOut + "\"}]}");
 
 //    textData.value = "{\"OutData\": [{\"Delay\": "+delay+" , \"Port\":\"Zig1\", \"Showname\":\"MamaMia\", \"Dir\":\"English\", \"Dout\":\"GO slide" + counter +".jpg NEXT slide"+(counter +1) +".jpg\"}]}";
 }
