@@ -22,8 +22,8 @@
 
     </div>
 <div id="bigdiv">
-    <div id = timing1 style = 'float:left'>
-        <fieldset>
+    <div id = timing1 class = timing >
+        <fieldset id = "fieldset1">
             <legend>Timing 1</legend>
 
                     Show Name: <input id=showname name=showname type=text value="ShowName" required style = "width: 8em" autofocus>
@@ -37,15 +37,12 @@
 
             <div>
                     Directory:     <input id=directory name=directory type=text value="English" style = "width: 8em" required>
-
-
-
                     Current Cue: <input id=phone name=phone type=tel value=1 required style = "width: 5em">
-                </div>
+            </div>
 
-
-                    <button id = "goButton"  onmousedown = "cueclick()"> GO </button>
-
+            <div id="buttondiv1">
+                    <button id = "goButton1"  onmousedown = "cueclick1()"> GO </button>
+            </div>
 
 
         </fieldset>
@@ -55,9 +52,9 @@
     </div>
 
 
-    <div id = timing2 style = 'float:right'>
+    <div id = timing2 class = timing>
         <fieldset>
-            <legend>Timing 2</legend>
+            <legend id = "legend1">Timing 2</legend>
 
             Show Name: <input id=showname2 name=showname type=text value="ShowName" required style = "width: 8em" autofocus>
 
@@ -70,22 +67,51 @@
 
             <div>
                 Directory:     <input id=directory2 name=directory type=text value="English" style = "width: 8em" required>
-
-
-
                 Current Cue: <input id=phone2 name=phone type=tel value=1 required style = "width: 5em">
             </div>
 
-
-            <button id = "goButton2"  onmousedown = "cueclick()"> GO </button>
-
+            <div id="buttondiv2">
+                 <button id = "goButton2"  onmousedown = "cueclick2()"> GO </button>
+            </div>
 
 
         </fieldset>
-
-
-
     </div>
-    </div>
+
+        <div id = timing3 class = timing>
+            <fieldset>
+                <legend>Timing 3</legend>
+
+                Show Name: <input id=showname3 name=showname type=text value="ShowName" required style = "width: 8em" autofocus>
+
+
+                <div>
+                    Output Type:   R4 Slides <input id=r4slides3 name=output3 value= "r4slides" type=radio checked>
+                    R4 Audio<input id=r4audio3 name=output3 value = "r4audio" type=radio >
+                    Both  <input id=r4both3 name=output3 value= "both" type=radio>
+                </div>
+
+                <div>
+                    Directory:     <input id=directory3 name=directory type=text value="English" style = "width: 8em" required>
+                    Current Cue: <input id=phone3 name=phone type=tel value=1 required style = "width: 5em">
+                </div>
+
+                <div id="buttondiv3" >
+                   <button id = "goButton3"  onmousedown = "cueclick3()"> GO </button>
+                </div>
+
+
+            </fieldset>
+
+
+
+        </div>
+
+
+
+
+ </div>
+
+
 </body>
 </html>
