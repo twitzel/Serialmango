@@ -19,6 +19,12 @@ exports.openSerialPort = function(portname)
 // I dont understand this call 0 but it works
     serialPort.on("open", function (err,res) {
         console.log("Port open success:"+portname);
+        //if CS4 branch then get time from io board
+       if( branch == 'cs4'){
+          serialPort.write("GETTIME\n\r");
+       }
+
+
     });  //it's console.log('open');
 
     serialPort.on('data', function(data) {

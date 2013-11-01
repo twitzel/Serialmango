@@ -224,7 +224,8 @@ exports.socketDataOut = function (data) {
         });
     }
 
-
+if(data.length >= 35) // this is to let GETTIME come through and get logged GETTIME returns a string 34 characters
+{
     lastCueReceived = (JSON.parse(JSON.stringify(serialData))); // store the data here in case of Cue file generation
     //get the internal system time or this event so we and keep track of it
     lastCueReceivedInternalTime = new Date();
@@ -289,6 +290,12 @@ exports.socketDataOut = function (data) {
     {
         comlib.websocketsend(serialData.Time.toISOString() + " " + indata);
     }
+}
+else
+{
+    collectionStartup.insert(serialData, {w: 1}, function (err, result) {
+        console.log(result);
+    });
 
-
+}
 };
