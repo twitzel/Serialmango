@@ -19,9 +19,12 @@
 
 h3{
     color: #0000ff;
+    float: left;
 
-    text-align: center;
-    margin:0;
+
+    margin-left:150px;
+    margin-bottom: 0;
+    margin-top: 0;
 }
 
 h1{
@@ -172,4 +175,5 @@ form#timing1 fieldset {
 
 #title{
     vertical-align: middle;
+    width:80%;
 }
