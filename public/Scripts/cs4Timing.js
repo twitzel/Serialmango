@@ -34,13 +34,18 @@ function testWebSocket()
 }
 
 function onOpen(evt) {
-
+    output.innerHTML = "";
     writeToScreen("CONNECTED TO CS4");
-
+    // change background color on connection
+    var logweb = document.getElementById('websocketlog')
+    logweb.style.backgroundColor = '#ececec';
 }
 
 function onClose(evt) {
     writeToScreen("DISCONNECTED");
+    var logweb = document.getElementById('websocketlog')
+    logweb.style.backgroundColor = '#ff6559';
+    setTimeout(testWebSocket(),1000);
 }
 
 function onMessage(evt)    {

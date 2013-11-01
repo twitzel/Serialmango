@@ -35,7 +35,7 @@ h1{
 .log{
     width: 90%;
     height: 50vh;
-    background-color: #ececec;
+    background-color: #ff6559;
     margin-top: 1px;
     border-radius: 5px;
     /*    border-top-left-radius: 5px;*/
@@ -167,5 +167,9 @@ form#timing1 fieldset {
 }
 
 #buttonClear{
-    float: right;
+    float:right;
+}
+
+#title{
+    vertical-align: middle;
 }
