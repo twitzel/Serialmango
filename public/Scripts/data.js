@@ -1,4 +1,3 @@
-
 //var wsUri = "ws://witzel.homeserver.com:8080";
 var wsUri = "ws://10.6.1.14:8080";
 var output;
@@ -463,6 +462,7 @@ function bigGraph(id)
     var startTime = new Date(dp[0].Time).getTime();
     var xpos = 0;
     var c = g[id].context;
+    var propscaletodraw;
     c.clearRect (0 , 0 , g[id].id.width , g[id].id.height );
    // maybe tempory - draw graph offset borders
     c.strokeStyle = 'grey';
@@ -490,13 +490,14 @@ function bigGraph(id)
         {
            // highlight if selected
             if (prop ==   document.getElementById('selectedtemp'+id).value){
-               c.strokeStyle='yellow';
-               c.lineWidth=4;
+             //  c.strokeStyle='yellow';
+               propscaletodraw = prop;
+                c.lineWidth=6;
             // moved to updatetempvalues
             //    document.getElementById('max'+id).value = sensors[prop].g[id].max;
             //    document.getElementById('min'+id).value = sensors[prop].g[id].min;
             }
-           else
+
                 if (sensors[prop].g[id].style){
                     c.strokeStyle = sensors[prop].g[id].style;
                 }
@@ -510,6 +511,16 @@ function bigGraph(id)
             }
             c.stroke();
         }
+       if(sensors[propscaletodraw]){
+        c.fillStyle = "green";
+      for (var i = sensors[propscaletodraw].g[id].min ; i <= sensors[propscaletodraw].g[id].max; ++i){
+
+          c.fillText(i,10,sy(i,id,propscaletodraw));
+      }
+
+       }
+
+
 
     }
 
@@ -545,11 +556,12 @@ var clicky ;
            i--;
        }
 // now find the closest plot - this will have to change to check only the visible plots
+    // add visible only plot check
     var difference = 9999;
     var closestTemp = '';
     for(var prop in dp[dp.length-1]){
-
-        if (prop.substr(0,4) == 'Temp'){
+        if ((prop.substr(0,4) == 'Temp') && (!sensors[prop].g[id].hide ))
+     {
             clicky = ((g[id].bottom-event.offsetY)/sensors[prop].g[id].yScale)+sensors[prop].g[id].min;
             console.log('Temperate clicked'+clicky+'for '+prop);
             if (Math.abs(dp[i][prop]-clicky)< difference){
@@ -580,18 +592,31 @@ var clicky ;
 }
 function selectedcolor(){
     sensors[document.getElementById('selectedtemp'+this.dataset.graph).value].g[this.dataset.graph].style = this.value;
-    bigGraph(this.id)
+    resize(this.id);
 }
 function maxchange(){
     //add *1 to force to number instead of string - was messing up calcul
-    sensors[document.getElementById('selectedtemp'+this.dataset.graph).value].g[this.dataset.graph].max = (this.value*1);
+    // changed to scale all the sensors
+    //sensors[document.getElementById('selectedtemp'+this.dataset.graph).value].g[this.dataset.graph].max = (this.value*1);
+    for(var prop in sensors){
+
+        if (prop.substr(0,4) == 'Temp'){
+    sensors[prop].g[this.dataset.graph].max = (this.value*1);
+        }
+    }
     resize(this.id);
 
 }
 function minchange(){
-    sensors[document.getElementById('selectedtemp'+this.dataset.graph).value].g[this.dataset.graph].min = (this.value*1);
-    resize(this.id);
+  //  sensors[document.getElementById('selectedtemp'+this.dataset.graph).value].g[this.dataset.graph].min = (this.value*1);
 
+    for(var prop in sensors){
+
+        if (prop.substr(0,4) == 'Temp'){
+            sensors[prop].g[this.dataset.graph].min = (this.value*1);
+        }
+    }
+    resize(this.id);
 }
 function selectedchange(){
     updatetempvalues(this.dataset.graph);
@@ -609,7 +634,7 @@ function newlastHours()
 
     query.packettype='query';
     query.lastHours = this.value;
-   debugger;
+
     doSend(JSON.stringify(query ));
 }
 
