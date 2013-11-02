@@ -17,7 +17,7 @@ var comlib = require('./comlib');
 var lastCueReceived = {"Time" : "10/09/13 15:20:04.20", "Source" : "Midi1", "InData" : "F0 7F 05 02 01 01 31 2E 30 30 F7 "};
 var serialDataSocket;
 var lastCueReceivedInternalTime;
-var lastCueReceivedExternalTime;
+var lastCueReceivedExternalTime = new Date();
 
 
 
@@ -130,6 +130,10 @@ exports.setup = function()
     app.get('/data2', routes.data2);
     app.get('/data3', routes.data3);
     app.get('/cs4Start', routes.cs4Start);
+    app.get('/cs4Home', routes.cs4Home);
+    app.get('/cs4Timing', routes.cs4Timing);
+
+
 };
 
 

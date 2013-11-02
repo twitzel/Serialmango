@@ -74,3 +74,11 @@ exports.data2 = function(req, res){
 exports.cs4Start = function(req, res){
    res.render('CS4Start.ejs',{ title: 'CS-4 Output Data tester', dummy:[{test: global.myuri, test1:"string1" },{test: global.myuri, test1:"string2" },{test: global.myuri, test1:"string3" }]});
 };
+
+exports.cs4Home = function(req, res){
+    res.render('cs4Home.ejs',{ title: 'CS-4 Home', myuri:"ws://localhost:8080" });
+};
+
+exports.cs4Timing = function(req, res){
+    res.render('cs4Timing.ejs',{ title: 'CS-4 Timing', myuri:"ws://localhost:8080" });
+};

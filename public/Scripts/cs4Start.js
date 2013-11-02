@@ -28,8 +28,8 @@ function testWebSocket()
 function onOpen(evt) {
 
     writeToScreen("CONNECTED");
-    var testx = JSON.parse(test)  ;
-    writeToScreen(testx[1].test1);
+    var testx = test  ;
+    writeToScreen(testx[2].test1);
 }
 
 function onClose(evt) {
