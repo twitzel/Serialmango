@@ -72,5 +72,5 @@ exports.data2 = function(req, res){
 };
 
 exports.cs4Start = function(req, res){
-   res.render('CS4Start.ejs',{ title: 'CS-4 Output Data tester', dummy:{test: global.myuri, test1:"string" }});
+   res.render('CS4Start.ejs',{ title: 'CS-4 Output Data tester', dummy:[{test: global.myuri, test1:"string1" },{test: global.myuri, test1:"string2" },{test: global.myuri, test1:"string3" }]});
 };

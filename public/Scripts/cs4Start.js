@@ -29,7 +29,7 @@ function onOpen(evt) {
 
     writeToScreen("CONNECTED");
     var testx = JSON.parse(test)  ;
-    writeToScreen(testx.test);
+    writeToScreen(testx[1].test1);
 }
 
 function onClose(evt) {
