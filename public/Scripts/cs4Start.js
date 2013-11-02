@@ -5,7 +5,7 @@ var lastCueTime;
 var delay;
 var wsUri = "ws://" + window.location.hostname + ":8080";
 
-var title =
+
 
 window.onload = init;
 function init()
@@ -13,8 +13,7 @@ function init()
     output = document.getElementById("websocketlog");
     initScroll();
     testWebSocket();
-    var sensors ='<%=title %>';
-   var deta = sensors;
+
 }
 
 function testWebSocket()
@@ -29,7 +28,8 @@ function testWebSocket()
 function onOpen(evt) {
 
     writeToScreen("CONNECTED");
-    writeToScreen('#{myuri}');
+    var testx = JSON.parse(test)  ;
+    writeToScreen(testx.test);
 }
 
 function onClose(evt) {

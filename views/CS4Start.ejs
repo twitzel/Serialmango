@@ -4,9 +4,13 @@
 
     <title>CS-4 Start Page</title>
     <h1> <center>Welcome to the CS-4 System</center></h1>
+   <script>
+      // var test = <%-title%>;
+       var test = '<%-JSON.stringify(dummy) %>';
+   </script>
 
 
-
+    <h2><center><%=title%></center>  </h2>
     <div id="scrollCanvas">
 
         <canvas id="myCanvas" width="800px" height="200px"></canvas>
@@ -16,6 +20,8 @@
 
     <script  src="/Scripts/cs4Start.js">  </script>
     <script  src="/Scripts/cs4Scroll.js"> </script>
+
+
 
     <style>
             /*  NOTE:  . = id;   # = class  */

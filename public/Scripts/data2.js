@@ -23,7 +23,7 @@ function testWebSocket()
 function onOpen(evt) {
 
     writeToScreen("CONNECTED");
-    writeToScreen('#{myuri}');
+   // writeToScreen(!{myuri});
 }
 
 function onClose(evt) {
