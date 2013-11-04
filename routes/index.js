@@ -73,9 +73,48 @@ exports.data2 = function(req, res){
 
 exports.cs4Start = function(req, res){
     var startup;
-    collectionStartup.find().sort({"id": -1}).toArray(function(error,startup){});
-   res.render('CS4Start.ejs',{ title: 'CS-4 Output Data tester', data: startup, dummy:[{test: global.myuri, test1:"string1" },{test: global.myuri, test1:"string2" },{test: global.myuri, test1:"string3" }]});
+    collectionStartup.find().sort({"Time": -1}).toArray(function(error,startup){
+
+        collectionCue.count(function(error,countCue){
+
+            collectionLog.count(function(error,countLog){
+
+                collectionStartup.count(function(error,countStartup){
+
+                    res.render('CS4Start.ejs',{ title: 'CS-4 Output Data tester', countCue:countCue, countLog:countLog, countStartup:countStartup });
+
+                });
+
+            });
+
+        });
+
+    });
+
+  };
+
+exports.cs4Info = function(req, res){
+    var startup;
+    collectionStartup.find().sort({"Time": -1}).toArray(function(error,startup){
+
+        collectionCue.count(function(error,countCue){
+
+            collectionLog.count(function(error,countLog){
+
+                collectionStartup.count(function(error,countStartup){
+
+                    res.render('CS4Start.ejs',{ title: 'CS-4 Output Data tester', countCue:countCue, countLog:countLog, countStartup:countStartup });
+
+                });
+
+            });
+
+        });
+
+    });
+
 };
+
 
 exports.cs4Home = function(req, res){
     res.render('cs4Home.ejs',{ title: 'CS-4 Home', myuri:"ws://localhost:8080" });
