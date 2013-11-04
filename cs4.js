@@ -103,6 +103,7 @@ exports.setup = function()
             global.collectionLog = db.collection('log');
             global.collectionCue = db.collection('cue');
             global.collectionStartup = db.collection('startup');
+            collectionCue.ensureIndex({InData:1},function (err,res){});
         }
     });
 
