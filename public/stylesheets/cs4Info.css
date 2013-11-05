@@ -20,3 +20,19 @@
 #titles{
     float:left;
 }
+
+#countcue{
+    margin-top:15px;
+    margin-left: 10px;
+    width: 15em;
+    height:2.5em;
+    float:left;
+    border: 2px solid #333333;
+    overflow-y: auto;
+    padding-left: 1em;
+    background-color: #ececec;
+
+    border-radius: 5px;
+    box-shadow: 3px 3px 3px #333;
+
+}
