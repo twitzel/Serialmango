@@ -95,7 +95,7 @@ exports.cs4Start = function(req, res){
 
 exports.cs4Info = function(req, res){
     var startup;
-    collectionStartup.find().sort({"Time": -1}).toArray(function(error,startup){
+    collectionStartup.find().sort({"Time": -1}).limit(25).toArray(function(error,startup){
 
         collectionCue.count(function(error,countCue){
 
@@ -103,7 +103,7 @@ exports.cs4Info = function(req, res){
 
                 collectionStartup.count(function(error,countStartup){
 
-                    res.render('CS4Start.ejs',{ title: 'CS-4 Output Data tester', countCue:countCue, countLog:countLog, countStartup:countStartup });
+                    res.render('CS4Info.ejs',{ title: 'CS-4 Info', startup:startup, countCue:countCue, countLog:countLog, countStartup:countStartup });
 
                 });
 

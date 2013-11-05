@@ -7,26 +7,9 @@ function init(){
     wsUri = "ws://" + window.location.hostname + ":8080";
     output = document.getElementById("websocketlog");
     //    context.canvas.width  = window.innerWidth;
-    canvas = document.getElementById('myCanvas');
-    context = canvas.getContext('2d');
 
-    canvasWidth = canvas.width;
-    canvasStart = canvasWidth*.8;
-    canvasHeight = canvas.height;
-    pixelData = new Array(); //time: ,line: , data,
-    numberLoops = 0;
-    ticIncrement = 10; // this gives a time increment of 1 ms per pixel //
-    lineStart = 180; // bottom of tic line
 
-     //setup origional time marks and time in the array
-    for(var i = 0; i  <=canvasStart; i+=ticIncrement){
-        if(i%50 == 0){
-            pixelData[i] = {line : 40};
-        }
-        else{
-            pixelData[i] = {line : 20};
-        }
-    }
+
     testWebSocket();
     setInterval(function(){movedata()},30);
 }

@@ -133,7 +133,7 @@ exports.setup = function()
     app.get('/cs4Start', routes.cs4Start);
     app.get('/cs4Home', routes.cs4Home);
     app.get('/cs4Timing', routes.cs4Timing);
-
+    app.get('/cs4Info', routes.cs4Info);
 
 };
 
