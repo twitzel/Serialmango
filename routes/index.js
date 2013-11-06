@@ -103,7 +103,7 @@ exports.cs4Info = function(req, res){
 
                 collectionStartup.count(function(error,countStartup){
 
-                    res.render('CS4Info.ejs',{ title: 'CS-4 Info', startup:startup, countCue:countCue, countLog:countLog, countStartup:countStartup });
+                    res.render('cs4Info.ejs',{ title: 'CS-4 Info', startup:startup, countCue:countCue, countLog:countLog, countStartup:countStartup });
 
                 });
 
