@@ -97,7 +97,7 @@ exports.cs4Info = function(req, res){
     var startup;
     collectionStartup.find().sort({"Time": -1}).limit(25).toArray(function(error,startup){
 
-        collectionCue.find({OutData.length: {$gt:0}} ).toArray(function(error,countCue){
+        collectionCue.find({OutData:{Delay:{$gt:0}}} ).toArray(function(error,countCue){
 
             collectionLog.count(function(error,countLog){
 
