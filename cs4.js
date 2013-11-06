@@ -159,11 +159,11 @@ exports.websocketDataIn = function(dataSocket){
     });
 
     //send the data out to the CS4 I/O
-     var dir = serialDataSocket.OutData[0].Dir;    // ****** needs to ba added to R4-4 Receiver Parsing ****** //
+     var dir = serialDataSocket.OutData.Dir;    // ****** needs to ba added to R4-4 Receiver Parsing ****** //
    // dir = "";
-    var port = serialDataSocket.OutData[0].Port;
-    var showname = serialDataSocket.OutData[0].Showname;
-    var dataToSend = serialDataSocket.OutData[0].Dout;
+    var port = serialDataSocket.OutData.Port;
+    var showname = serialDataSocket.OutData.Showname;
+    var dataToSend = serialDataSocket.OutData.Dout;
 
     var outstring = port + " " + showname + " " + dir + " " + dataToSend;
     sendOutput(outstring);
@@ -216,13 +216,13 @@ exports.socketDataOut = function (data) {
                {
                    // dir = item[0].OutData[i][0].Dir;    // ****** needs to ba added to R4-4 Receiver Parsing ****** //
                     dir = "";
-                    port = item[0].OutData[i][0].Port;
-                    showname = item[0].OutData[i][0].Showname;
-                    dataToSend = item[0].OutData[i][0].Dout;
-                    delay = item[0].OutData[i][0].Delay;
+                    port = item[0].OutData[i].Port;
+                    showname = item[0].OutData[i].Showname;
+                    dataToSend = item[0].OutData[i].Dout;
+                    delay = item[0].OutData[i].Delay;
                     outstring = port + " " + showname + " " + dir + " " + dataToSend;
                     setTimeout(sendOutput, delay, outstring);
-                    console.log(item[0].OutData[i][0].Dout + "  Delay "+item[0].OutData[i][0].Delay);
+                    console.log(item[0].OutData[i].Dout + "  Delay "+item[0].OutData[i].Delay);
                 }
 
             }
