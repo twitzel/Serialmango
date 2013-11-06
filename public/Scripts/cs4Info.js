@@ -5,6 +5,7 @@ window.onload = init;
 function init()
 {
     outputStartup = document.getElementById("startup");
+    outputCountstartup = document.getElementById("countstartup");
     outputCountcue = document.getElementById("countcue");
     outputCountlog = document.getElementById("countlog");
     outputTitles = document.getElementById("titles");
@@ -18,7 +19,7 @@ function init()
         outputStartup.innerHTML = outputStartup.innerHTML +"<BR>" + (parseInt(i)+1) + ".  " +new Date(startup[i].Time).toString().substr(0,25) ;
     }
 
-    outputStartup.innerHTML =   outputStartup.innerHTML + "<BR>" +"Number of Startups:" + "<BR>" + countStartup;
+    outputCountstartup.innerHTML =  "Number of Startups:" + "<BR>" + countStartup;
 
     outputCountcue.innerHTML = "Number of Cues:" + "<BR>" + countCue;
    outputCountlog.innerHTML = "Number of Entries in Log File:" + "<BR>" + countLog;
