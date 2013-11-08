@@ -1,8 +1,8 @@
 body{
     color:#000305;
     font-size: 87.5%;
-    font-family: Arial,"Lucida Sans Unicode";
-    line-height:1.5;
+    font-family: Veranda, Arial, "Lucida Sans Unicode" Arial, "Lucida Sans Unicode";
+    line-height:1;
     text-align: left;
 }
 
@@ -28,7 +28,7 @@ body{
 .mainheader nav ul li{
     float:left;
     display:inline;
-
+    font-size: 125%;
 }
 .mainheader nav a:link,  .mainheader nav a:visited{
     color: #fff;
@@ -38,8 +38,14 @@ body{
     text-decoration: none;
 }
 
-.mainheader nav a:hover, .mainheader nav a:active,
-.mainheader nav .active a:link, .mainheader nav .active a:visited{
+.mainheader nav .active a:visited{
+    background-color: #464646;
+    text-shadow: none;
+}
+
+.mainheader nav a:hover, .mainheader nav .active a:link,
+.mainheader nav a:active
+{
     background-color: #cf5c3f;
     text-shadow: none;
 }
