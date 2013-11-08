@@ -10,7 +10,7 @@ function init()
     outputCountlog = document.getElementById("countlog");
     outputTitles = document.getElementById("titles");
 
-    outputTitles.innerHTML = "System:" ;
+    outputTitles.innerHTML = "System Last Restarted:" ;
 
 
     outputStartup.innerHTML =  "1.  " + new Date(startup[0].Time).toString().substr(0,25); // this to eliminate blank line at top

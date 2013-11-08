@@ -1,11 +1,27 @@
 
+#maindiv{
 
+    float: left;
+}
 
 #titles{
     float:left;
-    width:90%
+    width:90%;
+    margin-left: 30px;
+    margin-top:4%;
+    margin-bottom: 0;
+    font-weight: bold;
+    font-size: 120%;
+}
+#startup,{
+
+    margin-top: .2%;
+
 }
 
+#countlog, #countcue, #countstartup{
+
+}
 
 .info{
     text-align: center;
@@ -23,10 +39,25 @@
     box-shadow: 3px 3px 3px #333;
 }
 
+.infostart{
+    text-align: center;
+    margin-top:15px;
+    margin-left: 10px;
+    width: 16em;
+    height:12.5em;
+    float:left;
+    border: 2px solid #333333;
+    overflow-y: auto;
+    padding-left: 1em;
+    background-color: #ececec;
+
+    border-radius: 5px;
+    box-shadow: 3px 3px 3px #333;
+}
 .body h1{
     font-family: Verdana;
     font-weight:bold;
-    font-size: 275%;
+    font-size: 250%;
     margin:2% 0;
     height:auto;
 
