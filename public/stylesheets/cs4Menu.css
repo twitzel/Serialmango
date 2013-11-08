@@ -18,6 +18,7 @@ body{
     background-color: #666;
     height: 40px;
     border-radius: 5px;
+    margin-top: 2%;
 }
 
 .mainheader nav ul{
@@ -39,7 +40,7 @@ body{
 }
 
 .mainheader nav .active a:visited{
-    background-color: #464646;
+    background-color: #303030;
     text-shadow: none;
 }
 
