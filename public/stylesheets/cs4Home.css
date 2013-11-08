@@ -17,7 +17,12 @@
     text-align: center;
 }
 
+.body h1{
+    margin: 1%;
+    height:auto;
+    text-shadow: 3px 1px #c6c6c6;
 
+}
 
 
 #body{

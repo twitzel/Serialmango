@@ -27,9 +27,6 @@ h3{
     margin-top: 0;
 }
 
-h1{
-    text-align: center;
-}
 
 
 #body{
@@ -176,4 +173,11 @@ form#timing1 fieldset {
 #title{
     vertical-align: middle;
     width:80%;
+}
+
+.body h1{
+    margin: 1%;
+    height:auto;
+    text-shadow: 1px 2px #c6c6c6;
+
 }
