@@ -43,8 +43,9 @@
     text-align: center;
     margin-top:15px;
     margin-left: 10px;
-    width: 16em;
-    height:12.5em;
+    margin-bottom: 4px;
+    width: 16.2em;
+    height:13em;
     float:left;
     border: 2px solid #333333;
     overflow-y: auto;
