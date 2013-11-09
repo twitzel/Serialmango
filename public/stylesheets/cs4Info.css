@@ -25,7 +25,7 @@
 
 .info{
     text-align: center;
-    margin-top:15px;
+    margin-top:5px;
     margin-left: 10px;
     width: 15em;
     height:2.5em;
@@ -41,11 +41,11 @@
 
 .infostart{
     text-align: center;
-    margin-top:15px;
-    margin-left: 10px;
+    margin-top:5px;
+    margin-left:0px;
     margin-bottom: 4px;
     width: 16.2em;
-    height:13em;
+    height:26em;
     float:left;
     border: 2px solid #333333;
     overflow-y: auto;

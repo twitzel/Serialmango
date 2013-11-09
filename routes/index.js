@@ -108,11 +108,12 @@ exports.cs4Info = function(req, res){
                 counter += countCue[i].OutData.length
             }
 
+
             collectionLog.count(function(error,countLog){
 
                 collectionStartup.count(function(error,countStartup){
 
-                    res.render('cs4Info.ejs',{ title: 'CS-4 Info', startup:startup, countCue:counter, countLog:countLog, countStartup:countStartup });
+                    res.render('cs4Info.ejs',{ title: 'CS-4 Info', startup:startup, countCue:counter, countLog:countLog, countStartup:countStartup, curTime: new Date() });
 
                 });
 
