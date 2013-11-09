@@ -316,16 +316,18 @@ function updateAvgPeriod(period)
                     {
                         if (sensorSettings[max])
                         {
-                            if (sensorSettings[max].order > maxorder)
+                            if ((sensorSettings[max].order*1) > maxorder)
                             {
 
-                                maxorder = sensorSettings[max].order;
+                                maxorder = (sensorSettings[max].order*1);
                             }
 
                         }
 
 
                     }
+                    // added all the *1 to stop it from addind sensors with an order of 91 or 911
+
                     sensorSettings[prop].name = prop;
                     sensorSettings[prop].order = (maxorder*1)+1 ;
                     console.log("Found new sensor:"+prop);
