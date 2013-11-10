@@ -40,9 +40,10 @@
 }
 
 .infostart{
-    text-align: center;
+
+    text-align: left;
     margin-top:5px;
-    margin-left:0px;
+    margin-left:5px;
     margin-bottom: 4px;
     width: 16.2em;
     height:26.5em;
