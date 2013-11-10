@@ -98,8 +98,9 @@ exports.cs4Start = function(req, res){
   };
 
 exports.cs4Info = function(req, res){
-    var startup;
-    collectionStartup.find().sort({"Time": -1}).limit(25).toArray(function(error,startup){
+    var startup=0;
+    var counter=0;
+    collectionStartup.find().sort({"Time": -11}).limit(25).toArray(function(error,startup){
 
         collectionCue.find().toArray(function(error,countCue){
             var counter = 0;
