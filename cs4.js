@@ -106,7 +106,7 @@ exports.setup = function()
             global.collectionStartup = db.collection('startup');
             collectionCue.ensureIndex({InData:1},function (err,res){});
 
- /*           // MOVED HERE = open serial port after mongo is running
+            // MOVED HERE = open serial port after mongo is running
 
             //now lets find out if we are on a windows system
             // if we are open the required com port
@@ -120,7 +120,7 @@ exports.setup = function()
             {
                 comlib.openSerialPort("/dev/ttyUSB0"); //not windows - Raspberry PI
             }
-*/
+
 
 
 
@@ -129,7 +129,7 @@ exports.setup = function()
         }
     });
 
-    // MOVED FORM HERE = open serial port after mongo is running
+/*    // MOVED FORM HERE = open serial port after mongo is running
 
     //now lets find out if we are on a windows system
     // if we are open the required com port
@@ -143,7 +143,7 @@ exports.setup = function()
     {
         comlib.openSerialPort("/dev/ttyUSB0"); //not windows - Raspberry PI
     }
-
+*/
 
     //set up all routes HERE
     //set up all routes HERE
