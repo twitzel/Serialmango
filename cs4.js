@@ -173,15 +173,17 @@ exports.websocketDataIn = function(dataSocket){
     if(dataSocket.substr(0,3) == "CMD")
     {
         var datain;
-        if(dataSocket.substr(0,5) == "CMD TZ")//if timezone command
+        if(dataSocket.substr(0,6) == "CMD TZ")//if timezone command
         {
             datain = dataSocket.substr(7);
             time.tzset(dataSocket.substr(7)); // tz string from client: CMD TZ US/Pacific
         }
         else
         {
+            //set the clock on the CS4 I/O board
             datain = dataSocket.substr(4);
-            comlib.write(dataSocket.substr(4));
+            datain = SetCS4Time(datain);
+            comlib.write(datain);
         }
 
     }
@@ -351,3 +353,26 @@ else
 
 }
 };
+
+function SetCS4Time(curTime)
+{
+    var uptime=0;
+    var seconds = 0;
+    var minutes = 0;
+    var hours = 0;
+    var days = 0;
+    var month = 0;
+    var year = 0;
+    var timeZoneOffset = 0;
+    curTime = new Date(curTime);
+    timeZoneOffset = curTime.getTimezoneOffset();
+    year = curTime.getFullYear().toString();
+    month = parseInt(curTime.getMonth()) + 1; // months start with 1 in the timer chip
+    day = curTime.getDate();
+    hours = curTime.getHours();
+    minutes = curTime.getMinutes();
+    seconds = curTime.getSeconds();
+    return "SETTIME " + seconds + " " + minutes + " " + hours + " " + day + " " + month + " " + year.substr(2) + "\n\r";
+    //  sendData("SETTIME " + textBoxSecond.Text + " " + textBoxMinute.Text + " " + textBoxHour.Text + " " + textBoxDay.Text + " " + textBoxMonth.Text + " " + textBoxYear.Text);
+}
+
