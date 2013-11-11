@@ -176,7 +176,7 @@ exports.websocketDataIn = function(dataSocket){
         if(dataSocket.substr(0,6) == "CMD TZ")//if timezone command
         {
             datain = dataSocket.substr(7);
-            time.tzset("\"" + dataSocket.substr(7)+ "\""); // tz string from client: CMD TZ US/Pacific
+            time.tzset(dataSocket.substr(7)); // tz string from client: CMD TZ US/Pacific
         }
         else
         {
