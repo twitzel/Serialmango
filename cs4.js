@@ -105,8 +105,31 @@ exports.setup = function()
             global.collectionCue = db.collection('cue');
             global.collectionStartup = db.collection('startup');
             collectionCue.ensureIndex({InData:1},function (err,res){});
+
+            // MOVED HERE = open serial port after mongo is running
+
+            //now lets find out if we are on a windows system
+            // if we are open the required com port
+            //if not open the pi port
+            console.log("Host System Name: " + os.type());
+            if(os.type() == 'Windows_NT')
+            {
+                comlib.openSerialPort('com19'); //windows
+            }
+            else
+            {
+                comlib.openSerialPort("/dev/ttyUSB0"); //not windows - Raspberry PI
+            }
+
+
+
+
+
+
         }
     });
+
+/*    // MOVED FORM HERE = open serial port after mongo is running
 
     //now lets find out if we are on a windows system
     // if we are open the required com port
@@ -120,6 +143,7 @@ exports.setup = function()
     {
         comlib.openSerialPort("/dev/ttyUSB0"); //not windows - Raspberry PI
     }
+*/
 
     //set up all routes HERE
     //set up all routes HERE
@@ -148,8 +172,18 @@ exports.setup = function()
 exports.websocketDataIn = function(dataSocket){
     if(dataSocket.substr(0,3) == "CMD")
     {
-        var datain = dataSocket.substr(4);
-        comlib.write(dataSocket.substr(4));
+        var datain;
+        if(dataSocket.substr(0,5) == "CMD TZ")//if timezone command
+        {
+            datain = dataSocket.substr(7);
+            time.tzset(dataSocket.substr(7)); // tz string from client: CMD TZ US/Pacific
+        }
+        else
+        {
+            datain = dataSocket.substr(4);
+            comlib.write(dataSocket.substr(4));
+        }
+
     }
     else
     {
