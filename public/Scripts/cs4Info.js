@@ -8,8 +8,6 @@ function init()
 {
     testWebSocket();
 
-
-
     outputStartup = document.getElementById("startup");
     outputCountstartup = document.getElementById("countstartup");
     outputCountcue = document.getElementById("countcue");
@@ -20,7 +18,7 @@ function init()
     UpTime(); //get uptime and update it every second
 
     outputStartup.innerHTML =  "1.  " + new Date(startup[0].Time).toString().substr(0,25); // this to eliminate blank line at top
-    outputStartup.innerHTML = "Last 25 Restarts:".bold() + "<br>" + outputStartup.innerHTML;
+    outputStartup.innerHTML = "   Last 25 Restarts:".bold() + "<br>" + outputStartup.innerHTML;
     for(var i = 1; i < startup.length; i++)
     {
         outputStartup.innerHTML = outputStartup.innerHTML +"<BR>" + (parseInt(i)+1) + ".  " +new Date(startup[i].Time).toString().substr(0,25) ;
@@ -45,13 +43,9 @@ function testWebSocket()
 }
 
 function onOpen(evt) {
-  //  output.innerHTML = "";
-  //  writeToScreen("CONNECTED TO CS4");
-    // change background color on connection
-  //  var logweb = document.getElementById('websocketlog')
- //   logweb.innerHTML = "CONNECTED";
-  //  logweb.style.backgroundColor = '#ececec';
-    var send = SetCS4Time();
+
+    //var send = SetCS4Time();
+    var send = new Date();
     websocket.send("CMD " + send); // SET the CS4 I/O clock to current browser time - ignores time zone offset
 }
 

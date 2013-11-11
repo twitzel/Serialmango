@@ -11,6 +11,7 @@ var os = require('os');
 var express = require('express');
 var routes = require('./routes');
 var user = require('./routes/user');
+var time = require('time');
 var timedOutInterval = 200; //time to wait between serial transmitts
 var timedOut = true; // set to false will delay transmission;
 var comlib = require('./comlib');
@@ -134,6 +135,11 @@ exports.setup = function()
     app.get('/cs4Home', routes.cs4Home);
     app.get('/cs4Timing', routes.cs4Timing);
     app.get('/cs4Info', routes.cs4Info);
+
+    //set timezone of pi
+   // time.tzset('US/Pacific');
+    time.tzset('US/Eastern');
+
 
 };
 
