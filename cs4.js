@@ -138,7 +138,7 @@ exports.setup = function()
 
     //set timezone of pi
    // time.tzset('US/Pacific');
-    time.tzset('America/New_York');
+    time.tzset('US/Pacific');
 
 
 };
