@@ -175,9 +175,10 @@ exports.websocketDataIn = function(dataSocket){
         var datain;
         if(dataSocket.substr(0,6) == "CMD TZ")//if timezone command
         {
-            dastain = dataSocket.substr(7)
-            time.tzset(dastain); // tz string from client: CMD TZ US/Pacific
-            collectionStartup.update({'TimeZoneSet':dastain}, {$set: dastain},{upsert:true, w:1},function(err,res){
+            datain = dataSocket.substr(7)
+            time.tzset(datain); // tz string from client: CMD TZ US/Pacific
+          //  collectionStartup.update({'TimeZoneChanged':'Yes'}, {$set:{'TimeZoneSet' : datain}},{upsert:true, w:1},function(err,res){
+                collectionStartup.update({'TimeZoneSet':{$exists:true}}, {$set:{'TimeZoneSet' : datain}},{upsert:true, w:1},function(err,res){
 
                 console.log('Time Zone Updated'+res);
 
