@@ -1,9 +1,10 @@
 #title{
+    display: inline;
     text-align: center;
 }
 
 #wrapper{
-
+    display: inline;
     width: 96%;
 }
 
@@ -18,11 +19,14 @@
 }
 
 .body h1{
-    margin: 1%;
+font-family: Verdana;
+    font-weight:bold;
+    font-size: 220%;
+    margin:2% 0;
     height:auto;
-    text-shadow: 3px 1px #c6c6c6;
-
+    color: #666;
 }
+
 
 
 #body{
@@ -77,4 +81,5 @@
     padding: 10px;
 
 }
+
 

@@ -143,3 +143,7 @@ exports.cs4Home = function(req, res){
 exports.cs4Timing = function(req, res){
     res.render('cs4Timing.ejs',{ title: 'CS-4 Timing', myuri:"ws://localhost:8080" });
 };
+
+exports.cs4VerticalScroll = function(req, res){
+    res.render('cs4VerticalScroll.ejs',{ title: 'CS-4 Scroll', myuri:"ws://localhost:8080" });
+};

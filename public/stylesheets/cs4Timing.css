@@ -1,4 +1,5 @@
 #title{
+    display: inline;
     text-align: center;
 }
 
@@ -176,8 +177,14 @@ form#timing1 fieldset {
 }
 
 .body h1{
-    margin: 1%;
+    font-family: Verdana;
+    font-weight:bold;
+    font-size: 220%;
+    margin:2% 0;
     height:auto;
-    text-shadow: 1px 2px #c6c6c6;
+    color: #666;
+}
 
+#buttonClear{
+    vertical-align: middle;
 }

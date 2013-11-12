@@ -167,6 +167,7 @@ exports.setup = function()
     app.get('/cs4Home', routes.cs4Home);
     app.get('/cs4Timing', routes.cs4Timing);
     app.get('/cs4Info', routes.cs4Info);
+    app.get('/cs4VerticalScroll', routes.cs4VerticalScroll);
 
     //set timezone of pi
    // time.tzset('US/Pacific');

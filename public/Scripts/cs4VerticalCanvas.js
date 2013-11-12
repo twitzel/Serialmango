@@ -63,7 +63,7 @@ function writeToScreen(message) {
     // get time of incoming cue
     lastCueTime = new Date();
 ////    output.innerHTML = message + "<BR>" + output.innerHTML;
-////    pixelData[canvasStart] = {data : message};
+    pixelData[canvasStart] = {data : message};
 
     //output.value = message+"<BR>"+output.value;
 }
@@ -89,14 +89,28 @@ function movedata(){
                 context.moveTo(lineStart, i);
                 context.lineTo(lineStart -pixelData[i].line, i );
             }
-            if(pixelData[i].line==25){
+            else if(pixelData[i].line==25){
 
                 context.moveTo(lineStart+7, i);
                 context.lineTo(lineStart+7 -pixelData[i].line, i );
             }
-            if(pixelData[i].time) {
+            else if(pixelData[i].time) {
                 context.fillStyle = "red";
                 context.fillText(pixelData[i].time,lineStart-25, i+3)
+
+            }
+            else if(pixelData[i].data){
+
+                if(pixelData[i].data.substring(0,1) == ".")
+                {
+                    context.fillStyle = "blue";
+                    context.fillText(pixelData[i].data.substr(56),lineStart+25, i)
+                }
+                else
+                {
+                    context.fillStyle = "black";
+                    context.fillText(pixelData[i].data.substr(25),lineStart-350, i)
+                }
 
             }
         }
