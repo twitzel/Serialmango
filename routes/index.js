@@ -100,7 +100,7 @@ exports.cs4Start = function(req, res){
 exports.cs4Info = function(req, res){
     var startup=0;
     var counter=0;
-    collectionStartup.find().sort({"Time": -11}).limit(25).toArray(function(error,startup){
+    collectionStartup.find({'Time':{$exists:true}}).sort({"Time": -1}).limit(25).toArray(function(error,startup){
 
         collectionCue.find().toArray(function(error,countCue){
             var counter = 0;
@@ -114,8 +114,17 @@ exports.cs4Info = function(req, res){
 
                 collectionStartup.count(function(error,countStartup){
 
-                    res.render('cs4Info.ejs',{ title: 'CS-4 Info', startup:startup, countCue:counter, countLog:countLog, countStartup:countStartup, curTime: new Date() });
+                    collectionStartup.findOne({'TimeZoneSet':{$exists:true}}, function(err,tme){
+                        if(tme){
+                            var a = tme.TimeZoneSet;
+                            timeZone = tme.TimeZoneSet;
+                        }
+                        else{
+                            timeZone = 'US/Eastern'; // this is the default time zone if nothing is set
+                        }
 
+                        res.render('cs4Info.ejs',{ title: 'CS-4 Info', startup:startup, countCue:counter, countLog:countLog, timeZone:timeZone, countStartup:countStartup, curTime: new Date() });
+                    });
                 });
 
             });

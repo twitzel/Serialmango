@@ -14,6 +14,7 @@ function init()
     outputCountlog = document.getElementById("countlog");
     outputTitles = document.getElementById("titles");
     outputUpTime = document.getElementById("uptime");
+    outputTimeZone = document.getElementById("timezone");
 
     UpTime(); //get uptime and update it every second
 
@@ -29,6 +30,8 @@ function init()
     outputCountcue.innerHTML = "Number of Cues:".bold() + "<BR>" + countCue;
     outputCountlog.innerHTML = "Number of Entries in Log File:".bold() + "<BR>" + countLog;
 
+    // Setup Timezone combo box
+    outputTimeZone.innerHTML = "Current Time Zone: " + timeZone.toString().bold();
 
 
 }
@@ -44,7 +47,7 @@ function testWebSocket()
 
 function onOpen(evt) {
 
-    //var send = SetCS4Time();
+   // var send = SetCS4Time();
     var send = new Date();
     websocket.send("CMD " + send); // SET the CS4 I/O clock to current browser time - ignores time zone offset
 }
@@ -131,4 +134,13 @@ function SetCS4Time()
     seconds = curTime.getSeconds();
     return "SETTIME " + seconds + " " + minutes + " " + hours + " " + day + " " + month + " " + year.substr(2) + "\n\r";
   //  sendData("SETTIME " + textBoxSecond.Text + " " + textBoxMinute.Text + " " + textBoxHour.Text + " " + textBoxDay.Text + " " + textBoxMonth.Text + " " + textBoxYear.Text);
+}
+
+function timeZoneChange()
+{
+    timeZone = document.getElementById('timeZoneCombo');
+    value = timeZone.value;
+    websocket.send("CMD TZ " + value);
+
+
 }
