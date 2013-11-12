@@ -120,10 +120,16 @@ exports.setup = function()
             {
                 comlib.openSerialPort("/dev/ttyUSB0"); //not windows - Raspberry PI
             }
+            //set timezone of pi
+           collectionStartup.find({'TimeZoneSet':{$exist:true}}), function(err,result){
+                if(result){
+                    time.tzset(result.TimeZoneSet);
+                }
+                else{
+                    time.tzset('US/Eastern'); // this is the default time zone if nothing is set
+                }
 
-
-
-
+               };
 
 
         }
@@ -162,10 +168,12 @@ exports.setup = function()
 
     //set timezone of pi
    // time.tzset('US/Pacific');
- //   time.tzset('US/Eastern');
+    time.tzset('US/Eastern');
 
 
 };
+
+
 
 exports.websocketDataIn = function(dataSocket){
     if(dataSocket.substr(0,3) == "CMD")
