@@ -175,8 +175,13 @@ exports.websocketDataIn = function(dataSocket){
         var datain;
         if(dataSocket.substr(0,6) == "CMD TZ")//if timezone command
         {
-            datain = dataSocket.substr(7);
-            time.tzset(dataSocket.substr(7)); // tz string from client: CMD TZ US/Pacific
+            dastain = dataSocket.substr(7)
+            time.tzset(dastain); // tz string from client: CMD TZ US/Pacific
+            collectionStartup.update({'TimeZoneSet':dastain}, {$set: dastain},{upsert:true, w:1},function(err,res){
+
+                console.log('Time Zone Updated'+res);
+
+            });
         }
         else
         {
@@ -271,7 +276,7 @@ exports.socketDataOut = function (data) {
                     delay = item[0].OutData[i].Delay;
                     outstring = port + " " + showname + " " + dir + " " + dataToSend;
                     setTimeout(sendOutput, delay, outstring);
-                    console.log(item[0].OutData[i][0].Dout + "  Delay "+item[0].OutData[i][0].Delay);
+                    console.log(item[0].OutData[i].Dout + "  Delay "+item[0].OutData[i].Delay);
                 }
 
             }
