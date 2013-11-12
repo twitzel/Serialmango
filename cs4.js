@@ -11,12 +11,13 @@ var os = require('os');
 var express = require('express');
 var routes = require('./routes');
 var user = require('./routes/user');
+var time = require('time');
 var timedOutInterval = 200; //time to wait between serial transmitts
 var timedOut = true; // set to false will delay transmission;
 var comlib = require('./comlib');
 var lastCueReceived = {"Time" : "10/09/13 15:20:04.20", "Source" : "Midi1", "InData" : "F0 7F 05 02 01 01 31 2E 30 30 F7 "};
 var serialDataSocket;
-var lastCueReceivedInternalTime;
+var lastCueReceivedInternalTime= new Date();
 var lastCueReceivedExternalTime = new Date();
 
 
@@ -104,8 +105,39 @@ exports.setup = function()
             global.collectionCue = db.collection('cue');
             global.collectionStartup = db.collection('startup');
             collectionCue.ensureIndex({InData:1},function (err,res){});
+
+
+            //set timezone of pi
+           collectionStartup.findOne({'TimeZoneSet':{$exists:true}}, function(err,res){
+                if(res){
+                    var a = res.TimeZoneSet;
+                    time.tzset(res.TimeZoneSet);
+                }
+                else{
+                    time.tzset('US/Eastern'); // this is the default time zone if nothing is set
+                }
+
+               });
+
+            // MOVED HERE = open serial port after mongo is running
+
+            //now lets find out if we are on a windows system
+            // if we are open the required com port
+            //if not open the pi port
+            console.log("Host System Name: " + os.type());
+            if(os.type() == 'Windows_NT')
+            {
+                comlib.openSerialPort('com19'); //windows
+            }
+            else
+            {
+                comlib.openSerialPort("/dev/ttyUSB0"); //not windows - Raspberry PI
+            }
+
         }
     });
+
+/*    // MOVED FORM HERE = open serial port after mongo is running
 
     //now lets find out if we are on a windows system
     // if we are open the required com port
@@ -119,6 +151,7 @@ exports.setup = function()
     {
         comlib.openSerialPort("/dev/ttyUSB0"); //not windows - Raspberry PI
     }
+*/
 
     //set up all routes HERE
     //set up all routes HERE
@@ -135,38 +168,68 @@ exports.setup = function()
     app.get('/cs4Timing', routes.cs4Timing);
     app.get('/cs4Info', routes.cs4Info);
 
+    //set timezone of pi
+   // time.tzset('US/Pacific');
+    time.tzset('US/Eastern');
+
+
 };
 
 
 
 exports.websocketDataIn = function(dataSocket){
+    if(dataSocket.substr(0,3) == "CMD")
+    {
+        var datain;
+        if(dataSocket.substr(0,6) == "CMD TZ")//if timezone command
+        {
+            datain = dataSocket.substr(7)
+            time.tzset(datain); // tz string from client: CMD TZ US/Pacific
+          //  collectionStartup.update({'TimeZoneChanged':'Yes'}, {$set:{'TimeZoneSet' : datain}},{upsert:true, w:1},function(err,res){
+                collectionStartup.update({'TimeZoneSet':{$exists:true}}, {$set:{'TimeZoneSet' : datain}},{upsert:true, w:1},function(err,res){
 
-    serialDataSocket = JSON.parse(dataSocket);
-    //now we know something is attached to the incoming cue so put it in Cue collection
-    // incoming cue = lastCueReceived
-    //lastCueReceived is a json parsed object from my io board
-    // serialDataSocket is the array data from the websocket
+                console.log('Time Zone Updated'+res);
 
-    //
-    collectionCue.update({'InData':lastCueReceived.InData}, {$set: lastCueReceived},{upsert:true, w:1},function(err,res){
+            });
+        }
+        else
+        {
+            //set the clock on the CS4 I/O board
+            datain = dataSocket.substr(4);
+            datain = SetCS4Time(datain);
+            comlib.write(datain);
+        }
 
-        console.log('InData to collection Cue'+res);
-    });
+    }
+    else
+    {
+        serialDataSocket = JSON.parse(dataSocket);
+        //now we know something is attached to the incoming cue so put it in Cue collection
+        // incoming cue = lastCueReceived
+        //lastCueReceived is a json parsed object from my io board
+        // serialDataSocket is the array data from the websocket
 
-    collectionCue.update({'InData': lastCueReceived.InData}, {$push:serialDataSocket},function(err,res){
+        //
+        collectionCue.update({'InData':lastCueReceived.InData}, {$set: lastCueReceived},{upsert:true, w:1},function(err,res){
 
-    console.log('added Dout to collection Cue'+res);
-    });
+            console.log('InData to collection Cue'+res);
+        });
 
-    //send the data out to the CS4 I/O
-     var dir = serialDataSocket.OutData.Dir;    // ****** needs to ba added to R4-4 Receiver Parsing ****** //
-   // dir = "";
-    var port = serialDataSocket.OutData.Port;
-    var showname = serialDataSocket.OutData.Showname;
-    var dataToSend = serialDataSocket.OutData.Dout;
+        collectionCue.update({'InData': lastCueReceived.InData}, {$push:serialDataSocket},function(err,res){
 
-    var outstring = port + " " + showname + " " + dir + " " + dataToSend;
-    sendOutput(outstring);
+        console.log('added Dout to collection Cue'+res);
+        });
+
+        //send the data out to the CS4 I/O
+         var dir = serialDataSocket.OutData.Dir;    // ****** needs to ba added to R4-4 Receiver Parsing ****** //
+       // dir = "";
+        var port = serialDataSocket.OutData.Port;
+        var showname = serialDataSocket.OutData.Showname;
+        var dataToSend = serialDataSocket.OutData.Dout;
+
+        var outstring = port + " " + showname + " " + dir + " " + dataToSend;
+        sendOutput(outstring);
+    }
 };
 
 
@@ -304,3 +367,26 @@ else
 
 }
 };
+
+function SetCS4Time(curTime)
+{
+    var uptime=0;
+    var seconds = 0;
+    var minutes = 0;
+    var hours = 0;
+    var days = 0;
+    var month = 0;
+    var year = 0;
+    var timeZoneOffset = 0;
+    curTime = new Date(curTime);
+    timeZoneOffset = curTime.getTimezoneOffset();
+    year = curTime.getFullYear().toString();
+    month = parseInt(curTime.getMonth()) + 1; // months start with 1 in the timer chip
+    day = curTime.getDate();
+    hours = curTime.getHours();
+    minutes = curTime.getMinutes();
+    seconds = curTime.getSeconds();
+    return "SETTIME " + seconds + " " + minutes + " " + hours + " " + day + " " + month + " " + year.substr(2) + "\n\r";
+    //  sendData("SETTIME " + textBoxSecond.Text + " " + textBoxMinute.Text + " " + textBoxHour.Text + " " + textBoxDay.Text + " " + textBoxMonth.Text + " " + textBoxYear.Text);
+}
+

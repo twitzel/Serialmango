@@ -25,7 +25,7 @@
 
 .info{
     text-align: center;
-    margin-top:15px;
+    margin-top:5px;
     margin-left: 10px;
     width: 15em;
     height:2.5em;
@@ -40,12 +40,13 @@
 }
 
 .infostart{
-    text-align: center;
-    margin-top:15px;
-    margin-left: 10px;
+
+    text-align: left;
+    margin-top:5px;
+    margin-left:5px;
     margin-bottom: 4px;
     width: 16.2em;
-    height:13em;
+    height:26.5em;
     float:left;
     border: 2px solid #333333;
     overflow-y: auto;
@@ -61,8 +62,16 @@
     font-size: 250%;
     margin:2% 0;
     height:auto;
-
     color: #666;
+}
 
+#timezone{
+    float: left;
+    margin-top:55px;
 
+}
+#timeZoneCombo{
+    float: left;
+    margin-top:52px;
+    margin-left: 10px;
 }
