@@ -106,6 +106,19 @@ exports.setup = function()
             global.collectionStartup = db.collection('startup');
             collectionCue.ensureIndex({InData:1},function (err,res){});
 
+
+            //set timezone of pi
+           collectionStartup.findOne({'TimeZoneSet':{$exists:true}}, function(err,res){
+                if(res){
+                    var a = res.TimeZoneSet;
+                    time.tzset(res.TimeZoneSet);
+                }
+                else{
+                    time.tzset('US/Eastern'); // this is the default time zone if nothing is set
+                }
+
+               });
+
             // MOVED HERE = open serial port after mongo is running
 
             //now lets find out if we are on a windows system
@@ -120,17 +133,6 @@ exports.setup = function()
             {
                 comlib.openSerialPort("/dev/ttyUSB0"); //not windows - Raspberry PI
             }
-            //set timezone of pi
-           collectionStartup.find({'TimeZoneSet':{$exist:true}}), function(err,result){
-                if(result){
-                    time.tzset(result.TimeZoneSet);
-                }
-                else{
-                    time.tzset('US/Eastern'); // this is the default time zone if nothing is set
-                }
-
-               };
-
 
         }
     });
