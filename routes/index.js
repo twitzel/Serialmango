@@ -114,8 +114,17 @@ exports.cs4Info = function(req, res){
 
                 collectionStartup.count(function(error,countStartup){
 
-                    res.render('cs4Info.ejs',{ title: 'CS-4 Info', startup:startup, countCue:counter, countLog:countLog, countStartup:countStartup, curTime: new Date() });
+                    collectionStartup.findOne({'TimeZoneSet':{$exists:true}}, function(err,tme){
+                        if(tme){
+                            var a = tme.TimeZoneSet;
+                            timeZone = tme.TimeZoneSet;
+                        }
+                        else{
+                            timeZone = 'US/Eastern'; // this is the default time zone if nothing is set
+                        }
 
+                        res.render('cs4Info.ejs',{ title: 'CS-4 Info', startup:startup, countCue:counter, countLog:countLog, timeZone:timeZone, countStartup:countStartup, curTime: new Date() });
+                    });
                 });
 
             });

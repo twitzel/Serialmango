@@ -20,6 +20,7 @@
         <%-"var countLog = "+JSON.stringify(countLog)%>
         <%-"var countCue = "+JSON.stringify(countCue)%>
         <%-"var curTime = "+JSON.stringify(curTime)%>
+        <%-"var timeZone = "+JSON.stringify(timeZone)%>
     </script>
 
     <header class="mainheader">
@@ -73,8 +74,12 @@
 
     </div>
 
-    <div id = "timezone">
-        <select id='timeZoneCombo' onchange='timeZoneChange();'>
+    <div id = "tzid" class="tz">
+        <div id = "timezone">
+
+        </div>
+
+        <select id='timeZoneCombo'  onchange='timeZoneChange();'>
             <option value='-1' title='-select one-'>-Select to Change Time Zone of CS4-</option>
             <option value='US/Eastern' title='US/Eastern'>US/Eastern</option>
             <option value='US/Central' title='US/Central'>US/Central</option>
@@ -82,8 +87,6 @@
             <option value='US/Pacific' title='US/Pacific'>US/Pacific</option>
             <option value='GMT' title='GMT'>GMT</option>
         </select>
-
-
     </div>
 <!--
     <footer class ="mainfooter">

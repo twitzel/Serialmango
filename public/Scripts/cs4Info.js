@@ -14,6 +14,7 @@ function init()
     outputCountlog = document.getElementById("countlog");
     outputTitles = document.getElementById("titles");
     outputUpTime = document.getElementById("uptime");
+    outputTimeZone = document.getElementById("timezone");
 
     UpTime(); //get uptime and update it every second
 
@@ -30,7 +31,7 @@ function init()
     outputCountlog.innerHTML = "Number of Entries in Log File:".bold() + "<BR>" + countLog;
 
     // Setup Timezone combo box
-
+    outputTimeZone.innerHTML = "Current Time Zone: " + timeZone.toString().bold();
 
 
 }

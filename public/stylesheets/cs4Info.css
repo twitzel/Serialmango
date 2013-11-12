@@ -62,8 +62,16 @@
     font-size: 250%;
     margin:2% 0;
     height:auto;
-
     color: #666;
+}
 
+#timezone{
+    float: left;
+    margin-top:55px;
 
+}
+#timeZoneCombo{
+    float: left;
+    margin-top:52px;
+    margin-left: 10px;
 }
