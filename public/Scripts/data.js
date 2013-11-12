@@ -1,5 +1,5 @@
-//var wsUri = "ws://witzel.homeserver.com:8080";
-var wsUri = "ws://10.6.1.14:8080";
+var wsUri = "ws://level451.com:8080";
+//var wsUri = "ws://10.6.1.14:8080";
 var output;
 var graph ={};
 var query = {};
@@ -346,11 +346,13 @@ var i = 0;
 
 
             temp = document.getElementById(prop);
-            temp.addEventListener("click",graphclick,false);
+
+            if (temp){temp.addEventListener("click",graphclick,false);}
+
             temp = document.getElementById("moveButton"+i);
-            temp.addEventListener("click",moveup,false);
+            if (temp) {temp.addEventListener("click",moveup,false);}
             temp = document.getElementById("moveButtonDown"+i);
-            temp.addEventListener("click",movedown,false);
+            if (temp){   temp.addEventListener("click",movedown,false);}
             i++;
         }
 
@@ -371,7 +373,7 @@ function timestampRealtime()
            //console.log((temp.getSeconds()/sensors[prop].interval)%10);
          //   if ((temp.getSeconds()/sensors[prop].interval)%15 == 0) {
 
-         graph[prop].Time[graph[prop].Time.length-1]=temp.getSeconds();
+       if(graph[prop]) {graph[prop].Time[graph[prop].Time.length-1]=temp.getSeconds();}
 
 
 
