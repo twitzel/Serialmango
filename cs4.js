@@ -162,12 +162,10 @@ exports.setup = function()
 
     //set timezone of pi
    // time.tzset('US/Pacific');
-    time.tzset('US/Eastern');
+ //   time.tzset('US/Eastern');
 
 
 };
-
-
 
 exports.websocketDataIn = function(dataSocket){
     if(dataSocket.substr(0,3) == "CMD")
