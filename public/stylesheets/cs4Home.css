@@ -1,12 +1,31 @@
 #title{
+    position: relative;
     display: inline;
     text-align: center;
+    margin-top: 25px;
 }
 
 #wrapper{
-    display: inline;
+
     width: 96%;
 }
+
+h3{
+    color: #666666;
+    float: left;
+
+
+    margin-left:50px;
+    margin-bottom: 0;
+    margin-top: 0;
+}
+
+#buttonClear{
+    float: right;
+    margin-right: 50px;
+}
+
+
 
 .titles{
     text-align: center;
@@ -35,12 +54,14 @@ font-family: Verdana;
 .log{
     width: 90%;
     height: 50vh;
-    background-color: #ececec;
+    background-color: rgba(255, 203, 204, 0.56);
     margin-top: 1px;
     border-radius: 5px;
     /*    border-top-left-radius: 5px;*/
     box-shadow: 3px 3px 3px #333;
-    padding: 10px;
+    padding-top: 0;
+    padding-left: 10px;
+    padding-right: 10px;
     padding-bottom: 20px;
 }
 

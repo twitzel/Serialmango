@@ -11,7 +11,7 @@ function init(){
 
 
     testWebSocket();
-    setInterval(function(){movedata()},30);
+
 }
 
 function testWebSocket()
@@ -24,8 +24,11 @@ function testWebSocket()
 }
 
 function onOpen(evt) {
-    writeToScreen("CONNECTED");
-    writeToScreen('#{myuri}');
+    output.innerHTML = "";
+    writeToScreen("CONNECTED TO CS4");
+    // change background color on connection
+    var logweb = document.getElementById('websocketlog')
+    logweb.style.backgroundColor = '#ececec';
 }
 
 function onClose(evt) {
@@ -48,44 +51,13 @@ function writeToScreen(message) {
     // get time of incoming cue
     lastCueTime = new Date();
     output.innerHTML = message + "<BR>" + output.innerHTML;
-    pixelData[canvasStart] = {data : message};
+ //   pixelData[canvasStart] = {data : message};
 
     //output.value = message+"<BR>"+output.value;
 }
 
-function movedata(){
-    numberLoops++;
-    pixelData.shift();  //movers everything over 1 px
 
-    context.clearRect(0,0,canvas.width,canvas.height);
-    if(numberLoops%100 == 0){
-        pixelData[canvasStart] = {line : 40, time : new Date().toLocaleTimeString().substring(0,8)};
-    }
-    else if(numberLoops % ticIncrement == 0){
-        pixelData[canvasStart] = {line : 20};
-    }
-    context.beginPath();
 
-    for(var i = 0; i< pixelData.length; i++ ){
-        if(pixelData[i]){
-            if(pixelData[i].line){
-                context.moveTo(i,lineStart);
-                context.lineTo(i,lineStart -pixelData[i].line);
-            }
-            if(pixelData[i].time) {
-                context.fillText(pixelData[i].time,i-21 ,192)
-
-            }
-        }
-    }
-    context.stroke();
-    //add starting line
-    context.beginPath();
-    context.strokeStyle = 'red';
-    context.moveTo(canvasStart, 0);
-    context.lineTo(canvasStart, canvasHeight);
-    context.stroke();
-    context.strokeStyle = 'black';
-
-    context.stroke();
+function buttonClear(){
+    output.innerHTML = "";
 }
