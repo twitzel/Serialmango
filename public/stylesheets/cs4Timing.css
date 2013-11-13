@@ -43,7 +43,7 @@ h3{
 }
 .log{
     width: 90%;
-    height: 50vh;
+    height: 350px;
     background-color: rgba(255, 203, 204, 0.56);
     margin-top: 1px;
     border-radius: 5px;
@@ -56,14 +56,15 @@ h3{
 }
 
 #websocketlog{
+    clear: both;
     margin: auto;
     border: 2px solid #333333;
     overflow-y: auto;
 }
 
 #goButton1{
-    width:20vw;
-    height:10vw;
+    width:70%;
+    height:40%;
     background-color: #06b00a;
     font-size:3em;
     font-weight: bolder;
@@ -73,8 +74,8 @@ h3{
 }
 
 #goButton2{
-    width:20vw;
-    height:10vw;
+    width:70%;
+    height:40%;
     background-color: #06b00a;
     font-size:3em;
     font-weight: bolder;
@@ -84,8 +85,8 @@ h3{
 }
 
 #goButton3{
-    width:20vw;
-    height:10vw;
+    width:70%;
+    height:40%;
     background-color: #06b00a;
     font-size:3em;
     font-weight: bolder;
@@ -123,29 +124,30 @@ form#timing1 fieldset {
 }
 
 #timing1{
-    background-color: #adffb4;
+    background-color: rgba(173, 255, 180, 0.21);
     margin-left: 40px;
 }
 
 #timing2{
-    background-color: #839dff;
+    background-color: rgba(131, 157, 255, 0.21);
 }
 
 #timing3{
-    background-color: #8decff;
+    background-color: rgba(141, 236, 255, 0.21);
 }
 
 
 .timing{
     margin-top: 20px;
-    width: 30%;
+    width: 25%;
     height: 26%;
-    margin-left: 20px;
+    margin-left: 10px;
     float:left;
 }
 
 #bigdiv{
     height: 26%;
+    font-size: .7em;
 
 
 }
