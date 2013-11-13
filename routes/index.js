@@ -145,7 +145,7 @@ exports.cs4Timing = function(req, res){
 };
 
 exports.cs4VerticalScroll = function(req, res){
-    res.render('cs4VerticalScroll.ejs',{ title: 'CS-4 Scroll', myuri:"ws://localhost:8080" });
+    res.render('CS4VerticalScroll.ejs',{ title: 'CS-4 Scroll', myuri:"ws://localhost:8080" });
 };
 
 exports.cs4Help = function(req, res){
