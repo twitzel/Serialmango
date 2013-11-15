@@ -16,6 +16,23 @@ body{
     margin-bottom:2%;
 }
 
+#title{
+    width: 40%;
+    margin-top: 50px;
+}
+#header h1{
+    clear: both;
+    color: #ff0000;
+    margin-top: 50px;
+
+}
+
+#header img{
+    float: right;
+    margin-top: 50px;
+    max-width: 100%;
+}
+
 #content{
     width: 61%;
     height: 200px;
