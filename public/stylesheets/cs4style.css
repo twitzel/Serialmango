@@ -10,28 +10,34 @@ body{
 }
 
 #header{
-    width: 100%;
+    float: right;
+
+    width: 45%;
     background-color: #000;
     height: 200px;
     margin-bottom:2%;
 }
 
-#title{
-    width: 40%;
-    margin-top: 50px;
-}
-#header h1{
-    clear: both;
-    color: #ff0000;
-    margin-top: 50px;
-
-}
-
 #header img{
+    margin: 10%;
     float: right;
-    margin-top: 50px;
-    max-width: 100%;
 }
+
+#headertext{
+    vertical-align: middle;
+    width: 45%;
+    background-color: #000;
+    color: #ff0000;
+    height: 200px;
+}
+
+#title{
+    text-align: center;
+    margin-top: 15%;
+}
+
+
+
 
 #content{
     width: 61%;
