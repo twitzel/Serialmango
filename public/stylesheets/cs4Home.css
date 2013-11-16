@@ -1,31 +1,28 @@
-#title{
-    position: relative;
-    display: inline;
-    text-align: center;
-    margin-top: 25px;
-
-}
-
 #wrapper{
 
     width: 96%;
 }
 
-h3{
-    color: #666666;
-    float: left;
+#title{
+    width: 96%;
+    height: 30px;
+    margin-left: 0;
+    margin-right: 0;
 
-
-    margin-left:50px;
-    margin-bottom: 0;
-    margin-top: 0;
 }
 
-#buttonClear{
-    float: right;
+#title button{
     margin-right: 50px;
+    float:right;
 }
 
+#title h3{
+    width: 100px;
+    margin-left: 50px;
+    line-height: 30px;
+    color: #0000ff;
+
+}
 
 
 .titles{
@@ -85,24 +82,9 @@ font-family: Verdana;
 }
 
 
-
-#canvasDiv{
-   /* width:90%;*/
+@media only screen and (max-width: 800px) {
 
 }
 
-
-
-#myCanvas{
-    margin-top: 20px;
-   width: 90%;
-   /*   *  margin-left: auto;
-      margin-right: auto;*/
-    height: 200px;
- /* float: right;*/
-    border: 3px solid #333333;
-    padding: 10px;
-
-}
 
 
