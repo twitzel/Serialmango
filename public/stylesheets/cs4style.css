@@ -12,28 +12,38 @@ body{
 #header{
     float: right;
 
-    width: 45%;
+    width: 100%;
     background-color: #000;
-    height: 200px;
+    height: 122px;
     margin-bottom:2%;
+    color: #ff0000;
 }
 
 #header img{
-    margin: 10%;
+    margin-top: 00px;
     float: right;
 }
 
+#header h1{
+    line-height: 150px;
+    margin-left: 30px;
+}
+
 #headertext{
-    vertical-align: middle;
+
     width: 45%;
-    background-color: #000;
+    background-color: #0f0;
     color: #ff0000;
     height: 200px;
 }
 
 #title{
-    text-align: center;
-    margin-top: 15%;
+
+line-height: 200px;
+text-align: center;
+
+
+
 }
 
 
