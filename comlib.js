@@ -100,7 +100,7 @@ wss.on('connection', function(ws) {
         else if(branch == 'cs4')
         {
             console.log('received: %s', message,thisId);
-            cs4.websocketDataIn(message);
+            cs4.websocketDataIn(message, thisId);
         }
     });
     ws.on('close', function(ws){

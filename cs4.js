@@ -180,11 +180,11 @@ exports.setup = function()
 
 
 
-exports.websocketDataIn = function(dataSocket){
-    if(dataSocket.substr(0,3) == "CMD")
+exports.websocketDataIn = function(dataSocket, Socket){
+    if(dataSocket.substr(0,3) == "TME") // if this is a time command
     {
         var datain;
-        if(dataSocket.substr(0,6) == "CMD TZ")//if timezone command
+        if(dataSocket.substr(0,6) == "TME TZ")//if timezone command
         {
             datain = dataSocket.substr(7)
             time.tzset(datain); // tz string from client: CMD TZ US/Pacific
@@ -197,12 +197,29 @@ exports.websocketDataIn = function(dataSocket){
         }
         else
         {
-            //set the clock on the CS4 I/O board
+            //set the clock on the CS4 I/O board every time the "info" screen is opened
             datain = dataSocket.substr(4);
             datain = SetCS4Time(datain);
             comlib.write(datain);
         }
 
+    }
+    else if(dataSocket.substr(0,3) == "LOG")//requesting entire log file to be sent log file
+    {
+        collectionLog.find().sort({"Id": -1}).toArray(function(error,logfile){
+            for(var i = 0; i <logfile.length;i++)
+            logfileData = JSON.parse(logfile[i]);
+            if(logfileData.Dout)
+            {
+                comlib.websocketsend(".    Sent: " + logfile[i], Socket) ;
+            }
+
+            else
+            {
+                comlib.websocketsend(parseCue(logfile[i]),Socket);
+            }
+
+        });
     }
     else
     {
@@ -308,9 +325,26 @@ if(data.length >= 35) // this is to let GETTIME come through and get logged GETT
     });
 
 
+
+    //parse the incoming cue data
+   comlib.websocketsend(parseCue(data));
+}
+else
+{   //we have startup time from the CS4 I/O board
+    collectionStartup.insert(serialData, {w: 1}, function (err, result) {
+        console.log(result);
+    });
+
+}
+};
+
+function parseCue(data)
+{
+    serialData = JSON.parse(data);
+    serialData.Time = new Date(serialData.Time);
+
     indata = serialData.InData;
     source = serialData.Source;
-
     // if cue is MIDI then get light cue number from hex string
     if (source.substr(0, 4) == "Midi") {
         if (indata.substr(0, 2) == "F0") // this is a light cue
@@ -353,23 +387,17 @@ if(data.length >= 35) // this is to let GETTIME come through and get logged GETT
             type = "Pitch Wheel Control";
         }
 
-        //comlib.websocketsend(JSON.stringify(serialData)) ;
-        comlib.websocketsend(serialData.Time.toISOString() + " " + type + " ---    " + indata) ;
+        return (serialData.Time.toISOString() + " " + type + " ---    " + indata);
+
+
 
     }
     else // just send data
     {
-        comlib.websocketsend(serialData.Time.toISOString() + " " + indata);
+        return (serialData.Time.toISOString() + " " + indata);
     }
-}
-else
-{   //we have startup time from the CS4 I/O board
-    collectionStartup.insert(serialData, {w: 1}, function (err, result) {
-        console.log(result);
-    });
 
 }
-};
 
 function SetCS4Time(curTime)
 {

@@ -49,7 +49,7 @@ function onOpen(evt) {
 
    // var send = SetCS4Time();
     var send = new Date();
-    websocket.send("CMD " + send); // SET the CS4 I/O clock to current browser time - ignores time zone offset
+    websocket.send("TME " + send); // SET the CS4 I/O clock to current browser time - ignores time zone offset
 }
 
 function onClose(evt) {
@@ -140,7 +140,7 @@ function timeZoneChange()
 {
     timeZone = document.getElementById('timeZoneCombo');
     value = timeZone.value;
-    websocket.send("CMD TZ " + value);
+    websocket.send("TME TZ " + value);
 
 
 }

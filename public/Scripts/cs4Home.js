@@ -61,3 +61,7 @@ function writeToScreen(message) {
 function buttonClear(){
     output.innerHTML = "";
 }
+
+function buttonLog(){
+    websocket.send('LOG')//request logfile
+}
