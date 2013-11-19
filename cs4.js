@@ -363,7 +363,7 @@ if(data.length >= 35) // this is to let GETTIME come through and get logged GETT
     }
 }
 else
-{
+{   //we have startup time from the CS4 I/O board
     collectionStartup.insert(serialData, {w: 1}, function (err, result) {
         console.log(result);
     });
