@@ -1,90 +1,39 @@
-#wrapper{
 
-    width: 96%;
-}
-
+/*  NOTE:  # = id;   . = class  */
 #title{
-    width: 96%;
     height: 30px;
-    margin-left: 0;
-    margin-right: 0;
-
 }
 
 #title button{
-    margin-right: 50px;
+    margin-right: 5.2%;
     float:right;
 }
 
 #title h3{
     width: 100px;
-    margin-left: 50px;
+    margin-left: 5.2%;
     line-height: 30px;
     color: #0000ff;
-
 }
 
-
-.titles{
-    text-align: center;
-}
-
-/*  NOTE:  # = id;   . = class  */
-#loglabel {
-    color: #0000ff;
-    text-align: center;
-}
-
-.body h1{
-font-family: Verdana;
-    font-weight:bold;
-    font-size: 220%;
-    margin:2% 0;
-    height:auto;
-    color: #666;
-}
-
-
-
-#body{
-    background-color:  #666666;
-}
 .log{
-    width: 90%;
     height: 350px;
     background-color: rgba(255, 203, 204, 0.56);
-    margin-top: 1px;
+    border: 2px solid #333333;
     border-radius: 5px;
-    /*    border-top-left-radius: 5px;*/
     box-shadow: 3px 3px 3px #333;
-    padding-top: 0;
     padding-left: 10px;
     padding-right: 10px;
-    padding-bottom: 20px;
-}
-
-#websocketlog{
-    clear: both;
-    margin: auto;
-    border: 2px solid #333333;
+    padding-bottom: 15px;
     overflow-y: auto;
-}
-
-#goButton{
-    width:20vw;
-    height:20vw;
-    background-color: #881b33;
-    font-size:200%;
-    font-weight: bolder;
-    float:left;
-    margin-left: 2vw;
-    margin-top: 2vh;
-}
-
-
-@media only screen and (max-width: 800px) {
 
 }
 
+
+@media only screen  and (max-device-width: 761px),(max-width: 761px)  {
+    .log{
+        font-size: .6em;
+    }
+}
 
 

@@ -1,15 +1,21 @@
-body{
-    color:#000305;
-    font-size: 87.5%;
-    font-family: Veranda, Arial, "Lucida Sans Unicode" Arial, "Lucida Sans Unicode";
-    line-height:1;
-    text-align: left;
-}
 
 .body{
     margin: 0 auto;
     width: 70%;
-    clear: both;
+    color:#000305;
+    font-size: .87em;
+    font-family: Veranda, Arial, "Lucida Sans Unicode" Arial, "Lucida Sans Unicode";
+    line-height:1;
+    text-align: left;
+    max-width: 1200px;
+}
+
+.body h1{
+
+    font-weight:bold;
+    font-size: 2.1em;
+    margin:2% 0;
+    color: #666;
 }
 
 .mainheader nav{
@@ -23,12 +29,12 @@ body{
 .mainheader nav ul{
     list-style: none;
     margin:0 auto;
-
 }
+
 .mainheader nav ul li{
     float:left;
     display:inline;
-    font-size: 125%;
+    font-size: 1.25em;
 }
 .mainheader nav a:link,  .mainheader nav a:visited{
     color: #fff;
@@ -67,14 +73,17 @@ body{
     width: 92%;
     margin: 10px auto;
     color: #666;
-
 }
 
 
 
-@media only screen  and (max-device-width: 761px) {
+@media only screen  and (max-device-width: 761px),(max-width: 761px)  {
     .body{
-        width: 90%;
+        width: 95%;
+    }
+
+    .body h1{
+        font-size: 1.7em;
     }
     .mainheader nav{
         height: 200px;
