@@ -208,15 +208,23 @@ exports.websocketDataIn = function(dataSocket, Socket){
     {
         collectionLog.find().sort({"Id": -1}).toArray(function(error,logfile){
             for(var i = 0; i <logfile.length;i++)
-            logfileData = JSON.parse(logfile[i]);
-            if(logfileData.Dout)
             {
-                comlib.websocketsend(".    Sent: " + logfile[i], Socket) ;
-            }
+                var logfileData;
+                var logfileItem;
+                var logfileTime;
+                logfileData = JSON.stringify(logfile[i]);
+                logfileParsed = JSON.parse(logfileData);
+                logfileItem = logfileData.Dout;
+                logfileTime = logfileData.InData;
+                if(logfileParsed.Dout != null)
+                {
+                    comlib.websocketsend(".    Sent: " + logfileData, Socket) ;
+                }
 
-            else
-            {
-                comlib.websocketsend(parseCue(logfile[i]),Socket);
+                else
+                {
+                    comlib.websocketsend(parseCue(logfileData),Socket);
+                }
             }
 
         });
