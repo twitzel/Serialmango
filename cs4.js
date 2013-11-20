@@ -45,7 +45,7 @@ sendOutput = function (dataToSend)
 
     //change the time of data sent to corolate with CS-4 I/O clock
     lastconverted   = new Date(lastCueReceived.Time);
-    addTime = addTime + "\""+  (new Date( lastconverted.setMilliseconds(lastconverted.getMilliseconds() + (timerStartTime -lastCueReceivedInternalTime)))).toISOString() +"\", \"Dout \" : \"" + dataToSend + "\"}";
+    addTime = addTime + "\""+  (new Date( lastconverted.setMilliseconds(lastconverted.getMilliseconds() + (timerStartTime -lastCueReceivedInternalTime)))).toISOString() +"\", \"Dout\" : \"" + dataToSend + "\"}";
 
     //send it out the socket
     comlib.websocketsend(".    Sent: " + addTime) ;
@@ -214,9 +214,9 @@ exports.websocketDataIn = function(dataSocket, Socket){
                 var logfileTime;
                 logfileData = JSON.stringify(logfile[i]);
                 logfileParsed = JSON.parse(logfileData);
-                logfileItem = logfileData.Dout;
-                logfileTime = logfileData.InData;
-                if(logfileParsed.Dout != null)
+                logfileItem = logfileParsed.Dout ;
+                logfileTime = logfileParsed.InData;
+                if(logfileParsed.Dout  != null)
                 {
                     comlib.websocketsend(".    Sent: " + logfileData, Socket) ;
                 }
