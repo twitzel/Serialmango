@@ -179,7 +179,13 @@ exports.setup = function()
 };
 
 
+/*Data in may have a prefix.  That prefix is a command and handled here:
+    TME     Sets the CS4 I/O clock
+    TME TZ  Changes system time zone
+    LOG     Sends log file out to client
 
+
+ */
 exports.websocketDataIn = function(dataSocket, Socket){
     if(dataSocket.substr(0,3) == "TME") // if this is a time command
     {
@@ -206,7 +212,7 @@ exports.websocketDataIn = function(dataSocket, Socket){
     }
     else if(dataSocket.substr(0,3) == "LOG")//requesting entire log file to be sent log file
     {
-        collectionLog.find().sort({"Id": -1}).toArray(function(error,logfile){
+        collectionLog.find({},{"_id":0}).sort({"_id": 1}).toArray(function(error,logfile){
             for(var i = 0; i <logfile.length;i++)
             {
                 var logfileData;
@@ -220,13 +226,11 @@ exports.websocketDataIn = function(dataSocket, Socket){
                 {
                     comlib.websocketsend(".    Sent: " + logfileData, Socket) ;
                 }
-
                 else
                 {
                     comlib.websocketsend(parseCue(logfileData),Socket);
                 }
             }
-
         });
     }
     else
