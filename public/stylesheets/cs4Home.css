@@ -7,18 +7,27 @@
 #title button{
     margin-right: 5.2%;
     float:right;
+    border-radius:10px;
+    background: linear-gradient(to bottom, rgba(63,76,107,0.1) 26%,rgba(63,76,107,0.15) 33%,rgba(0,0,0,0.42) 75%,rgba(0,0,0,0.49) 86%);
+    font-weight: bold;
 }
 
-#title h3{
-    width: 100px;
+#title h2{
+    width: 150px;
     margin-left: 5.2%;
     line-height: 30px;
-    color: #0000ff;
+    color: #5c5c5c;
+
+}
+
+#buttonLog{
+
+
 }
 
 .log{
     height: 350px;
-    background-color: rgba(255, 203, 204, 0.56);
+    background-color: rgba(220, 203, 204, 0.56);
     border: 2px solid #333333;
     border-radius: 5px;
     box-shadow: 3px 3px 3px #333;

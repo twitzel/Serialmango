@@ -212,26 +212,42 @@ exports.websocketDataIn = function(dataSocket, Socket){
     }
     else if(dataSocket.substr(0,3) == "LOG")//requesting entire log file to be sent log file
     {
-        collectionLog.find({},{"_id":0}).sort({"_id": 1}).toArray(function(error,logfile){
-            for(var i = 0; i <logfile.length;i++)
-            {
-                var logfileData;
-                var logfileItem;
-                var logfileTime;
-                logfileData = JSON.stringify(logfile[i]);
-                logfileParsed = JSON.parse(logfileData);
-                logfileItem = logfileParsed.Dout ;
-                logfileTime = logfileParsed.InData;
-                if(logfileParsed.Dout  != null)
+        if(dataSocket.substr(0,7) == "LOG 100")
+        {
+            collectionLog.find({},{"_id":0}).sort({"_id": 1}).limit(100).toArray(function(error,logfile){
+                for(var i = 0; i <logfile.length;i++)
                 {
-                    comlib.websocketsend(".    Sent: " + logfileData, Socket) ;
+                    logfileData = JSON.stringify(logfile[i]);
+
+                    if(logfile[i].Dout)
+                    {
+                        comlib.websocketsend(".    Sent: " + logfileData, Socket) ;
+                    }
+                    else
+                    {
+                        comlib.websocketsend(parseCue(logfileData),Socket);
+                    }
                 }
-                else
+            });
+        }
+        else
+        {
+            collectionLog.find({},{"_id":0}).sort({"_id": 1}).toArray(function(error,logfile){
+                for(var i = 0; i <logfile.length;i++)
                 {
-                    comlib.websocketsend(parseCue(logfileData),Socket);
+                    logfileData = JSON.stringify(logfile[i]);
+
+                    if(logfile[i].Dout)
+                    {
+                        comlib.websocketsend(".    Sent: " + logfileData, Socket) ;
+                    }
+                    else
+                    {
+                        comlib.websocketsend(parseCue(logfileData),Socket);
+                    }
                 }
-            }
-        });
+            });
+        }
     }
     else
     {
