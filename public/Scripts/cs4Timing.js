@@ -21,8 +21,28 @@ function init()
     cuevalue3 = document.getElementById("cue3");
 
 
+    var password =prompt("This is a system level protected area.  ANY changes entered here will affect CS4 System operation.  Please enter password to continue." ,"");
+
+    if(password != "" && password !== null) //check for cancel button
+    {
+        if (password == "qwerty")
+        {
+            document.getElementById("blackout").style.visibility="visible"; //if correct password make visible
+        }
+        else
+        {
+            init(); //if wrong password start again
+        }
+    }
+    else
+    {
+
+    }
 
 }
+
+
+
 
 function testWebSocket()
 {

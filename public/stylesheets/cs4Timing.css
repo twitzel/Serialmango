@@ -198,3 +198,8 @@ form#timing1 fieldset {
 #buttonClear{
     vertical-align: middle;
 }
+
+
+#blackout{
+    visibility: hidden;
+}
