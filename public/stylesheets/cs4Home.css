@@ -20,10 +20,6 @@
 
 }
 
-#buttonLog{
-
-
-}
 
 .log{
     height: 350px;
@@ -43,6 +39,16 @@
     .log{
         font-size: .6em;
     }
+    #title button{
+        margin-right: 1%;
+
+    }
+    #title h2{
+        margin-left: 1%;
+        font-size: .9em;
+    }
+
+
 }
 
 
