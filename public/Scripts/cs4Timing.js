@@ -9,7 +9,7 @@ var wsUri = "ws://" + window.location.hostname + ":8080";
 var cuevalue1;
 var cuevalue2;
 var cuevalue3;
-
+var bkgnd = 0;
 
 window.onload = init;
 function init()
@@ -20,7 +20,7 @@ function init()
     cuevalue2 = document.getElementById("cue2");
     cuevalue3 = document.getElementById("cue3");
 
-
+/*
     var password =prompt("This is a system level protected area.  ANY changes entered here will affect CS4 System operation.  Please enter password to continue." ,"");
 
     if(password != "" && password !== null) //check for cancel button
@@ -38,7 +38,9 @@ function init()
     {
 
     }
-
+*/
+    //remove this line
+    document.getElementById("blackout").style.visibility="visible"; //if correct password make visible
 }
 
 
@@ -187,4 +189,18 @@ function cueclick3(message){
 
 function buttonClear(){
     output.innerHTML = "";
+}
+
+function buttonBackground(){
+    if(bkgnd == 0){
+        document.getElementById("body").style.backgroundColor =  '#474747';
+        document.getElementById("websocketlog").style.backgroundColor =  '#505050';
+        bkgnd = 1;
+    }
+    else{
+        document.getElementById("body").style.backgroundColor =  '#ffffff';
+        document.getElementById("websocketlog").style.backgroundColor =  '#ececec';
+        bkgnd = 0;
+    }
+
 }
