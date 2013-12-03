@@ -48,24 +48,27 @@
         <h4> Waiting for connection...</h4>
     </div>
 
-    <fieldset id = "fieldset1">
-        <legend>Timing 1</legend>
+    <fieldset id = "midi">
+        <legend>Midi Send</legend>
 
-        Show Name: <input id=showname1 name=showname1 type=text value="ShowName" required style = "width: 8em" autofocus>
+            <ul> <input type = "radio" checked name = "midioutput" id = "light" value = "light" checked >
+            <label for = "light">Light Cue</label>
+            <input id=lightcuenumber name=lightcuenumber type=number value="123.4" required style = "width: 8em" ></ul>
+            <ul><input type = "radio" name = "midioutput" id = "noteon" value = "noteon" >
+            <label for = "noteon">Note On - 92 04 03</label></ul>
+            <ul> <input type = "radio" checked name = "midioutput" id = "noteoff" value = "noteoff" >
+            <label for = "noteoff">Note Off - 82 12 16</label></ul>
+            <ul> <input type = "radio" checked name = "midioutput" id = "hex" value = "ex"  >
+            <label for = "hex">HEX</label>
+            <input id=hexnumber name=hexnumber type=text value="891221" required style = "width: 8em" ></ul>
 
-        <div>
-            Output Type:   R4 Slides <input id=r4slides1 name=output1 value= "r4slides" type=radio checked>
-            R4 Audio<input id=r4audio1 name=output1 value = "r4audio" type=radio >
-        </div>
-
-        <div>
             Directory:     <input id=directory1 name=directory1 type=text value="English" style = "width: 8em" required>
             Current Cue: <input id=cue1 name=cue1 type=number value=1 required style = "width: 5em">
-        </div>
 
-        <div id="buttondiv1">
+
+
             <button id = "goButton1"  onmousedown = "cueclick1()"> GO </button>
-        </div>
+
 
     </fieldset>
 
