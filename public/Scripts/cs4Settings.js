@@ -52,59 +52,59 @@ function writeToScreen(message) {
 //************************************  RELAYS ******************************
 function relay1onbutton()
 {
-    websocket.send('SEND RELAY 1 1\r');//
+    websocket.send('SEND RELAY 1 1');//
 }
 function relay1offbutton()
 {
-    websocket.send('SEND RELAY 1 0\r');//
+    websocket.send('SEND RELAY 1 0');//
 }
 function relay2onbutton()
 {
-    websocket.send('SEND RELAY 2 1\r');//
+    websocket.send('SEND RELAY 2 1');//
 }
 function relay2offbutton()
 {
-    websocket.send('SEND RELAY 2 0\r');//
+    websocket.send('SEND RELAY 2 0');//
 }
 function relay3onbutton()
 {
-    websocket.send('SEND RELAY 3 1\r');//
+    websocket.send('SEND RELAY 3 1');//
 }
 function relay3offbutton()
 {
-    websocket.send('SEND RELAY 3 0\r');//
+    websocket.send('SEND RELAY 3 0');//
 }
 function relay4onbutton()
 {
-    websocket.send('SEND RELAY 4 1\r');//
+    websocket.send('SEND RELAY 4 1');//
 }
 function relay4offbutton()
 {
-    websocket.send('SEND RELAY 4 0\r');//
+    websocket.send('SEND RELAY 4 0');//
 }
 
 //************************************  SMPTE  ******************************
 function smpteonbutton()
 {
-    websocket.send('SEND SLAVE SMPTE ON\r');//
+    websocket.send('SEND SLAVE SMPTE ON');//
 }
 
 function smpteoffbutton()
 {
-    websocket.send('SEND SLAVE SMPTE OFF\r');//
+    websocket.send('SEND SLAVE SMPTE OFF');//
 }
 
 //************************************  DAC  ******************************
 function dac1button()
 {
     var val = document.getElementById('dac1output').value;
-    websocket.send('SEND SLAVE DAC1 ' + val + '\r');//
+    websocket.send('SEND SLAVE DAC1 ' + val + '');//
 }
 
 function dac2button()
 {
     var val = document.getElementById('dac2output').value;
-    websocket.send('SEND SLAVE DAC2 ' + val + '\r');//
+    websocket.send('SEND SLAVE DAC2 ' + val + '');//
 }
 
 //************************************  DMX  ******************************
@@ -113,7 +113,7 @@ function dmxchwatch()
     var val1 = document.getElementById('dmx1').value;
     var val2 = document.getElementById('dmx2').value;
     var val3 = document.getElementById('dmx3').value;
-    websocket.send('SEND SLAVE DMX_CH ' + val1 +  " " + val2 + " " + val3 + '\r');//
+    websocket.send('SEND SLAVE DMX_CH ' + val1 +  " " + val2 + " " + val3 + '');//
 }
 
 //************************************  SEND TO DISPLAY  ******************************
@@ -122,7 +122,7 @@ function sendtext()
     var name = document.getElementById('showname').value.trim();
     var text = document.getElementById('texttosend').value.trim();
 
-    websocket.send('SEND DISP ' + name +  " Text " + text + '\r');//
+    websocket.send('SEND DISP ' + name +  " Text " + text + '');//
 }
 
 //************************************  SERIAL  ******************************
@@ -131,7 +131,7 @@ function sendserial1()
     var baud = document.getElementById('serial1baud').value;
     var text = document.getElementById('serial1data').value.trim();
 
-    websocket.send('SEND SLAVE SER1 ' + baud +  " " + text + '\r');//
+    websocket.send('SEND SLAVE SER1 ' + baud +  " " + text + '');//
 }
 
 function sendserial2()
@@ -139,7 +139,7 @@ function sendserial2()
     var baud = document.getElementById('serial2baud').value;
     var text = document.getElementById('serial2data').value.trim();
 
-    websocket.send('SEND SLAVE SER2 ' + baud +  " " + text + '\r');//
+    websocket.send('SEND SLAVE SER2 ' + baud +  " " + text + '');//
 }
 
 function sendserial3()
@@ -147,5 +147,5 @@ function sendserial3()
     var baud = document.getElementById('serial3baud').value;
     var text = document.getElementById('serial3data').value.trim();
 
-    websocket.send('SEND SLAVE SER3 ' + baud +  " " + text + '\r');//
+    websocket.send('SEND SLAVE SER3 ' + baud +  " " + text + '');//
 }
