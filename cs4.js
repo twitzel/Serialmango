@@ -249,6 +249,10 @@ exports.websocketDataIn = function(dataSocket, Socket){
             });
         }
     }
+    else if (dataSocket.substr(0,4) == "SEND") // these are commands to send directly to the CS4I/0
+    {
+            comlib.write(dataSocket.substr(5)); // send it out the serial port
+    }
     else
     {
         serialDataSocket = JSON.parse(dataSocket);

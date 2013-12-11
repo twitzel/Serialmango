@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<script  src = "./Scripts/cs4Home.js"> </script>
+<script  src = "./Scripts/cs4Settings.js"> </script>
 <link rel='stylesheet'  href='./stylesheets/cs4Settings.css'>
 <link rel='stylesheet'  href='./stylesheets/cs4Menu.css'>
 
@@ -111,27 +111,27 @@
         <input id=serial1data name=serial1data type=text value="serial 1 data" required style = "width: 8em" >
         <label>Serial 1 Baud Rate</label>
         <input id=serial1baud name=serial1baud type=number value="9600" required style = "width: 8em" >
-        <button id = "semmndserial1"  onmousedown = "sendserial1()"> Serial 1 Send </button>
+        <button id = "sendserial1"  onmousedown = "sendserial1()"> Serial 1 Send </button>
         <label>Serial 2 Data</label>
         <input id=serial2data name=serial2data type=text value="serial 2 data" required style = "width: 8em" >
         <label>Serial 2 Baud Rate</label>
         <input id=serial2baud name=serial2baud type=number value="9600" required style = "width: 8em" >
-        <button id = "semmndserial2"  onmousedown = "sendserial2()"> Serial 2 Send </button>
+        <button id = "sendserial2"  onmousedown = "sendserial2()"> Serial 2 Send </button>
         <label>Serial 3 Data</label>
         <input id=serial3data name=serial3data type=text value="serial 3 data" required style = "width: 8em" >
         <label>Serial 3 Baud Rate</label>
         <input id=serial3baud name=serial3baud type=number value="9600" required style = "width: 8em" >
-        <button id = "semmndserial3"  onmousedown = "sendserial3()"> Serial 3 Send </button>
+        <button id = "sendserial3"  onmousedown = "sendserial3()"> Serial 3 Send </button>
 
     </fieldset>
 
     <fieldset id = "dac">
         <legend>DAC</legend>
         <label>DAC 1 (Millivolts)</label>
-        <input id=dac1output name=dac1output type=number value="3000" required style = "width: 8em" >
+        <input id=dac1output name=dac1output type=number min="0" max="5000" value="3000" required style = "width: 8em" >
         <button id = "dac1button"  onmousedown = "dac1button()"> DAC 1 </button>
         <label>DAC 2 (Millivolts)</label>
-        <input id=dac2output name=dac2output type=number value="2000" required style = "width: 8em" >
+        <input id=dac2output name=dac2output type=number  min="0" max="5000" value="2000" required style = "width: 8em" >
         <button id = "dac2button"  onmousedown = "dac2button()"> DAC 2 </button>
 
     </fieldset>
@@ -146,11 +146,11 @@
     <fieldset id = "dmxch">
         <legend>DMX Channel Select</legend>
         <label>1st Channel</label>
-        <input id=dmx1 name=dmx1 type=number value="1" required style = "width: 2em" >
+        <input id=dmx1 name=dmx1 type=number value="1" min="1" max="512" style = "width: 3.3em" >
         <label>2nd Channel</label>
-        <input id=dmx2 name=dmx2 type=number value="2" required style = "width: 2em" >
+        <input id=dmx2 name=dmx2 type=number value="2" min="1" max="512" required style = "width: 3.3em" >
         <label>3rd Chanel</label>
-        <input id=dmx3 name=dmx3 type=number value="3" required style = "width: 2em" >
+        <input id=dmx3 name=dmx3 type=number value="3" min="1" max="512" required style = "width: 3.3em" >
         <button id = "dmxchwatch"  onmousedown = "dmxchwatch()"> Update DMX Channel Watch </button>
 
     </fieldset>
