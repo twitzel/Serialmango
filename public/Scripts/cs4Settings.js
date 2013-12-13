@@ -179,6 +179,7 @@ function midi1button()
     if(document.getElementById('light').checked)
     {
         var output = [];
+        var outputfinal = new Uint8Array(30);
         var start = "SEND MIDI1 ";
         var str = "F07F05020101";  //prefix
         var cue = document.getElementById('lightcuenumber').value.trim();
@@ -189,8 +190,11 @@ function midi1button()
         }
         for(var i = 0; i < start.length; i++)
         {
-            output.push(start[i]);
+            //output.push(start[i]);
+            output.push(start.charCodeAt(i));
+
         }
+      //  output = output.join("")
         for(var i = 0; i<a.length ; i++)
         {
             output.push(parseInt(a[i],16));
@@ -198,8 +202,16 @@ function midi1button()
         for(var i = 0; i < cue.length; i++)
         {
             output.push(cue.charCodeAt(i));
+           // output.push(String.fromCharCode(cue[i]));
         }
-        websocket.send(output.join(""));
+        output.push(247);// F7
+        var out = String.fromCharCode(output[0]);
+        for(var i = 1; i<output.length; i++)
+        {
+            out += String.fromCharCode(output[i]);
+        }
+
+        websocket.send(out);
     }
     if(document.getElementById('noteon').checked)
     {

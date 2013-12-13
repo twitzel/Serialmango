@@ -47,6 +47,7 @@ exports.openSerialPort = function(portname)
 
 
 exports.write = function(data) {
+
     serialPort.write(data,function(err, results)
     {
           console.log('err (undefined is none)' + err);
