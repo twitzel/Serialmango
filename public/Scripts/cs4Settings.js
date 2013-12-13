@@ -149,3 +149,73 @@ function sendserial3()
 
     websocket.send('SEND SLAVE SER3 ' + baud +  " " + text + '');//
 }
+
+//************************************  STATUS  ******************************
+function adc1button()
+{
+    websocket.send('SEND SLAVE ADC1');//
+}
+function adc2button()
+{
+    websocket.send('SEND SLAVE ADC2');//
+}
+function closure1button()
+{
+    websocket.send('SEND SLAVE CLOSURE1');//
+}
+function closure2button()
+{
+    websocket.send('SEND SLAVE CLOSURE2');//
+}
+function dmxbutton()
+{
+    websocket.send('SEND SLAVE DMX');//
+}
+
+//************************************  MIDI  ******************************
+function midi1button()
+{
+    var val;
+    if(document.getElementById('light').checked)
+    {
+        var output = [];
+        var start = "SEND MIDI1 ";
+        var str = "F07F05020101";  //prefix
+        var cue = document.getElementById('lightcuenumber').value.trim();
+        var a = [];
+       // a.push('SEND MIDI1 ');
+        for (var i = 0; i < str.length; i += 2) {
+            a.push("0x" + str.substr(i, 2));
+        }
+        for(var i = 0; i < start.length; i++)
+        {
+            output.push(start[i]);
+        }
+        for(var i = 0; i<a.length ; i++)
+        {
+            output.push(parseInt(a[i],16));
+        }
+        for(var i = 0; i < cue.length; i++)
+        {
+            output.push(cue.charCodeAt(i));
+        }
+        websocket.send(output.join(""));
+    }
+    if(document.getElementById('noteon').checked)
+    {
+
+    }
+    if(document.getElementById('noteoff').checked)
+    {
+
+    }
+    if(document.getElementById('hex').checked)
+    {
+
+    }
+}
+
+function midi2button()
+{
+
+}

@@ -48,7 +48,7 @@ sendOutput = function (dataToSend)
     addTime = addTime + "\""+  (new Date( lastconverted.setMilliseconds(lastconverted.getMilliseconds() + (timerStartTime -lastCueReceivedInternalTime)))).toISOString() +"\", \"Dout\" : \"" + dataToSend + "\"}";
 
     //send it out the socket
-    comlib.websocketsend(".    Sent: " + addTime) ;
+    comlib.websocketsend("  Sent: " + addTime) ;
 
     //Log the data into the collection
     addTime = JSON.parse(addTime);
@@ -420,14 +420,14 @@ function parseCue(data)
             type = "Pitch Wheel Control";
         }
 
-        return (serialData.Time.toISOString() + " " + type + " ---    " + indata);
+        return (serialData.Time.toISOString() + "  " + type + ": " + indata);
 
 
 
     }
     else // just send data
     {
-        return (serialData.Time.toISOString() + " " + indata);
+        return (serialData.Time.toISOString() + "  " + source + " " + indata);
     }
 
 }
