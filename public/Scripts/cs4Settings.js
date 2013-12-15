@@ -175,59 +175,74 @@ function dmxbutton()
 //************************************  MIDI  ******************************
 function midi1button()
 {
-    var val;
     if(document.getElementById('light').checked)
     {
-        var output = [];
-        var outputfinal = new Uint8Array(30);
-        var start = "SEND MIDI1 ";
-        var str = "F07F05020101";  //prefix
+        var start = "SEND MIDI1 F07F05020101";
         var cue = document.getElementById('lightcuenumber').value.trim();
-        var a = [];
-       // a.push('SEND MIDI1 ');
-        for (var i = 0; i < str.length; i += 2) {
-            a.push("0x" + str.substr(i, 2));
-        }
-        for(var i = 0; i < start.length; i++)
-        {
-            //output.push(start[i]);
-            output.push(start.charCodeAt(i));
 
-        }
-      //  output = output.join("")
-        for(var i = 0; i<a.length ; i++)
+        for (var i = 0; i < cue.length; i ++)  // convert cue info to hex string be adding 0x30
         {
-            output.push(parseInt(a[i],16));
+            if(cue[i] == ".")
+            {
+                start += "2E";
+            }
+            else
+            {
+                start += (parseInt(cue[i])  + 0x30).toString(16);
+            }
         }
-        for(var i = 0; i < cue.length; i++)
-        {
-            output.push(cue.charCodeAt(i));
-           // output.push(String.fromCharCode(cue[i]));
-        }
-        output.push(247);// F7
-        var out = String.fromCharCode(output[0]);
-        for(var i = 1; i<output.length; i++)
-        {
-            out += String.fromCharCode(output[i]);
-        }
+        start += "F7";
 
-        websocket.send(out);
+        websocket.send(start);
     }
     if(document.getElementById('noteon').checked)
     {
-
+        websocket.send('SEND MIDI1 920403');
     }
     if(document.getElementById('noteoff').checked)
     {
-
+        websocket.send('SEND MIDI1 821216');
     }
     if(document.getElementById('hex').checked)
     {
-
+        var cue = document.getElementById('hexnumber').value.trim();
+        websocket.send( "SEND MIDI1 " + cue)
     }
 }
 
 function midi2button()
 {
+    if(document.getElementById('light').checked)
+    {
+        var start = "SEND MIDI2 F07F05020101";
+        var cue = document.getElementById('lightcuenumber').value.trim();
 
+        for (var i = 0; i < cue.length; i ++)  // convert cue info to hex string be adding 0x30
+        {
+            if(cue[i] == ".")
+            {
+                start += "2E";
+            }
+            else
+            {
+                start += (parseInt(cue[i])  + 0x30).toString(16);
+            }
+        }
+        start += "F7";
+
+        websocket.send(start);
+    }
+    if(document.getElementById('noteon').checked)
+    {
+        websocket.send('SEND MIDI2 920403');
+    }
+    if(document.getElementById('noteoff').checked)
+    {
+        websocket.send('SEND MIDI2 821216');
+    }
+    if(document.getElementById('hex').checked)
+    {
+        var cue =document.getElementById('hexnumber').value.trim();
+        websocket.send( "SEND MIDI2 " + cue)
+    }
 }

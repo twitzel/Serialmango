@@ -10,7 +10,9 @@ exports.openSerialPort = function(portname)
     serialPort = new com.SerialPort(portname, {
         baudrate: 115200,
 // Set the object to fire an event after a \n (chr 13 I think)  is in the serial buffer
-        parser: com.parsers.readline("\n")
+        parser: com.parsers.readline("\n"),
+        databits: 8
+
     });
      //serialPort.
 
