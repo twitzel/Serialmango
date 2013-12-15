@@ -420,7 +420,7 @@ function parseCue(data)
             type = "Pitch Wheel Control";
         }
 
-        return (serialData.Time.toISOString() + "  " + type + ": " + indata);
+        return (serialData.Time.toISOString() + "  " + source + "  " + type + ": " + indata);
 
 
 
