@@ -48,8 +48,8 @@ function testWebSocket()
 function onOpen(evt) {
 
    // var send = SetCS4Time();
-    var send = new Date();
-    websocket.send("TME " + send); // SET the CS4 I/O clock to current browser time - ignores time zone offset
+  //  var send = new Date();
+  //  websocket.send("TME " + send); // SET the CS4 I/O clock to current browser time - ignores time zone offset
 }
 
 function onClose(evt) {

@@ -43,6 +43,7 @@ function doSend(message) {
     writeToScreen("SENT: " + message);  websocket.send(message);
 }
 
+
 function writeToScreen(message) {
     // get time of incoming cue
     lastCueTime = new Date();
@@ -245,4 +246,22 @@ function midi2button()
         var cue =document.getElementById('hexnumber').value.trim();
         websocket.send( "SEND MIDI2 " + cue)
     }
+}
+
+//************************************  TIME  ******************************
+
+function gettimebutton(){
+    websocket.send( "SEND GETTIME")
+}
+
+function timebutton(){
+    var send = new Date();
+    websocket.send("TME " + send); // SET the CS4 I/O clock to current browser time - ignores time zone offset
+}
+
+function timeZoneChange()
+{
+    timeZone = document.getElementById('timeZoneCombo');
+    value = timeZone.value;
+    websocket.send("TME TZ " + value);
 }

@@ -23,7 +23,7 @@ exports.openSerialPort = function(portname)
         console.log("Port open success:"+portname);
         //if CS4 branch then get time from io board
        if( branch == 'cs4'){
-          serialPort.write("GETTIME\n\r");
+          serialPort.write("GETTIME\n\r"); //get time to log as starting up time
        }
 
 

@@ -366,6 +366,12 @@ else
 {   //we have startup time from the CS4 I/O board
     collectionStartup.insert(serialData, {w: 1}, function (err, result) {
         console.log(result);
+        try{
+           comlib.websocketsend("CS4 Current time is:" + data);
+        }
+        catch(err)
+        {//do nothing
+        }
     });
 
 }
