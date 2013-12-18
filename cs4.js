@@ -337,8 +337,8 @@ exports.socketDataOut = function (data) {
                for(var i = 0; i< item[0].OutData.length; i++)
                {
                    // dir = item[0].OutData[i][0].Dir;    // ****** needs to ba added to R4-4 Receiver Parsing ****** //
-                    dir = "";
-                    port = item[0].OutData[i].Port;
+                    dir = "xxxx";
+                    port = item[0].OutData[i].Port.toUpperCase();
                     showname = item[0].OutData[i].Showname;
                     dataToSend = item[0].OutData[i].Dout;
                     delay = item[0].OutData[i].Delay;
