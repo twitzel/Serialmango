@@ -19,7 +19,7 @@ function init()
     UpTime(); //get uptime and update it every second
 
     outputStartup.innerHTML =  "1.  " + new Date(startup[0].Time).toString().substr(0,25); // this to eliminate blank line at top
-    outputStartup.innerHTML = "   Last 25 Restarts:".bold() + "<br>" + outputStartup.innerHTML;
+    outputStartup.innerHTML = "   Last 25 Restarts:".bold().fontsize(4) + "<br>" + outputStartup.innerHTML;
     for(var i = 1; i < startup.length; i++)
     {
         outputStartup.innerHTML = outputStartup.innerHTML +"<BR>" + (parseInt(i)+1) + ".  " +new Date(startup[i].Time).toString().substr(0,25) ;
