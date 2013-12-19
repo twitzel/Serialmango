@@ -101,12 +101,15 @@ exports.setup = function()
         else
         {
             console.log("CS4: We are now connected to MongoDb, Wiz database, log collection");
-//           try{
-//               global.collectionLog =     db.createCollection("logcap", { capped : true, size : 500000, max : 20000 } );
-//            }
- //           catch(err){
- //               global.collectionLog=db.collection('logcap');}
-        //
+
+           try{
+               db.createCollection("log", { capped : true, size : 5000000, max : 20000 } );
+            }
+            catch(err){
+                console.log("create collection errer" + err);
+            }
+
+
 
             global.collectionLog = db.collection('log');
             global.collectionCue = db.collection('cue');
