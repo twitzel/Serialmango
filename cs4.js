@@ -7,11 +7,13 @@
 
 
 MongoClient = require('mongodb').MongoClient;
+var fs = require('fs');
 var os = require('os');
 var express = require('express');
 var routes = require('./routes');
 var user = require('./routes/user');
 var time = require('time');
+var usbdet =require('usb-detection');
 var timedOutInterval = 200; //time to wait between serial transmitts
 var timedOut = true; // set to false will delay transmission;
 var comlib = require('./comlib');
@@ -19,7 +21,7 @@ var lastCueReceived = {"Time" : "10/09/13 15:20:04.20", "Source" : "Midi1", "InD
 var serialDataSocket;
 var lastCueReceivedInternalTime= new Date();
 var lastCueReceivedExternalTime = new Date();
-
+var usbstickPath;
 
 
 //routine to ensure that serial data is not sent more than
