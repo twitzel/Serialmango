@@ -165,7 +165,7 @@ exports.setup = function()
     //set timezone of pi
    // time.tzset('US/Pacific');
     time.tzset('US/Eastern');
-
+/*
     usbdetect.on('change', function(err, devices) {
         console.log('Number of devices = ', devices.length);
         });
@@ -175,7 +175,7 @@ exports.setup = function()
     usbdetect.on('remove', function(err, devices) {
         console.log('Number of devices = ', devices.length);
     });
-
+*/
 };
 
 
