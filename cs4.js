@@ -481,18 +481,23 @@ function copyDataBase()
     }
     else
     {
-        console.log("got here");
         usbstickPath = "/media";
         fs.readdir(usbstickPath, function(err,list){
-            console.log("got here 2");
-            console.log("List number: " + list.length);
+            if( list.length!= 0)
+            {
+                list.forEach(function (file) {
+                    // Full path of that file
+                    var path = usbstickPath + "/" + file;
+                    comlib.websocketsend("Path to USB stick is: " + path);
 
-            list.forEach(function (file) {
-                // Full path of that file
-                var path = usbstickPath + "/" + file;
-                comlib.websocketsend(path);
-                console.log("Files: " + list.length) ;
-            });
+                });
+            }
+            else
+            {
+                comlib.websocketsend("USB stick is not detected.  Please insert USB stick and try again ");
+            }
+
+
 
         });
 
