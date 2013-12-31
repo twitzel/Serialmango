@@ -13,7 +13,7 @@ var express = require('express');
 var routes = require('./routes');
 var user = require('./routes/user');
 var time = require('time');
-var usbdet =require('usb-detection');
+var usbdetect =require('usb-detection');
 var timedOutInterval = 200; //time to wait between serial transmitts
 var timedOut = true; // set to false will delay transmission;
 var comlib = require('./comlib');
@@ -69,7 +69,6 @@ sendOutput = function (dataToSend)
 
 };
 
-
 exports.setup = function()
 {
     //iterate through all of the system IPv4 addresses
@@ -90,8 +89,6 @@ exports.setup = function()
     console.log('My IP Address is: ' + addresses[0]);
 
 
-
-
     //MongoClient.connect("mongodb://localhost:27017/WizDb", function(err, db)
    // MongoClient.connect("mongodb://192.168.2.10:27017/WizDb", function(err, db)
     MongoClient.connect("mongodb://" + global.myuri + ":27017/WizDb", function(err, db)
@@ -110,8 +107,6 @@ exports.setup = function()
             catch(err){
                 console.log("create collection errer" + err);
             }
-
-
 
             global.collectionLog = db.collection('log');
             global.collectionCue = db.collection('cue');
@@ -149,22 +144,6 @@ exports.setup = function()
         }
     });
 
-/*    // MOVED FORM HERE = open serial port after mongo is running
-
-    //now lets find out if we are on a windows system
-    // if we are open the required com port
-    //if not open the pi port
-    console.log("Host System Name: " + os.type());
-    if(os.type() == 'Windows_NT')
-    {
-        comlib.openSerialPort('com19'); //windows
-    }
-    else
-    {
-        comlib.openSerialPort("/dev/ttyUSB0"); //not windows - Raspberry PI
-    }
-*/
-
     //set up all routes HERE
     //set up all routes HERE
     //set up all routes HERE
@@ -187,6 +166,15 @@ exports.setup = function()
    // time.tzset('US/Pacific');
     time.tzset('US/Eastern');
 
+    usbdetect.on('change', function(err, devices) {
+        console.log('Number of devices = ', devices.length);
+        });
+    usbdetect.on('add', function(err, devices) {
+        console.log('Number of devices = ', devices.length);
+    });
+    usbdetect.on('remove', function(err, devices) {
+        console.log('Number of devices = ', devices.length);
+    });
 
 };
 
@@ -195,8 +183,6 @@ exports.setup = function()
     TME     Sets the CS4 I/O clock
     TME TZ  Changes system time zone
     LOG     Sends log file out to client
-
-
  */
 exports.websocketDataIn = function(dataSocket, Socket){
     if(dataSocket.substr(0,3) == "TME") // if this is a time command
@@ -296,8 +282,6 @@ exports.websocketDataIn = function(dataSocket, Socket){
     }
 };
 
-
-
 // This routine receives serial cue data,
 // parses it and sends it out the web socket
 // puts it in Log collection.
@@ -323,7 +307,6 @@ exports.socketDataOut = function (data) {
 
     serialData = JSON.parse(data);
     serialData.Time = new Date(serialData.Time);
-
 
 
     // make sure this is incoming cue data
@@ -368,8 +351,6 @@ if(data.length >= 35) // this is to let GETTIME come through and get logged GETT
     collectionLog.insert(serialData, {w: 1}, function (err, result) {
         console.log(result);
     });
-
-
 
     //parse the incoming cue data
    comlib.websocketsend(parseCue(data));
