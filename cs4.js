@@ -13,7 +13,7 @@ var express = require('express');
 var routes = require('./routes');
 var user = require('./routes/user');
 var time = require('time');
-var usbdetect =require('usb-detection');
+var ncp = require('ncp').ncp;
 var timedOutInterval = 200; //time to wait between serial transmitts
 var timedOut = true; // set to false will delay transmission;
 var comlib = require('./comlib');
@@ -165,17 +165,6 @@ exports.setup = function()
     //set timezone of pi
    // time.tzset('US/Pacific');
     time.tzset('US/Eastern');
-/*
-    usbdetect.on('change', function(err, devices) {
-        console.log('Number of devices = ', devices.length);
-        });
-    usbdetect.on('add', function(err, devices) {
-        console.log('Number of devices = ', devices.length);
-    });
-    usbdetect.on('remove', function(err, devices) {
-        console.log('Number of devices = ', devices.length);
-    });
-*/
 };
 
 
@@ -489,6 +478,12 @@ function copyDataBase()
                     // Full path of that file
                     var path = usbstickPath + "/" + file;
                     comlib.websocketsend("Path to USB stick is: " + path);
+                    ncp("/data/db", path, function (err) {
+                        if (err) {
+                            return comlib.websocketsend("Error in copy " + err);
+                        }
+                        comlib.websocketsend('Done all files copied!');
+                    });
 
                 });
             }
