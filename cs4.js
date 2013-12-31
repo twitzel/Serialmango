@@ -481,8 +481,10 @@ function copyDataBase()
     }
     else
     {
+        console.log("got here");
         usbstickPath = "/media";
         fs.readdir(usbstickPath, function(err,list){
+            console.log("got here 2");
             list.forEach(function (file) {
                 // Full path of that file
                 var path = usbstickPath + "/" + file;
