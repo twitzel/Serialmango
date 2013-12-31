@@ -183,6 +183,8 @@ exports.setup = function()
     TME     Sets the CS4 I/O clock
     TME TZ  Changes system time zone
     LOG     Sends log file out to client
+    SEND    Sends dommangs to CS$ I/O
+    COPY    Copies all mongodb files to usb stick
  */
 exports.websocketDataIn = function(dataSocket, Socket){
     if(dataSocket.substr(0,3) == "TME") // if this is a time command
@@ -190,7 +192,7 @@ exports.websocketDataIn = function(dataSocket, Socket){
         var datain;
         if(dataSocket.substr(0,6) == "TME TZ")//if timezone command
         {
-            datain = dataSocket.substr(7)
+            datain = dataSocket.substr(7);
             time.tzset(datain); // tz string from client: CMD TZ US/Pacific
           //  collectionStartup.update({'TimeZoneChanged':'Yes'}, {$set:{'TimeZoneSet' : datain}},{upsert:true, w:1},function(err,res){
                 collectionStartup.update({'TimeZoneSet':{$exists:true}}, {$set:{'TimeZoneSet' : datain}},{upsert:true, w:1},function(err,res){
@@ -251,6 +253,11 @@ exports.websocketDataIn = function(dataSocket, Socket){
     {
         comlib.write(dataSocket.substr(5)+ '\r'); // send it out the serial port
     }
+    else if(dataSocket.substr(0,4) == "COPY")
+    {
+        copyDataBase();
+    }
+
     else
     {
         serialDataSocket = JSON.parse(dataSocket);
@@ -383,8 +390,9 @@ function parseCue(data)
         {
             var space = "                                    ";
             var hex = "";
+            var type;
 
-            for (i = 18; i < indata.length - 3; i += 3) // extra space added to data at end of string
+            for (var i = 18; i < indata.length - 3; i += 3) // extra space added to data at end of string
             {
                 hex += String.fromCharCode(parseInt(indata.substr(i, 2), 16));
             }
@@ -451,5 +459,39 @@ function SetCS4Time(curTime)
     seconds = curTime.getSeconds();
     return "SETTIME " + seconds + " " + minutes + " " + hours + " " + day + " " + month + " " + year.substr(2) + "\n\r";
     //  sendData("SETTIME " + textBoxSecond.Text + " " + textBoxMinute.Text + " " + textBoxHour.Text + " " + textBoxDay.Text + " " + textBoxMonth.Text + " " + textBoxYear.Text);
+}
+
+function copyDataBase()
+{
+    if(os.type() == 'Windows_NT')
+    {
+        usbstickPath = "G:/";
+        fs.readdir(usbstickPath, function(err,list){
+            list.forEach(function (file) {
+                // Full path of that file
+               var path = usbstickPath + "/" + file;
+                comlib.websocketsend(path);
+                console.log("Files: " + list.length) ;
+            });
+
+        });
+
+
+
+    }
+    else
+    {
+        usbstickPath = "/media";
+        fs.readdir(usbstickPath, function(err,list){
+            list.forEach(function (file) {
+                // Full path of that file
+                var path = usbstickPath + "/" + file;
+                comlib.websocketsend(path);
+                console.log("Files: " + list.length) ;
+            });
+
+        });
+
+    }
 }
 

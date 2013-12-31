@@ -248,6 +248,11 @@ function midi2button()
     }
 }
 
+function copyToUSB()
+{
+    websocket.send("COPY");
+}
+
 //************************************  TIME  ******************************
 
 function gettimebutton(){
