@@ -250,7 +250,22 @@ function midi2button()
 
 function copyToUSB()
 {
-    websocket.send("COPY");
+    websocket.send("COPYTOUSB");
+}
+
+function copyFromUSB()
+{
+    websocket.send("COPYFROMUSB");
+}
+
+function copyToInternal()
+{
+    websocket.send("COPYTOINTERNAL");
+}
+
+function copyFromInternal()
+{
+    websocket.send("COPYFROMINTERNAL");
 }
 
 //************************************  TIME  ******************************

@@ -454,20 +454,58 @@ function copyDataBase()
 {
     if(os.type() == 'Windows_NT')
     {
+
         usbstickPath = "G:/";
-        fs.readdir(usbstickPath, function(err,list){
-            list.forEach(function (file) {
-                // Full path of that file
-               var path = usbstickPath + "/" + file;
-                comlib.websocketsend(path);
-                console.log("Files: " + list.length) ;
-            });
+        var path = usbstickPath ;
+        var sourcePath = "d://data/db";
+
+            var files = fs.readdirSync(sourcePath);
+            for(var i in files){
+                if(files[i].indexOf("Db") != -1)
+                {
+                    fs.createReadStream(sourcePath + "/" + files[i]).pipe(fs.createWriteStream(usbstickPath + files[i]));
+                    console.log(files[i]);
+                }
+
+             //   var name = dir+'/'+files[i];
+
+                }
+    }
+
+
+
+
+
+    /*
+
+        ncp("d://data/db", path,  filter = '.Db', function (err) {
+            if (err) {
+                return comlib.websocketsend("Error in copy " + err);
+            }
+            comlib.websocketsend('Done: all files copied!');
 
         });
 
-
-
     }
+    */
+      /*  usbstickPath = "G:/";
+        fs.readdir(usbstickPath, function(err,list){
+            list.forEach(function (file) {
+                // Full path of that file
+               var path = usbstickPath ;
+                comlib.websocketsend("Path to USB stick is: " + path);
+                console.log("Files: " + list.length) ;
+                ncp("d://data/db", path, function (err) {
+                    if (err) {
+                        return comlib.websocketsend("Error in copy " + err);
+                    }
+                    comlib.websocketsend('Done: all files copied!');
+                });
+            });
+
+        });
+    }
+*/
     else
     {
         usbstickPath = "/media";
@@ -478,11 +516,11 @@ function copyDataBase()
                     // Full path of that file
                     var path = usbstickPath + "/" + file;
                     comlib.websocketsend("Path to USB stick is: " + path);
-                    ncp("/data/db", path, function (err) {
+                    ncp("data/db", path, function (err) {
                         if (err) {
                             return comlib.websocketsend("Error in copy " + err);
                         }
-                        comlib.websocketsend('Done all files copied!');
+                        comlib.websocketsend('Done: all files copied!');
                     });
 
                 });
@@ -491,11 +529,7 @@ function copyDataBase()
             {
                 comlib.websocketsend("USB stick is not detected.  Please insert USB stick and try again ");
             }
-
-
-
         });
-
     }
 }
 
