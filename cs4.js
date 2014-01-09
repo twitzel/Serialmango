@@ -465,7 +465,7 @@ function copyDataBase()
         usbstickPath = "G:/";
          path = usbstickPath ;
          sourcePath = "d://data/db";
-         destinationPath = "d:/bac";
+         destinationPath = "d:/bac/dump";
          mongoDirectory = 'd:/mongo/bin/';
 
         try
@@ -474,7 +474,7 @@ function copyDataBase()
 
             spawn('d:/mongo/bin/mongodump', ['-o', destinationPath]).on('exit',function(code){
             console.log('finished ' + code);
-                fse.copyRecursive(destinationPath , usbstickPath, function (err) {
+                fse.copyRecursive(destinationPath , usbstickPath +'dump', function (err) {
                     if (err) {
                         console.log('error '+ err);
                     }
@@ -500,7 +500,7 @@ function copyDataBase()
         usbstickPath = "/media";
          path = usbstickPath ;
          sourcePath = "/data/db";
-         destinationPath = "/home/pi";
+         destinationPath = "/home/pi/dump";
          mongoDirectory = '/opt/mongo/bin/';
 
         fs.readdir(usbstickPath, function(err,list){
@@ -508,7 +508,7 @@ function copyDataBase()
             {
                 spawn(mongoDirectory + 'mongodump', ['-o', destinationPath]).on('exit',function(code){
                     console.log('finished ' + code);
-                    fse.copyRecursive(destinationPath , usbstickPath, function (err) {
+                    fse.copyRecursive(destinationPath , usbstickPath + 'dump', function (err) {
                         if (err) {
                             console.log('error '+ err);
                         }
