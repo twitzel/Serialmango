@@ -8,15 +8,16 @@
 
 MongoClient = require('mongodb').MongoClient;
 var fs = require('fs');
+var fse = require('fs.extra');
 var os = require('os');
 var express = require('express');
 var routes = require('./routes');
 var user = require('./routes/user');
 var time = require('time');
-var ncp = require('ncp').ncp;
 var timedOutInterval = 200; //time to wait between serial transmitts
 var timedOut = true; // set to false will delay transmission;
 var comlib = require('./comlib');
+var spawn = require('child_process').spawn;
 var lastCueReceived = {"Time" : "10/09/13 15:20:04.20", "Source" : "Midi1", "InData" : "F0 7F 05 02 01 01 31 2E 30 30 F7 "};
 var serialDataSocket;
 var lastCueReceivedInternalTime= new Date();
@@ -456,80 +457,55 @@ function copyDataBase()
     {
 
         usbstickPath = "G:/";
-        var path = usbstickPath ;
+       // var path = usbstickPath ;
         var sourcePath = "d://data/db";
-
-            var files = fs.readdirSync(sourcePath);
-            for(var i in files){
-                if(files[i].indexOf("Db") != -1)
-                {
-                    fs.createReadStream(sourcePath + "/" + files[i]).pipe(fs.createWriteStream(usbstickPath + files[i]));
-                    console.log(files[i]);
+        var destinationPath = "d:/bac"
+        var mongoDirectory = 'd:/mongo/bin/';
+/*
+        spawn(mongoDirectory + 'mongodump', ['-o', destinationPath]).on('exit',function(code){
+            console.log('finished ' + code);
+            fse.copyRecursive(destinationPath , usbstickPath, function (err) {
+                if (err) {
+                    console.log('error '+ err);
                 }
+                console.log("Successfully Copied " + destinationPath + " to " + usbstickPath);
+            });
 
-             //   var name = dir+'/'+files[i];
-
-                }
+         });
+*/
     }
 
-
-
-
-
-    /*
-
-        ncp("d://data/db", path,  filter = '.Db', function (err) {
-            if (err) {
-                return comlib.websocketsend("Error in copy " + err);
-            }
-            comlib.websocketsend('Done: all files copied!');
-
-        });
+    else
+    {
+        usbstickPath = "/media";
+      //  var path = usbstickPath ;
+        var sourcePath = "/data/db";
+        var destinationPath = "/home/pi"
+        var mongoDirectory = '/opt/mongo/bin/';
 
     }
-    */
-      /*  usbstickPath = "G:/";
-        fs.readdir(usbstickPath, function(err,list){
-            list.forEach(function (file) {
-                // Full path of that file
-               var path = usbstickPath ;
-                comlib.websocketsend("Path to USB stick is: " + path);
-                console.log("Files: " + list.length) ;
-                ncp("d://data/db", path, function (err) {
-                    if (err) {
-                        return comlib.websocketsend("Error in copy " + err);
-                    }
-                    comlib.websocketsend('Done: all files copied!');
-                });
+
+    try
+    {
+        fs.statSync(usbstickPath);
+        spawn(mongoDirectory + 'mongodump', ['-o', destinationPath]).on('exit',function(code){
+            console.log('finished ' + code);
+            fse.copyRecursive(destinationPath , usbstickPath, function (err) {
+                if (err) {
+                    console.log('error '+ err);
+                }
+                comlib.websocketsend("Successfully Copied All Data to USB Stick");
+                console.log("Successfully Copied " + destinationPath + " to " + usbstickPath);
             });
 
         });
     }
-*/
-    else
+    catch (er)
     {
-        usbstickPath = "/media";
-        fs.readdir(usbstickPath, function(err,list){
-            if( list.length!= 0)
-            {
-                list.forEach(function (file) {
-                    // Full path of that file
-                    var path = usbstickPath + "/" + file;
-                    comlib.websocketsend("Path to USB stick is: " + path);
-                    ncp("data/db", path, function (err) {
-                        if (err) {
-                            return comlib.websocketsend("Error in copy " + err);
-                        }
-                        comlib.websocketsend('Done: all files copied!');
-                    });
-
-                });
-            }
-            else
-            {
-                comlib.websocketsend("USB stick is not detected.  Please insert USB stick and try again ");
-            }
-        });
+        comlib.websocketsend("USB stick is not detected.  Please insert USB stick and try again ");
+        console.log("USB stick is not detected.  Please insert USB stick and try again ");
     }
+
+
 }
 
