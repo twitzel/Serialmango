@@ -512,7 +512,7 @@ function copyDataBase()
                         if (err) {
                             console.log('error '+ err);
                         }
-                        comlib.websocketsend("Successfully Copied All Data to USB Stick");
+                        comlib.websocketsend("Successfully Copied " + destinationPath + " to " + usbstickPath);//("Successfully Copied All Data to USB Stick");
                         console.log("Successfully Copied " + destinationPath + " to " + usbstickPath);
 
                     });
