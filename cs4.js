@@ -497,7 +497,7 @@ function copyDataBase()
 
     else
     {
-        usbstickPath = "/media";
+        usbstickPath = "/media/";
          path = usbstickPath ;
          sourcePath = "/data/db";
          destinationPath = "/home/pi/dump";
