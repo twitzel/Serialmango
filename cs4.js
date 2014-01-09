@@ -497,26 +497,34 @@ function copyDataBase()
 
     else
     {
-        usbstickPath = "/media/";
+        usbstickPath = "/media";
          path = usbstickPath ;
          sourcePath = "/data/db";
          destinationPath = "/home/pi/dump";
          mongoDirectory = '/opt/mongo/bin/';
 
         fs.readdir(usbstickPath, function(err,list){
+            console.log('usb ' + usbstickpath)
             if( list.length!= 0)
             {
-                spawn(mongoDirectory + 'mongodump', ['-o', destinationPath]).on('exit',function(code){
-                    console.log('finished ' + code);
-                    fse.copyRecursive(destinationPath , usbstickPath + 'dump', function (err) {
-                        if (err) {
-                            console.log('error '+ err);
-                        }
-                        comlib.websocketsend("Successfully Copied " + destinationPath + " to " + usbstickPath);//("Successfully Copied All Data to USB Stick");
-                        console.log("Successfully Copied " + destinationPath + " to " + usbstickPath);
+                list.forEach(function (file) {
+                    // Full path of that file
+                    var path = usbstickPath + "/" + file;
+                    comlib.websocketsend("Path to USB stick is: " + path);
+
+                    console.log("path: " + path)
+                    spawn(mongoDirectory + 'mongodump', ['-o', destinationPath]).on('exit',function(code){
+                        console.log('finished ' + code);
+                        fse.copyRecursive(destinationPath , path + '/dump', function (err) {
+                            if (err) {
+                                console.log('error '+ err);
+                            }
+                            comlib.websocketsend("Successfully Copied " + destinationPath + " to " + usbstickPath);//("Successfully Copied All Data to USB Stick");
+                            console.log("Successfully Copied " + destinationPath + " to " + usbstickPath);
+
+                        });
 
                     });
-
                 });
             }
             else
