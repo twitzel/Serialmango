@@ -471,7 +471,6 @@ function copyDataBase()
         try
         {
             fs.statSync(usbstickPath);
-
             spawn('d:/mongo/bin/mongodump', ['-o', destinationPath]).on('exit',function(code){
             console.log('finished ' + code);
                 fse.copyRecursive(destinationPath , usbstickPath +'dump', function (err) {
@@ -481,20 +480,16 @@ function copyDataBase()
 
                     comlib.websocketsend("Successfully Copied All Data to USB Stick");
                     console.log("Successfully Copied " + destinationPath + " to " + usbstickPath);
-
                 });
-
             });
-
         }
         catch (er)
         {
             comlib.websocketsend("USB stick is not detected.  Please insert USB stick and try again ");
             console.log("USB stick is not detected.  Please insert USB stick and try again ");
         }
-
     }
-
+    //this is for pi
     else
     {
         usbstickPath = "/media";
@@ -503,15 +498,13 @@ function copyDataBase()
          destinationPath = "/home/pi/dump";
          mongoDirectory = '/opt/mongo/bin/';
 
+        //have to find out the 'name' of the usb stick - it will be the only device in media
         fs.readdir(usbstickPath, function(err,list){
-            console.log('usb ' + usbstickPath)
             if( list.length!= 0)
             {
                 list.forEach(function (file) {
                     // Full path of that file
                     var path = usbstickPath + "/" + file;
-                    comlib.websocketsend("Path to USB stick is: " + path);
-
                     console.log("path: " + path)
                     spawn(mongoDirectory + 'mongodump', ['-o', destinationPath]).on('exit',function(code){
                         console.log('finished ' + code);
@@ -519,11 +512,9 @@ function copyDataBase()
                             if (err) {
                                 console.log('error '+ err);
                             }
-                            comlib.websocketsend("Successfully Copied " + destinationPath + " to " + usbstickPath);//("Successfully Copied All Data to USB Stick");
+                            comlib.websocketsend("Successfully Copied All Data to USB Stick");
                             console.log("Successfully Copied " + destinationPath + " to " + usbstickPath);
-
                         });
-
                     });
                 });
             }
