@@ -453,59 +453,78 @@ function SetCS4Time(curTime)
 
 function copyDataBase()
 {
+    var usbstickPath;
+    var path;
+    var sourcePath;
+    var destinationPath;
+    var mongoDirectory;
+
     if(os.type() == 'Windows_NT')
     {
 
         usbstickPath = "G:/";
-       // var path = usbstickPath ;
-        var sourcePath = "d://data/db";
-        var destinationPath = "d:/bac"
-        var mongoDirectory = 'd:/mongo/bin/';
-/*
-        spawn(mongoDirectory + 'mongodump', ['-o', destinationPath]).on('exit',function(code){
+         path = usbstickPath ;
+         sourcePath = "d://data/db";
+         destinationPath = "d:/bac";
+         mongoDirectory = 'd:/mongo/bin/';
+
+        try
+        {
+            fs.statSync(usbstickPath);
+
+            spawn('d:/mongo/bin/mongodump', ['-o', destinationPath]).on('exit',function(code){
             console.log('finished ' + code);
-            fse.copyRecursive(destinationPath , usbstickPath, function (err) {
-                if (err) {
-                    console.log('error '+ err);
-                }
-                console.log("Successfully Copied " + destinationPath + " to " + usbstickPath);
+                fse.copyRecursive(destinationPath , usbstickPath, function (err) {
+                    if (err) {
+                        console.log('error '+ err);
+                    }
+
+                    comlib.websocketsend("Successfully Copied All Data to USB Stick");
+                    console.log("Successfully Copied " + destinationPath + " to " + usbstickPath);
+
+                });
+
             });
 
-         });
-*/
+        }
+        catch (er)
+        {
+            comlib.websocketsend("USB stick is not detected.  Please insert USB stick and try again ");
+            console.log("USB stick is not detected.  Please insert USB stick and try again ");
+        }
+
     }
 
     else
     {
         usbstickPath = "/media";
-      //  var path = usbstickPath ;
-        var sourcePath = "/data/db";
-        var destinationPath = "/home/pi"
-        var mongoDirectory = '/opt/mongo/bin/';
+         path = usbstickPath ;
+         sourcePath = "/data/db";
+         destinationPath = "/home/pi";
+         mongoDirectory = '/opt/mongo/bin/';
 
-    }
+        fs.readdir(usbstickPath, function(err,list){
+            if( list.length!= 0)
+            {
+                spawn(mongoDirectory + 'mongodump', ['-o', destinationPath]).on('exit',function(code){
+                    console.log('finished ' + code);
+                    fse.copyRecursive(destinationPath , usbstickPath, function (err) {
+                        if (err) {
+                            console.log('error '+ err);
+                        }
+                        comlib.websocketsend("Successfully Copied All Data to USB Stick");
+                        console.log("Successfully Copied " + destinationPath + " to " + usbstickPath);
 
-    try
-    {
-        fs.statSync(usbstickPath);
-        spawn(mongoDirectory + 'mongodump', ['-o', destinationPath]).on('exit',function(code){
-            console.log('finished ' + code);
-            fse.copyRecursive(destinationPath , usbstickPath, function (err) {
-                if (err) {
-                    console.log('error '+ err);
-                }
-                comlib.websocketsend("Successfully Copied All Data to USB Stick");
-                console.log("Successfully Copied " + destinationPath + " to " + usbstickPath);
-            });
+                    });
 
+                });
+            }
+            else
+            {
+                comlib.websocketsend("USB stick is not detected.  Please insert USB stick and try again ");
+                console.log("USB stick is not detected.  Please insert USB stick and try again ");
+            }
         });
     }
-    catch (er)
-    {
-        comlib.websocketsend("USB stick is not detected.  Please insert USB stick and try again ");
-        console.log("USB stick is not detected.  Please insert USB stick and try again ");
-    }
-
-
 }
 
