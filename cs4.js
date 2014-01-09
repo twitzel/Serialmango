@@ -504,7 +504,7 @@ function copyDataBase()
          mongoDirectory = '/opt/mongo/bin/';
 
         fs.readdir(usbstickPath, function(err,list){
-            console.log('usb ' + usbstickpath)
+            console.log('usb ' + usbstickPath)
             if( list.length!= 0)
             {
                 list.forEach(function (file) {
