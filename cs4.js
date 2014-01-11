@@ -582,7 +582,7 @@ function copyFromUSB()
                     if (err) {
                         console.log('error '+ err);
                     }
-                    spawn('d:/mongo/bin/mongorestore', ['--db',collectionName , 'd:/bac/dump/' + collectionName , '--drop', '-vvv']).on('exit',function(code){
+                    spawn(mongoDirectory + 'mongorestore', ['--db',collectionName , destinationPath + "/" + collectionName , '--drop', '-vvv']).on('exit',function(code){
                         console.log('finished ' + code);
                     });
 
@@ -590,9 +590,6 @@ function copyFromUSB()
                     console.log("Successfully Copied " + usbstickPath + " to " + destinationPath);
                 });
             });
-
-
-
         }
         catch (er)
         {
@@ -618,16 +615,20 @@ function copyFromUSB()
                     var path = usbstickPath + "/" + file;
                     console.log("path: " + path)
 
-
-
-                    spawn(mongoDirectory + 'mongodump', ['-o', destinationPath]).on('exit',function(code){
-                        console.log('finished ' + code);
-                        fse.copyRecursive(destinationPath , path + '/dump', function (err) {
+                    fse.rmrf(destinationPath, function (err) {
+                        if (err) {
+                            console.error(err);
+                        }
+                        fse.copyRecursive(usbstickPath +'dump', destinationPath , function (err) {
                             if (err) {
                                 console.log('error '+ err);
                             }
-                            comlib.websocketsend("Successfully Copied All Data to USB Stick");
-                            console.log("Successfully Copied " + destinationPath + " to " + usbstickPath);
+                            spawn(mongoDirectory + 'mongorestore', ['--db',collectionName , destinationPath + "/" + collectionName , '--drop', '-vvv']).on('exit',function(code){
+                                console.log('finished ' + code);
+                            });
+
+                            comlib.websocketsend("Successfully Copied All Data from USB Stick");
+                            console.log("Successfully Copied " + usbstickPath + " to " + destinationPath);
                         });
                     });
                 });
@@ -643,7 +644,36 @@ function copyFromUSB()
 
 function copyToInternal()
 {
+    // copies database to destinationPath.
+    if(os.type() == 'Windows_NT')
+    {
+        usbstickPath = "G:/"; // this is based on particular usbsticl
+        path = usbstickPath ;
+        sourcePath = "d://data/db"; // this is based on system install of mongo
+        destinationPath = "d:/mongoBackup/dump"; //this is particular to the system mongo is running on
+        mongoDirectory = 'd:/mongo/bin/'; //this is based on system install of mongo
 
+        spawn('d:/mongo/bin/mongodump', ['-o', destinationPath]).on('exit',function(code){
+            comlib.websocketsend("Successfully copied all data to internal storage");
+            console.log("Successfully copied all data to internal storage: "+ destinationPath + " " + code);
+
+        });
+    }
+    //this is for the pi
+    else
+    {
+        usbstickPath = "/media";
+        path = usbstickPath ;
+        sourcePath = "/data/db";
+        destinationPath = "/home/pi/mongoBackup/dump"; // this was arbitrarily chosen but now fixed
+        mongoDirectory = '/opt/mongo/bin/';
+
+        spawn(mongoDirectory + 'mongodump', ['-o', destinationPath]).on('exit',function(code){
+            comlib.websocketsend("Successfully copied all data to internal storage");
+            console.log("Successfully copied all data to internal storage: "+ destinationPath + " " + code);
+
+        });
+    }
 }
 
 function copyFromInternal()
