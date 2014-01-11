@@ -23,7 +23,11 @@ var serialDataSocket;
 var lastCueReceivedInternalTime= new Date();
 var lastCueReceivedExternalTime = new Date();
 var usbstickPath;
-
+var path;
+var sourcePath;
+var destinationPath;
+var mongoDirectory;
+var collectionName = 'WizDb';
 
 //routine to ensure that serial data is not sent more than
 // every timedOutInterval
@@ -92,10 +96,12 @@ exports.setup = function()
 
     //MongoClient.connect("mongodb://localhost:27017/WizDb", function(err, db)
    // MongoClient.connect("mongodb://192.168.2.10:27017/WizDb", function(err, db)
-    MongoClient.connect("mongodb://" + global.myuri + ":27017/WizDb", function(err, db)
+
+    MongoClient.connect("mongodb://" + global.myuri + ":27017/" + collectionName, function(err, db)
     {
         if (err)
         {
+
             console.log("Connection to mongo failed:"+err)  ;
         }
         else
@@ -170,11 +176,17 @@ exports.setup = function()
 
 
 /*Data in may have a prefix.  That prefix is a command and handled here:
-    TME     Sets the CS4 I/O clock
-    TME TZ  Changes system time zone
-    LOG     Sends log file out to client
-    SEND    Sends dommangs to CS$ I/O
-    COPY    Copies all mongodb files to usb stick
+    TME                     Sets the CS4 I/O clock
+    TME TZ                  Changes system time zone
+    LOG                     Sends log file out to client
+    SEND                    Sends dommangs to CS$ I/O
+    COPYTOUSB               Copies all mongodb files to usb stick
+    COPYFROMUSB             Copies all mongodb files from usb stick
+    COPYTOINTERNAL          Copies all mongodb files to internal location
+    COPYFROMINTERNAL        Copies all mongodb files from internal location
+
+
+
  */
 exports.websocketDataIn = function(dataSocket, Socket){
     if(dataSocket.substr(0,3) == "TME") // if this is a time command
@@ -243,9 +255,21 @@ exports.websocketDataIn = function(dataSocket, Socket){
     {
         comlib.write(dataSocket.substr(5)+ '\r'); // send it out the serial port
     }
-    else if(dataSocket.substr(0,4) == "COPY")
+    else if(dataSocket.substr(0,9) == "COPYTOUSB")
     {
-        copyDataBase();
+        copyToUSB();
+    }
+    else if(dataSocket.substr(0,11) == "COPYFROMUSB")
+    {
+        copyFromUSB();
+    }
+    else if(dataSocket.substr(0,14) == "COPYTOINTERNAL")
+    {
+        copyToInternal();
+    }
+    else if(dataSocket.substr(0,16) == "COPYFROMINTERNAL")
+    {
+        copyFromInternal();
     }
 
     else
@@ -429,6 +453,9 @@ function parseCue(data)
 
 }
 
+/**
+ * @return {string}
+ */
 function SetCS4Time(curTime)
 {
     var uptime=0;
@@ -451,36 +478,39 @@ function SetCS4Time(curTime)
     //  sendData("SETTIME " + textBoxSecond.Text + " " + textBoxMinute.Text + " " + textBoxHour.Text + " " + textBoxDay.Text + " " + textBoxMonth.Text + " " + textBoxYear.Text);
 }
 
-function copyDataBase()
+function copyToUSB()
 {
-    var usbstickPath;
-    var path;
-    var sourcePath;
-    var destinationPath;
-    var mongoDirectory;
+    // copies database to destinationPath.  Then copies to usbstick
+    // USBStick MUST be formatted to fat32
 
     if(os.type() == 'Windows_NT')
     {
 
-        usbstickPath = "G:/";
+         usbstickPath = "G:/"; // this is based on particular usbsticl
          path = usbstickPath ;
-         sourcePath = "d://data/db";
-         destinationPath = "d:/bac/dump";
-         mongoDirectory = 'd:/mongo/bin/';
-
+         sourcePath = "d://data/db"; // this is based on system install of mongo
+         destinationPath = "d:/bac/dump"; //this is particular to the system mongo is running on
+         mongoDirectory = 'd:/mongo/bin/'; //this is based on system install of mongo
         try
         {
             fs.statSync(usbstickPath);
             spawn('d:/mongo/bin/mongodump', ['-o', destinationPath]).on('exit',function(code){
             console.log('finished ' + code);
-                fse.copyRecursive(destinationPath , usbstickPath +'dump', function (err) {
+                //remove files if they exist or copy will error with 'file exists'
+                fse.rmrf(usbstickPath +'dump', function (err) {
                     if (err) {
-                        console.log('error '+ err);
+                        console.error('Error removing files ' + err);
                     }
+                    fse.copyRecursive(destinationPath , usbstickPath +'dump', function (err) {
+                        if (err) {
+                            console.log('error '+ err);
+                        }
 
-                    comlib.websocketsend("Successfully Copied All Data to USB Stick");
-                    console.log("Successfully Copied " + destinationPath + " to " + usbstickPath);
+                        comlib.websocketsend("Successfully Copied All Data to USB Stick");
+                        console.log("Successfully Copied " + destinationPath + " to " + usbstickPath);
+                    });
                 });
+
             });
         }
         catch (er)
@@ -489,13 +519,13 @@ function copyDataBase()
             console.log("USB stick is not detected.  Please insert USB stick and try again ");
         }
     }
-    //this is for pi
+    //this is for the pi
     else
     {
         usbstickPath = "/media";
          path = usbstickPath ;
          sourcePath = "/data/db";
-         destinationPath = "/home/pi/dump";
+         destinationPath = "/home/pi/dump"; // this wass abritrauraly chosen but now fixed
          mongoDirectory = '/opt/mongo/bin/';
 
         //have to find out the 'name' of the usb stick - it will be the only device in media
@@ -527,3 +557,96 @@ function copyDataBase()
     }
 }
 
+function copyFromUSB()
+{
+    // copies database from usbstick to destination path, then restores to mongoDb
+    // USBStick MUST be formatted to fat32
+
+    if(os.type() == 'Windows_NT')
+    {
+
+        usbstickPath = "G:/"; // this is based on particular usb stick
+        path = usbstickPath ;
+        sourcePath = "d://data/db"; // this is based on system install of mongo
+        destinationPath = "d:/bac/dump"; //this is particular to the system mongo is running on
+        mongoDirectory = 'd:/mongo/bin/'; //this is based on system install of mongo
+        try
+        {
+            fs.statSync(usbstickPath);
+                //remove files from existing directory
+            fse.rmrf(destinationPath, function (err) {
+                if (err) {
+                    console.error(err);
+                }
+                fse.copyRecursive(usbstickPath +'dump', destinationPath , function (err) {
+                    if (err) {
+                        console.log('error '+ err);
+                    }
+                    spawn('d:/mongo/bin/mongorestore', ['--db',collectionName , 'd:/bac/dump/' + collectionName , '--drop', '-vvv']).on('exit',function(code){
+                        console.log('finished ' + code);
+                    });
+
+                    comlib.websocketsend("Successfully Copied All Data from USB Stick");
+                    console.log("Successfully Copied " + usbstickPath + " to " + destinationPath);
+                });
+            });
+
+
+
+        }
+        catch (er)
+        {
+            comlib.websocketsend("USB stick is not detected.  Please insert USB stick and try again ");
+            console.log("USB stick is not detected.  Please insert USB stick and try again ");
+        }
+    }
+    //this is for the pi
+    else
+    {
+        usbstickPath = "/media";
+        path = usbstickPath ;
+        sourcePath = "/data/db";
+        destinationPath = "/home/pi/dump"; // this wass abritrauraly chosen but now fixed
+        mongoDirectory = '/opt/mongo/bin/';
+
+        //have to find out the 'name' of the usb stick - it will be the only device in media
+        fs.readdir(usbstickPath, function(err,list){
+            if( list.length!= 0)
+            {
+                list.forEach(function (file) {
+                    // Full path of that file
+                    var path = usbstickPath + "/" + file;
+                    console.log("path: " + path)
+
+
+
+                    spawn(mongoDirectory + 'mongodump', ['-o', destinationPath]).on('exit',function(code){
+                        console.log('finished ' + code);
+                        fse.copyRecursive(destinationPath , path + '/dump', function (err) {
+                            if (err) {
+                                console.log('error '+ err);
+                            }
+                            comlib.websocketsend("Successfully Copied All Data to USB Stick");
+                            console.log("Successfully Copied " + destinationPath + " to " + usbstickPath);
+                        });
+                    });
+                });
+            }
+            else
+            {
+                comlib.websocketsend("USB stick is not detected.  Please insert USB stick and try again ");
+                console.log("USB stick is not detected.  Please insert USB stick and try again ");
+            }
+        });
+    }
+}
+
+function copyToInternal()
+{
+
+}
+
+function copyFromInternal()
+{
+
+}
