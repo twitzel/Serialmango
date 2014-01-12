@@ -647,9 +647,9 @@ function copyToInternal()
     // copies database to destinationPath.
     if(os.type() == 'Windows_NT')
     {
-        usbstickPath = "G:/"; // this is based on particular usbsticl
-        path = usbstickPath ;
-        sourcePath = "d://data/db"; // this is based on system install of mongo
+      //  usbstickPath = "G:/"; // this is based on particular usbsticl
+     //   path = usbstickPath ;
+      //  sourcePath = "d://data/db"; // this is based on system install of mongo
         destinationPath = "d:/mongoBackup/dump"; //this is particular to the system mongo is running on
         mongoDirectory = 'd:/mongo/bin/'; //this is based on system install of mongo
 
@@ -662,9 +662,9 @@ function copyToInternal()
     //this is for the pi
     else
     {
-        usbstickPath = "/media";
-        path = usbstickPath ;
-        sourcePath = "/data/db";
+      //  usbstickPath = "/media";
+      //  path = usbstickPath ;
+      //  sourcePath = "/data/db";
         destinationPath = "/home/pi/mongoBackup/dump"; // this was arbitrarily chosen but now fixed
         mongoDirectory = '/opt/mongo/bin/';
 
@@ -678,5 +678,29 @@ function copyToInternal()
 
 function copyFromInternal()
 {
+    // restores database from from internal storage to Mongo data path
 
+    if(os.type() == 'Windows_NT')
+    {
+        destinationPath = "d:/mongoBackup/dump"; //this is particular to the system mongo is running on
+        mongoDirectory = 'd:/mongo/bin/'; //this is based on system install of mongo
+
+        spawn(mongoDirectory + 'mongorestore', ['--db',collectionName , destinationPath + "/" + collectionName , '--drop', '-vvv']).on('exit',function(code){
+            console.log('finished ' + code);
+            comlib.websocketsend("Successfully Copied All Data from Internal Storage");
+            console.log("Successfully Copied " + destinationPath + " to " + mongoDirectory);
+        });
+    }
+    //this is for the pi
+    else
+    {
+        destinationPath = "/home/pi/mongoBackup/dump"; // this was arbitrarily chosen but now fixed
+        mongoDirectory = '/opt/mongo/bin/';
+
+        spawn(mongoDirectory + 'mongorestore', ['--db',collectionName , destinationPath + "/" + collectionName , '--drop', '-vvv']).on('exit',function(code){
+            console.log('finished ' + code);
+            comlib.websocketsend("Successfully Copied All Data from Internal Storage");
+            console.log("Successfully Copied " + destinationPath + " to " + mongoDirectory);
+        });
+    }
 }
