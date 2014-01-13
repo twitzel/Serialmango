@@ -408,7 +408,15 @@ function parseCue(data)
 
             for (var i = 18; i < indata.length - 3; i += 3) // extra space added to data at end of string
             {
-                hex += String.fromCharCode(parseInt(indata.substr(i, 2), 16));
+                if (indata.substr(i,2) == 0x00)
+                {
+                    hex += '*';
+                }
+                else
+                {
+                    hex += String.fromCharCode(parseInt(indata.substr(i, 2), 16));
+                }
+
             }
             type = 'Sysex Cue: ' + hex;
         }
