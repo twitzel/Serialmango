@@ -620,7 +620,7 @@ function copyFromUSB()
                             console.error(err);
                         }
                         console.log('we are here dir removed');
-                        fse.copyRecursive(usbstickPath +'dump', destinationPath , function (err) {
+                        fse.copyRecursive(path +'/dump', destinationPath , function (err) {
                             if (err) {
                                 console.log('error '+ err);
                             }
