@@ -619,10 +619,12 @@ function copyFromUSB()
                         if (err) {
                             console.error(err);
                         }
+                        console.log('we are here dir removed');
                         fse.copyRecursive(usbstickPath +'dump', destinationPath , function (err) {
                             if (err) {
                                 console.log('error '+ err);
                             }
+                            console.log('copied from usb');
                             spawn(mongoDirectory + 'mongorestore', ['--db',collectionName , destinationPath + "/" + collectionName , '--drop', '-vvv']).on('exit',function(code){
                                 console.log('finished ' + code);
                             });
