@@ -723,7 +723,7 @@ exports.ledOn = function(){
     {
         var led = require('rpio');
         led.setOutput(12);
-        led.write(12, rpio.HIGH);
+        led.write(12, led.HIGH);
     }
 };
 
@@ -733,6 +733,6 @@ exports.ledOff = function(){
     {
         var led = require('rpio');
         led.setOutput(12);
-        led.write(12, rpio.LOW);
+        led.write(12, led.LOW);
     }
 };
