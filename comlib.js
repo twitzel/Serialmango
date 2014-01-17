@@ -24,6 +24,9 @@ exports.openSerialPort = function(portname)
         //if CS4 branch then get time from io board
        if( branch == 'cs4'){
           serialPort.write("GETTIME\n\r"); //get time to log as starting up time
+           //we are now up and working
+            //turn status LED on
+           cs4.ledOn();
        }
 
 

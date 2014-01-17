@@ -18,6 +18,8 @@ var timedOutInterval = 200; //time to wait between serial transmitts
 var timedOut = true; // set to false will delay transmission;
 var comlib = require('./comlib');
 var spawn = require('child_process').spawn;
+
+
 var lastCueReceived = {"Time" : "10/09/13 15:20:04.20", "Source" : "Midi1", "InData" : "F0 7F 05 02 01 01 31 2E 30 30 F7 "};
 var serialDataSocket;
 var lastCueReceivedInternalTime= new Date();
@@ -712,5 +714,23 @@ function copyFromInternal()
             comlib.websocketsend("Successfully Copied All Data from Internal Storage");
             console.log("Successfully Copied " + destinationPath + " to " + mongoDirectory);
         });
+    }
+}
+
+exports.ledOn = function(){
+
+    if(os.type() != 'Windows_NT') // this is only for the pi
+    {
+        var led = require(fastgpio);
+        led.set(4);
+    }
+}
+
+exports.ledOff = function(){
+
+    if(os.type() != 'Windows_NT') // this is only for the pi
+    {
+        var led = require(fastgpio);
+        led.unset(4);
     }
 }
