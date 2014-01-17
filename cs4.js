@@ -722,8 +722,8 @@ exports.ledOn = function(){
     if(os.type() != 'Windows_NT') // this is only for the pi
     {
         var led = require('rpio');
-        led.setOutput(4);
-        led.write(4, rpio.HIGH);
+        led.setOutput(12);
+        led.write(12, rpio.HIGH);
     }
 };
 
@@ -732,7 +732,7 @@ exports.ledOff = function(){
     if(os.type() != 'Windows_NT') // this is only for the pi
     {
         var led = require('rpio');
-        led.setOutput(4);
-        led.write(4, rpio.LOW);
+        led.setOutput(12);
+        led.write(12, rpio.LOW);
     }
 };
