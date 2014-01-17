@@ -722,6 +722,7 @@ exports.ledOn = function(){
     if(os.type() != 'Windows_NT') // this is only for the pi
     {
         var led = require('fastgpio');
+        led.prepareGPIO(4);
         led.set(4);
     }
 };
@@ -731,6 +732,7 @@ exports.ledOff = function(){
     if(os.type() != 'Windows_NT') // this is only for the pi
     {
         var led = require('fastgpio');
+        led.prepareGPIO(4);
         led.unset(4);
     }
 };
