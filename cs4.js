@@ -724,7 +724,7 @@ exports.ledOn = function(){
         var led = require('fastgpio');
         led.set(17);
     }
-}
+};
 
 exports.ledOff = function(){
 
@@ -733,4 +733,4 @@ exports.ledOff = function(){
         var led = require('fastgpio');
         led.unset(17);
     }
-}
+};
