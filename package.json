@@ -14,6 +14,6 @@
     "ejs": "*",
     "time": "*",
     "fs.extra": "*",
-    "rpio": "*"
+    "fastgpio": "*"
   }
 }
