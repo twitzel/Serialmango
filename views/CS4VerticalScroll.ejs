@@ -10,7 +10,7 @@
     <title> Vertical Scroll</title>
     <meta name = "viewport" content = "width=device-width, initial-scale = 1.0">
 </head>
-<body class = 'body'>
+
 
 <h1> CS4 Scrolling Data</h1>
 
@@ -27,13 +27,14 @@
     </nav>
 </header>
 
+<body class = 'body1' onresize="resize_canvas()">
 <div id = "title" >
-    <h3 id = "in" > Incoming Data  </h3>
-    <h3 id = "out" >Outgoing Data</h3>
 
 </div>
 
     <div id = "canvasDiv">
+        <h3 id = "in" > Incoming Data  </h3>
+        <h3 id = "out" >Outgoing Data</h3>
         <canvas id="myCanvas" width= 800px height=2000px></canvas>
 
     </div>

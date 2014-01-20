@@ -3,10 +3,13 @@
  */
 window.onload = init;
 function init(){
+
     wsUri = "ws://" + window.location.hostname + ":8080";
     output = document.getElementById("websocketlog");
 
+    document.getElementById('myCanvas').width =  document.getElementById('canvasDiv').offsetWidth;
     canvas = document.getElementById('myCanvas');
+
     context = canvas.getContext('2d');
     canvasWidth = canvas.width;
     canvasStart = 0;
@@ -27,6 +30,7 @@ function init(){
     }
     testWebSocket();
     setInterval(function(){movedata()},30);
+
 }
 
 function testWebSocket()
@@ -63,8 +67,9 @@ function writeToScreen(message) {
     // get time of incoming cue
     lastCueTime = new Date();
 ////    output.innerHTML = message + "<BR>" + output.innerHTML;
-    pixelData[canvasStart] = {data : message};
-
+    if(message.length > 10){
+        pixelData[canvasStart] = {data : message};
+    }
     //output.value = message+"<BR>"+output.value;
 }
 
@@ -100,18 +105,30 @@ function movedata(){
 
             }
             else if(pixelData[i].data){
-
                 if(pixelData[i].data.substring(0,1) == ".")
                 {
                     context.fillStyle = "blue";
-                    context.fillText(pixelData[i].data.substr(56),lineStart+25, i)
+                    wrapText(context,pixelData[i].data.substring(25),i+5,lineStart+25,lineStart-25,10);
                 }
                 else
                 {
                     context.fillStyle = "black";
-                    context.fillText(pixelData[i].data.substr(25),lineStart-350, i)
-                }
+                    //context.fillText(pixelData[i].data.substr(25),lineStart-350, i)
+                    var metrics = context.measureText(pixelData[i].data.substr(25)); // get actual length on line
+                    var start;
+                    if (metrics.width > lineStart)
+                    {
+                        start = 5;
+                    }
+                    else
+                    {
+                        start = lineStart-metrics.width-25;
+                    }
+                    var len = metrics.width;
+                   // context.fillText(pixelData[i].data.substr(25),lineStart-metrics.width-23, i)
+                    wrapText(context,pixelData[i].data.substring(25),i+5,start,lineStart-25,10);
 
+                }
             }
         }
     }
@@ -125,4 +142,42 @@ function movedata(){
     context.strokeStyle = 'black';
 
     context.stroke();
+}
+
+function resize_canvas()
+{
+    document.getElementById('myCanvas').width =  document.getElementById('canvasDiv').offsetWidth;
+    lineStart = document.getElementById('myCanvas').width/2;
+}
+
+function wrapText(context, text, y, x, maxWidth, lineHeight) {
+    var words = text.split(" ");
+    var line = "";
+
+    for(var n = 0; n < words.length; n++) {
+        var testLine = line + words[n] + " ";
+        var metrics = context.measureText(testLine);
+        var testWidth = metrics.width;
+        if(testWidth > maxWidth) {
+            context.save();
+         //   context.rotate(Math.PI/2);
+         //   context.translate(0,0);
+            //context.fillText(line, 0, 0);//
+            context.fillText(line, x, y);
+            context.restore();
+            line = words[n] + " ";
+            y += lineHeight;
+        }
+        else {
+            line = testLine;
+        }
+    }
+    // context.fillText(line, x, y);
+    context.save();
+  //  context.rotate(Math.PI/2);
+  //  context.translate(0,0);
+    //context.fillText(line, 10, 10);
+      context.fillText(line, x, y);
+
+    context.restore();
 }

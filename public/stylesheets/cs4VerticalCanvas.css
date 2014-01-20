@@ -27,16 +27,27 @@ body{
     color: #666;
 }
 
+#canvasDiv{
+    width:95%;
+}
+
+#myCanvas{
+    margin-left: 2.5%;
+}
+
 #title{
-    display: inline;
-    margin: 0;
+    width: 95%;
+
+
 }
 
 #in{
     float:left;
-    margin-left: 2%;
+    margin-left: 5%;
+    margin-bottom: 5px;
 }
 #out{
-    margin-right: 2%;
+    margin-right: 2.5%;
     float: right;
+    margin-bottom: 5px;
 }
