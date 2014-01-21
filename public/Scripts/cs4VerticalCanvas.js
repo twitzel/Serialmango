@@ -77,6 +77,9 @@ function movedata(){
     numberLoops++;
 
     pixelData.unshift({null:1});  //movers everything over 1 px
+    while(pixelData.length > canvasHeight){
+        pixelData.pop(); // keep the array size fixed to canvas height
+    }
 
     context.clearRect(0,0,canvas.width,canvas.height);
     if(numberLoops%100 == 0){

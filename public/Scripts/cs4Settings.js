@@ -2,6 +2,8 @@
  * Created by Steve on 12/10/13.
  */
 window.onload = init;
+var autocount;
+
 function init(){
     wsUri = "ws://" + window.location.hostname + ":8080";
     output = document.getElementById("websocketlog");
@@ -247,6 +249,46 @@ function midi2button()
         websocket.send( "SEND MIDI2 " + cue)
     }
 }
+
+function sendMidiAuto(){
+    var start = "SEND MIDI1 F07F05020101";
+    var cue = document.getElementById('cuenumber').value.trim();
+
+    var temp = document.getElementById('sendMidiAuto').tagName;
+
+    if(document.getElementById('sendMidiAuto').tag == "Send Midi Auto"){
+        for (var i = 0; i < cue.length; i ++)  // convert cue info to hex string be adding 0x30
+        {
+            if(cue[i] == ".")
+            {
+                start += "2E";
+            }
+            else
+            {
+                start += (parseInt(cue[i])  + 0x30).toString(16);
+            }
+        }
+        start += "F7";
+
+        websocket.send(start);
+        autocount = setTimeout(function(){sendMidiAuto()}, 5000);
+        document.getElementById('cuenumber').value = parseInt(document.getElementById('cuenumber').value) +1;
+        if(parseInt(document.getElementById('cuenumber').value)> 1000){
+            document.getElementById('cuenumber').value = 1; //count to 1000 then repeat
+        }
+        document.getElementById('sendMidiAuto').tag = "Stop Midi Auto"  ;
+    }
+    else{
+        document.getElementById('sendMidiAuto').tag = "Send Midi Auto"  ;
+        clearTimeout(autocount);
+    }
+
+
+}
+
+function stopAutoAdvance(){
+    clearTimeout(autocount)
+};
 
 function copyToUSB()
 {
