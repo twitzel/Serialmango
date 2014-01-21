@@ -294,13 +294,20 @@ exports.websocketDataIn = function(dataSocket, Socket){
         });
 
         //send the data out to the CS4 I/O
-         var dir = serialDataSocket.OutData.Dir;    // ****** needs to ba added to R4-4 Receiver Parsing ****** //
-       // dir = "";
+        var dir = serialDataSocket.OutData.Dir;    // ****** needs to ba added to R4-4 Receiver Parsing ****** //
+       // var dir = "";
         var port = serialDataSocket.OutData.Port;
         var showname = serialDataSocket.OutData.Showname;
         var dataToSend = serialDataSocket.OutData.Dout;
+        if(dir =="")
+        {
+           var  outstring = port + " " + showname + " " + dataToSend;
+        }
+        else
+        {
+           var outstring = port + " " + showname + " " + dir + " " + dataToSend;
+        }
 
-        var outstring = port + " " + showname + " " + dir + " " + dataToSend;
         sendOutput(outstring);
     }
 };
@@ -347,13 +354,21 @@ exports.socketDataOut = function (data) {
 
                for(var i = 0; i< item[0].OutData.length; i++)
                {
-                   // dir = item[0].OutData[i][0].Dir;    // ****** needs to ba added to R4-4 Receiver Parsing ****** //
-                    dir = "xxxx";
+                    dir = item[0].OutData[i].Dir;    // ****** needs to ba added to R4-4 Receiver Parsing ****** //
+                   // dir = "xxxx";
                     port = item[0].OutData[i].Port.toUpperCase();
                     showname = item[0].OutData[i].Showname;
                     dataToSend = item[0].OutData[i].Dout;
                     delay = item[0].OutData[i].Delay;
-                    outstring = port + " " + showname + " " + dir + " " + dataToSend;
+                    if(dir =="")
+                    {
+                        outstring = port + " " + showname + " " + dataToSend;
+                    }
+                    else
+                    {
+                        outstring = port + " " + showname + " " + dir + " " + dataToSend;
+                    }
+
                     setTimeout(sendOutput, delay, outstring);
                     console.log(item[0].OutData[i].Dout + "  Delay "+item[0].OutData[i].Delay);
                 }

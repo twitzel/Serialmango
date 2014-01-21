@@ -251,44 +251,46 @@ function midi2button()
 }
 
 function sendMidiAuto(){
-    var start = "SEND MIDI1 F07F05020101";
-    var cue = document.getElementById('cuenumber').value.trim();
-
-    var temp = document.getElementById('sendMidiAuto').tagName;
-
-    if(document.getElementById('sendMidiAuto').tag == "Send Midi Auto"){
-        for (var i = 0; i < cue.length; i ++)  // convert cue info to hex string be adding 0x30
-        {
-            if(cue[i] == ".")
-            {
-                start += "2E";
-            }
-            else
-            {
-                start += (parseInt(cue[i])  + 0x30).toString(16);
-            }
-        }
-        start += "F7";
-
-        websocket.send(start);
-        autocount = setTimeout(function(){sendMidiAuto()}, 5000);
-        document.getElementById('cuenumber').value = parseInt(document.getElementById('cuenumber').value) +1;
-        if(parseInt(document.getElementById('cuenumber').value)> 1000){
-            document.getElementById('cuenumber').value = 1; //count to 1000 then repeat
-        }
-        document.getElementById('sendMidiAuto').tag = "Stop Midi Auto"  ;
+    if(document.getElementById('sendMidiAuto').innerHTML == "Send Midi Auto"){
+        document.getElementById('sendMidiAuto').innerHTML = "Stop Midi Auto"  ;
+        document.getElementById("sendMidiAuto").style.background='#FF0000';
+        midiAuto(); //start settimeout and repeats forever -- unless stopped
     }
     else{
-        document.getElementById('sendMidiAuto').tag = "Send Midi Auto"  ;
+        document.getElementById('sendMidiAuto').innerHTML = "Send Midi Auto"  ;
         clearTimeout(autocount);
+        document.getElementById("sendMidiAuto").style.background='#F1F1F1';
     }
-
-
 }
 
-function stopAutoAdvance(){
-    clearTimeout(autocount)
-};
+function midiAuto(){
+    var start = "SEND MIDI1 F07F05020101";
+    var cue = document.getElementById('cuenumber').value.trim();
+    var temp = document.getElementById('sendMidiAuto');
+
+    for (var i = 0; i < cue.length; i ++)  // convert cue info to hex string be adding 0x30
+    {
+        if(cue[i] == ".")
+        {
+            start += "2E";
+        }
+        else
+        {
+            start += (parseInt(cue[i])  + 0x30).toString(16);
+        }
+    }
+    start += "F7";
+
+    websocket.send(start);
+
+    autocount = setTimeout(function(){midiAuto()}, parseInt(document.getElementById('cuetime').value)*1000);
+    document.getElementById('cuenumber').value = parseInt(document.getElementById('cuenumber').value) +1;
+
+    if(parseInt(document.getElementById('cuenumber').value)> 1000){
+        document.getElementById('cuenumber').value = 1; //count to 1000 then repeat
+    }
+}
+
 
 function copyToUSB()
 {

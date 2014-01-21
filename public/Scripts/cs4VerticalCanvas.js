@@ -108,10 +108,11 @@ function movedata(){
 
             }
             else if(pixelData[i].data){
-                if(pixelData[i].data.substring(0,1) == ".")
+                var test = pixelData[i].data.substring(0,6);
+                if(pixelData[i].data.substring(0,6) == "  Sent")
                 {
                     context.fillStyle = "blue";
-                    wrapText(context,pixelData[i].data.substring(25),i+5,lineStart+25,lineStart-25,10);
+                    wrapText(context,pixelData[i].data.substring(54, pixelData[i].data.length -2),i+5,lineStart+25,lineStart-25,10);//get rid of extraneous stuff before writing
                 }
                 else
                 {
@@ -121,11 +122,11 @@ function movedata(){
                     var start;
                     if (metrics.width > lineStart)
                     {
-                        start = 5;
+                        start = 10;
                     }
                     else
                     {
-                        start = lineStart-metrics.width-25;
+                        start = lineStart-metrics.width-30;
                     }
                     var len = metrics.width;
                    // context.fillText(pixelData[i].data.substr(25),lineStart-metrics.width-23, i)
