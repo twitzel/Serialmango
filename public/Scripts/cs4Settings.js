@@ -3,6 +3,7 @@
  */
 window.onload = init;
 var autocount;
+var autocue;
 
 function init(){
     wsUri = "ws://" + window.location.hostname + ":8080";
@@ -289,6 +290,49 @@ function midiAuto(){
     if(parseInt(document.getElementById('cuenumber').value)> 1000){
         document.getElementById('cuenumber').value = 1; //count to 1000 then repeat
     }
+}
+
+function r4CueAuto(message){
+    if(document.getElementById('r4CueAuto').innerHTML == "Send Cue Auto"){
+        document.getElementById('r4CueAuto').innerHTML = "Stop Cue Auto"  ;
+        document.getElementById("r4CueAuto").style.background='#FF0000';
+        cueAuto(); //start settimeout and repeats forever -- unless stopped
+    }
+    else{
+        document.getElementById('r4CueAuto').innerHTML = "Send Cue Auto"  ;
+        clearTimeout(autocue);
+        document.getElementById("r4CueAuto").style.background='#F1F1F1';
+    }
+}
+
+function cueAuto(){
+    var counter = parseInt(cue.value);
+    var showName = document.getElementById('showname').value.trim();
+    var directory = document.getElementById('directory').value.trim();
+    var radioButtons = document.getElementsByName('output');
+    var dataFormat;
+    var dataOut;
+
+    for (var i = 0, length = radioButtons.length; i < length; i++) {
+        if (radioButtons[i].checked) {
+
+            dataFormat = (radioButtons[i].value);
+
+            // get out of loop now that we have value
+            break;
+        }
+    }
+
+    if(dataFormat == 'r4slides'){
+        dataOut =  "GO slide" + counter +".jpg NEXT slide"+(counter +1) +".jpg";
+    }
+    else if(dataFormat == 'r4audio'){
+        dataOut = "GO audio" + counter + ".mp3";
+    }
+    cue.value = counter +1; //update the cue count
+   // delay = (new Date()-lastCueTime);
+    websocket.send("{\"OutData\": {\"Delay\": "+delay+" , \"Port\":\"Zig1\", \"Showname\":\""+ showName +"\", \"Dir\":\""+ directory +"\", \"Dout\":\"" + dataOut + "\"}}");
+    autocue = setTimeout(function(){cueAuto()}, parseInt(document.getElementById('delay').value)*1000);
 }
 
 

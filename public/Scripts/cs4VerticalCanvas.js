@@ -163,12 +163,8 @@ function wrapText(context, text, y, x, maxWidth, lineHeight) {
         var metrics = context.measureText(testLine);
         var testWidth = metrics.width;
         if(testWidth > maxWidth) {
-            context.save();
-         //   context.rotate(Math.PI/2);
-         //   context.translate(0,0);
-            //context.fillText(line, 0, 0);//
+
             context.fillText(line, x, y);
-            context.restore();
             line = words[n] + " ";
             y += lineHeight;
         }
@@ -176,12 +172,5 @@ function wrapText(context, text, y, x, maxWidth, lineHeight) {
             line = testLine;
         }
     }
-    // context.fillText(line, x, y);
-    context.save();
-  //  context.rotate(Math.PI/2);
-  //  context.translate(0,0);
-    //context.fillText(line, 10, 10);
       context.fillText(line, x, y);
-
-    context.restore();
 }
