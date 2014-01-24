@@ -86,7 +86,47 @@
         font-size: 1.7em;
     }
     .mainheader nav{
-        height: 200px;
+        height: 30px;
+
+     }
+
+    .mainheader nav ul{
+        display: none;
+        padding-left: 0;
+    }
+
+    .mainheader nav:hover{
+        height: 250px;
+    }
+
+    .mainheader nav:hover ul,.mainheader nav:hover ul li{
+        width: 100%;
+        text-align: center;
+       display: block;
+    }
+
+    .mainheader nav:hover a:link,  .mainheader nav:hover a:visited{
+
+        padding: 10px 25px;
+        height: 20px;
+        display:block;
+    }
+
+
+
+
+}
+/*
+@media only screen  and (max-device-width: 761px),(max-width: 761px)  {
+    .body{
+        width: 95%;
+    }
+
+    .body h1{
+        font-size: 1.7em;
+    }
+    .mainheader nav{
+        height: 300px;
      }
 
     .mainheader nav ul{
@@ -122,3 +162,4 @@
     }
 
 }
+*/

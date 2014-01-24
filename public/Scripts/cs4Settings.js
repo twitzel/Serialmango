@@ -309,7 +309,7 @@ function cueAuto(){
     var counter = parseInt(cue.value);
     var showName = document.getElementById('showname').value.trim();
     var directory = document.getElementById('directory').value.trim();
-    var radioButtons = document.getElementsByName('output');
+    var radioButtons = document.getElementsByName('outputcue');
     var dataFormat;
     var dataOut;
 
@@ -323,15 +323,15 @@ function cueAuto(){
         }
     }
 
-    if(dataFormat == 'r4slides'){
+    if(dataFormat == 'r4slidescue'){
         dataOut =  "GO slide" + counter +".jpg NEXT slide"+(counter +1) +".jpg";
     }
-    else if(dataFormat == 'r4audio'){
+    else if(dataFormat == 'r4audiocue'){
         dataOut = "GO audio" + counter + ".mp3";
     }
     cue.value = counter +1; //update the cue count
    // delay = (new Date()-lastCueTime);
-    websocket.send("{\"OutData\": {\"Delay\": "+delay+" , \"Port\":\"Zig1\", \"Showname\":\""+ showName +"\", \"Dir\":\""+ directory +"\", \"Dout\":\"" + dataOut + "\"}}");
+    websocket.send('SEND ZIG1' + ' ' + showName + ' ' + directory + ' ' + dataOut);
     autocue = setTimeout(function(){cueAuto()}, parseInt(document.getElementById('delay').value)*1000);
 }
 
