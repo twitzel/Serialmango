@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 
     <script  src = "./Scripts/cs4Timing.js"> </script>
+    <script  src = "./Scripts/cs4Menu.js"> </script>
     <link rel='stylesheet'  href='./stylesheets/cs4Timing.css'>
     <link rel='stylesheet'  href='./stylesheets/cs4Menu.css'>
 
@@ -15,7 +16,10 @@
     <h1>CS4 Timings Screen</h1>
 
     <header class="mainheader">
-        <nav>
+        <div id="menubutton">
+            <button id = "buttonMenu"  onmousedown = "buttonMenu()">&#9776</button>
+        </div>
+        <nav id = "menunav">
             <ul>
                 <li><a href="cs4Home">Home</a></li>
                 <li><a href="cs4VerticalScroll" >Scrolling</a></li>

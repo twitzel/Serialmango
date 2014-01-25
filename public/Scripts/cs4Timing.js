@@ -11,7 +11,8 @@ var cuevalue2;
 var cuevalue3;
 var bkgnd = 0;
 
-window.onload = init;
+//window.onload = init;
+window.addEventListener("load", init, true);
 function init()
 {
     output = document.getElementById("websocketlog");

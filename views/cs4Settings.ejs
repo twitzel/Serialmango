@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 
-<script  src = "./Scripts/cs4Settings.js"> </script>
-<link rel='stylesheet'  href='./stylesheets/cs4Settings.css'>
-<link rel='stylesheet'  href='./stylesheets/cs4Menu.css'>
+    <script  src = "./Scripts/cs4Settings.js"> </script>
+    <script  src = "./Scripts/cs4Menu.js"> </script>
+    <link rel='stylesheet'  href='./stylesheets/cs4Settings.css'>
+    <link rel='stylesheet'  href='./stylesheets/cs4Menu.css'>
 
 <html>
 
@@ -20,7 +21,10 @@
     <h1>CS4 Setup</h1>
 
     <header class="mainheader">
-        <nav>
+        <div id="menubutton">
+            <button id = "buttonMenu"  onmousedown = "buttonMenu()">&#9776</button>
+        </div>
+        <nav id = "menunav">
             <ul>
                 <li><a href="cs4Home">Home</a></li>
                 <li><a href="cs4VerticalScroll" >Scrolling</a></li>
