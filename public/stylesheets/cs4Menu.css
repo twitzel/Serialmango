@@ -24,6 +24,7 @@
     font-weight: bold;
     font-size: 140%;
     background-color: #ddffc1;
+    display: none;
 }
 
 .mainheader nav{
@@ -32,6 +33,7 @@
     border-radius: 5px;
     margin-top: 2%;
     margin-bottom: 3%;
+    display: block;
 }
 
 .mainheader nav ul{
@@ -129,4 +131,7 @@
         border-radius: 5px;
     }
 
+    #buttonMenu{
+        display: block;
+    }
 }
