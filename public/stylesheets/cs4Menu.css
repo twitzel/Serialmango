@@ -139,3 +139,10 @@
         display: block;
     }
 }
+@media only screen  and (max-device-width: 400px),(max-width: 400px)  {
+    .body h1{
+        font-size: 1.6em;
+
+    }
+}
+

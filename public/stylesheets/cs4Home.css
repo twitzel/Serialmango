@@ -21,6 +21,8 @@
 }
 
 
+
+
 .log{
     height: 350px;
     background-color: rgba(220, 203, 204, 0.56);
@@ -37,7 +39,7 @@
 
 @media only screen  and (max-device-width: 761px),(max-width: 761px)  {
     .log{
-        font-size: .6em;
+        font-size: .7em;
     }
     #title button{
         margin-right: 1%;
@@ -52,6 +54,12 @@
     }
 
 
+
+
 }
 
+@media only screen  and (max-device-width: 600px),(max-width: 600px)  {
+
+
+}
 

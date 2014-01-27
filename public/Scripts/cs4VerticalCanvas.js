@@ -1,6 +1,8 @@
 /**
  * Created by Steve on 10/28/13.
  */
+var status;
+var autoplot;
 window.onload = init;
 function init(){
 
@@ -20,7 +22,7 @@ function init(){
     lineStart = canvasWidth/2; // bottom of tic line
 
     //setup origional time marks and time in the array
-    for(var i = 0; i  <=canvasHeight; i+=ticIncrement){
+/*    for(var i = 0; i  <=canvasHeight; i+=ticIncrement){
         if(i%50 == 0){
             pixelData[i] = {line : 25};
         }
@@ -28,8 +30,9 @@ function init(){
             pixelData[i] = {line : 10};
         }
     }
+ */
     testWebSocket();
-    setInterval(function(){movedata()},30);
+  //  autoplot = setInterval(function(){movedata()},30);
 
 }
 
@@ -44,11 +47,13 @@ function testWebSocket()
 
 function onOpen(evt) {
     writeToScreen("CONNECTED");
-    writeToScreen('#{myuri}');
+    autoplot = setInterval(function(){movedata()},30);
+
 }
 
 function onClose(evt) {
     writeToScreen("DISCONNECTED");
+    clearInterval(autoplot);
 }
 
 function onMessage(evt)    {
@@ -67,9 +72,11 @@ function writeToScreen(message) {
     // get time of incoming cue
     lastCueTime = new Date();
 ////    output.innerHTML = message + "<BR>" + output.innerHTML;
-    if(message.length > 10){
-        pixelData[canvasStart] = {data : message};
-    }
+
+    pixelData[canvasStart] = {data : message};
+
+
+
     //output.value = message+"<BR>"+output.value;
 }
 
@@ -130,7 +137,12 @@ function movedata(){
                     }
                     var len = metrics.width;
                    // context.fillText(pixelData[i].data.substr(25),lineStart-metrics.width-23, i)
-                    wrapText(context,pixelData[i].data.substring(25),i+5,start,lineStart-25,10);
+
+
+                   wrapText(context,pixelData[i].data.substring(25),i+5,start,lineStart-25,10);
+
+
+
 
                 }
             }

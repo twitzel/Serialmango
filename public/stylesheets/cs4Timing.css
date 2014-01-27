@@ -1,5 +1,5 @@
 #title{
-    height: 30px;
+    height:  10px;
 }
 
 
@@ -129,8 +129,32 @@ form#timing1 fieldset {
     text-align:center;
 }
 
-
-
 #blackout{
     visibility: hidden;
+}
+
+@media only screen  and (max-device-width: 400px),(max-width: 400px)  {
+    .log{
+        height: 200px;
+        margin-bottom: 0;
+    }
+    #timing3{
+        display: none;
+       
+    }
+    .timing{
+        margin-top:  -20px;
+        width: 25%;
+        height: 26%;
+        margin-left: 10px;
+        float:left;
+    }
+    #timing1{
+        margin-left: 15px;
+    }
+    #timing2{
+        float: right;
+        margin-right: 55px;
+        background-color: rgba(131, 157, 255, 0.21);
+    }
 }
