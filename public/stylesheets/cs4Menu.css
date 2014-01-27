@@ -19,11 +19,15 @@
 }
 
 #buttonMenu{
+    position: absolute;
+    right: 10px;
+    top: 5px;
+    text-align: right;
     margin: 0;
     border-radius:5px;
     font-weight: bold;
     font-size: 140%;
-    background-color: #ddffc1;
+    background-color: #e0ffe1;
     display: none;
 }
 
