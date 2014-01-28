@@ -52,7 +52,7 @@ sendOutput = function (dataToSend)
         //
 
 
-    //change the time of data sent to corolate with CS-4 I/O clock
+    //change the time of data sent to correlate with CS-4 I/O clock
     lastconverted   = new Date(lastCueReceived.Time);
     addTime = addTime + "\""+  (new Date( lastconverted.setMilliseconds(lastconverted.getMilliseconds() + (timerStartTime -lastCueReceivedInternalTime)))).toISOString() +"\", \"Dout\" : \"" + dataToSend + "\"}";
 
@@ -201,7 +201,8 @@ exports.websocketDataIn = function(dataSocket, Socket){
           //  collectionStartup.update({'TimeZoneChanged':'Yes'}, {$set:{'TimeZoneSet' : datain}},{upsert:true, w:1},function(err,res){
                 collectionStartup.update({'TimeZoneSet':{$exists:true}}, {$set:{'TimeZoneSet' : datain}},{upsert:true, w:1},function(err,res){
 
-                console.log('Time Zone Updated'+res);
+                console.log('Time Zone Updated '+res + " "+ datain);
+
 
             });
         }
