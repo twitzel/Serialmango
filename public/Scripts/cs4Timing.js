@@ -10,6 +10,7 @@ var cuevalue1;
 var cuevalue2;
 var cuevalue3;
 var bkgnd = 0;
+var incue = 0;
 
 //window.onload = init;
 window.addEventListener("load", init, true);
@@ -73,6 +74,10 @@ function onClose(evt) {
 
 function onMessage(evt)    {
     writeToScreen(evt.data);
+    if(evt.data.substr(0,1) == '2'){
+        incue = 1;
+    }
+
 }
 
 function onError(evt) {
@@ -99,6 +104,10 @@ function writeToScreen(message) {
 
 
 function cueclick1(message){
+    if(incue ==0){
+        alert(" Please wait for an incoming cue before starting!");
+        return;
+    }
     var counter = parseInt(cuevalue1.value);
     var showName = document.getElementById('showname1').value.trim();
     var directory = document.getElementById('directory1').value.trim();
@@ -129,6 +138,10 @@ function cueclick1(message){
 }
 
 function cueclick2(message){
+    if(incue ==0){
+        alert(" Please wait for an incoming cue before starting!");
+        return;
+    }
     var counter = parseInt(cuevalue2.value);
     var showName = document.getElementById('showname2').value.trim();
     var directory = document.getElementById('directory2').value.trim();
@@ -159,6 +172,10 @@ function cueclick2(message){
 }
 
 function cueclick3(message){
+    if(incue ==0){
+        alert(" Please wait for an incoming cue before starting!");
+        return;
+    }
     var counter = parseInt(cuevalue3.value);
     var showName = document.getElementById('showname3').value.trim();
     var directory = document.getElementById('directory3').value.trim();
