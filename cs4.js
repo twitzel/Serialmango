@@ -141,13 +141,14 @@ exports.setup = function()
             // if we are open the required com port
             //if not open the pi port
             console.log("Host System Name: " + os.type());
+            var baud = 115200;
             if(os.type() == 'Windows_NT')
             {
-                comlib.openSerialPort('com19'); //windows
+                comlib.openSerialPort('com19', baud); //windows
             }
             else
             {
-                comlib.openSerialPort("/dev/ttyUSB0"); //not windows - Raspberry PI
+                comlib.openSerialPort("/dev/ttyUSB0", baud); //not windows - Raspberry PI
             }
 
         }

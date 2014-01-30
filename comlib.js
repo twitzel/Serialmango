@@ -2,13 +2,13 @@ var com = require('serialport');
 var cs4 = require('./cs4');
 var twi = require('./twi');
 var WebSocketServer = require('ws').Server;
-exports.openSerialPort = function(portname)
+exports.openSerialPort = function(portname, baud)
 {
     console.log("Attempting to open serial port "+portname);
    // serialport declared with the var to make it module global
 
     serialPort = new com.SerialPort(portname, {
-        baudrate: 115200,
+        baudrate: baud,
 // Set the object to fire an event after a \n (chr 13 I think)  is in the serial buffer
         parser: com.parsers.readline("\n"),
         databits: 8
