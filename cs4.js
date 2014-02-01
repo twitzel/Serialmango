@@ -221,8 +221,19 @@ exports.websocketDataIn = function(dataSocket, Socket){
     {
         if(dataSocket.substr(0,7) == "LOG 100")
         {
-          //  collectionLog.find({},{"_id":0}).sort({"_id": 1}).limit(100).toArray(function(error,logfile){
-            collectionLog.find({},{}).sort({"Time": 1}).limit(100).toArray(function(error,logfile){
+
+            var numberToSkip;
+            if(collectionLog.count > 100){
+                numberToSkip = collectionLog.count -100
+            }
+
+            else{
+                numberToSkip = 0;
+            }
+                collectionLog.find({},{}).sort({"Time": 1}).skip(numberToSkip).limit(100).toArray(function(error,logfile){
+         //   collectionLog.find({},{"_id":0}).sort({"_id": 1}).limit(100).toArray(function(error,logfile){
+
+           // collectionLog.find({},{}).sort({"Time": 1}).limit(100).toArray(function(error,logfile){
                 for(var i = 0; i <logfile.length;i++)
                 {
                     logfileData = JSON.stringify(logfile[i]);
@@ -241,7 +252,7 @@ exports.websocketDataIn = function(dataSocket, Socket){
         else
         {
            // collectionLog.find({},{"_id":0}).sort({"_id": 1}).toArray(function(error,logfile){
-            collectionLog.find({},{}).sort({"Time": 1}).limit(2000).toArray(function(error,logfile){
+            collectionLog.find({},{}).sort({"Time": 1}).toArray(function(error,logfile){
                 for(var i = 0; i <logfile.length;i++)
                 {
                     logfileData = JSON.stringify(logfile[i]);
