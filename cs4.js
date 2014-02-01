@@ -61,6 +61,7 @@ sendOutput = function (dataToSend)
 
     //Log the data into the collection
     addTime = JSON.parse(addTime);
+    addTime.Time = new Date(addTime.Time); //get to real time format.
     collectionLog.insert(addTime, {w: 1}, function (err, result) {
         console.log(result);
     });
@@ -220,7 +221,8 @@ exports.websocketDataIn = function(dataSocket, Socket){
     {
         if(dataSocket.substr(0,7) == "LOG 100")
         {
-            collectionLog.find({},{"_id":0}).sort({"_id": 1}).limit(100).toArray(function(error,logfile){
+          //  collectionLog.find({},{"_id":0}).sort({"_id": 1}).limit(100).toArray(function(error,logfile){
+            collectionLog.find({},{}).sort({"Time": 1}).limit(100).toArray(function(error,logfile){
                 for(var i = 0; i <logfile.length;i++)
                 {
                     logfileData = JSON.stringify(logfile[i]);
@@ -238,7 +240,8 @@ exports.websocketDataIn = function(dataSocket, Socket){
         }
         else
         {
-            collectionLog.find({},{"_id":0}).sort({"_id": 1}).toArray(function(error,logfile){
+           // collectionLog.find({},{"_id":0}).sort({"_id": 1}).toArray(function(error,logfile){
+            collectionLog.find({},{}).sort({"Time": 1}).limit(2000).toArray(function(error,logfile){
                 for(var i = 0; i <logfile.length;i++)
                 {
                     logfileData = JSON.stringify(logfile[i]);
