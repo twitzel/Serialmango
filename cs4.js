@@ -259,7 +259,8 @@ exports.websocketDataIn = function(dataSocket, Socket){
                     else
                     {
                        /// comlib.websocketsend(parseCue(logfileData),Socket);
-                        dataToSend = parseCue(logfileData) + "\n" + dataToSend;
+                       // dataToSend = parseCue(logfileData) + "\n" + dataToSend;
+                        dataToSend = dataToSend + logfileData + "\n" ;
                     }
                 }
                 comlib.websocketsend(dataToSend, Socket) ;
