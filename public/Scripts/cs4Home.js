@@ -65,6 +65,7 @@ function buttonLog(){
 function buttonLog100(){
     output.innerHTML = "";
     websocket.send('LOG 100');//request logfile
+    document.body.style.cursor  = 'wait';
 }
 
 function buttonBackground(){
