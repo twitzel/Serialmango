@@ -224,7 +224,7 @@ exports.websocketDataIn = function(dataSocket, Socket){
 
         if(dataSocket.substr(0,7) == "LOG 100")
         {
-                comlib.websocketsend("Preparing Data For Display. \nPlease Wait. \n(may take several seconds) ", Socket) ;
+                comlib.websocketsend("* Preparing Data For Display. \n* Please Wait. \n* (may take several seconds) ", Socket) ;
                 collectionLog.find({},{}).sort({"Time": -1}).limit(1000).toArray(function(error,logfile){
                 for(var i = 0; i <logfile.length;i++)
                 {
@@ -246,7 +246,7 @@ exports.websocketDataIn = function(dataSocket, Socket){
         }
         else
         {
-            comlib.websocketsend("Preparing Data For Display. \nPlease Wait. \n(may take up to 1 minute) ", Socket) ;
+            comlib.websocketsend("* Preparing Data For Display. \n* Please Wait. \n* (may take up to 1 minute) ", Socket) ;
             collectionLog.find({},{}).sort({"Time": 1}).toArray(function(error,logfile){
                 for(var i = 0; i <logfile.length;i++)
                 {

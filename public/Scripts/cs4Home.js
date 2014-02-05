@@ -48,7 +48,9 @@ function writeToScreen(message) {
     // get time of incoming cue
     lastCueTime = new Date();
     output.innerHTML = message + "<BR>" + output.innerHTML;
-    document.body.style.cursor  = 'default';
+    if(message.substr(0,1) != '*'){
+        document.body.style.cursor  = 'default';
+    }
 }
 
 
