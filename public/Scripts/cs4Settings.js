@@ -5,6 +5,7 @@ window.onload = init;
 var autocount;
 var autocue;
 var dataToShow = "";
+var bkgnd = 0;
 
 function init(){
     wsUri = "ws://" + window.location.hostname + ":8080";
@@ -54,6 +55,24 @@ function writeToScreen(message) {
     dataToShow =  message + "<BR>" + dataToShow;
     output.innerHTML = dataToShow;
        // output.innerHTML = message + "<BR>" + output.innerHTML;
+}
+
+function buttonClear(){
+    output.innerHTML = "";
+}
+
+function buttonBackground(){
+    if(bkgnd == 0){
+        document.getElementById("body").style.backgroundColor =  '#474747';
+        document.getElementById("websocketlog").style.backgroundColor =  '#505050';
+        bkgnd = 1;
+    }
+    else{
+        document.getElementById("body").style.backgroundColor =  '#ffffff';
+        document.getElementById("websocketlog").style.backgroundColor =  '#ececec';
+        bkgnd = 0;
+    }
+
 }
 
 //************************************  RELAYS ******************************
