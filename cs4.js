@@ -119,7 +119,7 @@ exports.setup = function()
             }
 
             global.collectionLog = db.collection('log');
-            collectionLog.ensureIndex({Time:1},function (err,res){});
+         //   collectionLog.ensureIndex({Time:1},function (err,res){});
             global.collectionCue = db.collection('cue');
             global.collectionStartup = db.collection('startup');
             collectionCue.ensureIndex({InData:1},function (err,res){});
@@ -221,9 +221,10 @@ exports.websocketDataIn = function(dataSocket, Socket){
     else if(dataSocket.substr(0,3) == "LOG")//requesting entire log file to be sent log file
     {
         var dataToSend = "";
+
         if(dataSocket.substr(0,7) == "LOG 100")
         {
-
+                comlib.websocketsend("Preparing Data For Display. \nPlease Wait. \n(may take several seconds) ", Socket) ;
                 collectionLog.find({},{}).sort({"Time": -1}).limit(1000).toArray(function(error,logfile){
                 for(var i = 0; i <logfile.length;i++)
                 {
@@ -245,22 +246,19 @@ exports.websocketDataIn = function(dataSocket, Socket){
         }
         else
         {
+            comlib.websocketsend("Preparing Data For Display. \nPlease Wait. \n(may take up to 1 minute) ", Socket) ;
             collectionLog.find({},{}).sort({"Time": 1}).toArray(function(error,logfile){
-                comlib.websocketsend("Data Gathered", Socket) ;
                 for(var i = 0; i <logfile.length;i++)
                 {
                     logfileData = JSON.stringify(logfile[i]);
 
                     if(logfile[i].Dout)
                     {
-                       // comlib.websocketsend(".    Sent: " + logfileData, Socket) ;
                         dataToSend = ".    Sent: " + logfileData + "\n" + dataToSend;
                     }
                     else
                     {
-                       /// comlib.websocketsend(parseCue(logfileData),Socket);
-                       // dataToSend = parseCue(logfileData) + "\n" + dataToSend;
-                        dataToSend = dataToSend + logfileData + "\n" ;
+                        dataToSend = parseCue(logfileData) + "\n" + dataToSend;
                     }
                 }
                 comlib.websocketsend(dataToSend, Socket) ;
