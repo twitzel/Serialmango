@@ -7,7 +7,7 @@
 #title button{
     margin-right: 5.2%;
     float:right;
-    border-radius:10px;
+    border-radius:5px;
   /* background: linear-gradient(to bottom, rgba(63,76,107,0.1) 50%,rgba(63,76,107,0.15) 20%,rgba(0,0,0,0.42) 40%,rgba(0,0,0,0.49) 75%);*/
     font-weight: bold;
 }

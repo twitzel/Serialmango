@@ -119,6 +119,7 @@ exports.setup = function()
             }
 
             global.collectionLog = db.collection('log');
+            collectionLog.ensureIndex({Time:1},function (err,res){});
             global.collectionCue = db.collection('cue');
             global.collectionStartup = db.collection('startup');
             collectionCue.ensureIndex({InData:1},function (err,res){});
