@@ -232,7 +232,7 @@ exports.websocketDataIn = function(dataSocket, Socket){
                 numberToSkip = 0;
             }
 */
-                collectionLog.find({},{}).sort({"Time": -1}).limit(100).toArray(function(error,logfile){
+                collectionLog.find({},{}).sort({"Time": -1}).limit(1000).toArray(function(error,logfile){
          //   collectionLog.find({},{"_id":0}).sort({"_id": 1}).limit(100).toArray(function(error,logfile){
 
            // collectionLog.find({},{}).sort({"Time": 1}).limit(100).toArray(function(error,logfile){
