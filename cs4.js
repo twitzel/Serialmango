@@ -219,9 +219,10 @@ exports.websocketDataIn = function(dataSocket, Socket){
     }
     else if(dataSocket.substr(0,3) == "LOG")//requesting entire log file to be sent log file
     {
+        var dataToSend = "";
         if(dataSocket.substr(0,7) == "LOG 100")
         {
-
+/*
             var numberToSkip;
             if(collectionLog.count > 100){
                 numberToSkip = collectionLog.count -100
@@ -230,7 +231,8 @@ exports.websocketDataIn = function(dataSocket, Socket){
             else{
                 numberToSkip = 0;
             }
-                collectionLog.find({},{}).sort({"Time": 1}).skip(numberToSkip).limit(100).toArray(function(error,logfile){
+*/
+                collectionLog.find({},{}).sort({"Time": -1}).limit(100).toArray(function(error,logfile){
          //   collectionLog.find({},{"_id":0}).sort({"_id": 1}).limit(100).toArray(function(error,logfile){
 
            // collectionLog.find({},{}).sort({"Time": 1}).limit(100).toArray(function(error,logfile){
@@ -240,17 +242,21 @@ exports.websocketDataIn = function(dataSocket, Socket){
 
                     if(logfile[i].Dout)
                     {
-                        comlib.websocketsend(".    Sent: " + logfileData, Socket) ;
+                        //comlib.websocketsend(".    Sent: " + logfileData, Socket) ;
+                        dataToSend = dataToSend + ".    Sent: " + logfileData + "\n" ;
                     }
                     else
                     {
-                        comlib.websocketsend(parseCue(logfileData),Socket);
+                        //comlib.websocketsend(parseCue(logfileData),Socket);
+                        dataToSend = dataToSend + parseCue(logfileData) + "\n" ;
                     }
                 }
+                    comlib.websocketsend(dataToSend, Socket) ;
             });
         }
         else
         {
+
            // collectionLog.find({},{"_id":0}).sort({"_id": 1}).toArray(function(error,logfile){
             collectionLog.find({},{}).sort({"Time": 1}).toArray(function(error,logfile){
                 for(var i = 0; i <logfile.length;i++)
@@ -259,14 +265,18 @@ exports.websocketDataIn = function(dataSocket, Socket){
 
                     if(logfile[i].Dout)
                     {
-                        comlib.websocketsend(".    Sent: " + logfileData, Socket) ;
+                       // comlib.websocketsend(".    Sent: " + logfileData, Socket) ;
+                        dataToSend = ".    Sent: " + logfileData + "\n" + dataToSend;
                     }
                     else
                     {
-                        comlib.websocketsend(parseCue(logfileData),Socket);
+                       /// comlib.websocketsend(parseCue(logfileData),Socket);
+                        dataToSend = parseCue(logfileData) + "\n" + dataToSend;
                     }
                 }
+                comlib.websocketsend(dataToSend, Socket) ;
             });
+
         }
     }
     else if (dataSocket.substr(0,4) == "SEND") // these are commands to send directly to the CS4I/0

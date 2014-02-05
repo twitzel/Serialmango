@@ -4,6 +4,7 @@
 window.onload = init;
 var autocount;
 var autocue;
+var dataToShow = "";
 
 function init(){
     wsUri = "ws://" + window.location.hostname + ":8080";
@@ -50,7 +51,9 @@ function doSend(message) {
 function writeToScreen(message) {
     // get time of incoming cue
     lastCueTime = new Date();
-    output.innerHTML = message + "<BR>" + output.innerHTML;
+    dataToShow =  message + "<BR>" + dataToShow;
+    output.innerHTML = dataToShow;
+       // output.innerHTML = message + "<BR>" + output.innerHTML;
 }
 
 //************************************  RELAYS ******************************
