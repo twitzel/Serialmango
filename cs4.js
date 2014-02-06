@@ -18,7 +18,7 @@ var timedOutInterval = 200; //time to wait between serial transmitts
 var timedOut = true; // set to false will delay transmission;
 var comlib = require('./comlib');
 var spawn = require('child_process').spawn;
-
+var nodemailer = require("nodemailer");
 
 var lastCueReceived = {"Time" : "10/09/13 15:20:04.20", "Source" : "Midi1", "InData" : "F0 7F 05 02 01 01 31 2E 30 30 F7 "};
 var serialDataSocket;
@@ -30,6 +30,7 @@ var sourcePath;
 var destinationPath;
 var mongoDirectory;
 var collectionName = 'WizDb';
+var smtpTransport;
 
 //routine to ensure that serial data is not sent more than
 // every timedOutInterval
@@ -177,7 +178,17 @@ exports.setup = function()
     //set timezone of pi
    // time.tzset('US/Pacific');
     time.tzset('US/Eastern');
+    //set up email
+    smtpTransport = nodemailer.createTransport("SMTP",{
+        service: "Gmail",
+        auth: {
+            user: "stevewitz@gmail.com",
+            pass: "panema2020"
+        }
+    });
+
 };
+
 
 
 /*Data in may have a prefix.  That prefix is a command and handled here:
@@ -753,6 +764,25 @@ exports.ledOn = function(){
         led.prepareGPIO(4);
         led.set(4);
     }
+    //send startup email
+    // setup e-mail data with unicode symbols
+    var mailOptions = {
+        from: "CS4 192.168.2.10 ✔ <stevewitz@gmail.com>", // sender address
+        to: "steve@wizcomputing.com      ", // comma seperated list of receivers
+        subject: "Message from CS4 ✔", // Subject line
+        text: "This CS4 has just been started", // plaintext body
+        html: "This CS4 has just been started" // html body
+    }
+
+// send mail with defined transport object
+    smtpTransport.sendMail(mailOptions, function(error, response){
+        if(error){
+            console.log(error);
+        }
+        else{
+            console.log("Message sent: " + response.message);
+        }
+    });
 };
 
 exports.ledOff = function(){
