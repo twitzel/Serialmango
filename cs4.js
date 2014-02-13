@@ -201,7 +201,7 @@ exports.setup = function()
     COPYFROMUSB             Copies all mongodb files from usb stick
     COPYTOINTERNAL          Copies all mongodb files to internal location
     COPYFROMINTERNAL        Copies all mongodb files from internal location
-
+    EDIT                    Sends all Cue collection data to client
 
 
  */
@@ -300,14 +300,14 @@ exports.websocketDataIn = function(dataSocket, Socket){
     }
     else if(dataSocket.substr(0,4) == "EDIT"){
         collectionCue.find({},{}).sort({"Time": 1}).toArray(function(error,cuefile){
-            //var x = {};
-            //x.packettype="cuedata";
-            //x.data = cuefile''
+            var packet = {};
+            packet.packetType="cuefiledata";
+            packet.data = cuefile;
 
             //JSON.parse(x);
             //packettype = x.packettype;
             //data = x.data;
-            comlib.websocketsend(JSON.stringify(cuefile), Socket);
+            comlib.websocketsend(JSON.stringify(packet), Socket);
 
         });
     }
@@ -383,8 +383,11 @@ exports.socketDataOut = function (data) {
     // If matching cue found then iterate through
     // OutData and send the stuff out
     // and send output data to log file
+
+    //added search fields: must match InData and Source
     if (serialData.InData != null) {
-        collectionCue.find({'InData': serialData.InData}).toArray(function (err, item) {
+        collectionCue.find({$and: [{'InData': serialData.InData} , {'Source': serialData.Source }]}).toArray(function (err, item) {
+        //collectionCue.find({'InData': serialData.InData }).toArray(function (err, item) {
             if (item.length == 0) {
                 console.log("not Found");
             }
