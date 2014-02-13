@@ -1,39 +1,40 @@
-extends layout
+doctype 5
+html
+    head
+        title= title
+        link(rel='stylesheet', href='/stylesheets/twi.css')
+        script(src="/Scripts/data.js")
+    body
 
-block content
-  script(src="/Scripts/data.js")
-  h1= title
-  div.myDiv(id="output")
-  div
+    block content
 
-      -for(var prop in item[item.length-1]){
-       -var displayname = prop;
-       -for (var i = 0; i<settings.length; ++i){if(settings[i].sensor == prop){displayname=settings[i].name;break;}  }
-       div
-           div(id=prop+"_name" data-sensor=prop data-name=displayname )
+      h1= title
+      div.myDiv(id="output")
+      div
+          -for(var position = 0; position<Object.keys(sensors).length -2 ;position++){
 
-               p
+          -for(var prop in sensors){if (sensors[prop].order == position){break;    }      }
 
-                =displayname
-                 |:
+           div(id="position"+position data-sensor=prop data-position=position class="graphfadeformove")
 
-                 =item[item.length-1][prop]
-               script.
-                var temp = document.getElementById("!{prop+"_name"}");
-                temp.addEventListener("click",nameclick,false);
-           div
-               canvas(id=prop,height="85",width=item.length+50,style="border:1px solid #000000;")
-               script.
-                var temp = document.getElementById("!{prop}");
-                temp.addEventListener("click",graphclick,false);
-               canvas(id=prop+"_rt",height="85",width=100,style="border:1px solid #000000;")
+              div(id="r" style="width:200px; float:left;")
+                  div(id=prop+"_name" style="width:200px;" contenteditable='true' onblur='savesensorname()' data-sensor=prop data-name=sensors[prop].name data-position=position onkeydown='if (event.keyCode == 13) return false')
+                        =sensors[prop].name
+                  div(style="width:200px;")
+                        ="Current Temperature:"+item[item.length-1][prop]
+                  button(id="moveButton"+position data-id="position"+position) Move Up
+                  button(id="moveButtonDown"+position data-id="position"+position) Move Down
+              div
+                  canvas(id=prop,height="150",width=item.length+50,style="border:1px solid #000000;")
+                  canvas(id=prop+"_rt",height="150",width=200,style="border:1px solid #000000;")
+           -}
+          button(onclick = "buttonclick()") Todd Made this form Me!
 
-               -}
-      button(onclick = "buttonclick()") Todd Made this form Me!
+      style.
+        .myDiv { height: 40px }
 
-  style.
-    .myDiv { height: 150px;overflow: scroll; float: right; }
-
-  script.
-      var dp = !{JSON.stringify(item)};
-      window.addEventListener("load", init, false);
+      script.
+          var dp = !{JSON.stringify(item)};
+          var sensors = !{JSON.stringify(sensors)};
+          addEventListeners();
+          window.addEventListener("load", init, false);

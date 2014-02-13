@@ -8,9 +8,11 @@
 /*              for Todd's branch or Steve's branch                      */
 /*                                                                       */
 
-              //global.branch = 'twi';
-               global.branch = 'cs4';
 
+                global.branch = process.argv[2];
+//          ** put cs4 ot twi in the edit configuration app parameters
+//                global.branch = 'cs4';
+            console.info ("Branch set to "+global.branch);
 /*                                                                       */
 /*                                                                       */
 /*                                                                       */
@@ -23,11 +25,11 @@ var routes = require('./routes');
 var user = require('./routes/user');
 var http = require('http');
 var path = require('path');
-var WebSocketServer = require('ws').Server;
+
 //var MongoClient = require('mongodb').MongoClient;
 
 global.comlib = require('./comlib');
-
+global.myuri;
 
 //Set up all express stuff
 app = express();
@@ -35,6 +37,7 @@ app = express();
 app.set('port', 3000); // This is a default port.  Change here only if necessary
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
+app.set('view engine', 'ejs');
 app.use(express.favicon());
 app.use(express.logger('dev'));
 app.use(express.bodyParser());
@@ -42,51 +45,13 @@ app.use(express.methodOverride());
 app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
 
-//  All route information now is contined in
+//  All route information now is contained in
 //  TWI.js or CS4.js
 
 
 // Set up the server
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
-});
-
-
-//Set up the web socket here.. Default port is 8080
-wss = new WebSocketServer({port: 8080}, function(err,res){
-
-  //  console.log(wss.url);
-    if (err){
-        console.log("Websocket error:"+err);
-    }
-    else
-    {
-
-        console.log("Websocket server Listening");
-    }
-});
-
-
-
-//Set up Web socket for a connection and make it global
-wss.on('connection', function(ws) {
-    ws.on('message', function(message) {
-
-    if(branch == 'twi')
-    {
-        twi.websocketDataIn(message);
-    }
-    else if(branch == 'cs4')
-    {
-        console.log('received: %s', message);
-        cs4.websocketDataIn(message);
-    }
-    });
-    global.websocket=ws;
-   //this line sends to twi and cs4 and causes an error on Todds webpage
-   // ws.send('Log Window Now Active');
-
-
 });
 
 /*
@@ -108,6 +73,7 @@ if(branch == 'twi')
 else if(branch == 'cs4')
 {
     var cs4 = require('./cs4');
+    cs4.ledOff(); // turn off the ready led
     cs4.setup();
 }
 

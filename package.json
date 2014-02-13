@@ -10,6 +10,11 @@
     "jade": "*",
     "ws" : "*" ,
     "mongodb": "*" ,
-    "serialport": "1.1.3"
+    "serialport": "1.1.3",
+    "ejs": "*",
+    "time": "*",
+    "fs.extra": "*",
+    "fastgpio": "*",
+    "nodemailer": "*"
   }
 }
