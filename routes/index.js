@@ -155,3 +155,7 @@ exports.cs4Help = function(req, res){
 exports.cs4Settings = function(req, res){
     res.render('cs4Settings.ejs',{ title: 'CS-4 Scroll', myuri:"ws://localhost:8080" });
 };
+
+exports.cs4Edit = function(req, res){
+    res.render('cs4Edit.ejs',{ title: 'CS-4 Cue Editor', myuri:"ws://localhost:8080" });
+};

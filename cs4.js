@@ -174,6 +174,7 @@ exports.setup = function()
     app.get('/cs4VerticalScroll', routes.cs4VerticalScroll);
     app.get('/cs4Help', routes.cs4Help);
     app.get('/cs4Settings', routes.cs4Settings);
+    app.get('/cs4Edit', routes.cs4Edit);
 
     //set timezone of pi
    // time.tzset('US/Pacific');
@@ -296,6 +297,12 @@ exports.websocketDataIn = function(dataSocket, Socket){
     else if(dataSocket.substr(0,16) == "COPYFROMINTERNAL")
     {
         copyFromInternal();
+    }
+    else if(dataSocket.substr(0,4) == "EDIT"){
+        collectionCue.find({},{}).sort({"Time": 1}).toArray(function(error,cuefile){
+            comlib.websocketsend(JSON.stringify(cuefile), Socket);
+
+        });
     }
 
     else
