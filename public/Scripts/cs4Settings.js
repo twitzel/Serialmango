@@ -3,9 +3,6 @@
  */
 window.onload = init;
 var autocount;
-var autocue;
-var dataToShow = "";
-var bkgnd = 0;
 
 function init(){
     wsUri = "ws://" + window.location.hostname + ":8080";
@@ -52,27 +49,7 @@ function doSend(message) {
 function writeToScreen(message) {
     // get time of incoming cue
     lastCueTime = new Date();
-    dataToShow =  message + "<BR>" + dataToShow;
-    output.innerHTML = dataToShow;
-       // output.innerHTML = message + "<BR>" + output.innerHTML;
-}
-
-function buttonClear(){
-    output.innerHTML = "";
-}
-
-function buttonBackground(){
-    if(bkgnd == 0){
-        document.getElementById("body").style.backgroundColor =  '#474747';
-        document.getElementById("websocketlog").style.backgroundColor =  '#505050';
-        bkgnd = 1;
-    }
-    else{
-        document.getElementById("body").style.backgroundColor =  '#ffffff';
-        document.getElementById("websocketlog").style.backgroundColor =  '#ececec';
-        bkgnd = 0;
-    }
-
+    output.innerHTML = message + "<BR>" + output.innerHTML;
 }
 
 //************************************  RELAYS ******************************
@@ -274,89 +251,44 @@ function midi2button()
 }
 
 function sendMidiAuto(){
-    if(document.getElementById('sendMidiAuto').innerHTML == "Send Midi Auto"){
-        document.getElementById('sendMidiAuto').innerHTML = "Stop Midi Auto"  ;
-        document.getElementById("sendMidiAuto").style.background='#FF0000';
-        midiAuto(); //start settimeout and repeats forever -- unless stopped
-    }
-    else{
-        document.getElementById('sendMidiAuto').innerHTML = "Send Midi Auto"  ;
-        clearTimeout(autocount);
-        document.getElementById("sendMidiAuto").style.background='#F1F1F1';
-    }
-}
-
-function midiAuto(){
     var start = "SEND MIDI1 F07F05020101";
     var cue = document.getElementById('cuenumber').value.trim();
-    var temp = document.getElementById('sendMidiAuto');
 
-    for (var i = 0; i < cue.length; i ++)  // convert cue info to hex string be adding 0x30
-    {
-        if(cue[i] == ".")
+    var temp = document.getElementById('sendMidiAuto').tagName;
+
+    if(document.getElementById('sendMidiAuto').tag == "Send Midi Auto"){
+        for (var i = 0; i < cue.length; i ++)  // convert cue info to hex string be adding 0x30
         {
-            start += "2E";
+            if(cue[i] == ".")
+            {
+                start += "2E";
+            }
+            else
+            {
+                start += (parseInt(cue[i])  + 0x30).toString(16);
+            }
         }
-        else
-        {
-            start += (parseInt(cue[i])  + 0x30).toString(16);
+        start += "F7";
+
+        websocket.send(start);
+        autocount = setTimeout(function(){sendMidiAuto()}, 5000);
+        document.getElementById('cuenumber').value = parseInt(document.getElementById('cuenumber').value) +1;
+        if(parseInt(document.getElementById('cuenumber').value)> 1000){
+            document.getElementById('cuenumber').value = 1; //count to 1000 then repeat
         }
-    }
-    start += "F7";
-
-    websocket.send(start);
-
-    autocount = setTimeout(function(){midiAuto()}, parseInt(document.getElementById('cuetime').value)*1000);
-    document.getElementById('cuenumber').value = parseInt(document.getElementById('cuenumber').value) +1;
-
-    if(parseInt(document.getElementById('cuenumber').value)> 1000){
-        document.getElementById('cuenumber').value = 1; //count to 1000 then repeat
-    }
-}
-
-function r4CueAuto(message){
-    if(document.getElementById('r4CueAuto').innerHTML == "Send Cue Auto"){
-        document.getElementById('r4CueAuto').innerHTML = "Stop Cue Auto"  ;
-        document.getElementById("r4CueAuto").style.background='#FF0000';
-        cueAuto(); //start settimeout and repeats forever -- unless stopped
+        document.getElementById('sendMidiAuto').tag = "Stop Midi Auto"  ;
     }
     else{
-        document.getElementById('r4CueAuto').innerHTML = "Send Cue Auto"  ;
-        clearTimeout(autocue);
-        document.getElementById("r4CueAuto").style.background='#F1F1F1';
+        document.getElementById('sendMidiAuto').tag = "Send Midi Auto"  ;
+        clearTimeout(autocount);
     }
+
+
 }
 
-function cueAuto(){
-    var counter = parseInt(cue.value);
-    var showName = document.getElementById('showname').value.trim();
-    var directory = document.getElementById('directory').value.trim();
-    var radioButtons = document.getElementsByName('outputcue');
-    var dataFormat;
-    var dataOut;
-
-    for (var i = 0, length = radioButtons.length; i < length; i++) {
-        if (radioButtons[i].checked) {
-
-            dataFormat = (radioButtons[i].value);
-
-            // get out of loop now that we have value
-            break;
-        }
-    }
-
-    if(dataFormat == 'r4slidescue'){
-        dataOut =  "GO slide" + counter +".jpg NEXT slide"+(counter +1) +".jpg";
-    }
-    else if(dataFormat == 'r4audiocue'){
-        dataOut = "GO audio" + counter + ".mp3";
-    }
-    cue.value = counter +1; //update the cue count
-   // delay = (new Date()-lastCueTime);
-    websocket.send('SEND ZIG1' + ' ' + showName + ' ' + directory + ' ' + dataOut);
-    autocue = setTimeout(function(){cueAuto()}, parseInt(document.getElementById('delay').value)*1000);
-}
-
+function stopAutoAdvance(){
+    clearTimeout(autocount)
+};
 
 function copyToUSB()
 {

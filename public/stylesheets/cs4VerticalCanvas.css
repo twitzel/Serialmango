@@ -16,7 +16,7 @@ body{
     width: 80%;
     clear: both;
 }
-/*
+
 .body h1{
     font-family: Verdana;
     font-weight:bold;
@@ -26,10 +26,9 @@ body{
     height:auto;
     color: #666;
 }
-*/
+
 #canvasDiv{
     width:95%;
-    color: #666;
 }
 
 #myCanvas{

@@ -1,8 +1,6 @@
 /**
  * Created by Steve on 10/28/13.
  */
-var status;
-var autoplot;
 window.onload = init;
 function init(){
 
@@ -22,7 +20,7 @@ function init(){
     lineStart = canvasWidth/2; // bottom of tic line
 
     //setup origional time marks and time in the array
-/*    for(var i = 0; i  <=canvasHeight; i+=ticIncrement){
+    for(var i = 0; i  <=canvasHeight; i+=ticIncrement){
         if(i%50 == 0){
             pixelData[i] = {line : 25};
         }
@@ -30,9 +28,8 @@ function init(){
             pixelData[i] = {line : 10};
         }
     }
- */
     testWebSocket();
-  //  autoplot = setInterval(function(){movedata()},30);
+    setInterval(function(){movedata()},30);
 
 }
 
@@ -47,13 +44,11 @@ function testWebSocket()
 
 function onOpen(evt) {
     writeToScreen("CONNECTED");
-    autoplot = setInterval(function(){movedata()},30);
-
+    writeToScreen('#{myuri}');
 }
 
 function onClose(evt) {
     writeToScreen("DISCONNECTED");
-    clearInterval(autoplot);
 }
 
 function onMessage(evt)    {
@@ -72,11 +67,9 @@ function writeToScreen(message) {
     // get time of incoming cue
     lastCueTime = new Date();
 ////    output.innerHTML = message + "<BR>" + output.innerHTML;
-
-    pixelData[canvasStart] = {data : message};
-
-
-
+    if(message.length > 10){
+        pixelData[canvasStart] = {data : message};
+    }
     //output.value = message+"<BR>"+output.value;
 }
 
@@ -115,11 +108,10 @@ function movedata(){
 
             }
             else if(pixelData[i].data){
-                var test = pixelData[i].data.substring(0,6);
-                if(pixelData[i].data.substring(0,6) == "  Sent")
+                if(pixelData[i].data.substring(0,1) == ".")
                 {
                     context.fillStyle = "blue";
-                    wrapText(context,pixelData[i].data.substring(54, pixelData[i].data.length -2),i+5,lineStart+25,lineStart-25,10);//get rid of extraneous stuff before writing
+                    wrapText(context,pixelData[i].data.substring(25),i+5,lineStart+25,lineStart-25,10);
                 }
                 else
                 {
@@ -129,20 +121,15 @@ function movedata(){
                     var start;
                     if (metrics.width > lineStart)
                     {
-                        start = 10;
+                        start = 5;
                     }
                     else
                     {
-                        start = lineStart-metrics.width-30;
+                        start = lineStart-metrics.width-25;
                     }
                     var len = metrics.width;
                    // context.fillText(pixelData[i].data.substr(25),lineStart-metrics.width-23, i)
-
-
-                   wrapText(context,pixelData[i].data.substring(25),i+5,start,lineStart-25,10);
-
-
-
+                    wrapText(context,pixelData[i].data.substring(25),i+5,start,lineStart-25,10);
 
                 }
             }
@@ -175,8 +162,12 @@ function wrapText(context, text, y, x, maxWidth, lineHeight) {
         var metrics = context.measureText(testLine);
         var testWidth = metrics.width;
         if(testWidth > maxWidth) {
-
+            context.save();
+         //   context.rotate(Math.PI/2);
+         //   context.translate(0,0);
+            //context.fillText(line, 0, 0);//
             context.fillText(line, x, y);
+            context.restore();
             line = words[n] + " ";
             y += lineHeight;
         }
@@ -184,5 +175,12 @@ function wrapText(context, text, y, x, maxWidth, lineHeight) {
             line = testLine;
         }
     }
+    // context.fillText(line, x, y);
+    context.save();
+  //  context.rotate(Math.PI/2);
+  //  context.translate(0,0);
+    //context.fillText(line, 10, 10);
       context.fillText(line, x, y);
+
+    context.restore();
 }

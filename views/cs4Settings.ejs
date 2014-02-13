@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 
-    <script  src = "./Scripts/cs4Settings.js"> </script>
-    <script  src = "./Scripts/cs4Menu.js"> </script>
-    <link rel='stylesheet'  href='./stylesheets/cs4Settings.css'>
-    <link rel='stylesheet'  href='./stylesheets/cs4Menu.css'>
+<script  src = "./Scripts/cs4Settings.js"> </script>
+<link rel='stylesheet'  href='./stylesheets/cs4Settings.css'>
+<link rel='stylesheet'  href='./stylesheets/cs4Menu.css'>
 
 <html>
 
@@ -21,10 +20,7 @@
     <h1>CS4 Setup</h1>
 
     <header class="mainheader">
-        <div id="menubutton">
-            <button id = "buttonMenu"  onmousedown = "buttonMenu()">=</button>
-        </div>
-        <nav id = "menunav">
+        <nav>
             <ul>
                 <li><a href="cs4Home">Home</a></li>
                 <li><a href="cs4VerticalScroll" >Scrolling</a></li>
@@ -68,36 +64,10 @@
 
             <button id = "midi1button"  onmousedown = "midi1button()"> Send Midi 1 </button>
             <button id = "midi2button"  onmousedown = "midi2button()"> Send Midi 2 </button>
-            <label>Next Cue</label>
             <input id=cuenumber name=cuenumber type=text value="1" required style = "width: 3em" >
-            <label>Delay</label>
-            <input id=cuetime name=cuetime type=text value="5" required style = "width: 3em" >
-            <button id = "sendMidiAuto"  onmousedown = "sendMidiAuto()">Send Midi Auto</button>
+            <button id = "sendMidiAuto"  onmousedown = "sendMidiAuto()"> Send Midi Auto </button>
+            <button id = "stopAutoAdvance"  onmousedown = "stopAutoAdvance()"> Stop Midi Auto </button>
     </fieldset>
-
-
-    <fieldset>
-        <legend id = "legend1">Send To R4</legend>
-
-        Show Name: <input id=showname name=showname type=text value="ShowName" required style = "width: 8em"  >
-
-        <div>
-            Output:   R4 Slides <input id=r4slidescue name=outputcue value= "r4slidescue" type=radio checked>
-            R4 Audio<input id=r4audiocue name=outputcue value = "r4audiocue" type=radio >
-        </div>
-
-        <div>
-            Directory:     <input id=directory name=directory type=text value="English" style = "width: 8em" required>
-            Next Cue: <input id=cue name=cue type=number value=1 required style = "width: 5em">
-            Delay: <input id=delay name=delay type=number value=5 required style = "width: 5em">
-        </div>
-
-        <div id="buttondiv">
-            <button id = "r4CueAuto"  onmousedown = "r4CueAuto()">Send Cue Auto</button>
-        </div>
-
-    </fieldset>
-
 
     <fieldset id = "time">
         <legend>Date & Time</legend>

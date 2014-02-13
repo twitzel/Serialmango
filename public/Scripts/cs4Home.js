@@ -48,9 +48,6 @@ function writeToScreen(message) {
     // get time of incoming cue
     lastCueTime = new Date();
     output.innerHTML = message + "<BR>" + output.innerHTML;
-    if(message.substr(0,1) != '*' ){
-        document.body.style.cursor  = 'default';
-    }
 }
 
 
@@ -61,13 +58,11 @@ function buttonClear(){
 function buttonLog(){
     output.innerHTML = "";
     websocket.send('LOG');//request logfile
-    document.body.style.cursor  = 'wait';
 }
 
 function buttonLog100(){
     output.innerHTML = "";
     websocket.send('LOG 100');//request logfile
-    document.body.style.cursor  = 'wait';
 }
 
 function buttonBackground(){

@@ -18,7 +18,7 @@ var timedOutInterval = 200; //time to wait between serial transmitts
 var timedOut = true; // set to false will delay transmission;
 var comlib = require('./comlib');
 var spawn = require('child_process').spawn;
-var nodemailer = require("nodemailer");
+
 
 var lastCueReceived = {"Time" : "10/09/13 15:20:04.20", "Source" : "Midi1", "InData" : "F0 7F 05 02 01 01 31 2E 30 30 F7 "};
 var serialDataSocket;
@@ -30,7 +30,6 @@ var sourcePath;
 var destinationPath;
 var mongoDirectory;
 var collectionName = 'WizDb';
-var smtpTransport;
 
 //routine to ensure that serial data is not sent more than
 // every timedOutInterval
@@ -53,7 +52,7 @@ sendOutput = function (dataToSend)
         //
 
 
-    //change the time of data sent to correlate with CS-4 I/O clock
+    //change the time of data sent to corolate with CS-4 I/O clock
     lastconverted   = new Date(lastCueReceived.Time);
     addTime = addTime + "\""+  (new Date( lastconverted.setMilliseconds(lastconverted.getMilliseconds() + (timerStartTime -lastCueReceivedInternalTime)))).toISOString() +"\", \"Dout\" : \"" + dataToSend + "\"}";
 
@@ -62,7 +61,6 @@ sendOutput = function (dataToSend)
 
     //Log the data into the collection
     addTime = JSON.parse(addTime);
-    addTime.Time = new Date(addTime.Time); //get to real time format.
     collectionLog.insert(addTime, {w: 1}, function (err, result) {
         console.log(result);
     });
@@ -120,7 +118,6 @@ exports.setup = function()
             }
 
             global.collectionLog = db.collection('log');
-         //   collectionLog.ensureIndex({Time:1},function (err,res){});
             global.collectionCue = db.collection('cue');
             global.collectionStartup = db.collection('startup');
             collectionCue.ensureIndex({InData:1},function (err,res){});
@@ -144,14 +141,13 @@ exports.setup = function()
             // if we are open the required com port
             //if not open the pi port
             console.log("Host System Name: " + os.type());
-            var baud = 115200;
             if(os.type() == 'Windows_NT')
             {
-                comlib.openSerialPort('com19', baud); //windows
+                comlib.openSerialPort('com19'); //windows
             }
             else
             {
-                comlib.openSerialPort("/dev/ttyUSB0", baud); //not windows - Raspberry PI
+                comlib.openSerialPort("/dev/ttyUSB0"); //not windows - Raspberry PI
             }
 
         }
@@ -174,22 +170,11 @@ exports.setup = function()
     app.get('/cs4VerticalScroll', routes.cs4VerticalScroll);
     app.get('/cs4Help', routes.cs4Help);
     app.get('/cs4Settings', routes.cs4Settings);
-    app.get('/cs4Edit', routes.cs4Edit);
 
     //set timezone of pi
    // time.tzset('US/Pacific');
     time.tzset('US/Eastern');
-    //set up email
-    smtpTransport = nodemailer.createTransport("SMTP",{
-        service: "Gmail",
-        auth: {
-            user: "stevewitz@gmail.com",
-            pass: "panema2020"
-        }
-    });
-
 };
-
 
 
 /*Data in may have a prefix.  That prefix is a command and handled here:
@@ -216,8 +201,7 @@ exports.websocketDataIn = function(dataSocket, Socket){
           //  collectionStartup.update({'TimeZoneChanged':'Yes'}, {$set:{'TimeZoneSet' : datain}},{upsert:true, w:1},function(err,res){
                 collectionStartup.update({'TimeZoneSet':{$exists:true}}, {$set:{'TimeZoneSet' : datain}},{upsert:true, w:1},function(err,res){
 
-                console.log('Time Zone Updated '+res + " "+ datain);
-
+                console.log('Time Zone Updated'+res);
 
             });
         }
@@ -232,50 +216,41 @@ exports.websocketDataIn = function(dataSocket, Socket){
     }
     else if(dataSocket.substr(0,3) == "LOG")//requesting entire log file to be sent log file
     {
-        var dataToSend = "";
-
         if(dataSocket.substr(0,7) == "LOG 100")
         {
-                comlib.websocketsend("* Preparing Data For Display. \n* Please Wait. \n* (may take several seconds) ", Socket) ;
-                collectionLog.find({},{}).sort({"Time": -1}).limit(1000).toArray(function(error,logfile){
+            collectionLog.find({},{"_id":0}).sort({"_id": 1}).limit(100).toArray(function(error,logfile){
                 for(var i = 0; i <logfile.length;i++)
                 {
                     logfileData = JSON.stringify(logfile[i]);
 
                     if(logfile[i].Dout)
                     {
-                        //comlib.websocketsend(".    Sent: " + logfileData, Socket) ;
-                        dataToSend = dataToSend + ".    Sent: " + logfileData + "\n" ;
+                        comlib.websocketsend(".    Sent: " + logfileData, Socket) ;
                     }
                     else
                     {
-                        //comlib.websocketsend(parseCue(logfileData),Socket);
-                        dataToSend = dataToSend + parseCue(logfileData) + "\n" ;
+                        comlib.websocketsend(parseCue(logfileData),Socket);
                     }
                 }
-                    comlib.websocketsend(dataToSend, Socket) ;
             });
         }
         else
         {
-            comlib.websocketsend("* Preparing Data For Display. \n* Please Wait. \n* (may take up to 1 minute) ", Socket) ;
-            collectionLog.find({},{}).sort({"Time": 1}).toArray(function(error,logfile){
+            collectionLog.find({},{"_id":0}).sort({"_id": 1}).toArray(function(error,logfile){
                 for(var i = 0; i <logfile.length;i++)
                 {
                     logfileData = JSON.stringify(logfile[i]);
 
                     if(logfile[i].Dout)
                     {
-                        dataToSend = ".    Sent: " + logfileData + "\n" + dataToSend;
+                        comlib.websocketsend(".    Sent: " + logfileData, Socket) ;
                     }
                     else
                     {
-                        dataToSend = parseCue(logfileData) + "\n" + dataToSend;
+                        comlib.websocketsend(parseCue(logfileData),Socket);
                     }
                 }
-                comlib.websocketsend(dataToSend, Socket) ;
             });
-
         }
     }
     else if (dataSocket.substr(0,4) == "SEND") // these are commands to send directly to the CS4I/0
@@ -298,12 +273,6 @@ exports.websocketDataIn = function(dataSocket, Socket){
     {
         copyFromInternal();
     }
-    else if(dataSocket.substr(0,4) == "EDIT"){
-        collectionCue.find({},{}).sort({"Time": 1}).toArray(function(error,cuefile){
-            comlib.websocketsend(JSON.stringify(cuefile), Socket);
-
-        });
-    }
 
     else
     {
@@ -325,20 +294,13 @@ exports.websocketDataIn = function(dataSocket, Socket){
         });
 
         //send the data out to the CS4 I/O
-        var dir = serialDataSocket.OutData.Dir;    // ****** needs to ba added to R4-4 Receiver Parsing ****** //
-       // var dir = "";
+         var dir = serialDataSocket.OutData.Dir;    // ****** needs to ba added to R4-4 Receiver Parsing ****** //
+       // dir = "";
         var port = serialDataSocket.OutData.Port;
         var showname = serialDataSocket.OutData.Showname;
         var dataToSend = serialDataSocket.OutData.Dout;
-        if(dir =="")
-        {
-           var  outstring = port + " " + showname + " " + dataToSend;
-        }
-        else
-        {
-           var outstring = port + " " + showname + " " + dir + " " + dataToSend;
-        }
 
+        var outstring = port + " " + showname + " " + dir + " " + dataToSend;
         sendOutput(outstring);
     }
 };
@@ -385,21 +347,13 @@ exports.socketDataOut = function (data) {
 
                for(var i = 0; i< item[0].OutData.length; i++)
                {
-                    dir = item[0].OutData[i].Dir;    // ****** needs to ba added to R4-4 Receiver Parsing ****** //
-                   // dir = "xxxx";
+                   // dir = item[0].OutData[i][0].Dir;    // ****** needs to ba added to R4-4 Receiver Parsing ****** //
+                    dir = "xxxx";
                     port = item[0].OutData[i].Port.toUpperCase();
                     showname = item[0].OutData[i].Showname;
                     dataToSend = item[0].OutData[i].Dout;
                     delay = item[0].OutData[i].Delay;
-                    if(dir =="")
-                    {
-                        outstring = port + " " + showname + " " + dataToSend;
-                    }
-                    else
-                    {
-                        outstring = port + " " + showname + " " + dir + " " + dataToSend;
-                    }
-
+                    outstring = port + " " + showname + " " + dir + " " + dataToSend;
                     setTimeout(sendOutput, delay, outstring);
                     console.log(item[0].OutData[i].Dout + "  Delay "+item[0].OutData[i].Delay);
                 }
@@ -771,25 +725,6 @@ exports.ledOn = function(){
         led.prepareGPIO(4);
         led.set(4);
     }
-    //send startup email
-    // setup e-mail data with unicode symbols
-    var mailOptions = {
-        from: "CS4 192.168.2.10 ✔ <stevewitz@gmail.com>", // sender address
-        to: "steve@wizcomputing.com      ", // comma seperated list of receivers
-        subject: "Message from CS4 ✔", // Subject line
-        text: "This CS4 has just been started", // plaintext body
-        html: "This CS4 has just been started" // html body
-    }
-
-// send mail with defined transport object
-    smtpTransport.sendMail(mailOptions, function(error, response){
-        if(error){
-            console.log(error);
-        }
-        else{
-            console.log("Message sent: " + response.message);
-        }
-    });
 };
 
 exports.ledOff = function(){

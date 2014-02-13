@@ -1,5 +1,5 @@
-var status;
-var autoplot;
+var inMessage;
+var cueArray;
 window.onload = init;
 function init(){
 
@@ -55,7 +55,15 @@ function onClose(evt) {
 }
 
 function onMessage(evt)    {
-    writeToScreen(evt.data);
+    message = JSON.parse(evt.data);
+    if(message.packetType == 'cuefiledata'){
+        inMessage = message.data;
+        writeToScreen(inMessage);
+    }
+    else{
+       writeToScreen(inMessage);
+    }
+
 }
 
 function onError(evt) {

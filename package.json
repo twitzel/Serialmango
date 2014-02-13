@@ -14,7 +14,6 @@
     "ejs": "*",
     "time": "*",
     "fs.extra": "*",
-    "fastgpio": "*",
-    "nodemailer": "*"
+    "fastgpio": "*"
   }
 }
