@@ -1,0 +1,81 @@
+
+#maindiv{
+
+    float: left;
+}
+
+#titles{
+    float:left;
+    width:90%;
+    margin-left: 30px;
+    margin-top:4%;
+    margin-bottom: 0;
+    font-weight: bold;
+    font-size: 120%;
+}
+#startup,{
+
+    margin-top: .2%;
+
+}
+
+#countlog, #countcue, #countstartup{
+
+}
+
+.info{
+    text-align: center;
+    margin-top:5px;
+    margin-left: 10px;
+    width: 15em;
+    height:2.5em;
+    float:left;
+    border: 2px solid #333333;
+    overflow-y: auto;
+    padding-left: 1em;
+    background-color: #ececec;
+
+    border-radius: 5px;
+    box-shadow: 3px 3px 3px #333;
+}
+
+.infostart{
+
+    text-align: left;
+    margin-top:5px;
+    margin-left:5px;
+    margin-bottom: 4px;
+    width: 19.2em;
+    height:26.5em;
+    float:left;
+    border: 2px solid #333333;
+    overflow-y: auto;
+    padding-left: 1em;
+    background-color: #ececec;
+
+    border-radius: 5px;
+    box-shadow: 3px 3px 3px #333;
+}
+.body h1{
+    font-family: Verdana;
+    font-weight:bold;
+    font-size: 220%;
+    margin:2% 0;
+    height:auto;
+    color: #666;
+}
+
+
+#timezone{
+    float: left;
+    margin-top:55px;
+
+}
+#timeZoneCombo{
+    float: left;
+    margin-top:52px;
+    margin-left: 10px;
+}
+.tz{
+    display: none;
+}
