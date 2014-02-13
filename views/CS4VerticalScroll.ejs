@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+
+    <script  src = "./Scripts/cs4VerticalCanvas.js"> </script>
+    <script  src = "./Scripts/cs4Menu.js"> </script>
+    <link rel='stylesheet'  href='./stylesheets/cs4VerticalCanvas.css'>
+    <link rel='stylesheet'  href='./stylesheets/cs4Menu.css'>
+
+<html>
+
+<head>
+    <title> Vertical Scroll</title>
+    <meta name = "viewport" content = "width=device-width, initial-scale = 1.0">
+</head>
+
+
+<h1> CS4 Scrolling Data</h1>
+
+<header class="mainheader">
+    <div id="menubutton">
+        <button id = "buttonMenu"  onmousedown = "buttonMenu()">=</button>
+    </div>
+    <nav id = "menunav">
+        <ul>
+            <li><a href="cs4Home">Home</a></li>
+            <li class="active"><a href="cs4VerticalScroll" >Scrolling</a></li>
+            <li ><a href="cs4Info" >Info</a></li>
+            <li><a href="cs4Timing">Timing</a></li>
+            <li><a href="cs4Settings">Settings</a></li>
+            <li><a href="cs4Help">Help</a></li>
+        </ul>
+    </nav>
+</header>
+
+<body class = 'body' onresize="resize_canvas()">
+<div id = "title" >
+
+</div>
+
+    <div id = "canvasDiv">
+        <h3 id = "in" > Incoming Data  </h3>
+        <h3 id = "out" >Outgoing Data</h3>
+        <canvas id="myCanvas" width= 800px height=1000px></canvas>
+
+    </div>
+</body>
+</html>

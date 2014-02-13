@@ -1,0 +1,54 @@
+#myCanvas{
+    margin-top: 1px;
+    border: 3px solid #333333;;
+}
+
+body{
+    color:#000305;
+    font-size: 87.5%;
+    font-family: Veranda, Arial, "Lucida Sans Unicode" Arial, "Lucida Sans Unicode";
+    line-height:1;
+    text-align: left;
+}
+
+.body{
+    margin: 0 auto;
+    width: 80%;
+    clear: both;
+}
+/*
+.body h1{
+    font-family: Verdana;
+    font-weight:bold;
+    font-size: 220%;
+    margin-top:2% ;
+    margin-bottom: 0;
+    height:auto;
+    color: #666;
+}
+*/
+#canvasDiv{
+    width:95%;
+    color: #666;
+}
+
+#myCanvas{
+    margin-left: 2.5%;
+}
+
+#title{
+    width: 95%;
+
+
+}
+
+#in{
+    float:left;
+    margin-left: 5%;
+    margin-bottom: 5px;
+}
+#out{
+    margin-right: 2.5%;
+    float: right;
+    margin-bottom: 5px;
+}

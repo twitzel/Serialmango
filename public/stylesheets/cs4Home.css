@@ -1,0 +1,65 @@
+
+/*  NOTE:  # = id;   . = class  */
+#title{
+    height: 30px;
+}
+
+#title button{
+    margin-right: 5.2%;
+    float:right;
+    border-radius:5px;
+  /* background: linear-gradient(to bottom, rgba(63,76,107,0.1) 50%,rgba(63,76,107,0.15) 20%,rgba(0,0,0,0.42) 40%,rgba(0,0,0,0.49) 75%);*/
+    font-weight: bold;
+}
+
+#title h2{
+    width: 150px;
+    margin-left: 5.2%;
+    line-height: 30px;
+    color: #5c5c5c;
+
+}
+
+
+
+
+.log{
+    height: 350px;
+    background-color: rgba(220, 203, 204, 0.56);
+    border: 2px solid #333333;
+    border-radius: 5px;
+    box-shadow: 3px 3px 3px #333;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 15px;
+    overflow-y: auto;
+    font-size: 1.1em;
+}
+
+
+@media only screen  and (max-device-width: 761px),(max-width: 761px)  {
+    .log{
+        font-size: .7em;
+    }
+    #title button{
+        margin-right: 1%;
+
+    }
+    #title h2{
+        margin-left: 1%;
+        font-size: .9em;
+    }
+    #websocketlog {
+        font-size: 95%;
+    }
+
+
+
+
+}
+
+@media only screen  and (max-device-width: 600px),(max-width: 600px)  {
+
+
+}
+

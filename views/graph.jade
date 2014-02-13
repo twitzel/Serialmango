@@ -1,0 +1,63 @@
+doctype 5
+html
+    head
+        title= title
+        link(rel='stylesheet', href='/stylesheets/twi.css')
+        script(src="/Scripts/data.js")
+    body
+
+    block content
+
+      h1= title
+
+      -for (var i = 0; i < 1; i++){
+      div(width = "100%")
+
+          canvas(id="graph"+i,height="400",style="border:1px solid #000000;")
+      div(width = "80%",id="graphsettings"+i,height="5px",style="border:1px solid #000000;")
+        input(id ='min'+i,type="range",min=-20,max=120,data-graph=i)
+        input(id ='max'+i,type="range",min=-20,max=120,data-graph=i)
+        |Graph settings
+        input(id="selectedtempcolor"+i,type="color",data-graph=i)
+        select(id="selectedtemp"+i,data-graph=i)
+         -for(var prop in sensors)
+           -if (prop.substr(0,4) == 'Temp'){
+            option(value=prop) #{sensors[prop].name}
+           -}
+        input(id='hide'+i,type='checkbox',data-graph=i)
+        |Hide
+        select(id='period'+i,data-graph=i)
+            option(value = 1) 1 Minute
+            option(value = 2) 2 Minutes
+            option(value = 3) 3 Minutes
+            option(value = 5) 5 Minutes
+            option(value = 10) 10 Minutes
+            option(value = 15) 15 Minutes
+            option(value = 30) 30 Minutes
+            option(value = 60) 1 Hour
+            option(value = 120) 2 Hours
+            option(value = 360) 6 Hours
+            option(value = 720) 12 Hours
+            option(value = 1440) 24 Hours
+        select(id='lastHours'+i,data-graph=i)
+            option(value = 1) 1 Hour
+            option(value = 2) 2 Hours
+            option(value = 4) 4 Hours
+            option(value = 6) 6 Hours
+            option(value = 12) 12 Hours
+            option(value = 24) 1 Day
+            option(value = 48) 2 Days
+            option(value = 96) 4 Days
+            option(value = 168) 1 Week
+            option(value = 360) 6 Hours
+            option(value = 720) 12 Hours
+            option(value = 1440) 24 Hours
+        button(id='save'+i,data-graph=i) Save
+        -}
+
+      div.websocketInfo(id="output")
+      script.
+          var dp = !{JSON.stringify(item)};
+          var sensors = !{JSON.stringify(sensors)};
+          window.addEventListener("load", bigGraphInit, false);
+          window.addEventListener("resize",resize,false);

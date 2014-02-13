@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+
+    <script  src = "./Scripts/cs4Settings.js"> </script>
+    <script  src = "./Scripts/cs4Menu.js"> </script>
+    <link rel='stylesheet'  href='./stylesheets/cs4Settings.css'>
+    <link rel='stylesheet'  href='./stylesheets/cs4Menu.css'>
+
+<html>
+
+<head>
+
+    <title>CS4 System Home</title>
+    <meta name = "viewport" content = "width=device-width, initial-scale = 1.0">
+
+</head>
+
+
+
+<body class = "body" id = "body">
+
+    <h1>CS4 Setup</h1>
+
+    <header class="mainheader">
+        <div id="menubutton">
+            <button id = "buttonMenu"  onmousedown = "buttonMenu()">=</button>
+        </div>
+        <nav id = "menunav">
+            <ul>
+                <li><a href="cs4Home">Home</a></li>
+                <li><a href="cs4VerticalScroll" >Scrolling</a></li>
+                <li><a href="cs4Info" >Info</a></li>
+                <li><a href="cs4Timing">Timing</a></li>
+                <li class="active"><a href="cs4Settings">Settings</a></li>
+                <li><a href="cs4Help">Help</a></li>
+            </ul>
+        </nav>
+    </header>
+
+
+
+    <div id = "title" >
+
+        <button id = "buttonBackground"  onmousedown = "buttonBackground()"> BkGnd </button>
+        <button id = "buttonClear"  onmousedown = "buttonClear()"> Clear</button>
+        <h2 >Event Log</h2>
+
+
+    </div>
+
+    <pre>
+        <div id="websocketlog" class="log">
+            <h4> Waiting for connection...</h4>
+        </div>
+    </pre>
+    <fieldset id = "midi">
+        <legend>Midi Send</legend>
+
+            <ul> <input type = "radio" checked name = "midioutput" id = "light" value = "light" checked >
+            <label for = "light">Light Cue</label>
+            <input id=lightcuenumber name=lightcuenumber   value="123.4" required style = "width: 8em" ></ul>
+            <ul><input type = "radio" name = "midioutput" id = "noteon" value = "noteon" >
+            <label for = "noteon">Note On - 92 04 03</label></ul>
+            <ul> <input type = "radio" checked name = "midioutput" id = "noteoff" value = "noteoff" >
+            <label for = "noteoff">Note Off - 82 12 16</label></ul>
+            <ul> <input type = "radio" checked name = "midioutput" id = "hex" value = "hex"  >
+            <label for = "hex">HEX</label>
+            <input id=hexnumber name=hexnumber type=text value="891221" required style = "width: 8em" ></ul>
+
+            <button id = "midi1button"  onmousedown = "midi1button()"> Send Midi 1 </button>
+            <button id = "midi2button"  onmousedown = "midi2button()"> Send Midi 2 </button>
+            <label>Next Cue</label>
+            <input id=cuenumber name=cuenumber type=text value="1" required style = "width: 3em" >
+            <label>Delay</label>
+            <input id=cuetime name=cuetime type=text value="5" required style = "width: 3em" >
+            <button id = "sendMidiAuto"  onmousedown = "sendMidiAuto()">Send Midi Auto</button>
+    </fieldset>
+
+
+    <fieldset>
+        <legend id = "legend1">Send To R4</legend>
+
+        Show Name: <input id=showname name=showname type=text value="ShowName" required style = "width: 8em"  >
+
+        <div>
+            Output:   R4 Slides <input id=r4slidescue name=outputcue value= "r4slidescue" type=radio checked>
+            R4 Audio<input id=r4audiocue name=outputcue value = "r4audiocue" type=radio >
+        </div>
+
+        <div>
+            Directory:     <input id=directory name=directory type=text value="English" style = "width: 8em" required>
+            Next Cue: <input id=cue name=cue type=number value=1 required style = "width: 5em">
+            Delay: <input id=delay name=delay type=number value=5 required style = "width: 5em">
+        </div>
+
+        <div id="buttondiv">
+            <button id = "r4CueAuto"  onmousedown = "r4CueAuto()">Send Cue Auto</button>
+        </div>
+
+    </fieldset>
+
+
+    <fieldset id = "time">
+        <legend>Date & Time</legend>
+        <button id = 'gettimebutton' onmousedown="gettimebutton()"> Get CS4 Time</button>
+        <button id = "timebutton"  onmousedown = "timebutton()"> Update CS4 Time to My Time </button>
+        <select id='timeZoneCombo'  onchange='timeZoneChange();'>
+            <option value='-1' title='-select one-'>-Select to Change Time Zone of CS4-</option>
+            <option value='US/Eastern' title='US/Eastern'>US/Eastern</option>
+            <option value='US/Central' title='US/Central'>US/Central</option>
+            <option value='US/Mountain' title='US/Mountain'>US/Mountain</option>
+            <option value='US/Pacific' title='US/Pacific'>US/Pacific</option>
+            <option value='GMT' title='GMT'>GMT</option>
+        </select>
+    </fieldset>
+
+    <fieldset id = "relay">
+        <legend>Relay Control</legend>
+        <button id = "relay1onbutton"  onmousedown = "relay1onbutton()"> Relay 1 ON </button>
+        <button id = "relay2onbutton"  onmousedown = "relay2onbutton()"> Relay 2 ON </button>
+        <button id = "relay3onbutton"  onmousedown = "relay3onbutton()"> Relay 3 ON </button>
+        <button id = "relay4onbutton"  onmousedown = "relay4onbutton()"> Relay 4 ON </button>
+        <button id = "relay1offbutton"  onmousedown = "relay1offbutton()"> Relay 1 OFF </button>
+        <button id = "relay2offbutton"  onmousedown = "relay2offbutton()"> Relay 2 OFF </button>
+        <button id = "relay3offbutton"  onmousedown = "relay3offbutton()"> Relay 3 OFF </button>
+        <button id = "relay4offbutton"  onmousedown = "relay4offbutton()"> Relay 4 OFF </button>
+
+    </fieldset>
+
+    <fieldset id = "status">
+        <legend>CS4 Input Status</legend>
+        <button id = "adc1button"  onmousedown = "adc1button()"> ADC 1 </button>
+        <button id = "adc2button"  onmousedown = "adc2button()"> ADC 2 </button>
+        <button id = "closure1button"  onmousedown = "closure1button()"> Closure 1 </button>
+        <button id = "closure2button"  onmousedown = "closure2button()"> Closure 2 </button>
+        <button id = "dmxbutton"  onmousedown = "dmxbutton()"> DMX </button>
+
+    </fieldset>
+
+    <fieldset id = "display">
+        <legend>Display Text</legend>
+        <label>Text To Send</label>
+        <input id=texttosend name=texttosend type=text value="This text will be sent to R4 Receivers" required style = "width: 8em" >
+        <label>Show Name</label>
+        <input id=showname name=showname type=text value="show" required style = "width: 8em" >
+        <button id = "sendtext"  onmousedown = "sendtext()"> Send To Display </button>
+
+    </fieldset>
+
+    <fieldset id = "serial">
+        <legend>Serial Send</legend>
+        <label>Serial 1 Data</label>
+        <input id=serial1data name=serial1data type=text value="serial 1 data" required style = "width: 8em" >
+        <label>Serial 1 Baud Rate</label>
+        <input id=serial1baud name=serial1baud type=number value="9600" required style = "width: 8em" >
+        <button id = "sendserial1"  onmousedown = "sendserial1()"> Serial 1 Send </button>
+        <label>Serial 2 Data</label>
+        <input id=serial2data name=serial2data type=text value="serial 2 data" required style = "width: 8em" >
+        <label>Serial 2 Baud Rate</label>
+        <input id=serial2baud name=serial2baud type=number value="9600" required style = "width: 8em" >
+        <button id = "sendserial2"  onmousedown = "sendserial2()"> Serial 2 Send </button>
+        <label>Serial 3 Data</label>
+        <input id=serial3data name=serial3data type=text value="serial 3 data" required style = "width: 8em" >
+        <label>Serial 3 Baud Rate</label>
+        <input id=serial3baud name=serial3baud type=number value="9600" required style = "width: 8em" >
+        <button id = "sendserial3"  onmousedown = "sendserial3()"> Serial 3 Send </button>
+
+    </fieldset>
+
+    <fieldset id = "dac">
+        <legend>DAC</legend>
+        <label>DAC 1 (Millivolts)</label>
+        <input id=dac1output name=dac1output type=number min="0" max="5000" value="3000" required style = "width: 8em" >
+        <button id = "dac1button"  onmousedown = "dac1button()"> DAC 1 </button>
+        <label>DAC 2 (Millivolts)</label>
+        <input id=dac2output name=dac2output type=number  min="0" max="5000" value="2000" required style = "width: 8em" >
+        <button id = "dac2button"  onmousedown = "dac2button()"> DAC 2 </button>
+
+    </fieldset>
+
+    <fieldset id = "SMPTE Output">
+        <legend>SMTPE Output</legend>
+        <button id = "smpteonbutton"  onmousedown = "smpteonbutton()"> SMPTE ON </button>
+        <button id = "smpteoffbutton"  onmousedown = "smpteoffbutton()"> SMPTE OFF </button>
+
+    </fieldset>
+
+    <fieldset id = "dmxch">
+        <legend>DMX Channel Select</legend>
+        <label>1st Channel</label>
+        <input id=dmx1 name=dmx1 type=number value="1" min="1" max="512" style = "width: 3.3em" >
+        <label>2nd Channel</label>
+        <input id=dmx2 name=dmx2 type=number value="2" min="1" max="512" required style = "width: 3.3em" >
+        <label>3rd Chanel</label>
+        <input id=dmx3 name=dmx3 type=number value="3" min="1" max="512" required style = "width: 3.3em" >
+        <button id = "dmxchwatch"  onmousedown = "dmxchwatch()"> Update DMX Channel Watch </button>
+
+    </fieldset>
+
+    <fieldset id = "copy">
+        <legend>Data Base Files</legend>
+
+        <button id = "copyToUSB"  onmousedown = "copyToUSB()">Copy Data TO USB </button>
+        <button id = "copyFromUSB"  onmousedown = "copyFromUSB()">Copy Data From USB </button>
+        <button id = "copyToInternal"  onmousedown = "copyToInternal()">Backup Data TO Internal </button>
+        <button id = "copyFromInternal"  onmousedown = "copyFromInternal()">Restore Data FROM Internal </button>
+
+    </fieldset>
+
+</body>
+
+
+
+
+</html>

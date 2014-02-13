@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title>CS-4 Start Page</title>
+    <h1> <center>Welcome to the CS-4 System</center></h1>
+   <script>
+      // var test = <%-title%>;
+       <%-"var test = "+JSON.stringify(dummy)%>
+   </script>
+
+
+    <h2><center><%=title%></center>  </h2>
+    <div id="scrollCanvas">
+
+        <canvas id="myCanvas" width="800px" height="200px"></canvas>
+
+    </div>
+
+
+    <script  src="/Scripts/cs4Start.js">  </script>
+    <script  src="/Scripts/cs4Scroll.js"> </script>
+
+
+
+    <style>
+            /*  NOTE:  . = id;   # = class  */
+        #loglabel {
+            color: #0000ff;
+            text-align: center;
+        }
+
+        #body{
+            background-color:  #666666;
+        }
+
+        .log{
+            width: 90vw;
+            height: 50vh;
+            background-color: #ececec;
+            margin-top: 1px;
+            border-radius: 5px;
+            /*    border-top-left-radius: 5px;*/
+            box-shadow: 3px 3px 3px #333;
+            padding: 10px;
+            padding-bottom: 20px;
+        }
+
+        #websocketlog{
+            margin: auto;
+            border: 2px solid #333333;
+            overflow-y: auto;
+        }
+
+        #goButton{
+            width:20vw;
+            height:20vw;
+            background-color: #881b33;
+            font-size:200%;
+            font-weight: bolder;
+            float:left;
+            margin-left: 2vw;
+            margin-top: 2vh;
+
+        }
+        #goButton:hover{background-color: #4d8856
+        }
+
+        #myCanvas{
+            float: right;
+            border: 1px solid #333333;
+
+
+    </style>
+
+</head>
+
+<body id = "body">
+
+
+
+
+<h3 id="loglabel"   > Event Log </h3>
+
+
+
+
+
+
+<div id="websocketlog" class="log">
+    <p> test text</p>
+</div>
+
+
+
+<div id="cueFunctions" >
+    <button id = "goButton"  onmousedown = "cueclick()"> GO
+
+    </button>
+
+</div>
+
+
+
+
+
+</body>
+
+
+</html>

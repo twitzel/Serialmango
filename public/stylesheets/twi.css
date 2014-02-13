@@ -1,0 +1,13 @@
+.graphfadeformove
+ {
+     transition-property: opacity;
+     transition-duration: 2s;
+
+ }
+
+body {
+    padding: 50px;
+    font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+.websocketInfo { height: 40px }
