@@ -91,11 +91,22 @@ function loadclick(){
 }
 
 function pixelLoad(item){
+    //
+    //  (new Date( lastconverted.setMilliseconds(lastconverted.getMilliseconds() + (timerStartTime -lastCueReceivedInternalTime)))).toISOString()
+    //
+    var i =0;
+    var j = 0;
+    var count = 0;
+    var dte;
     if (item.length == 0) {
         console.log("not Found");
     }
     else {
-
+        var packet = {};
+      //  packet.Time = new Date(new Date(item[i].Time) + item[i].OutData[j].Delay).toISOString();
+        packet.Time = new Date(item[i].Time).toISOString();
+        packet.Time = item[i].OutData[j].Delay;
+        packet.Time =  new Date(item[i].Time).toISOString() + item[i].OutData[j].Delay;
         for(var i = 0; i< item[0].OutData.length; i++)
         {
             dir = item[0].OutData[i].Dir;    // ****** needs to ba added to R4-4 Receiver Parsing ****** //
