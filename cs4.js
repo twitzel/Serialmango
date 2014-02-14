@@ -383,6 +383,8 @@ exports.socketDataOut = function (data) {
     // If matching cue found then iterate through
     // OutData and send the stuff out
     // and send output data to log file
+
+    //added search fields: must match InData and Source
     if (serialData.InData != null) {
         collectionCue.find({$and: [{'InData': serialData.InData} , {'Source': serialData.Source }]}).toArray(function (err, item) {
         //collectionCue.find({'InData': serialData.InData }).toArray(function (err, item) {
