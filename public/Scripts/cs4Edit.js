@@ -91,7 +91,9 @@ function loadclick(){
 }
 
 function pixelLoad(item){
-    //
+    //lastconverted   = new Date(lastCueReceived.Time);
+   // addTime = addTime + "\""+  (new Date( lastconverted.setMilliseconds(lastconverted.getMilliseconds() + (timerStartTime -lastCueReceivedInternalTime)))).toISOString() +"\", \"Dout\" : \"" + dataToSend + "\"}";
+
     //  (new Date( lastconverted.setMilliseconds(lastconverted.getMilliseconds() + (timerStartTime -lastCueReceivedInternalTime)))).toISOString()
     //
     var i =0;
@@ -104,9 +106,10 @@ function pixelLoad(item){
     else {
         var packet = {};
         //  packet.Time = new Date(new Date(item[i].Time) + item[i].OutData[j].Delay).toISOString();
-        packet.Time = new Date(item[i].Time).toISOString();
-        packet.Time = item[i].OutData[j].Delay;
-        packet.Time =  new Date(item[i].Time).toISOString() + item[i].OutData[j].Delay;
+        packet.Time = new Date(item[i].Time);
+        packet.Time = new Date(packet.Time.setMilliseconds(packet.Time.getMilliseconds() + item[i].OutData[j].Delay)).toISOString();
+
+
         for(var i = 0; i< item[0].OutData.length; i++)
         {
             dir = item[0].OutData[i].Dir;    // ****** needs to ba added to R4-4 Receiver Parsing ****** //
