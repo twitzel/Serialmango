@@ -109,8 +109,9 @@ function pixelLoad(item){
             pixelArray[count] =  item[i]; // stick the object into the array
             count++;
             //iterate over all of the OutData
-            var packet = {};
+
             for(var j = 0; j < item[i].OutData.length; j++){
+                var packet = {};
                 //  packet.Time = new Date(new Date(item[i].Time) + item[i].OutData[j].Delay).toISOString();
                 packet.Time = new Date(item[i].Time);
                 packet.Time = new Date(packet.Time.setMilliseconds(packet.Time.getMilliseconds() + item[i].OutData[j].Delay)).toISOString();
