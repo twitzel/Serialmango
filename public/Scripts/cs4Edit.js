@@ -1,5 +1,7 @@
 var status;
 var autoplot;
+var pixelArray;
+
 window.onload = init;
 function init(){
 
@@ -104,31 +106,37 @@ function pixelLoad(item){
         console.log("not Found");
     }
     else {
-        var packet = {};
-        //  packet.Time = new Date(new Date(item[i].Time) + item[i].OutData[j].Delay).toISOString();
-        packet.Time = new Date(item[i].Time);
-        packet.Time = new Date(packet.Time.setMilliseconds(packet.Time.getMilliseconds() + item[i].OutData[j].Delay)).toISOString();
 
+        for(var i = 0; i< item.length; i++){
+            pixelArray[count] = item[i]; // stick the object into the array
+            count++;
 
-        for(var i = 0; i< item[0].OutData.length; i++)
-        {
-            dir = item[0].OutData[i].Dir;    // ****** needs to ba added to R4-4 Receiver Parsing ****** //
-            // dir = "xxxx";
-            port = item[0].OutData[i].Port.toUpperCase();
-            showname = item[0].OutData[i].Showname;
-            dataToSend = item[0].OutData[i].Dout;
-            delay = item[0].OutData[i].Delay;
-            if(dir =="")
+            var packet = {};
+            //  packet.Time = new Date(new Date(item[i].Time) + item[i].OutData[j].Delay).toISOString();
+            packet.Time = new Date(item[i].Time);
+            packet.Time = new Date(packet.Time.setMilliseconds(packet.Time.getMilliseconds() + item[i].OutData[j].Delay)).toISOString();
+            packet.Data = item[i].outData[j];
+
+            for(var i = 0; i< item[0].OutData.length; i++)
             {
-                outstring = port + " " + showname + " " + dataToSend;
-            }
-            else
-            {
-                outstring = port + " " + showname + " " + dir + " " + dataToSend;
-            }
+                dir = item[0].OutData[i].Dir;    // ****** needs to ba added to R4-4 Receiver Parsing ****** //
+                // dir = "xxxx";
+                port = item[0].OutData[i].Port.toUpperCase();
+                showname = item[0].OutData[i].Showname;
+                dataToSend = item[0].OutData[i].Dout;
+                delay = item[0].OutData[i].Delay;
+                if(dir =="")
+                {
+                    outstring = port + " " + showname + " " + dataToSend;
+                }
+                else
+                {
+                    outstring = port + " " + showname + " " + dir + " " + dataToSend;
+                }
 
-            setTimeout(sendOutput, delay, outstring);
-            console.log(item[0].OutData[i].Dout + "  Delay "+item[0].OutData[i].Delay);
+                setTimeout(sendOutput, delay, outstring);
+                console.log(item[0].OutData[i].Dout + "  Delay "+item[0].OutData[i].Delay);
+            }
         }
 
     }
