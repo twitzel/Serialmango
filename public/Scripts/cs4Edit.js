@@ -1,6 +1,5 @@
-var status;
 var autoplot;
-
+var pixelArray = [];
 
 window.onload = init;
 function init(){
@@ -16,9 +15,9 @@ function init(){
     canvasStart = 0;
     canvasHeight = canvas.height;
     pixelData = new Array(); //time: ,line: , data,
-    numberLoops = 0;
-    ticIncrement = 10; // this gives a time increment of 1 ms per pixel //
-    lineStart = canvasWidth/2; // bottom of tic line
+ //   numberLoops = 0;
+ //   ticIncrement = 10; // this gives a time increment of 1 ms per pixel //
+ //   lineStart = canvasWidth/2; // bottom of tic line
 
     //setup origional time marks and time in the array
     /*    for(var i = 0; i  <=canvasHeight; i+=ticIncrement){
@@ -61,6 +60,7 @@ function onMessage(evt)    {
     if(message.packetType == 'cuefiledata'){
         inMessage = message.data;
         pixelLoad(inMessage);
+        canvasPlot();
     }
     else{
        writeToScreen(inMessage);
@@ -93,14 +93,9 @@ function loadclick(){
 }
 
 function pixelLoad(item){
-    //lastconverted   = new Date(lastCueReceived.Time);
-   // addTime = addTime + "\""+  (new Date( lastconverted.setMilliseconds(lastconverted.getMilliseconds() + (timerStartTime -lastCueReceivedInternalTime)))).toISOString() +"\", \"Dout\" : \"" + dataToSend + "\"}";
-
-    //  (new Date( lastconverted.setMilliseconds(lastconverted.getMilliseconds() + (timerStartTime -lastCueReceivedInternalTime)))).toISOString()
-    //
     var count = 0;
-    var pixelArray = [];
-    var dte;
+    pixelArray = []; //clear the array
+
     if (item.length == 0) {
         console.log("not Found");
     }
@@ -116,8 +111,7 @@ function pixelLoad(item){
                 packet.Time = new Date(item[i].Time);
                 packet.Time = new Date(packet.Time.setMilliseconds(packet.Time.getMilliseconds() + item[i].OutData[j].Delay)).toISOString();
                 packet.Data = item[i].OutData[j];
-                dir = item[i].OutData[j].Dir;    // ****** needs to ba added to R4-4 Receiver Parsing ****** //
-                // dir = "xxxx";
+                dir = item[i].OutData[j].Dir;
                 port = item[i].OutData[j].Port.toUpperCase();
                 showname = item[i].OutData[j].Showname;
                 dataToSend = item[i].OutData[j].Dout;
@@ -138,5 +132,16 @@ function pixelLoad(item){
     }
 }
 
+function canvasPlot(){
+    //plot all of the pixelArray data on the canvas
+    //find time difference between first and last event.
+    round = new Date(pixelArray[0].Time)
+    round.setSeconds(0);
+
+   //timeDifference = new Date(pixelArray[pixelArray.length -1].Time) - new Date(pixelArray[0].Time);
+    timeDifference = new Date(pixelArray[pixelArray.length -1].Time) - new Date(round);
+        t = timeDifference;
+
+}
 
 
