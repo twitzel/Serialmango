@@ -136,6 +136,7 @@ function canvasPlot(){
     //plot all of the pixelArray data on the canvas
     //find time difference between first and last event.
     round = new Date(pixelArray[0].Time)
+     round.setMinutes(round.getMinutes()-1) ;
     round.setSeconds(0);
 
    //timeDifference = new Date(pixelArray[pixelArray.length -1].Time) - new Date(pixelArray[0].Time);
