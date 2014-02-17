@@ -144,7 +144,7 @@ function timeRound(time, interval){
     diff = new Date(time);
     diff.setMinutes(diff.getMinutes() + interval);
     diff.setSeconds(0);
-    diff.setMilliseconds(0)
+    diff.setMilliseconds(0);
     return diff;
 }
 
