@@ -91,7 +91,7 @@ function doSend(message) {
 function writeToScreen(message) {
 
     // get time of incoming cue
-    if(message.substring(0,1) != ".") //make sure it's an incoming cue
+    if(message.substring(0,1) != " ") //make sure it's an incoming cue
     {
         lastCueTime = new Date();
     }

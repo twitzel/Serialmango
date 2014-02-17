@@ -2,7 +2,11 @@
     width:100%;
     color: #666;
 }
-#myCanvas{
+#mainCanvas{
      margin-top: 1px;
      border: 3px solid #333333;;
  }
+#zoomCanvas{
+    margin-top: 1px;
+    border: 3px solid #333333;;
+}

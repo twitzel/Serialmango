@@ -1,5 +1,8 @@
 var autoplot;
 var pixelArray = [];
+var startTime;
+var msPerPixelMain;
+var msPerPixelZoom;
 
 window.onload = init;
 function init(){
@@ -7,8 +10,9 @@ function init(){
     wsUri = "ws://" + window.location.hostname + ":8080";
     output = document.getElementById("websocketlog");
 
-    document.getElementById('myCanvas').width =  document.getElementById('canvasDiv').offsetWidth;
-    canvas = document.getElementById('myCanvas');
+    document.getElementById('mainCanvas').width =  document.getElementById('canvasDiv').offsetWidth;
+    document.getElementById('zoomCanvas').width =  document.getElementById('canvasDiv').offsetWidth;
+    canvas = document.getElementById('mainCanvas');
 
     context = canvas.getContext('2d');
     canvasWidth = canvas.width;
@@ -130,19 +134,42 @@ function pixelLoad(item){
         }
 
     }
+    //sort array by time in case there are some re-done cues
+    pixelArray.sort(function(a,b){
+        return new Date(a.Time) - new Date(b.Time);
+    });
 }
+
+function timeRound(time, interval){
+    diff = new Date(time);
+    diff.setMinutes(diff.getMinutes() + interval);
+    diff.setSeconds(0);
+    diff.setMilliseconds(0)
+    return diff;
+}
+
+function timeDifference(time){
+    return(new Date(time) - new Date(startTime));
+}
+
+
+
+
+
+
 
 function canvasPlot(){
     //plot all of the pixelArray data on the canvas
     //find time difference between first and last event.
-    round = new Date(pixelArray[0].Time)
-     round.setMinutes(round.getMinutes()-1) ;
-    round.setSeconds(0);
+
+    startTime = timeRound(pixelArray[0].Time, -1); //round down to nearest minute
+    endTime = timeRound(pixelArray[pixelArray.length -1].Time, 2);
 
    //timeDifference = new Date(pixelArray[pixelArray.length -1].Time) - new Date(pixelArray[0].Time);
-    timeDifference = new Date(pixelArray[pixelArray.length -1].Time) - new Date(round);
-        t = timeDifference;
-
+   // timeDifference = new Date(pixelArray[pixelArray.length -1].Time) - new Date(startTime);
+    timediff = timeDifference(endTime);
+    msPerPixelMain = timeDifference(endTime)/canvasWidth;
+    t = msPerPixelMain;
 }
 
 
