@@ -239,8 +239,12 @@ function updateCanvas(){
     context.globalAlpha = 0.5;
     offset = (canvasWidth/2) * (zoomFactor/100);
     shift = offset * (50 - zoomLocation)/50;
-    context.fillRect(0,0,offset - shift, canvasHeight);
-    context.fillRect(canvasWidth - (offset + shift),0, canvasWidth, canvasHeight);
+    minPixel = offset-shift;
+    maxPixel = canvasWidth - (offset + shift);
+    context.fillRect(0,0,minPixel, canvasHeight);
+    context.fillRect(maxPixel,0, canvasWidth, canvasHeight);
     context.stroke();
+    //Now put it in the zoomed canvas
+
 
 }
