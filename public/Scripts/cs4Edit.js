@@ -71,7 +71,7 @@ function doSend(message) {
 function writeToScreen(message) {
     // get time of incoming cue
     lastCueTime = new Date();
-  output.innerHTML = message + "<BR>" + output.innerHTML;
+//  output.innerHTML = message + "<BR>" + output.innerHTML;
 
 
 
@@ -227,12 +227,15 @@ function updateCanvas(){
     context.fillRect(maxPixel,0, canvasWidth, canvasHeight);
     context.stroke();
     //Now put it in the zoomed canvas
-    drawZoomTimeLine(minPixel*msPerPixelMain + new Date(startTime), maxPixel*msPerPixelMain + new Date(startTime));
+    drawZoomTimeLine(minPixel , maxPixel );
 
 }
 /////////////////////////////////
 function drawZoomTimeLine(start, end){
     zoomcontext.globalAlpha = 1;
+    startTimeZoom =  new Date(new Date(startTime).setMilliseconds(new Date(startTime).getMilliseconds() + minPixel*msPerPixelMain));
+    endTimeZoom =    new Date(new Date(startTime).setMilliseconds(new Date(startTime).getMilliseconds() + minPixel*msPerPixelMain + maxPixel*msPerPixelMain));
+    msPerPixelZoom = (maxPixel - minPixel)*msPerPixelMain/zoomcanvasWidth;
     zoomcontext.clearRect(0,0,zoomcanvasWidth,zoomcanvasHeight);
     for(var i = 10; i< zoomcanvasWidth; i+=10){
         zoomcontext.beginPath();
@@ -241,7 +244,7 @@ function drawZoomTimeLine(start, end){
             zoomcontext.moveTo(i, zoomcanvasHeight / 2 - 10);
             zoomcontext.lineTo(i, zoomcanvasHeight / 2 + 10);
             new Date().toLocaleTimeString().substring(0,8);
-            zoomcontext.fillText( new Date(new Date(start).setMilliseconds(new Date(start).getMilliseconds() + i*msPerPixelMain)).toLocaleTimeString().substring(0,8),i-15, canvasHeight/2+20);
+            zoomcontext.fillText( new Date(new Date(startTime).setMilliseconds(new Date(startTime).getMilliseconds() + minPixel*msPerPixelMain + i*msPerPixelZoom)).toLocaleTimeString().substring(0,8),i-15, canvasHeight/2+20);
         }
 
         else {
@@ -252,4 +255,29 @@ function drawZoomTimeLine(start, end){
         }
         zoomcontext.stroke();
     }
+
+//now plot the data
+
+
+    for(var i = 0; i< pixelArray.length; i++){
+        zoomcontext.beginPath();
+
+
+
+        if((new Date(pixelArray[i].Time) >=  new Date(startTimeZoom)) && (new Date(pixelArray[i].Time) <= new Date(endTimeZoom))){
+            if(pixelArray[i].output){//this is output data
+                zoomcontext.strokeStyle = 'blue';
+                zoomcontext.moveTo(timeDifference(pixelArray[i].Time,startTimeZoom)/msPerPixelZoom, zoomcanvasHeight / 2 - 15);
+                zoomcontext.lineTo(timeDifference(pixelArray[i].Time,startTimeZoom)/msPerPixelZoom, zoomcanvasHeight / 2 - 150);
+
+            }
+            else{      //this in cue input data
+                zoomcontext.strokeStyle = 'green';
+                zoomcontext.moveTo(timeDifference(pixelArray[i].Time,startTimeZoom)/msPerPixelZoom, zoomcanvasHeight / 2 + 35);
+                zoomcontext.lineTo(timeDifference(pixelArray[i].Time,startTimeZoom)/msPerPixelZoom, zoomcanvasHeight / 2 + 150);
+            }
+            zoomcontext.stroke();
+        }
+    }
+
 }
