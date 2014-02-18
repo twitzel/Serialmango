@@ -3,6 +3,8 @@ var pixelArray = [];
 var startTime;
 var msPerPixelMain;
 var msPerPixelZoom;
+var zoomFactor = 0;
+var zoomLocation = 50;
 
 window.onload = init;
 function init(){
@@ -220,15 +222,25 @@ function canvasPlot(){
 }
 
 function zoomChange(value){
+    zoomFactor = value;
+    updateCanvas();
+}
+
+function locationChange(value){
+    zoomLocation = value;
+    updateCanvas();
+}
+
+function updateCanvas(){
     context.clearRect(0,0,canvasWidth,canvasHeight);
     drawTimeLine(startTime, endTime);
     drawData();
     context.fillStyle = 'gray';
     context.globalAlpha = 0.5;
-    context.fillRect(0,0,(canvasWidth/2) * (value/100), canvasHeight);
-    context.fillRect(canvasWidth - (canvasWidth/2) * (value/100),0, canvasWidth, canvasHeight);
+    offset = (canvasWidth/2) * (zoomFactor/100);
+    shift = offset * (50 - zoomLocation)/50;
+    context.fillRect(0,0,offset - shift, canvasHeight);
+    context.fillRect(canvasWidth - (offset + shift),0, canvasWidth, canvasHeight);
     context.stroke();
-    val = value;
-    x = val;
-}
 
+}
