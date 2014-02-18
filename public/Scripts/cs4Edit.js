@@ -93,7 +93,8 @@ function writeToScreen(message) {
 }
 
 function loadclick(){
-    websocket.send('EDIT');//
+    websocket.send('EDIT');
+    context.clearRect(0,0,canvasWidth,canvasHeight);
 }
 
 function pixelLoad(item){
@@ -152,24 +153,82 @@ function timeDifference(time){
     return(new Date(time) - new Date(startTime));
 }
 
+function drawTimeLine(start, end){
+    context.globalAlpha = 1;
+    for(var i = 10; i< canvasWidth; i+=10){
+        if (i % 100 == 0) {
+            context.beginPath();
+            context.strokeStyle = 'red';
+            context.moveTo(i, canvasHeight / 2 - 10);
+            context.lineTo(i, canvasHeight / 2 + 10);
+            new Date().toLocaleTimeString().substring(0,8);
+            context.fillText( new Date(new Date(start).setMilliseconds(new Date(start).getMilliseconds() + i*msPerPixelMain)).toLocaleTimeString().substring(0,8),i-15, canvasHeight/2+20);
+
+            context.stroke();
+        }
+
+        else {
+            context.beginPath();
+            context.strokeStyle = 'black';
+            context.moveTo(i, canvasHeight / 2 - 5);
+            context.lineTo(i, canvasHeight / 2 + 5);
+            context.stroke();
+        }
+    }
+
+}
+
+function drawData(){
+    context.globalAlpha = 1;
+    for(var i = 0; i< pixelArray.length; i++){
+        if(pixelArray[i].output){//this is output data
+            context.beginPath();
+            context.strokeStyle = 'blue';
+            x=timeDifference(pixelArray[i].Time);
+            context.moveTo(timeDifference(pixelArray[i].Time)/msPerPixelMain, canvasHeight / 2 - 15);
+            context.lineTo(timeDifference(pixelArray[i].Time)/msPerPixelMain, canvasHeight / 2 - 150);
+            context.stroke();
+        }
+        else{
+            context.beginPath();
+            context.strokeStyle = 'green';
+            x=timeDifference(pixelArray[i].Time);
+            context.moveTo(timeDifference(pixelArray[i].Time)/msPerPixelMain, canvasHeight / 2 + 35);
+            context.lineTo(timeDifference(pixelArray[i].Time)/msPerPixelMain, canvasHeight / 2 + 150);
+            context.stroke();
+        }
+
+    }
 
 
-
-
-
+}
 
 function canvasPlot(){
     //plot all of the pixelArray data on the canvas
     //find time difference between first and last event.
 
-    startTime = timeRound(pixelArray[0].Time, -1); //round down to nearest minute
-    endTime = timeRound(pixelArray[pixelArray.length -1].Time, 2);
+    startTime = timeRound(pixelArray[0].Time, -0); //round down to nearest minute
+    endTime = timeRound(pixelArray[pixelArray.length -1].Time, 1);
 
    //timeDifference = new Date(pixelArray[pixelArray.length -1].Time) - new Date(pixelArray[0].Time);
    // timeDifference = new Date(pixelArray[pixelArray.length -1].Time) - new Date(startTime);
     timediff = timeDifference(endTime);
     msPerPixelMain = timeDifference(endTime)/canvasWidth;
     t = msPerPixelMain;
+    drawTimeLine(startTime, endTime);
+    drawData();
 }
 
+function zoomChange(value){
+    context.clearRect(0,0,canvasWidth,canvasHeight);
+    drawTimeLine(startTime, endTime);
+    drawData();
+    context.fillStyle = 'gray';
+    context.globalAlpha = 0.5;
+    context.fillRect(0,0,(canvasWidth/2) * (value/100), canvasHeight);
+    context.fillRect(canvasWidth - (canvasWidth/2) * (value/100),0, canvasWidth, canvasHeight);
+    context.stroke();
+    val = value;
+    x = val;
+}
 

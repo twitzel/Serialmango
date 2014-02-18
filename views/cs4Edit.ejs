@@ -41,6 +41,8 @@
     <button id = "loadButton"  onmousedown = "loadclick()">Load Cue File </button>
     <button id = "saveButton"  onmousedown = "saveclick()">Save Cue File</button>
     <h3 id = "out" >Outgoing Data</h3>
+    Zoom: 0<input type="range" name="zoom" step = 0.25 value = 0 max = 99.75 onchange="zoomChange(this.value)" oninput="zoomChange(this.value)">100
+    Location: 0<input type="range" name="zoom" step = 0.25 value = 50 onchange="locationChange(this.value)" oninput="locationChange(this.value)">100
     <canvas id="mainCanvas" width= 1000px height=500px></canvas>
     <canvas id="zoomCanvas" width= 1000px height=500px></canvas>
 
