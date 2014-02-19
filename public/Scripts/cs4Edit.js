@@ -165,21 +165,30 @@ function drawTimeLine(start, end){
 }
 
 function drawData(){
+    var countTop = 0;
+    var countBottom = 0;
     context.globalAlpha = 1;
     for(var i = 0; i< pixelArray.length; i++){
         context.beginPath();
         pixelX=timeDifference(pixelArray[i].Time, startTime)/msPerPixelMain;
         if(pixelArray[i].output){//this is output data
+            countTop++;
             context.strokeStyle = 'blue';
-            context.moveTo(pixelX, canvasHeight / 2 - 15);
-            context.lineTo(pixelX, canvasHeight / 2 - 150);
+            context.moveTo(pixelX, canvasHeight / 2 - 25);
+            context.lineTo(pixelX, 15);
+            if((countTop%5 ==0) || (countTop ==1)){
+            wrapText(context, pixelArray[i].output, pixelX-1.5,zoomcanvasHeight/2-25,zoomcanvasHeight/2-25,10);
+            }
         }
         else{      //this in cue input data
+            countBottom++;
             context.strokeStyle = 'green';
             x=timeDifference(pixelArray[i].Time, startTime);
-            context.moveTo(pixelX, canvasHeight / 2 + 35);
-            context.lineTo(pixelX, canvasHeight / 2 + 150);
-            context.stroke();
+            context.moveTo(pixelX, canvasHeight / 2 + 25);
+            context.lineTo(pixelX, canvasHeight - 5);
+            if((countBottom%5 ==0) || (countBottom ==1)){
+            wrapText(context, parseCue(pixelArray[i]), pixelX-1.5,zoomcanvasHeight  - 5,zoomcanvasHeight/2-25,10);
+            }
         }
         context.stroke();
     }
@@ -267,13 +276,14 @@ function drawZoomTimeLine(start, end){
                 zoomcontext.moveTo(pixelX, zoomcanvasHeight / 2 - 25);
                 zoomcontext.lineTo(pixelX, 15);
                // rotateText(zoomcontext,pixelArray[i].output , pixelX-1.5, zoomcanvasHeight / 2 - 25);
-                wrapText(zoomcontext, pixelArray[i].output, pixelX-1.5,zoomcanvasHeight/2-25,100,10);
+                wrapText(zoomcontext, pixelArray[i].output, pixelX-1.5,zoomcanvasHeight/2-25,zoomcanvasHeight/2-25,10);
             }
             else{      //this in cue input data
                 zoomcontext.strokeStyle = 'green';
                 zoomcontext.moveTo(pixelX, zoomcanvasHeight / 2 + 25);
                 zoomcontext.lineTo(pixelX, zoomcanvasHeight  - 5);
-                rotateText(zoomcontext,parseCue(pixelArray[i]) , pixelX-1.5, zoomcanvasHeight  - 5);
+                wrapText(zoomcontext, parseCue(pixelArray[i]), pixelX-1.5,zoomcanvasHeight  - 5,zoomcanvasHeight/2-25,10);
+               // rotateText(zoomcontext,parseCue(pixelArray[i]) , pixelX-1.5, zoomcanvasHeight  - 5);
             }
             zoomcontext.stroke();
         }
@@ -290,18 +300,18 @@ function wrapText(cxt, text, x, y, maxWidth, lineHeight) {
         var metrics = cxt.measureText(testLine);
         var testWidth = metrics.width;
         if(testWidth > maxWidth) {
-            line = words[n] + " ";
             cxt.save();
             cxt.rotate(-Math.PI/2);
             cxt.fillText(line, -y, x);//context.fillText(line, x, y);
             cxt.restore();
+            line = words[n] + " ";
             x += lineHeight;
         }
         else {
             line = testLine;
         }
     }
-    // context.fillText(line, x, y);
+
     cxt.save();
     cxt.rotate(-Math.PI/2);
     cxt.fillText(line, -y, x);
