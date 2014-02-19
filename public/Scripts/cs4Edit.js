@@ -168,18 +168,17 @@ function drawData(){
     context.globalAlpha = 1;
     for(var i = 0; i< pixelArray.length; i++){
         context.beginPath();
+        pixelX=timeDifference(pixelArray[i].Time, startTime)/msPerPixelMain;
         if(pixelArray[i].output){//this is output data
             context.strokeStyle = 'blue';
-            x=timeDifference(pixelArray[i].Time, startTime);
-            context.moveTo(timeDifference(pixelArray[i].Time,startTime)/msPerPixelMain, canvasHeight / 2 - 15);
-            context.lineTo(timeDifference(pixelArray[i].Time,startTime)/msPerPixelMain, canvasHeight / 2 - 150);
-
+            context.moveTo(pixelX, canvasHeight / 2 - 15);
+            context.lineTo(pixelX, canvasHeight / 2 - 150);
         }
         else{      //this in cue input data
             context.strokeStyle = 'green';
             x=timeDifference(pixelArray[i].Time, startTime);
-            context.moveTo(timeDifference(pixelArray[i].Time,startTime)/msPerPixelMain, canvasHeight / 2 + 35);
-            context.lineTo(timeDifference(pixelArray[i].Time,startTime)/msPerPixelMain, canvasHeight / 2 + 150);
+            context.moveTo(pixelX, canvasHeight / 2 + 35);
+            context.lineTo(pixelX, canvasHeight / 2 + 150);
             context.stroke();
         }
         context.stroke();
@@ -243,15 +242,12 @@ function drawZoomTimeLine(start, end){
             zoomcontext.strokeStyle = 'red';
             zoomcontext.moveTo(i, zoomcanvasHeight / 2 - 10);
             zoomcontext.lineTo(i, zoomcanvasHeight / 2 + 10);
-            new Date().toLocaleTimeString().substring(0,8);
             zoomcontext.fillText( new Date(new Date(startTime).setMilliseconds(new Date(startTime).getMilliseconds() + minPixel*msPerPixelMain + i*msPerPixelZoom)).toLocaleTimeString().substring(0,8),i-15, canvasHeight/2+20);
         }
-
         else {
             zoomcontext.strokeStyle = 'black';
             zoomcontext.moveTo(i, canvasHeight / 2 - 5);
             zoomcontext.lineTo(i, canvasHeight / 2 + 5);
-
         }
         zoomcontext.stroke();
     }
@@ -265,19 +261,111 @@ function drawZoomTimeLine(start, end){
 
 
         if((new Date(pixelArray[i].Time) >=  new Date(startTimeZoom)) && (new Date(pixelArray[i].Time) <= new Date(endTimeZoom))){
+            pixelX = timeDifference(pixelArray[i].Time,startTimeZoom)/msPerPixelZoom;
             if(pixelArray[i].output){//this is output data
                 zoomcontext.strokeStyle = 'blue';
-                zoomcontext.moveTo(timeDifference(pixelArray[i].Time,startTimeZoom)/msPerPixelZoom, zoomcanvasHeight / 2 - 15);
-                zoomcontext.lineTo(timeDifference(pixelArray[i].Time,startTimeZoom)/msPerPixelZoom, zoomcanvasHeight / 2 - 150);
-
+                zoomcontext.moveTo(pixelX, zoomcanvasHeight / 2 - 25);
+                zoomcontext.lineTo(pixelX, 15);
+               // rotateText(zoomcontext,pixelArray[i].output , pixelX-1.5, zoomcanvasHeight / 2 - 25);
+                wrapText(zoomcontext, pixelArray[i].output, pixelX-1.5,zoomcanvasHeight/2-25,100,10);
             }
             else{      //this in cue input data
                 zoomcontext.strokeStyle = 'green';
-                zoomcontext.moveTo(timeDifference(pixelArray[i].Time,startTimeZoom)/msPerPixelZoom, zoomcanvasHeight / 2 + 35);
-                zoomcontext.lineTo(timeDifference(pixelArray[i].Time,startTimeZoom)/msPerPixelZoom, zoomcanvasHeight / 2 + 150);
+                zoomcontext.moveTo(pixelX, zoomcanvasHeight / 2 + 25);
+                zoomcontext.lineTo(pixelX, zoomcanvasHeight  - 5);
+                rotateText(zoomcontext,parseCue(pixelArray[i]) , pixelX-1.5, zoomcanvasHeight  - 5);
             }
             zoomcontext.stroke();
         }
+    }
+
+}
+
+function wrapText(cxt, text, x, y, maxWidth, lineHeight) {
+    var words = text.split(" ");
+    var line = "";
+
+    for(var n = 0; n < words.length; n++) {
+        var testLine = line + words[n] + " ";
+        var metrics = cxt.measureText(testLine);
+        var testWidth = metrics.width;
+        if(testWidth > maxWidth) {
+            line = words[n] + " ";
+            cxt.save();
+            cxt.rotate(-Math.PI/2);
+            cxt.fillText(line, -y, x);//context.fillText(line, x, y);
+            cxt.restore();
+            x += lineHeight;
+        }
+        else {
+            line = testLine;
+        }
+    }
+    // context.fillText(line, x, y);
+    cxt.save();
+    cxt.rotate(-Math.PI/2);
+    cxt.fillText(line, -y, x);
+    cxt.restore();
+}
+function rotateText(cxt,text, x,y){
+   /* zoomcontext.save();
+    zoomcontext.rotate(-Math.PI/2);
+    zoomcontext.fillText(text,-y, x); // fix coordinates for rotated change
+    zoomcontext.restore();
+  */
+    cxt.save();
+    cxt.rotate(-Math.PI/2);
+    cxt.fillText(text,-y, x, zoomcanvasHeight/2 -30); // fix coordinates for rotated change
+    cxt.restore();
+}
+function parseCue(data){
+
+    indata = data.InData;
+    source = data.Source;
+    // if cue is MIDI then get light cue number from hex string
+    if (source.substr(0, 4) == "Midi") {
+        if (indata.substr(0, 2) == "F0"){// this is a light cue
+            var space = "                                    ";
+            var hex = "";
+            var type;
+
+            for (var i = 18; i < indata.length - 3; i += 3) // extra space added to data at end of string
+            {
+                if (indata.substr(i,2) == 0x00){
+                    hex += '*';
+                }
+                else{
+                    hex += String.fromCharCode(parseInt(indata.substr(i, 2), 16));
+                }
+            }
+            type = 'Cue: ' + hex;
+        }
+        else if (indata.substr(0, 1) == "8") {
+            type = "Note Off";
+        }
+        else if (indata.substr(0, 1) == "9") {
+            type = "Note On";
+        }
+        else if (indata.substr(0, 1) == "A") {
+            type = "Polyphonic Aftertouch";
+        }
+        else if (indata.substr(0, 1) == "B") {
+            type = "Control/Mode Change";
+        }
+        else if (indata.substr(0, 1) == "C") {
+            type = "Program Change";
+        }
+        else if (indata.substr(0, 1) == "D") {
+            type = "Channel Aftertouch";
+        }
+        else if (indata.substr(0, 1) == "E") {
+            type = "Pitch Wheel Control";
+        }
+        return (source + "  " + type + " " + indata);
+    }
+    else // just send data
+    {
+        return (source + " " + indata);
     }
 
 }
