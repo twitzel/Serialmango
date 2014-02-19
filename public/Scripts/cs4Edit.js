@@ -177,7 +177,7 @@ function drawData(){
             context.moveTo(pixelX, canvasHeight / 2 - 25);
             context.lineTo(pixelX, 15);
             if((countTop%5 ==0) || (countTop ==1)){
-            wrapText(context, pixelArray[i].output, pixelX-1.5,zoomcanvasHeight/2-25,zoomcanvasHeight/2-25,10);
+            wrapText(context, pixelArray[i].output, pixelX-1.5,canvasHeight/2-25,canvasHeight/2-25,10);
             }
         }
         else{      //this in cue input data
@@ -187,7 +187,7 @@ function drawData(){
             context.moveTo(pixelX, canvasHeight / 2 + 25);
             context.lineTo(pixelX, canvasHeight - 5);
             if((countBottom%5 ==0) || (countBottom ==1)){
-            wrapText(context, parseCue(pixelArray[i]), pixelX-1.5,zoomcanvasHeight  - 5,zoomcanvasHeight/2-25,10);
+            wrapText(context, parseCue(pixelArray[i]), pixelX-1.5,canvasHeight  - 5,canvasHeight/2-25,10);
             }
         }
         context.stroke();
@@ -251,12 +251,12 @@ function drawZoomTimeLine(start, end){
             zoomcontext.strokeStyle = 'red';
             zoomcontext.moveTo(i, zoomcanvasHeight / 2 - 10);
             zoomcontext.lineTo(i, zoomcanvasHeight / 2 + 10);
-            zoomcontext.fillText( new Date(new Date(startTime).setMilliseconds(new Date(startTime).getMilliseconds() + minPixel*msPerPixelMain + i*msPerPixelZoom)).toLocaleTimeString().substring(0,8),i-15, canvasHeight/2+20);
+            zoomcontext.fillText( new Date(new Date(startTime).setMilliseconds(new Date(startTime).getMilliseconds() + minPixel*msPerPixelMain + i*msPerPixelZoom)).toLocaleTimeString().substring(0,8),i-15, zoomcanvasHeight/2+20);
         }
         else {
             zoomcontext.strokeStyle = 'black';
-            zoomcontext.moveTo(i, canvasHeight / 2 - 5);
-            zoomcontext.lineTo(i, canvasHeight / 2 + 5);
+            zoomcontext.moveTo(i, zoomcanvasHeight / 2 - 5);
+            zoomcontext.lineTo(i, zoomcanvasHeight / 2 + 5);
         }
         zoomcontext.stroke();
     }
