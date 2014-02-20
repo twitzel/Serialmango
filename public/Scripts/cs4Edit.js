@@ -17,6 +17,8 @@ function init(){
     context = canvas.getContext('2d');
     canvasWidth = canvas.width;
     canvasHeight = canvas.height;
+    canvas.addEventListener("mouseover",canvasMouseover, false);
+    canvas.addEventListener("mouseout",canvasMouseout, false );
 
     document.getElementById('zoomCanvas').width =  document.getElementById('canvasDiv').offsetWidth;
     zoomcanvas = document.getElementById('zoomCanvas');
@@ -171,8 +173,10 @@ function drawData(){
     for(var i = 0; i< pixelArray.length; i++){
         context.beginPath();
         pixelX=timeDifference(pixelArray[i].Time, startTime)/msPerPixelMain;
+        pixelArray[i].normalPoint = pixelX;
         if(pixelArray[i].output){//this is output data
             countTop++;
+
             context.strokeStyle = 'blue';
             context.moveTo(pixelX, canvasHeight / 2 - 25);
             context.lineTo(pixelX, 15);
@@ -271,6 +275,7 @@ function drawZoomTimeLine(start, end){
 
         if((new Date(pixelArray[i].Time) >=  new Date(startTimeZoom)) && (new Date(pixelArray[i].Time) <= new Date(endTimeZoom))){
             pixelX = timeDifference(pixelArray[i].Time,startTimeZoom)/msPerPixelZoom;
+            pixelArray[i].zoomPoint = pixelX;
             if(pixelArray[i].output){//this is output data
                 zoomcontext.strokeStyle = 'blue';
                 zoomcontext.moveTo(pixelX, zoomcanvasHeight / 2 - 25);
@@ -286,6 +291,9 @@ function drawZoomTimeLine(start, end){
                // rotateText(zoomcontext,parseCue(pixelArray[i]) , pixelX-1.5, zoomcanvasHeight  - 5);
             }
             zoomcontext.stroke();
+        }
+        else{
+            pixelArray[i].zoomPoint = -1;//point is not on graph
         }
     }
 
@@ -377,5 +385,11 @@ function parseCue(data){
     {
         return (source + " " + indata);
     }
-
+}
+//............................................
+function canvasMouseover(event){
+    document.body.style.cursor  = 'pointer';
+}
+function canvasMouseout(event){
+    document.body.style.cursor  = 'default';
 }
