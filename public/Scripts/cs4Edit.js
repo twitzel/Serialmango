@@ -17,8 +17,12 @@ function init(){
     context = canvas.getContext('2d');
     canvasWidth = canvas.width;
     canvasHeight = canvas.height;
+    rect = canvas.getBoundingClientRect();
     canvas.addEventListener("mouseover",canvasMouseover, false);
     canvas.addEventListener("mouseout",canvasMouseout, false );
+    canvas.addEventListener("mousedown",canvasMousedown, false );
+    canvas.addEventListener("mouseup",canvasMouseup, false );
+    canvas.addEventListener("mousemove",canvasMousemove, false );
 
     document.getElementById('zoomCanvas').width =  document.getElementById('canvasDiv').offsetWidth;
     zoomcanvas = document.getElementById('zoomCanvas');
@@ -379,7 +383,7 @@ function parseCue(data){
         else if (indata.substr(0, 1) == "E") {
             type = "Pitch Wheel Control";
         }
-        return (source + "  " + type + " " + indata);
+        return (source + "  " + type + "  " + indata);
     }
     else // just send data
     {
@@ -389,7 +393,83 @@ function parseCue(data){
 //............................................
 function canvasMouseover(event){
     document.body.style.cursor  = 'pointer';
+ //   context.clearRect(0,0,300,300);
+ //   wrapText(context, event.clientX + " x pos " + event.clientY + " y pos", 100,200,200,10);
+
 }
 function canvasMouseout(event){
     document.body.style.cursor  = 'default';
+    updateCanvas();
+}
+function canvasMousedown(event){
+   //document.body.style.cursor  = 'e-resize';
+ //   context.clearRect(2,2,300,50);
+  //  context.rect(15,15,295,45);
+  //  context.stroke();
+}
+function canvasMouseup(event){
+   // document.body.style.cursor  = 'move';
+}
+function canvasMousemove(event){
+    context.globalAlpha = 1;
+    context.clearRect(2,2,350,17);
+    context.rect(2,2,350,17);
+    context.stroke();
+    x = event.clientX -rect.left;
+    if((event.clientY - rect.top) < canvasHeight/2){//we are in outgoing events part of canvas.  look at outgoing events
+        for(var i = 0; i < pixelArray.length; i++){
+            if(pixelArray[i].output && (x < pixelArray[i].normalPoint)){
+                distance = x-pixelArray[i].normalPoint; //get the parameters of where we are
+                point = i;
+                context.fillStyle= 'red';
+                if(i>0){
+                    while(!pixelArray[i-1].output){
+                        i--;
+                        if(i==0){
+                            break;
+                        }
+                    }
+                }
+                if(i >0){
+                    distance2 = pixelArray[i-1].normalPoint - x;
+                    if(distance > distance2){
+                        context.fillText(pixelArray[point].output,5,14,330);
+                    }
+                    else{
+                        context.fillText(pixelArray[i-1].output,5,14,330);
+                    }
+                }
+                break;
+            }
+        }
+    }
+    else{ //look at incoming events for a match
+        for(var i = 0; i < pixelArray.length; i++){
+            if(!pixelArray[i].output && (x < pixelArray[i].normalPoint)){
+                distance = x-pixelArray[i].normalPoint; //get the parameters of where we are
+                point = i;
+                context.fillStyle= 'red';
+                if(i>0){
+                    while(pixelArray[i-1].output){
+                        i--;
+                        if(i==0){
+                            break;
+                        }
+                    }
+                }
+                if(i >0){
+                    distance2 = pixelArray[i-1].normalPoint - x;
+                    if(distance > distance2){
+                        context.fillText(parseCue(pixelArray[point]),5,14,330);
+                    }
+                    else{
+                        context.fillText(parseCue(pixelArray[i-1]),5,14, 330);
+                    }
+                }
+                break;
+            }
+        }
+    }
+
+context.fillStyle="black";
 }
