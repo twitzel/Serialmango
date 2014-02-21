@@ -29,6 +29,12 @@ function init(){
     zoomcontext = zoomcanvas.getContext('2d');
     zoomcanvasWidth = zoomcanvas.width;
     zoomcanvasHeight = zoomcanvas.height;
+    zoomcanvas.addEventListener("mouseover", zoomcanvasMouseover, false);
+    zoomcanvas.addEventListener("mouseout", zoomcanvasMouseout, false );
+    zoomcanvas.addEventListener("mousedown", zoomcanvasMousedown, false );
+    zoomcanvas.addEventListener("mouseup", zoomcanvasMouseup, false );
+    zoomcanvas.addEventListener("mousemove", zoomcanvasMousemove, false );
+
     testWebSocket();
 }
 
@@ -383,7 +389,8 @@ function parseCue(data){
         else if (indata.substr(0, 1) == "E") {
             type = "Pitch Wheel Control";
         }
-        return (source + "  " + type + "  " + indata);
+        return (source + "  " + type + "  " +
+            "" + indata);
     }
     else // just send data
     {
@@ -415,8 +422,9 @@ function canvasMousemove(event){
     context.clearRect(2,2,350,17);
     context.rect(2,2,350,17);
     context.stroke();
-    x = event.clientX -rect.left;
-    if((event.clientY - rect.top) < canvasHeight/2){//we are in outgoing events part of canvas.  look at outgoing events
+    //x = event.clientX -rect.left;
+    x= event.offsetX;
+    if(event.offsetY < canvasHeight/2){//we are in outgoing events part of canvas.  look at outgoing events
         for(var i = 0; i < pixelArray.length; i++){
             if(pixelArray[i].output && (x < pixelArray[i].normalPoint)){
                 distance = x-pixelArray[i].normalPoint; //get the parameters of where we are
@@ -472,4 +480,87 @@ function canvasMousemove(event){
     }
 
 context.fillStyle="black";
+}
+//------------------------------
+function zoomcanvasMouseover(event){
+    document.body.style.cursor  = 'pointer';
+    //   context.clearRect(0,0,300,300);
+    //   wrapText(context, event.clientX + " x pos " + event.clientY + " y pos", 100,200,200,10);
+
+}
+function zoomcanvasMouseout(event){
+    document.body.style.cursor  = 'default';
+    updateCanvas();
+}
+function zoomcanvasMousedown(event){
+    //document.body.style.cursor  = 'e-resize';
+    //   context.clearRect(2,2,300,50);
+    //  context.rect(15,15,295,45);
+    //  context.stroke();
+}
+function zoomcanvasMouseup(event){
+    // document.body.style.cursor  = 'move';
+}
+function zoomcanvasMousemove(event){
+    zoomcontext.globalAlpha = 1;
+    zoomcontext.clearRect(2,2,350,17);
+    zoomcontext.rect(2,2,350,17);
+    zoomcontext.stroke();
+    x = event.offsetX;
+    if(event.offsetY < zoomcanvasHeight/2){//we are in outgoing events part of canvas.  look at outgoing events
+        for(var i = 0; i < pixelArray.length; i++){
+            if(pixelArray[i].output && (x < pixelArray[i].zoomPoint)){
+                distance = x-pixelArray[i].zoomPoint; //get the parameters of where we are
+                point = i;
+                zoomcontext.fillStyle= 'red';
+                if(i>0){
+                    while(!pixelArray[i-1].output){
+                        i--;
+                        if(i==0){
+                            break;
+                        }
+                    }
+                }
+                if(i >0){
+                    distance2 = pixelArray[i-1].zoomPoint - x;
+                    if(distance > distance2){
+                        zoomcontext.fillText(pixelArray[point].output,5,14,330);
+                    }
+                    else{
+                        zoomcontext.fillText(pixelArray[i-1].output,5,14,330);
+                    }
+                }
+                break;
+            }
+        }
+    }
+    else{ //look at incoming events for a match
+        for(var i = 0; i < pixelArray.length; i++){
+            if(!pixelArray[i].output && (x < pixelArray[i].zoomPoint)){
+                distance = x-pixelArray[i].zoomPoint; //get the parameters of where we are
+                point = i;
+                zoomcontext.fillStyle= 'red';
+                if(i>0){
+                    while(pixelArray[i-1].output){
+                        i--;
+                        if(i==0){
+                            break;
+                        }
+                    }
+                }
+                if(i >0){
+                    distance2 = pixelArray[i-1].zoomPoint - x;
+                    if(distance > distance2){
+                        zoomcontext.fillText(parseCue(pixelArray[point]),5,14,330);
+                    }
+                    else{
+                        zoomcontext.fillText(parseCue(pixelArray[i-1]),5,14, 330);
+                    }
+                }
+                break;
+            }
+        }
+    }
+
+    zoomcontext.fillStyle="black";
 }
