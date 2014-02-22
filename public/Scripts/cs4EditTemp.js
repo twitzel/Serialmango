@@ -1,3 +1,6 @@
+/**
+ * Created by Steve on 2/21/14.
+ */
 var autoplot;
 var pixelArray = [];
 var startTime;
@@ -52,7 +55,7 @@ function testWebSocket()
 
 function onOpen(evt) {
     writeToScreen("CONNECTED");
-   // autoplot = setInterval(function(){movedata()},30);
+    // autoplot = setInterval(function(){movedata()},30);
 
 }
 
@@ -69,7 +72,7 @@ function onMessage(evt)    {
         canvasPlot();
     }
     else{
-       writeToScreen(inMessage);
+        writeToScreen(inMessage);
     }
 
 }
@@ -193,7 +196,7 @@ function drawData(){
             context.moveTo(pixelX, canvasHeight / 2 - 25);
             context.lineTo(pixelX, 15);
             if((countTop%5 ==0) || (countTop ==1)){
-            wrapText(context, pixelArray[i].output, pixelX-1.5,canvasHeight/2-25,canvasHeight/2-25,10);
+                wrapText(context, pixelArray[i].output, pixelX-1.5,canvasHeight/2-25,canvasHeight/2-25,10);
             }
         }
         else{      //this in cue input data
@@ -203,7 +206,7 @@ function drawData(){
             context.moveTo(pixelX, canvasHeight / 2 + 25);
             context.lineTo(pixelX, canvasHeight - 5);
             if((countBottom%5 ==0) || (countBottom ==1)){
-            wrapText(context, parseCue(pixelArray[i]), pixelX-1.5,canvasHeight  - 5,canvasHeight/2-25,10);
+                wrapText(context, parseCue(pixelArray[i]), pixelX-1.5,canvasHeight  - 5,canvasHeight/2-25,10);
             }
         }
         context.stroke();
@@ -217,8 +220,8 @@ function canvasPlot(){
     startTime = timeRound(pixelArray[0].Time, -0); //round down to nearest minute
     endTime = timeRound(pixelArray[pixelArray.length -1].Time, 1);
 
-   //timeDifference = new Date(pixelArray[pixelArray.length -1].Time) - new Date(pixelArray[0].Time);
-   // timeDifference = new Date(pixelArray[pixelArray.length -1].Time) - new Date(startTime);
+    //timeDifference = new Date(pixelArray[pixelArray.length -1].Time) - new Date(pixelArray[0].Time);
+    // timeDifference = new Date(pixelArray[pixelArray.length -1].Time) - new Date(startTime);
     timediff = timeDifference(endTime, startTime);
     msPerPixelMain = timeDifference(endTime, startTime)/canvasWidth;
     t = msPerPixelMain;
@@ -292,7 +295,7 @@ function drawZoomTimeLine(start, end){
                 zoomcontext.strokeStyle = 'blue';
                 zoomcontext.moveTo(pixelX, zoomcanvasHeight / 2 - 25);
                 zoomcontext.lineTo(pixelX, 15);
-               // rotateText(zoomcontext,pixelArray[i].output , pixelX-1.5, zoomcanvasHeight / 2 - 25);
+                // rotateText(zoomcontext,pixelArray[i].output , pixelX-1.5, zoomcanvasHeight / 2 - 25);
                 wrapText(zoomcontext, pixelArray[i].output, pixelX-1.5,zoomcanvasHeight/2-25,zoomcanvasHeight/2-25,10);
             }
             else{      //this in cue input data
@@ -300,7 +303,7 @@ function drawZoomTimeLine(start, end){
                 zoomcontext.moveTo(pixelX, zoomcanvasHeight / 2 + 25);
                 zoomcontext.lineTo(pixelX, zoomcanvasHeight  - 5);
                 wrapText(zoomcontext, parseCue(pixelArray[i]), pixelX-1.5,zoomcanvasHeight  - 5,zoomcanvasHeight/2-25,10);
-               // rotateText(zoomcontext,parseCue(pixelArray[i]) , pixelX-1.5, zoomcanvasHeight  - 5);
+                // rotateText(zoomcontext,parseCue(pixelArray[i]) , pixelX-1.5, zoomcanvasHeight  - 5);
             }
             zoomcontext.stroke();
         }
@@ -338,11 +341,11 @@ function wrapText(cxt, text, x, y, maxWidth, lineHeight) {
     cxt.restore();
 }
 function rotateText(cxt,text, x,y){
-   /* zoomcontext.save();
-    zoomcontext.rotate(-Math.PI/2);
-    zoomcontext.fillText(text,-y, x); // fix coordinates for rotated change
-    zoomcontext.restore();
-  */
+    /* zoomcontext.save();
+     zoomcontext.rotate(-Math.PI/2);
+     zoomcontext.fillText(text,-y, x); // fix coordinates for rotated change
+     zoomcontext.restore();
+     */
     cxt.save();
     cxt.rotate(-Math.PI/2);
     cxt.fillText(text,-y, x, zoomcanvasHeight/2 -30); // fix coordinates for rotated change
@@ -402,8 +405,8 @@ function parseCue(data){
 //............................................
 function canvasMouseover(event){
     document.body.style.cursor  = 'pointer';
- //   context.clearRect(0,0,300,300);
- //   wrapText(context, event.clientX + " x pos " + event.clientY + " y pos", 100,200,200,10);
+    //   context.clearRect(0,0,300,300);
+    //   wrapText(context, event.clientX + " x pos " + event.clientY + " y pos", 100,200,200,10);
 
 }
 function canvasMouseout(event){
@@ -411,13 +414,13 @@ function canvasMouseout(event){
     updateCanvas();
 }
 function canvasMousedown(event){
-   //document.body.style.cursor  = 'e-resize';
- //   context.clearRect(2,2,300,50);
-  //  context.rect(15,15,295,45);
-  //  context.stroke();
+    //document.body.style.cursor  = 'e-resize';
+    //   context.clearRect(2,2,300,50);
+    //  context.rect(15,15,295,45);
+    //  context.stroke();
 }
 function canvasMouseup(event){
-   // document.body.style.cursor  = 'move';
+    // document.body.style.cursor  = 'move';
 }
 function canvasMousemove(event){
     context.globalAlpha = 1;
@@ -481,7 +484,7 @@ function canvasMousemove(event){
         }
     }
 
-context.fillStyle="black";
+    context.fillStyle="black";
 }
 //------------------------------
 function zoomcanvasMouseover(event){
@@ -582,17 +585,17 @@ function zoomcanvasMousemove(event){
     zoomcontext.fillStyle="black";
 }
 function drawSingleEvent(element, colorstroke, colorfill){
-   zoomcontext.strokeStyle = colorstroke;
+    zoomcontext.strokeStyle = colorstroke;
     zoomcontext.fillStyle = colorfill;
     pixelX = timeDifference(pixelArray[element].Time,startTimeZoom)/msPerPixelZoom;
     if(pixelArray[element].output){//this is output data
-      //  zoomcontext.strokeStyle = 'blue';
+        //  zoomcontext.strokeStyle = 'blue';
         zoomcontext.moveTo(pixelX, zoomcanvasHeight / 2 - 25);
         zoomcontext.lineTo(pixelX, 15);
         wrapText(zoomcontext, pixelArray[element].output, pixelX-1.5,zoomcanvasHeight/2-25,zoomcanvasHeight/2-25,10);
     }
     else{      //this in cue input data
-       // zoomcontext.strokeStyle = 'green';
+        // zoomcontext.strokeStyle = 'green';
         zoomcontext.moveTo(pixelX, zoomcanvasHeight / 2 + 25);
         zoomcontext.lineTo(pixelX, zoomcanvasHeight  - 5);
         wrapText(zoomcontext, parseCue(pixelArray[element]), pixelX-1.5,zoomcanvasHeight  - 5,zoomcanvasHeight/2-25,10);
