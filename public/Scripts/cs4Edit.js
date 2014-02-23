@@ -7,7 +7,8 @@ var msPerPixelZoom;
 var zoomFactor = 0;
 var zoomLocation = 50;
 var selected;
-var selectedPreviousZoomPoint;
+var selectedPreviousZoomPoint = {};
+var arrayPrevious = [];
 var mouseDown = 0;
 
 window.onload = init;
@@ -501,8 +502,12 @@ function zoomcanvasMouseout(event){
 }
 function zoomcanvasMousedown(event){
     if(selected >=0 || selected <=pixelArray.length){
+        selectedPreviousZoomPoint={};
         mouseDown = 1;
-        selectedPreviousZoomPoint = parseInt(pixelArray[selected].zoomPoint);
+        selectedPreviousZoomPoint.Point = parseInt(pixelArray[selected].zoomPoint);
+        selectedPreviousZoomPoint.output = pixelArray[selected].output;
+        arrayPrevious.push(selectedPreviousZoomPoint);
+
     }
 
 }
@@ -521,9 +526,11 @@ function zoomcanvasMousemove(event){
             incremental = new Date(incremental.setMilliseconds(incremental.getMilliseconds() - (pixelArray[selected].zoomPoint - event.offsetX)*msPerPixelZoom  )).toISOString();
             pixelArray[selected].Time = incremental;
             updateCanvas();
+            zoomcontext.strokeStyle = 'blue';
             zoomcontext.clearRect(2,2,355,20);
             zoomcontext.rect(2,2,350,17);
-            zoomcontext.fillText("Changer " +parseInt((event.offsetX  - selectedPreviousZoomPoint)* msPerPixelZoom )/1000 + "  Seconds"  ,5,14,330);
+            zoomcontext.stroke();
+            zoomcontext.fillText("Changed " +parseInt((event.offsetX  - selectedPreviousZoomPoint.Point)* msPerPixelZoom )/1000 + "  Seconds"  ,5,14,330);
         }
     }
     else{
