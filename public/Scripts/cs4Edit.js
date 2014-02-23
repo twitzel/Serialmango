@@ -7,7 +7,7 @@ var msPerPixelZoom;
 var zoomFactor = 0;
 var zoomLocation = 50;
 var selected;
-var selectedPrevious;
+var selectedPreviousZoomPoint;
 var mouseDown = 0;
 
 window.onload = init;
@@ -496,20 +496,15 @@ function zoomcanvasMouseover(event){
 }
 function zoomcanvasMouseout(event){
     document.body.style.cursor  = 'default';
+    mouseDown = 0;
     updateCanvas();
 }
 function zoomcanvasMousedown(event){
-    mouseDown = 1;
-   if(selected >=0 && selected <=pixelArray.length){
-       //calculate a new time
+    if(selected >=0 || selected <=pixelArray.length){
+        mouseDown = 1;
+        selectedPreviousZoomPoint = parseInt(pixelArray[selected].zoomPoint);
+    }
 
-
-       incremental = new Date(pixelArray[selected].Time);
-       incremental = new Date(incremental.setMilliseconds(incremental.getMilliseconds() - (pixelArray[selected].zoomPoint - event.offsetX)*msPerPixelZoom  )).toISOString();
-       pixelArray[selected].Time = incremental;
-       pixelArray[selected].zoomPoint = event.offsetX;
-       updateCanvas();
-   }
 }
 function zoomcanvasMouseup(event){
     mouseDown = 0;
@@ -526,6 +521,9 @@ function zoomcanvasMousemove(event){
             incremental = new Date(incremental.setMilliseconds(incremental.getMilliseconds() - (pixelArray[selected].zoomPoint - event.offsetX)*msPerPixelZoom  )).toISOString();
             pixelArray[selected].Time = incremental;
             updateCanvas();
+            zoomcontext.clearRect(2,2,355,20);
+            zoomcontext.rect(2,2,350,17);
+            zoomcontext.fillText("Changer " +parseInt((event.offsetX  - selectedPreviousZoomPoint)* msPerPixelZoom )/1000 + "  Seconds"  ,5,14,330);
         }
     }
     else{
