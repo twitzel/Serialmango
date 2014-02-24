@@ -104,6 +104,27 @@ function loadclick(){
     context.clearRect(0,0,canvasWidth,canvasHeight);
 }
 
+function undoclick(){
+    if(arrayPrevious.length >0){//make sure there is some data there
+        selectedPreviousZoomPoint = arrayPrevious.pop();
+        for(i=0; i<pixelArray.length; i++){
+            if(pixelArray[i].output == selectedPreviousZoomPoint.output){//we found it
+                pixelArray[i].Time = selectedPreviousZoomPoint.Time;
+                pixelArray.sort(function(a,b){//sort array by time to put every thing back
+                    return new Date(a.Time) - new Date(b.Time);
+                });
+                updateCanvas(); //redraw
+                break; // get out our work here is finished
+            }
+        }
+    }
+
+}
+
+function saveclick(){
+
+}
+
 function pixelLoad(item){
     var count = 0;
     pixelArray = []; //clear the array
@@ -506,6 +527,7 @@ function zoomcanvasMousedown(event){
         mouseDown = 1;
         selectedPreviousZoomPoint.Point = parseInt(pixelArray[selected].zoomPoint);
         selectedPreviousZoomPoint.output = pixelArray[selected].output;
+        selectedPreviousZoomPoint.Time = pixelArray[selected].Time;
         arrayPrevious.push(selectedPreviousZoomPoint);
 
     }
