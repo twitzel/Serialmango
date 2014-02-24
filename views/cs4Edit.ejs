@@ -13,7 +13,7 @@
 </head>
 
 
-<h1> CS4 Scrolling Data</h1>
+<h1> CS4 Cue Editor</h1>
 
 <header class="mainheader">
     <div id="menubutton">
@@ -38,13 +38,14 @@
 
 <div id = "canvasDiv">
 
-    <button id = "loadButton"  onmousedown = "loadclick()">Load Cue File </button>
+
     <button id = "saveButton"  onmousedown = "saveclick()">Save Cue File</button>
     <button id = "undoButton"  onmousedown = "undoclick()">Undo Last Edit</button>
+    <button id = "loadButton"  onmousedown = "loadclick()">Load Cue File </button>
     <h3 id = "in" > All Cue Data  </h3>
     <canvas id="mainCanvas" width= 1000px height=300px tabindex = "1">  </canvas>
     Zoom: 0<input type="range" class="slider"  name="zoom" step = 0.25 value = 0 max = 99.75 onchange="zoomChange(this.value)" oninput="zoomChange(this.value)">100
-    Location: 0<input type="range" class="slider" name="zoom" step = 0.25 value = 50 onchange="locationChange(this.value)" oninput="locationChange(this.value)">100
+    Location: 0<input type="range" class="slider" name="zoom1" step = 0.25 value = 50 onchange="locationChange(this.value)" oninput="locationChange(this.value)">100
     <h3 id = "out" >Zoom Cue Data</h3>
     <canvas id="zoomCanvas" width= 1000px height=400px tabindex = "2"></canvas>
 

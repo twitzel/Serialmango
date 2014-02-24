@@ -2,6 +2,7 @@
  * Created by Steve on 11/4/13.
  */
 var wsUri = "ws://" + window.location.hostname + ":8080";
+var dataPacket = {};
 
 window.onload = init;
 function init()
@@ -48,8 +49,8 @@ function testWebSocket()
 function onOpen(evt) {
 
    // var send = SetCS4Time();
-    var send = new Date();
-    websocket.send("CMD " + send); // SET the CS4 I/O clock to current browser time - ignores time zone offset
+    //var send = new Date();
+    //websocket.send("CMD " + send); // SET the CS4 I/O clock to current browser time - ignores time zone offset
 }
 
 function onClose(evt) {
@@ -138,9 +139,9 @@ function SetCS4Time()
 
 function timeZoneChange()
 {
-    timeZone = document.getElementById('timeZoneCombo');
-    value = timeZone.value;
-    websocket.send("CMD TZ " + value);
+  //  timeZone = document.getElementById('timeZoneCombo');
+  //  value = timeZone.value;
+  //  websocket.send("CMD TZ " + value);
 
 
 }

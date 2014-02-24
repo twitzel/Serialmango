@@ -31,6 +31,7 @@ var destinationPath;
 var mongoDirectory;
 var collectionName = 'WizDb';
 var smtpTransport;
+var dataPacket = {};
 
 //routine to ensure that serial data is not sent more than
 // every timedOutInterval
@@ -192,7 +193,7 @@ exports.setup = function()
 
 
 
-/*Data in may have a prefix.  That prefix is a command and handled here:
+/*Data in may have a Type.  That Type is a command and handled here:
     TME                     Sets the CS4 I/O clock
     TME TZ                  Changes system time zone
     LOG                     Sends log file out to client
@@ -202,116 +203,132 @@ exports.setup = function()
     COPYTOINTERNAL          Copies all mongodb files to internal location
     COPYFROMINTERNAL        Copies all mongodb files from internal location
     EDIT                    Sends all Cue collection data to client
+    CUECREATE               MAkse a copy of all files to internal, deletes the cue file and recreates it form cue editor data.
 
+dataSocket.Type
+dataSocket.Data
 
  */
 exports.websocketDataIn = function(dataSocket, Socket){
-    if(dataSocket.substr(0,3) == "TME") // if this is a time command
-    {
-        var datain;
-        if(dataSocket.substr(0,6) == "TME TZ")//if timezone command
+    dataSocket = JSON.parse(dataSocket);
+    if(dataSocket.Type){
+
+
+        if(dataSocket.Type.substr(0,3) == "TME") // if this is a time command
         {
-            datain = dataSocket.substr(7);
-            time.tzset(datain); // tz string from client: CMD TZ US/Pacific
-          //  collectionStartup.update({'TimeZoneChanged':'Yes'}, {$set:{'TimeZoneSet' : datain}},{upsert:true, w:1},function(err,res){
-                collectionStartup.update({'TimeZoneSet':{$exists:true}}, {$set:{'TimeZoneSet' : datain}},{upsert:true, w:1},function(err,res){
+            var datain;
+            if(dataSocket.Type == "TME TZ")//if timezone command
+            {
+                datain = dataSocket.Data;
+                time.tzset(datain); // tz string from client: CMD TZ US/Pacific
+              //  collectionStartup.update({'TimeZoneChanged':'Yes'}, {$set:{'TimeZoneSet' : datain}},{upsert:true, w:1},function(err,res){
+                    collectionStartup.update({'TimeZoneSet':{$exists:true}}, {$set:{'TimeZoneSet' : datain}},{upsert:true, w:1},function(err,res){
 
-                console.log('Time Zone Updated '+res + " "+ datain);
+                    console.log('Time Zone Updated '+res + " "+ datain);
 
 
-            });
+                });
+            }
+            else
+            {
+                //set the clock on the CS4 I/O board every time the "info" screen is opened
+                datain = dataSocket.Data;
+                datain = SetCS4Time(datain);
+                comlib.write(datain);
+            }
+
         }
-        else
+        else if(dataSocket.Type.substr(0,3) == "LOG")//requesting entire log file to be sent log file
         {
-            //set the clock on the CS4 I/O board every time the "info" screen is opened
-            datain = dataSocket.substr(4);
-            datain = SetCS4Time(datain);
-            comlib.write(datain);
-        }
+            var dataToSend = "";
 
-    }
-    else if(dataSocket.substr(0,3) == "LOG")//requesting entire log file to be sent log file
-    {
-        var dataToSend = "";
-
-        if(dataSocket.substr(0,7) == "LOG 100")
-        {
-                comlib.websocketsend("* Preparing Data For Display. \n* Please Wait. \n* (may take several seconds) ", Socket) ;
-                collectionLog.find({},{}).sort({"Time": -1}).limit(1000).toArray(function(error,logfile){
-                for(var i = 0; i <logfile.length;i++)
-                {
-                    logfileData = JSON.stringify(logfile[i]);
-
-                    if(logfile[i].Dout)
+            if(dataSocket.Type == "LOG 1000")
+            {
+                    comlib.websocketsend("* Preparing Data For Display. \n* Please Wait. \n* (may take several seconds) ", Socket) ;
+                    collectionLog.find({},{}).sort({"Time": -1}).limit(1000).toArray(function(error,logfile){
+                    for(var i = 0; i <logfile.length;i++)
                     {
-                        //comlib.websocketsend(".    Sent: " + logfileData, Socket) ;
-                        dataToSend = dataToSend + ".    Sent: " + logfileData + "\n" ;
+                        logfileData = JSON.stringify(logfile[i]);
+
+                        if(logfile[i].Dout)
+                        {
+                            //comlib.websocketsend(".    Sent: " + logfileData, Socket) ;
+                            dataToSend = dataToSend + ".    Sent: " + logfileData + "\n" ;
+                        }
+                        else
+                        {
+                            //comlib.websocketsend(parseCue(logfileData),Socket);
+                            dataToSend = dataToSend + parseCue(logfileData) + "\n" ;
+                        }
                     }
-                    else
+                        comlib.websocketsend(dataToSend, Socket) ;
+                });
+            }
+            else
+            {
+                comlib.websocketsend("* Preparing Data For Display. \n* Please Wait. \n* (may take up to 1 minute) ", Socket) ;
+                collectionLog.find({},{}).sort({"Time": 1}).toArray(function(error,logfile){
+                    for(var i = 0; i <logfile.length;i++)
                     {
-                        //comlib.websocketsend(parseCue(logfileData),Socket);
-                        dataToSend = dataToSend + parseCue(logfileData) + "\n" ;
+                        logfileData = JSON.stringify(logfile[i]);
+
+                        if(logfile[i].Dout)
+                        {
+                            dataToSend = ".    Sent: " + logfileData + "\n" + dataToSend;
+                        }
+                        else
+                        {
+                            dataToSend = parseCue(logfileData) + "\n" + dataToSend;
+                        }
                     }
-                }
                     comlib.websocketsend(dataToSend, Socket) ;
-            });
+                });
+
+            }
         }
-        else
+        else if (dataSocket.Type == "SEND") // these are commands to send directly to the CS4I/0
         {
-            comlib.websocketsend("* Preparing Data For Display. \n* Please Wait. \n* (may take up to 1 minute) ", Socket) ;
-            collectionLog.find({},{}).sort({"Time": 1}).toArray(function(error,logfile){
-                for(var i = 0; i <logfile.length;i++)
-                {
-                    logfileData = JSON.stringify(logfile[i]);
+            comlib.write(dataSocket.Data+ '\r'); // send it out the serial port
+        }
+        else if(dataSocket.Type == "COPYTOUSB")
+        {
+            copyToUSB();
+        }
+        else if(dataSocket.Type == "COPYFROMUSB")
+        {
+            copyFromUSB();
+        }
+        else if(dataSocket.Type == "COPYTOINTERNAL")
+        {
+            copyToInternal();
+        }
+        else if(dataSocket.Type == "COPYFROMINTERNAL")
+        {
+            copyFromInternal();
+        }
+        else if(dataSocket.Type == "EDIT"){
+            collectionCue.find({},{}).sort({"Time": 1}).toArray(function(error,cuefile){
+                var packet = {};
+                packet.packetType="cuefiledata";
+                packet.data = cuefile;
 
-                    if(logfile[i].Dout)
-                    {
-                        dataToSend = ".    Sent: " + logfileData + "\n" + dataToSend;
-                    }
-                    else
-                    {
-                        dataToSend = parseCue(logfileData) + "\n" + dataToSend;
-                    }
-                }
-                comlib.websocketsend(dataToSend, Socket) ;
+                //JSON.parse(x);
+                //packettype = x.packettype;
+                //data = x.data;
+                comlib.websocketsend(JSON.stringify(packet), Socket);
+
             });
+        }
+        else if (dataSocket.Type == "CUECREATE"){
+            copyToInternal();//copy to create a backup
+            db.collection("cue").remove({},function(err,numberRemoved){
+                console.log("inside remove call back" + numberRemoved);
+            });
+
+
 
         }
     }
-    else if (dataSocket.substr(0,4) == "SEND") // these are commands to send directly to the CS4I/0
-    {
-        comlib.write(dataSocket.substr(5)+ '\r'); // send it out the serial port
-    }
-    else if(dataSocket.substr(0,9) == "COPYTOUSB")
-    {
-        copyToUSB();
-    }
-    else if(dataSocket.substr(0,11) == "COPYFROMUSB")
-    {
-        copyFromUSB();
-    }
-    else if(dataSocket.substr(0,14) == "COPYTOINTERNAL")
-    {
-        copyToInternal();
-    }
-    else if(dataSocket.substr(0,16) == "COPYFROMINTERNAL")
-    {
-        copyFromInternal();
-    }
-    else if(dataSocket.substr(0,4) == "EDIT"){
-        collectionCue.find({},{}).sort({"Time": 1}).toArray(function(error,cuefile){
-            var packet = {};
-            packet.packetType="cuefiledata";
-            packet.data = cuefile;
-
-            //JSON.parse(x);
-            //packettype = x.packettype;
-            //data = x.data;
-            comlib.websocketsend(JSON.stringify(packet), Socket);
-
-        });
-    }
-
     else
     {
         serialDataSocket = JSON.parse(dataSocket);

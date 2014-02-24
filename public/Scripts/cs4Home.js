@@ -2,6 +2,7 @@
  * Created by Steve on 10/21/13.
  */
 var bkgnd = 0;
+var dataPacket = {};
 window.onload = init;
 function init(){
     wsUri = "ws://" + window.location.hostname + ":8080";
@@ -60,13 +61,15 @@ function buttonClear(){
 
 function buttonLog(){
     output.innerHTML = "";
-    websocket.send('LOG');//request logfile
+    dataPacket.Type = 'LOG';
+    websocket.send(JSON.stringify(dataPacket));//request logfile
     document.body.style.cursor  = 'wait';
 }
 
 function buttonLog100(){
     output.innerHTML = "";
-    websocket.send('LOG 100');//request logfile
+    dataPacket.Type = 'LOG 1000';
+    websocket.send(JSON.stringify(dataPacket));//request logfile
     document.body.style.cursor  = 'wait';
 }
 

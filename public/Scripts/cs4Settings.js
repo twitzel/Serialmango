@@ -6,6 +6,7 @@ var autocount;
 var autocue;
 var dataToShow = "";
 var bkgnd = 0;
+var dataPacket = {};
 
 function init(){
     wsUri = "ws://" + window.location.hostname + ":8080";
@@ -76,134 +77,152 @@ function buttonBackground(){
 }
 
 //************************************  RELAYS ******************************
-function relay1onbutton()
-{
-    websocket.send('SEND RELAY 1 1');//
+function relay1onbutton(){
+    dataPacket.Type = 'SEND' ;
+    dataPacket.Data = 'RELAY 1 1'
+    websocket.send(JSON.stringify(dataPacket));//
 }
-function relay1offbutton()
-{
-    websocket.send('SEND RELAY 1 0');//
+function relay1offbutton(){
+    dataPacket.Type ='SEND' ;
+    dataPacket.Data = 'RELAY 1 0';
+    websocket.send(JSON.stringify(dataPacket));//
 }
-function relay2onbutton()
-{
-    websocket.send('SEND RELAY 2 1');//
+function relay2onbutton(){
+    dataPacket.Type ='SEND';
+    dataPacket.Data = 'RELAY 2 1';
+    websocket.send(JSON.stringify(dataPacket));//
 }
-function relay2offbutton()
-{
-    websocket.send('SEND RELAY 2 0');//
+function relay2offbutton(){
+    dataPacket.Type ='SEND';
+    dataPacket.Data = 'RELAY 2 0';
+    websocket.send(JSON.stringify(dataPacket));
 }
-function relay3onbutton()
-{
-    websocket.send('SEND RELAY 3 1');//
+function relay3onbutton(){
+    dataPacket.Type ='SEND';
+    dataPacket.Data = 'RELAY 3 1';
+    websocket.send(JSON.stringify(dataPacket));
 }
-function relay3offbutton()
-{
-    websocket.send('SEND RELAY 3 0');//
+function relay3offbutton(){
+    dataPacket.Type ='SEND';
+    dataPacket.Data = 'RELAY 3 0';
+    websocket.send(JSON.stringify(dataPacket));
 }
-function relay4onbutton()
-{
-    websocket.send('SEND RELAY 4 1');//
+function relay4onbutton(){
+    dataPacket.Type ='SEND';
+    dataPacket.Data = 'RELAY 4 1';
+    websocket.send(JSON.stringify(dataPacket));
 }
-function relay4offbutton()
-{
-    websocket.send('SEND RELAY 4 0');//
+function relay4offbutton(){
+    dataPacket.Type ='SEND';
+    dataPacket.Data = 'RELAY 4 0';
+    websocket.send(JSON.stringify(dataPacket));
 }
 
 //************************************  SMPTE  ******************************
-function smpteonbutton()
-{
-    websocket.send('SEND SLAVE SMPTE ON');//
+function smpteonbutton(){
+    dataPacket.Type ='SEND';
+    dataPacket.Data = 'SLAVE SMPTE ON';
+    websocket.send(JSON.stringify(dataPacket));
 }
 
-function smpteoffbutton()
-{
-    websocket.send('SEND SLAVE SMPTE OFF');//
+function smpteoffbutton(){
+    dataPacket.Type ='SEND';
+    dataPacket.Data = 'SLAVE SMPTE OFF';
+    websocket.send(JSON.stringify(dataPacket));
 }
 
 //************************************  DAC  ******************************
-function dac1button()
-{
-    var val = document.getElementById('dac1output').value;
-    websocket.send('SEND SLAVE DAC1 ' + val + '');//
+function dac1button(){
+    dataPacket.Data = document.getElementById('dac1output').value + '';
+    dataPacket.Type ='SEND';
+    dataPacket.Data = 'SLAVE DAC1';
+    websocket.send(JSON.stringify(dataPacket));
 }
 
-function dac2button()
-{
-    var val = document.getElementById('dac2output').value;
-    websocket.send('SEND SLAVE DAC2 ' + val + '');//
+function dac2button(){
+    dataPacket.Type ='SEND';
+    dataPacket.Data = 'SLAVE DAC2';
+    dataPacket.Data = document.getElementById('dac2output').value + '';
+    websocket.send(JSON.stringify(dataPacket));
 }
 
 //************************************  DMX  ******************************
-function dmxchwatch()
-{
+function dmxchwatch(){
+    dataPacket.Type ='SEND' ;
     var val1 = document.getElementById('dmx1').value;
     var val2 = document.getElementById('dmx2').value;
     var val3 = document.getElementById('dmx3').value;
-    websocket.send('SEND SLAVE DMX_CH ' + val1 +  " " + val2 + " " + val3 + '');//
+    dataPacket.Data = 'SLAVE DMX_CH ' + val1 +  " " + val2 + " " + val3 + ''
+    websocket.send(JSON.stringify(dataPacket));
 }
 
 //************************************  SEND TO DISPLAY  ******************************
-function sendtext()
-{
+function sendtext(){
+    dataPacket.Type ='SEND';
     var name = document.getElementById('showname').value.trim();
     var text = document.getElementById('texttosend').value.trim();
-
-    websocket.send('SEND DISP ' + name +  " Text " + text + '');//
+    dataPacket.Data = 'DISP' + name +  " Text " + text + '';
+    websocket.send(JSON.stringify(dataPacket));
 }
 
 //************************************  SERIAL  ******************************
-function sendserial1()
-{
+function sendserial1(){
+    dataPacket.Type ='SEND';
     var baud = document.getElementById('serial1baud').value;
     var text = document.getElementById('serial1data').value.trim();
-
-    websocket.send('SEND SLAVE SER1 ' + baud +  " " + text + '');//
+    dataPacket.Data =  'SLAVE SER1 ' + baud +  " " + text + '';
+    websocket.send(JSON.stringify(dataPacket));
 }
 
-function sendserial2()
-{
+function sendserial2(){
+    dataPacket.Type ='SEND';
     var baud = document.getElementById('serial2baud').value;
     var text = document.getElementById('serial2data').value.trim();
-
-    websocket.send('SEND SLAVE SER2 ' + baud +  " " + text + '');//
+    dataPacket.Data = 'SLAVE SER2 ' + baud +  " " + text + '';
+    websocket.send(JSON.stringify(dataPacket));
 }
 
-function sendserial3()
-{
+function sendserial3(){
+    dataPacket.Type ='SEND' ;
     var baud = document.getElementById('serial3baud').value;
     var text = document.getElementById('serial3data').value.trim();
-
-    websocket.send('SEND SLAVE SER3 ' + baud +  " " + text + '');//
+    dataPacket.Data = 'SLAVE SER3 ' + baud +  " " + text + '';
+    websocket.send(JSON.stringify(dataPacket));
 }
 
 //************************************  STATUS  ******************************
-function adc1button()
-{
-    websocket.send('SEND SLAVE ADC1');//
+function adc1button(){
+    dataPacket.Type ='SEND' ;
+    dataPacket.Data = 'SLAVE ADC1'
+    websocket.send(JSON.stringify(dataPacket));
 }
-function adc2button()
-{
-    websocket.send('SEND SLAVE ADC2');//
+function adc2button(){
+    dataPacket.Type ='SEND';
+    dataPacket.Data =  'SLAVE ADC2';
+    websocket.send(JSON.stringify(dataPacket));
 }
-function closure1button()
-{
-    websocket.send('SEND SLAVE CLOSURE1');//
+function closure1button(){
+    dataPacket.Type ='SEND';
+    dataPacket.Data = 'SLAVE CLOSURE1';
+    websocket.send(JSON.stringify(dataPacket));
 }
-function closure2button()
-{
-    websocket.send('SEND SLAVE CLOSURE2');//
+function closure2button(){
+    dataPacket.Type ='SEND';
+    dataPacket.Data = 'SLAVE CLOSURE2';
+    websocket.send(JSON.stringify(dataPacket));
 }
-function dmxbutton()
-{
-    websocket.send('SEND SLAVE DMX');//
+
+function dmxbutton(){
+    dataPacket.Type ='SEND';
+    dataPacket.Data = 'SLAVE DMX';
+    websocket.send(JSON.stringify(dataPacket));
 }
 
 //************************************  MIDI  ******************************
-function midi1button()
-{
+function midi1button(){
     if(document.getElementById('light').checked)
     {
-        var start = "SEND MIDI1 F07F05020101";
+        var start = "MIDI1 F07F05020101";
         var cue = document.getElementById('lightcuenumber').value.trim();
 
         for (var i = 0; i < cue.length; i ++)  // convert cue info to hex string be adding 0x30
@@ -218,29 +237,35 @@ function midi1button()
             }
         }
         start += "F7";
-
-        websocket.send(start);
+        dataPacket.Type ='SEND';
+        dataPacket.Data = start;
+        websocket.send(JSON.stringify(dataPacket));
     }
     if(document.getElementById('noteon').checked)
     {
-        websocket.send('SEND MIDI1 920403');
+        dataPacket.Type ='SEND';
+        dataPacket.Data ='MIDI1 920403';
+            websocket.send(JSON.stringify(dataPacket));
     }
     if(document.getElementById('noteoff').checked)
     {
-        websocket.send('SEND MIDI1 821216');
+        dataPacket.Type ='SEND';
+        dataPacket.Data =' MIDI1 821216';
+        websocket.send(JSON.stringify(dataPacket));
     }
     if(document.getElementById('hex').checked)
     {
+        dataPacket.Type ="SEND";
         var cue = document.getElementById('hexnumber').value.trim();
-        websocket.send( "SEND MIDI1 " + cue)
+        dataPacket.Data = 'MIDI1 ' + cue;
+        websocket.send(JSON.stringify(dataPacket));
     }
 }
 
-function midi2button()
-{
+function midi2button(){
     if(document.getElementById('light').checked)
     {
-        var start = "SEND MIDI2 F07F05020101";
+        var start = "MIDI2 F07F05020101";
         var cue = document.getElementById('lightcuenumber').value.trim();
 
         for (var i = 0; i < cue.length; i ++)  // convert cue info to hex string be adding 0x30
@@ -256,20 +281,28 @@ function midi2button()
         }
         start += "F7";
 
-        websocket.send(start);
+        dataPacket.Type ='SEND';
+        dataPacket.Data = start;
+        websocket.send(JSON.stringify(dataPacket));
     }
     if(document.getElementById('noteon').checked)
     {
-        websocket.send('SEND MIDI2 920403');
+        dataPacket.Type ='SEND';
+        dataPacket.Data = 'MIDI2 920403';
+        websocket.send(JSON.stringify(dataPacket));
     }
     if(document.getElementById('noteoff').checked)
     {
-        websocket.send('SEND MIDI2 821216');
+        dataPacket.Type ='SEND';
+        dataPacket.Data = 'MIDI2 821216';
+        websocket.send(JSON.stringify(dataPacket));
     }
     if(document.getElementById('hex').checked)
     {
+        dataPacket.Type ="SEND";
         var cue =document.getElementById('hexnumber').value.trim();
-        websocket.send( "SEND MIDI2 " + cue)
+        dataPacket.Data = 'MIDI2' + cue;
+        websocket.send(JSON.stringify(dataPacket));
     }
 }
 
@@ -287,7 +320,7 @@ function sendMidiAuto(){
 }
 
 function midiAuto(){
-    var start = "SEND MIDI1 F07F05020101";
+    var start = "MIDI1 F07F05020101";
     var cue = document.getElementById('cuenumber').value.trim();
     var temp = document.getElementById('sendMidiAuto');
 
@@ -303,8 +336,9 @@ function midiAuto(){
         }
     }
     start += "F7";
-
-    websocket.send(start);
+    dataPacket.Type = 'SEND';
+    dataPacket.Data = start;
+    websocket.send(JSON.stringify(dataPacket));
 
     autocount = setTimeout(function(){midiAuto()}, parseInt(document.getElementById('cuetime').value)*1000);
     document.getElementById('cuenumber').value = parseInt(document.getElementById('cuenumber').value) +1;
@@ -353,45 +387,52 @@ function cueAuto(){
     }
     cue.value = counter +1; //update the cue count
    // delay = (new Date()-lastCueTime);
-    websocket.send('SEND ZIG1' + ' ' + showName + ' ' + directory + ' ' + dataOut);
+    dataPacket.Type ='SEND';
+    dataPacket.Data = 'ZIG1' + ' ' + showName + ' ' + directory + ' ' + dataOut;
+    websocket.send(JSON.stringify(dataPacket));
     autocue = setTimeout(function(){cueAuto()}, parseInt(document.getElementById('delay').value)*1000);
 }
 
 
-function copyToUSB()
-{
-    websocket.send("COPYTOUSB");
+function copyToUSB(){
+    dataPacket.Type ="COPYTOUSB";
+    websocket.send(JSON.stringify(dataPacket));
 }
 
-function copyFromUSB()
-{
-    websocket.send("COPYFROMUSB");
+function copyFromUSB(){
+    dataPacket.Type ="COPYFROMUSB";
+    websocket.send(JSON.stringify(dataPacket));
 }
 
-function copyToInternal()
-{
-    websocket.send("COPYTOINTERNAL");
+function copyToInternal(){
+    dataPacket.Type ="COPYTOINTERNAL";
+    websocket.send(JSON.stringify(dataPacket));
 }
 
-function copyFromInternal()
-{
-    websocket.send("COPYFROMINTERNAL");
+function copyFromInternal(){
+    dataPacket.Type ="COPYFROMINTERNAL"
+    websocket.send(JSON.stringify(dataPacket));
 }
-
 //************************************  TIME  ******************************
 
 function gettimebutton(){
-    websocket.send( "SEND GETTIME")
+    dataPacket.Type ="SEND";
+    dataPacket.Data = 'GETTIME';
+    websocket.send(JSON.stringify(dataPacket));
 }
 
 function timebutton(){
+    dataPacket.Type ='TME';
     var send = new Date();
-    websocket.send("TME " + send); // SET the CS4 I/O clock to current browser time - ignores time zone offset
+    dataPacket.Data = send;
+    websocket.send(JSON.stringify(dataPacket));// SET the CS4 I/O clock to current browser time - ignores time zone offset
 }
 
-function timeZoneChange()
-{
+function timeZoneChange(){
+    dataPacket.Type = 'TME TZ';
     timeZone = document.getElementById('timeZoneCombo');
     value = timeZone.value;
-    websocket.send("TME TZ " + value);
+    dataPacket.Data = value;
+    websocket.send(JSON.stringify(dataPacket));
+
 }

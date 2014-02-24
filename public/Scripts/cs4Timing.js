@@ -11,6 +11,7 @@ var cuevalue2;
 var cuevalue3;
 var bkgnd = 0;
 var incue = 0;
+var dataPacket = {};
 
 //window.onload = init;
 window.addEventListener("load", init, true);
@@ -85,7 +86,10 @@ function onError(evt) {
 }
 
 function doSend(message) {
-    writeToScreen("SENT: " + message);  websocket.send(message);
+    writeToScreen("SENT: " + message);
+    dataPacket.Data = message;
+
+    websocket.send(JSON.stringify(dataPacket));
 }
 
 function writeToScreen(message) {
@@ -134,7 +138,8 @@ function cueclick1(message){
     cuevalue1.value = counter +1; //update the cue count
     delay = (new Date()-lastCueTime);
    // websocket.send("{\"OutData\": [{\"Delay\": "+delay+" , \"Port\":\"Zig1\", \"Showname\":\""+ showName +"\", \"Dir\":\""+ directory +"\", \"Dout\":\"" + dataOut + "\"}]}");
-    websocket.send("{\"OutData\": {\"Delay\": "+delay+" , \"Port\":\"Zig1\", \"Showname\":\""+ showName +"\", \"Dir\":\""+ directory +"\", \"Dout\":\"" + dataOut + "\"}}");
+    dataPacket.Data = "{\"OutData\": {\"Delay\": "+delay+" , \"Port\":\"Zig1\", \"Showname\":\""+ showName +"\", \"Dir\":\""+ directory +"\", \"Dout\":\"" + dataOut + "\"}}";
+    websocket.send(JSON.stringify(dataPacket));
 }
 
 function cueclick2(message){
@@ -167,7 +172,8 @@ function cueclick2(message){
     }
     cuevalue2.value = counter +1; //update the cue count
     delay = (new Date()-lastCueTime);
-    websocket.send("{\"OutData\": {\"Delay\": "+delay+" , \"Port\":\"Zig1\", \"Showname\":\""+ showName +"\", \"Dir\":\""+ directory +"\", \"Dout\":\"" + dataOut + "\"}}");
+    dataPacket.Data = ("{\"OutData\": {\"Delay\": "+delay+" , \"Port\":\"Zig1\", \"Showname\":\""+ showName +"\", \"Dir\":\""+ directory +"\", \"Dout\":\"" + dataOut + "\"}}");
+    websocket.send(JSON.stringify(dataPacket));
 
 }
 
@@ -201,7 +207,8 @@ function cueclick3(message){
     }
     cuevalue3.value = counter +1; //update the cue count
     delay = (new Date()-lastCueTime);
-    websocket.send("{\"OutData\": {\"Delay\": "+delay+" , \"Port\":\"Zig1\", \"Showname\":\""+ showName +"\", \"Dir\":\""+ directory +"\", \"Dout\":\"" + dataOut + "\"}}");
+    dataPacket.Data = ("{\"OutData\": {\"Delay\": "+delay+" , \"Port\":\"Zig1\", \"Showname\":\""+ showName +"\", \"Dir\":\""+ directory +"\", \"Dout\":\"" + dataOut + "\"}}");
+    websocket.send(JSON.stringify(dataPacket));
 
 }
 

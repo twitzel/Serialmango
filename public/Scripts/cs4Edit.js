@@ -10,6 +10,7 @@ var selected;
 var selectedPreviousZoomPoint = {};
 var arrayPrevious = [];
 var mouseDown = 0;
+var dataPacket = {};
 
 window.onload = init;
 function init(){
@@ -56,7 +57,8 @@ function testWebSocket()
 function onOpen(evt) {
     writeToScreen("CONNECTED");
     // autoplot = setInterval(function(){movedata()},30);
-    websocket.send('EDIT');
+    dataPacket.Type = 'EDIT';
+    websocket.send(JSON.stringify(dataPacket));
     context.clearRect(0,0,canvasWidth,canvasHeight);
 }
 
@@ -100,7 +102,8 @@ function writeToScreen(message) {
 }
 
 function loadclick(){
-    websocket.send('EDIT');
+    dataPacket.Type = 'EDIT';
+    websocket.send(JSON.stringify(dataPacket));
     context.clearRect(0,0,canvasWidth,canvasHeight);
 }
 
@@ -118,11 +121,15 @@ function undoclick(){
             }
         }
     }
+    else{
+        alert("Nothing more to UNDO");
+    }
 
 }
 
 function saveclick(){
-
+    dataPacket.Type = 'CUECREATE';
+    websocket.send(JSON.stringify(dataPacket));
 }
 
 function pixelLoad(item){

@@ -2,6 +2,7 @@
  * Created by Steve on 11/4/13.
  */
 var wsUri = "ws://" + window.location.hostname + ":8080";
+var dataPacket = {};
 
 window.onload = init;
 function init()
@@ -140,7 +141,9 @@ function timeZoneChange()
 {
     timeZone = document.getElementById('timeZoneCombo');
     value = timeZone.value;
-    websocket.send("TME TZ " + value);
+    dataPacket.Type = 'TME TZ';
+    dataPacket.Data = value;
+    websocket.send(JSON.stringify(dataPacket));
 }
 
 function passWord(){

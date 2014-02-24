@@ -1,608 +1,811 @@
+
 /**
- * Created by Steve on 2/21/14.
+ * Created by Steve on 9/30/13.
  */
-var autoplot;
-var pixelArray = [];
-var startTime;
-var startTimeZoom;
-var msPerPixelMain;
-var msPerPixelZoom;
-var zoomFactor = 0;
-var zoomLocation = 50;
-var selected;
-var selectedPrevious;
-window.onload = init;
-function init(){
 
-    wsUri = "ws://" + window.location.hostname + ":8080";
-    output = document.getElementById("websocketlog");
 
-    document.getElementById('mainCanvas').width =  document.getElementById('canvasDiv').offsetWidth;
-    canvas = document.getElementById('mainCanvas');
-    context = canvas.getContext('2d');
-    canvasWidth = canvas.width;
-    canvasHeight = canvas.height;
-    rect = canvas.getBoundingClientRect();
-    canvas.addEventListener("mouseover",canvasMouseover, false);
-    canvas.addEventListener("mouseout",canvasMouseout, false );
-    canvas.addEventListener("mousedown",canvasMousedown, false );
-    canvas.addEventListener("mouseup",canvasMouseup, false );
-    canvas.addEventListener("mousemove",canvasMousemove, false );
+MongoClient = require('mongodb').MongoClient;
+var fs = require('fs');
+var fse = require('fs.extra');
+var os = require('os');
+var express = require('express');
+var routes = require('./routes');
+var user = require('./routes/user');
+var time = require('time');
+var timedOutInterval = 200; //time to wait between serial transmitts
+var timedOut = true; // set to false will delay transmission;
+var comlib = require('./comlib');
+var spawn = require('child_process').spawn;
+var nodemailer = require("nodemailer");
 
-    document.getElementById('zoomCanvas').width =  document.getElementById('canvasDiv').offsetWidth;
-    zoomcanvas = document.getElementById('zoomCanvas');
-    zoomcontext = zoomcanvas.getContext('2d');
-    zoomcanvasWidth = zoomcanvas.width;
-    zoomcanvasHeight = zoomcanvas.height;
-    zoomcanvas.addEventListener("mouseover", zoomcanvasMouseover, false);
-    zoomcanvas.addEventListener("mouseout", zoomcanvasMouseout, false );
-    zoomcanvas.addEventListener("mousedown", zoomcanvasMousedown, false );
-    zoomcanvas.addEventListener("mouseup", zoomcanvasMouseup, false );
-    zoomcanvas.addEventListener("mousemove", zoomcanvasMousemove, false );
+var lastCueReceived = {"Time" : "10/09/13 15:20:04.20", "Source" : "Midi1", "InData" : "F0 7F 05 02 01 01 31 2E 30 30 F7 "};
+var serialDataSocket;
+var lastCueReceivedInternalTime= new Date();
+var lastCueReceivedExternalTime = new Date();
+var usbstickPath;
+var path;
+var sourcePath;
+var destinationPath;
+var mongoDirectory;
+var collectionName = 'WizDb';
+var smtpTransport;
 
-    testWebSocket();
-}
+//routine to ensure that serial data is not sent more than
+// every timedOutInterval
+//
+// adds time stamp to Outgoing data and puts it in Log collection
 
-function testWebSocket()
+sendOutput = function (dataToSend)
 {
-    websocket = new WebSocket(wsUri);
-    websocket.onopen = function(evt) { onOpen(evt) };
-    websocket.onclose = function(evt) { onClose(evt) };
-    websocket.onmessage = function(evt) { onMessage(evt) };
-    websocket.onerror = function(evt) { onError(evt) };
+    var addTime = "{\"Time\":";
+    var timerStartTime;
+    var lastconverted;
 
-}
+    if (timedOut)
+    {
+        timedOut = false;
+        comlib.write("         " + dataToSend + "\n\r"); // add spaces at beginning for R4 zigbee stuff and terminate\n\r
+        setTimeout(function(){timedOut = true;}, timedOutInterval);
+        timerStartTime = new Date();
+        console.log(dataToSend);
+        //
 
-function onOpen(evt) {
-    writeToScreen("CONNECTED");
-    // autoplot = setInterval(function(){movedata()},30);
 
-}
+        //change the time of data sent to correlate with CS-4 I/O clock
+        lastconverted   = new Date(lastCueReceived.Time);
+        addTime = addTime + "\""+  (new Date( lastconverted.setMilliseconds(lastconverted.getMilliseconds() + (timerStartTime -lastCueReceivedInternalTime)))).toISOString() +"\", \"Dout\" : \"" + dataToSend + "\"}";
 
-function onClose(evt) {
-    writeToScreen("DISCONNECTED");
-    clearInterval(autoplot);
-}
+        //send it out the socket
+        comlib.websocketsend("  Sent: " + addTime) ;
 
-function onMessage(evt)    {
-    message = JSON.parse(evt.data);
-    if(message.packetType == 'cuefiledata'){
-        inMessage = message.data;
-        pixelLoad(inMessage);
-        canvasPlot();
+        //Log the data into the collection
+        addTime = JSON.parse(addTime);
+        addTime.Time = new Date(addTime.Time); //get to real time format.
+        collectionLog.insert(addTime, {w: 1}, function (err, result) {
+            console.log(result);
+        });
+        //log the time difference for testing
+        console.log("Time difference & New data stored  -->> "+ (timerStartTime -lastCueReceivedInternalTime)+ "---" + addTime);
+
     }
-    else{
-        writeToScreen(inMessage);
+    else
+    {
+        //since we are not ready for this to go out (or we wouldn't be here) -- reset a timer with actual time left.
+        setTimeout(function(){sendOutput(dataToSend);}, ( timedOutInterval -(timerStartTime - Date())))
     }
 
-}
+};
 
-function onError(evt) {
-    writeToScreen('<span style="color: red;">ERROR:</span> ' + evt.data);
-}
-
-function doSend(message) {
-    writeToScreen("SENT: " + message);  websocket.send(message);
-}
-
-function writeToScreen(message) {
-    // get time of incoming cue
-    lastCueTime = new Date();
-//  output.innerHTML = message + "<BR>" + output.innerHTML;
-
-
-
-
-
-    //output.value = message+"<BR>"+output.value;
-}
-
-function loadclick(){
-    websocket.send('EDIT');
-    context.clearRect(0,0,canvasWidth,canvasHeight);
-}
-
-function pixelLoad(item){
-    var count = 0;
-    pixelArray = []; //clear the array
-
-    if (item.length == 0) {
-        console.log("not Found");
+exports.setup = function()
+{
+    //iterate through all of the system IPv4 addresses
+    // we should connect to address[0] with the webserver
+    //so lets grab it and make a global variable to
+    //use elseware
+    var interfaces = os.networkInterfaces();
+    global.addresses = [];
+    for (k in interfaces) {
+        for (k2 in interfaces[k]) {
+            var address = interfaces[k][k2];
+            if (address.family == 'IPv4' && !address.internal) {
+                addresses.push(address.address)
+            }
+        }
     }
-    else {
-        for(var i = 0; i< item.length; i++){
-            pixelArray[count] =  item[i]; // stick the object into the array
-            count++;
-            //iterate over all of the OutData
+    global.myuri = addresses[0];
+    console.log('My IP Address is: ' + addresses[0]);
 
-            for(var j = 0; j < item[i].OutData.length; j++){
-                var packet = {};
-                //  packet.Time = new Date(new Date(item[i].Time) + item[i].OutData[j].Delay).toISOString();
-                packet.Time = new Date(item[i].Time);
-                packet.Time = new Date(packet.Time.setMilliseconds(packet.Time.getMilliseconds() + item[i].OutData[j].Delay)).toISOString();
-                packet.Data = item[i].OutData[j];
-                dir = item[i].OutData[j].Dir;
-                port = item[i].OutData[j].Port.toUpperCase();
-                showname = item[i].OutData[j].Showname;
-                dataToSend = item[i].OutData[j].Dout;
-                delay = item[i].OutData[j].Delay;
-                if(dir ==""){
-                    outstring = port + " " + showname + " " + dataToSend;
+
+    //MongoClient.connect("mongodb://localhost:27017/WizDb", function(err, db)
+    // MongoClient.connect("mongodb://192.168.2.10:27017/WizDb", function(err, db)
+
+    MongoClient.connect("mongodb://" + global.myuri + ":27017/" + collectionName, function(err, db)
+    {
+        if (err)
+        {
+
+            console.log("Connection to mongo failed:"+err)  ;
+        }
+        else
+        {
+            console.log("CS4: We are now connected to MongoDb, Wiz database, log collection");
+
+            try{
+                db.createCollection("log", { capped : true, size : 10000000, max : 25000 },function (err,res){} );
+            }
+            catch(err){
+                console.log("create collection errer" + err);
+            }
+
+            global.collectionLog = db.collection('log');
+            //   collectionLog.ensureIndex({Time:1},function (err,res){});
+            global.collectionCue = db.collection('cue');
+            global.collectionStartup = db.collection('startup');
+            collectionCue.ensureIndex({InData:1},function (err,res){});
+
+
+            //set timezone of pi
+            collectionStartup.findOne({'TimeZoneSet':{$exists:true}}, function(err,res){
+                if(res){
+                    var a = res.TimeZoneSet;
+                    time.tzset(res.TimeZoneSet);
                 }
                 else{
-                    outstring = port + " " + showname + " " + dir + " " + dataToSend;
+                    time.tzset('US/Eastern'); // this is the default time zone if nothing is set
                 }
 
-                packet.output = outstring;
-                pixelArray[count] = packet;
-                count++;
+            });
+
+            // MOVED HERE = open serial port after mongo is running
+
+            //now lets find out if we are on a windows system
+            // if we are open the required com port
+            //if not open the pi port
+            console.log("Host System Name: " + os.type());
+            var baud = 115200;
+            if(os.type() == 'Windows_NT')
+            {
+                comlib.openSerialPort('com19', baud); //windows
             }
+            else
+            {
+                comlib.openSerialPort("/dev/ttyUSB0", baud); //not windows - Raspberry PI
+            }
+
         }
-    }
-    //sort array by time in case there are some re-done cues
-    pixelArray.sort(function(a,b){
-        return new Date(a.Time) - new Date(b.Time);
     });
-}
 
-function timeRound(time, interval){
-    diff = new Date(time);
-    diff.setMinutes(diff.getMinutes() + interval);
-    diff.setSeconds(0);
-    diff.setMilliseconds(0);
-    return diff;
-}
+    //set up all routes HERE
+    //set up all routes HERE
+    //set up all routes HERE
+    //set up all routes HERE
+    app.get('/com', routes.com);
+    app.get('/', routes.index);
+    app.get('/users', user.list);
+    app.get('/data', routes.data);
+    app.get('/data2', routes.data2);
+    app.get('/data3', routes.data3);
+    app.get('/cs4Start', routes.cs4Start);
+    app.get('/cs4Home', routes.cs4Home);
+    app.get('/cs4Timing', routes.cs4Timing);
+    app.get('/cs4Info', routes.cs4Info);
+    app.get('/cs4VerticalScroll', routes.cs4VerticalScroll);
+    app.get('/cs4Help', routes.cs4Help);
+    app.get('/cs4Settings', routes.cs4Settings);
+    app.get('/cs4Edit', routes.cs4Edit);
 
-function timeDifference(time, start){
-    return(new Date(time) - new Date(start));
-}
+    //set timezone of pi
+    // time.tzset('US/Pacific');
+    time.tzset('US/Eastern');
+    //set up email
+    smtpTransport = nodemailer.createTransport("SMTP",{
+        service: "Gmail",
+        auth: {
+            user: "stevewitz@gmail.com",
+            pass: "panema2020"
+        }
+    });
 
-function drawTimeLine(start, end){
-    context.globalAlpha = 1;
-    for(var i = 10; i< canvasWidth; i+=10){
-        if (i % 100 == 0) {
-            context.beginPath();
-            context.strokeStyle = 'red';
-            context.moveTo(i, canvasHeight / 2 - 10);
-            context.lineTo(i, canvasHeight / 2 + 10);
-            new Date().toLocaleTimeString().substring(0,8);
-            context.fillText( new Date(new Date(start).setMilliseconds(new Date(start).getMilliseconds() + i*msPerPixelMain)).toLocaleTimeString().substring(0,8),i-15, canvasHeight/2+20);
+};
 
-            context.stroke();
+
+
+/*Data in may have a prefix.  That prefix is a command and handled here:
+ TME                     Sets the CS4 I/O clock
+ TME TZ                  Changes system time zone
+ LOG                     Sends log file out to client
+ SEND                    Sends dommangs to CS$ I/O
+ COPYTOUSB               Copies all mongodb files to usb stick
+ COPYFROMUSB             Copies all mongodb files from usb stick
+ COPYTOINTERNAL          Copies all mongodb files to internal location
+ COPYFROMINTERNAL        Copies all mongodb files from internal location
+ EDIT                    Sends all Cue collection data to client
+
+
+ */
+exports.websocketDataIn = function(dataSocket, Socket){
+    if(dataSocket.substr(0,3) == "TME") // if this is a time command
+    {
+        var datain;
+        if(dataSocket.substr(0,6) == "TME TZ")//if timezone command
+        {
+            datain = dataSocket.substr(7);
+            time.tzset(datain); // tz string from client: CMD TZ US/Pacific
+            //  collectionStartup.update({'TimeZoneChanged':'Yes'}, {$set:{'TimeZoneSet' : datain}},{upsert:true, w:1},function(err,res){
+            collectionStartup.update({'TimeZoneSet':{$exists:true}}, {$set:{'TimeZoneSet' : datain}},{upsert:true, w:1},function(err,res){
+
+                console.log('Time Zone Updated '+res + " "+ datain);
+
+
+            });
+        }
+        else
+        {
+            //set the clock on the CS4 I/O board every time the "info" screen is opened
+            datain = dataSocket.substr(4);
+            datain = SetCS4Time(datain);
+            comlib.write(datain);
         }
 
-        else {
-            context.beginPath();
-            context.strokeStyle = 'black';
-            context.moveTo(i, canvasHeight / 2 - 5);
-            context.lineTo(i, canvasHeight / 2 + 5);
-            context.stroke();
+    }
+    else if(dataSocket.substr(0,3) == "LOG")//requesting entire log file to be sent log file
+    {
+        var dataToSend = "";
+
+        if(dataSocket.substr(0,7) == "LOG 100")
+        {
+            comlib.websocketsend("* Preparing Data For Display. \n* Please Wait. \n* (may take several seconds) ", Socket) ;
+            collectionLog.find({},{}).sort({"Time": -1}).limit(1000).toArray(function(error,logfile){
+                for(var i = 0; i <logfile.length;i++)
+                {
+                    logfileData = JSON.stringify(logfile[i]);
+
+                    if(logfile[i].Dout)
+                    {
+                        //comlib.websocketsend(".    Sent: " + logfileData, Socket) ;
+                        dataToSend = dataToSend + ".    Sent: " + logfileData + "\n" ;
+                    }
+                    else
+                    {
+                        //comlib.websocketsend(parseCue(logfileData),Socket);
+                        dataToSend = dataToSend + parseCue(logfileData) + "\n" ;
+                    }
+                }
+                comlib.websocketsend(dataToSend, Socket) ;
+            });
+        }
+        else
+        {
+            comlib.websocketsend("* Preparing Data For Display. \n* Please Wait. \n* (may take up to 1 minute) ", Socket) ;
+            collectionLog.find({},{}).sort({"Time": 1}).toArray(function(error,logfile){
+                for(var i = 0; i <logfile.length;i++)
+                {
+                    logfileData = JSON.stringify(logfile[i]);
+
+                    if(logfile[i].Dout)
+                    {
+                        dataToSend = ".    Sent: " + logfileData + "\n" + dataToSend;
+                    }
+                    else
+                    {
+                        dataToSend = parseCue(logfileData) + "\n" + dataToSend;
+                    }
+                }
+                comlib.websocketsend(dataToSend, Socket) ;
+            });
+
         }
     }
-}
+    else if (dataSocket.substr(0,4) == "SEND") // these are commands to send directly to the CS4I/0
+    {
+        comlib.write(dataSocket.substr(5)+ '\r'); // send it out the serial port
+    }
+    else if(dataSocket.substr(0,9) == "COPYTOUSB")
+    {
+        copyToUSB();
+    }
+    else if(dataSocket.substr(0,11) == "COPYFROMUSB")
+    {
+        copyFromUSB();
+    }
+    else if(dataSocket.substr(0,14) == "COPYTOINTERNAL")
+    {
+        copyToInternal();
+    }
+    else if(dataSocket.substr(0,16) == "COPYFROMINTERNAL")
+    {
+        copyFromInternal();
+    }
+    else if(dataSocket.substr(0,4) == "EDIT"){
+        collectionCue.find({},{}).sort({"Time": 1}).toArray(function(error,cuefile){
+            var packet = {};
+            packet.packetType="cuefiledata";
+            packet.data = cuefile;
 
-function drawData(){
-    var countTop = 0;
-    var countBottom = 0;
-    context.globalAlpha = 1;
-    for(var i = 0; i< pixelArray.length; i++){
-        context.beginPath();
-        pixelX=timeDifference(pixelArray[i].Time, startTime)/msPerPixelMain;
-        pixelArray[i].normalPoint = pixelX;
-        if(pixelArray[i].output){//this is output data
-            countTop++;
+            //JSON.parse(x);
+            //packettype = x.packettype;
+            //data = x.data;
+            comlib.websocketsend(JSON.stringify(packet), Socket);
 
-            context.strokeStyle = 'blue';
-            context.moveTo(pixelX, canvasHeight / 2 - 25);
-            context.lineTo(pixelX, 15);
-            if((countTop%5 ==0) || (countTop ==1)){
-                wrapText(context, pixelArray[i].output, pixelX-1.5,canvasHeight/2-25,canvasHeight/2-25,10);
+        });
+    }
+
+    else
+    {
+        serialDataSocket = JSON.parse(dataSocket);
+        //now we know something is attached to the incoming cue so put it in Cue collection
+        // incoming cue = lastCueReceived
+        //lastCueReceived is a json parsed object from my io board
+        // serialDataSocket is the array data from the websocket
+
+        //
+        collectionCue.update({'InData':lastCueReceived.InData}, {$set: lastCueReceived},{upsert:true, w:1},function(err,res){
+
+            console.log('InData to collection Cue'+res);
+        });
+
+        collectionCue.update({'InData': lastCueReceived.InData}, {$push:serialDataSocket},function(err,res){
+
+            console.log('added Dout to collection Cue'+res);
+        });
+
+        //send the data out to the CS4 I/O
+        var dir = serialDataSocket.OutData.Dir;    // ****** needs to ba added to R4-4 Receiver Parsing ****** //
+        // var dir = "";
+        var port = serialDataSocket.OutData.Port;
+        var showname = serialDataSocket.OutData.Showname;
+        var dataToSend = serialDataSocket.OutData.Dout;
+        if(dir =="")
+        {
+            var  outstring = port + " " + showname + " " + dataToSend;
+        }
+        else
+        {
+            var outstring = port + " " + showname + " " + dir + " " + dataToSend;
+        }
+
+        sendOutput(outstring);
+    }
+};
+
+// This routine receives serial cue data,
+// parses it and sends it out the web socket
+// puts it in Log collection.
+//
+// Then checks to Cue file to see if there any matching cues.
+// If so, goes thrugh all outgoing cues.
+// sets output timers to send data back to CS-4 IO via serial.
+
+
+exports.socketDataOut = function (data) {
+    var type = "";
+    var indata;
+    var source;
+    var serialData;
+    var dataToSend;
+    var delay;
+    var port;
+    var showname;
+    var outstring;
+    var dir; // ****** needs to ba added to R4-4 Receiver Parsing ****** //
+
+    // put the time string into proper form
+
+    serialData = JSON.parse(data);
+    serialData.Time = new Date(serialData.Time);
+
+
+    // make sure this is incoming cue data
+    // if it is, then search for matching cue
+    //
+    // If matching cue found then iterate through
+    // OutData and send the stuff out
+    // and send output data to log file
+
+    //added search fields: must match InData and Source
+    if (serialData.InData != null) {
+        collectionCue.find({$and: [{'InData': serialData.InData} , {'Source': serialData.Source }]}).toArray(function (err, item) {
+            //collectionCue.find({'InData': serialData.InData }).toArray(function (err, item) {
+            if (item.length == 0) {
+                console.log("not Found");
             }
-        }
-        else{      //this in cue input data
-            countBottom++;
-            context.strokeStyle = 'green';
-            x=timeDifference(pixelArray[i].Time, startTime);
-            context.moveTo(pixelX, canvasHeight / 2 + 25);
-            context.lineTo(pixelX, canvasHeight - 5);
-            if((countBottom%5 ==0) || (countBottom ==1)){
-                wrapText(context, parseCue(pixelArray[i]), pixelX-1.5,canvasHeight  - 5,canvasHeight/2-25,10);
+            else {
+
+                for(var i = 0; i< item[0].OutData.length; i++)
+                {
+                    dir = item[0].OutData[i].Dir;    // ****** needs to ba added to R4-4 Receiver Parsing ****** //
+                    // dir = "xxxx";
+                    port = item[0].OutData[i].Port.toUpperCase();
+                    showname = item[0].OutData[i].Showname;
+                    dataToSend = item[0].OutData[i].Dout;
+                    delay = item[0].OutData[i].Delay;
+                    if(dir =="")
+                    {
+                        outstring = port + " " + showname + " " + dataToSend;
+                    }
+                    else
+                    {
+                        outstring = port + " " + showname + " " + dir + " " + dataToSend;
+                    }
+
+                    setTimeout(sendOutput, delay, outstring);
+                    console.log(item[0].OutData[i].Dout + "  Delay "+item[0].OutData[i].Delay);
+                }
+
             }
-        }
-        context.stroke();
-    }
-}
 
-function canvasPlot(){
-    //plot all of the pixelArray data on the canvas
-    //find time difference between first and last event.
-
-    startTime = timeRound(pixelArray[0].Time, -0); //round down to nearest minute
-    endTime = timeRound(pixelArray[pixelArray.length -1].Time, 1);
-
-    //timeDifference = new Date(pixelArray[pixelArray.length -1].Time) - new Date(pixelArray[0].Time);
-    // timeDifference = new Date(pixelArray[pixelArray.length -1].Time) - new Date(startTime);
-    timediff = timeDifference(endTime, startTime);
-    msPerPixelMain = timeDifference(endTime, startTime)/canvasWidth;
-    t = msPerPixelMain;
-    drawTimeLine(startTime, endTime);
-    drawData();
-
-}
-
-function zoomChange(value){
-    zoomFactor = value;
-    updateCanvas();
-}
-
-function locationChange(value){
-    zoomLocation = value;
-    updateCanvas();
-}
-
-function updateCanvas(){
-    context.clearRect(0,0,canvasWidth,canvasHeight);
-    drawTimeLine(startTime, endTime);
-    drawData();
-    context.fillStyle = 'gray';
-    context.globalAlpha = 0.5;
-    offset = (canvasWidth/2) * (zoomFactor/100);
-    shift = offset * (50 - zoomLocation)/50;
-    minPixel = offset-shift;
-    maxPixel = canvasWidth - (offset + shift);
-    context.fillRect(0,0,minPixel, canvasHeight);
-    context.fillRect(maxPixel,0, canvasWidth, canvasHeight);
-    context.stroke();
-    //Now put it in the zoomed canvas
-    drawZoomTimeLine(minPixel , maxPixel );
-
-}
-/////////////////////////////////
-function drawZoomTimeLine(start, end){
-    zoomcontext.globalAlpha = 1;
-    startTimeZoom =  new Date(new Date(startTime).setMilliseconds(new Date(startTime).getMilliseconds() + minPixel*msPerPixelMain));
-    endTimeZoom =    new Date(new Date(startTime).setMilliseconds(new Date(startTime).getMilliseconds() + minPixel*msPerPixelMain + maxPixel*msPerPixelMain));
-    msPerPixelZoom = (maxPixel - minPixel)*msPerPixelMain/zoomcanvasWidth;
-    zoomcontext.clearRect(0,0,zoomcanvasWidth,zoomcanvasHeight);
-    for(var i = 10; i< zoomcanvasWidth; i+=10){
-        zoomcontext.beginPath();
-        if (i % 100 == 0) {
-            zoomcontext.strokeStyle = 'red';
-            zoomcontext.moveTo(i, zoomcanvasHeight / 2 - 10);
-            zoomcontext.lineTo(i, zoomcanvasHeight / 2 + 10);
-            zoomcontext.fillText( new Date(new Date(startTime).setMilliseconds(new Date(startTime).getMilliseconds() + minPixel*msPerPixelMain + i*msPerPixelZoom)).toLocaleTimeString().substring(0,8),i-15, zoomcanvasHeight/2+20);
-        }
-        else {
-            zoomcontext.strokeStyle = 'black';
-            zoomcontext.moveTo(i, zoomcanvasHeight / 2 - 5);
-            zoomcontext.lineTo(i, zoomcanvasHeight / 2 + 5);
-        }
-        zoomcontext.stroke();
+        });
     }
 
-//now plot the data
+    if(data.length >= 35) // this is to let GETTIME come through and get logged GETTIME returns a string 34 characters
+    {
+        lastCueReceived = (JSON.parse(JSON.stringify(serialData))); // store the data here in case of Cue file generation
+        //get the internal system time or this event so we and keep track of it
+        lastCueReceivedInternalTime = new Date();
+        lastCueReceivedExternalTime = new Date(lastCueReceived);
 
+        //Log the data into the collection
+        collectionLog.insert(serialData, {w: 1}, function (err, result) {
+            console.log(result);
+        });
 
-    for(var i = 0; i< pixelArray.length; i++){
-        zoomcontext.beginPath();
-
-
-
-        if((new Date(pixelArray[i].Time) >=  new Date(startTimeZoom)) && (new Date(pixelArray[i].Time) <= new Date(endTimeZoom))){
-            pixelX = timeDifference(pixelArray[i].Time,startTimeZoom)/msPerPixelZoom;
-            pixelArray[i].zoomPoint = pixelX;
-            if(pixelArray[i].output){//this is output data
-                zoomcontext.strokeStyle = 'blue';
-                zoomcontext.moveTo(pixelX, zoomcanvasHeight / 2 - 25);
-                zoomcontext.lineTo(pixelX, 15);
-                // rotateText(zoomcontext,pixelArray[i].output , pixelX-1.5, zoomcanvasHeight / 2 - 25);
-                wrapText(zoomcontext, pixelArray[i].output, pixelX-1.5,zoomcanvasHeight/2-25,zoomcanvasHeight/2-25,10);
+        //parse the incoming cue data
+        comlib.websocketsend(parseCue(data));
+    }
+    else
+    {   //we have startup time from the CS4 I/O board
+        collectionStartup.insert(serialData, {w: 1}, function (err, result) {
+            console.log(result);
+            try{
+                comlib.websocketsend("CS4 Current time is:" + data);
             }
-            else{      //this in cue input data
-                zoomcontext.strokeStyle = 'green';
-                zoomcontext.moveTo(pixelX, zoomcanvasHeight / 2 + 25);
-                zoomcontext.lineTo(pixelX, zoomcanvasHeight  - 5);
-                wrapText(zoomcontext, parseCue(pixelArray[i]), pixelX-1.5,zoomcanvasHeight  - 5,zoomcanvasHeight/2-25,10);
-                // rotateText(zoomcontext,parseCue(pixelArray[i]) , pixelX-1.5, zoomcanvasHeight  - 5);
+            catch(err)
+            {//do nothing
             }
-            zoomcontext.stroke();
-        }
-        else{
-            pixelArray[i].zoomPoint = -1;//point is not on graph
-        }
+        });
+
     }
+};
 
-}
+function parseCue(data)
+{
+    serialData = JSON.parse(data);
+    serialData.Time = new Date(serialData.Time);
 
-function wrapText(cxt, text, x, y, maxWidth, lineHeight) {
-    var words = text.split(" ");
-    var line = "";
-
-    for(var n = 0; n < words.length; n++) {
-        var testLine = line + words[n] + " ";
-        var metrics = cxt.measureText(testLine);
-        var testWidth = metrics.width;
-        if(testWidth > maxWidth) {
-            cxt.save();
-            cxt.rotate(-Math.PI/2);
-            cxt.fillText(line, -y, x);//context.fillText(line, x, y);
-            cxt.restore();
-            line = words[n] + " ";
-            x += lineHeight;
-        }
-        else {
-            line = testLine;
-        }
-    }
-
-    cxt.save();
-    cxt.rotate(-Math.PI/2);
-    cxt.fillText(line, -y, x);
-    cxt.restore();
-}
-function rotateText(cxt,text, x,y){
-    /* zoomcontext.save();
-     zoomcontext.rotate(-Math.PI/2);
-     zoomcontext.fillText(text,-y, x); // fix coordinates for rotated change
-     zoomcontext.restore();
-     */
-    cxt.save();
-    cxt.rotate(-Math.PI/2);
-    cxt.fillText(text,-y, x, zoomcanvasHeight/2 -30); // fix coordinates for rotated change
-    cxt.restore();
-}
-function parseCue(data){
-
-    indata = data.InData;
-    source = data.Source;
+    indata = serialData.InData;
+    source = serialData.Source;
     // if cue is MIDI then get light cue number from hex string
     if (source.substr(0, 4) == "Midi") {
-        if (indata.substr(0, 2) == "F0"){// this is a light cue
+        if (indata.substr(0, 2) == "F0") // this is a light cue
+        {
             var space = "                                    ";
             var hex = "";
             var type;
 
             for (var i = 18; i < indata.length - 3; i += 3) // extra space added to data at end of string
             {
-                if (indata.substr(i,2) == 0x00){
+                if (indata.substr(i,2) == 0x00)
+                {
                     hex += '*';
                 }
-                else{
+                else
+                {
                     hex += String.fromCharCode(parseInt(indata.substr(i, 2), 16));
                 }
+
             }
-            type = 'Cue: ' + hex;
+            type = 'Sysex Cue: ' + hex;
         }
+
         else if (indata.substr(0, 1) == "8") {
             type = "Note Off";
         }
+
         else if (indata.substr(0, 1) == "9") {
             type = "Note On";
         }
+
         else if (indata.substr(0, 1) == "A") {
             type = "Polyphonic Aftertouch";
         }
+
         else if (indata.substr(0, 1) == "B") {
             type = "Control/Mode Change";
         }
+
         else if (indata.substr(0, 1) == "C") {
             type = "Program Change";
         }
+
         else if (indata.substr(0, 1) == "D") {
             type = "Channel Aftertouch";
         }
+
         else if (indata.substr(0, 1) == "E") {
             type = "Pitch Wheel Control";
         }
-        return (source + "  " + type + "  " +
-            "" + indata);
+
+        return (serialData.Time.toISOString() + "  " + source + "  " + type + ": " + indata);
+
+
+
     }
     else // just send data
     {
-        return (source + " " + indata);
+        return (serialData.Time.toISOString() + "  " + source + " " + indata);
     }
-}
-//............................................
-function canvasMouseover(event){
-    document.body.style.cursor  = 'pointer';
-    //   context.clearRect(0,0,300,300);
-    //   wrapText(context, event.clientX + " x pos " + event.clientY + " y pos", 100,200,200,10);
 
 }
-function canvasMouseout(event){
-    document.body.style.cursor  = 'default';
-    updateCanvas();
+
+/**
+ * @return {string}
+ */
+function SetCS4Time(curTime)
+{
+    var uptime=0;
+    var seconds = 0;
+    var minutes = 0;
+    var hours = 0;
+    var days = 0;
+    var month = 0;
+    var year = 0;
+    var timeZoneOffset = 0;
+    curTime = new Date(curTime);
+    timeZoneOffset = curTime.getTimezoneOffset();
+    year = curTime.getFullYear().toString();
+    month = parseInt(curTime.getMonth()) + 1; // months start with 1 in the timer chip
+    day = curTime.getDate();
+    hours = curTime.getHours();
+    minutes = curTime.getMinutes();
+    seconds = curTime.getSeconds();
+    return "SETTIME " + seconds + " " + minutes + " " + hours + " " + day + " " + month + " " + year.substr(2) + "\n\r";
+    //  sendData("SETTIME " + textBoxSecond.Text + " " + textBoxMinute.Text + " " + textBoxHour.Text + " " + textBoxDay.Text + " " + textBoxMonth.Text + " " + textBoxYear.Text);
 }
-function canvasMousedown(event){
-    //document.body.style.cursor  = 'e-resize';
-    //   context.clearRect(2,2,300,50);
-    //  context.rect(15,15,295,45);
-    //  context.stroke();
-}
-function canvasMouseup(event){
-    // document.body.style.cursor  = 'move';
-}
-function canvasMousemove(event){
-    context.globalAlpha = 1;
-    context.clearRect(2,2,350,17);
-    context.rect(2,2,350,17);
-    context.stroke();
-    //x = event.clientX -rect.left;
-    x= event.offsetX;
-    if(event.offsetY < canvasHeight/2){//we are in outgoing events part of canvas.  look at outgoing events
-        for(var i = 0; i < pixelArray.length; i++){
-            if(pixelArray[i].output && (x < pixelArray[i].normalPoint)){
-                distance = x-pixelArray[i].normalPoint; //get the parameters of where we are
-                point = i;
-                context.fillStyle= 'red';
-                if(i>0){
-                    while(!pixelArray[i-1].output){
-                        i--;
-                        if(i==0){
-                            break;
+
+function copyToUSB()
+{
+    // copies database to destinationPath.  Then copies to usbstick
+    // USBStick MUST be formatted to fat32
+
+    if(os.type() == 'Windows_NT')
+    {
+
+        usbstickPath = "G:/"; // this is based on particular usbsticl
+        path = usbstickPath ;
+        sourcePath = "d://data/db"; // this is based on system install of mongo
+        destinationPath = "d:/bac/dump"; //this is particular to the system mongo is running on
+        mongoDirectory = 'd:/mongo/bin/'; //this is based on system install of mongo
+        try
+        {
+            fs.statSync(usbstickPath);
+            spawn('d:/mongo/bin/mongodump', ['-o', destinationPath]).on('exit',function(code){
+                console.log('finished ' + code);
+                //remove files if they exist or copy will error with 'file exists'
+                fse.rmrf(usbstickPath +'dump', function (err) {
+                    if (err) {
+                        console.error('Error removing files ' + err);
+                    }
+                    fse.copyRecursive(destinationPath , usbstickPath +'dump', function (err) {
+                        if (err) {
+                            console.log('error '+ err);
                         }
-                    }
-                }
-                if(i >0){
-                    distance2 = pixelArray[i-1].normalPoint - x;
-                    if(distance > distance2){
-                        context.fillText(pixelArray[point].output,5,14,330);
-                    }
-                    else{
-                        context.fillText(pixelArray[i-1].output,5,14,330);
-                    }
-                }
-                break;
-            }
+
+                        comlib.websocketsend("Successfully Copied All Data to USB Stick");
+                        console.log("Successfully Copied " + destinationPath + " to " + usbstickPath);
+                    });
+                });
+
+            });
+        }
+        catch (er)
+        {
+            comlib.websocketsend("USB stick is not detected.  Please insert USB stick and try again ");
+            console.log("USB stick is not detected.  Please insert USB stick and try again ");
         }
     }
-    else{ //look at incoming events for a match
-        for(var i = 0; i < pixelArray.length; i++){
-            if(!pixelArray[i].output && (x < pixelArray[i].normalPoint)){
-                distance = x-pixelArray[i].normalPoint; //get the parameters of where we are
-                point = i;
-                context.fillStyle= 'red';
-                if(i>0){
-                    while(pixelArray[i-1].output){
-                        i--;
-                        if(i==0){
-                            break;
+    //this is for the pi
+    else
+    {
+        usbstickPath = "/media";
+        path = usbstickPath ;
+        sourcePath = "/data/db";
+        destinationPath = "/home/pi/dump"; // this wass abritrauraly chosen but now fixed
+        mongoDirectory = '/opt/mongo/bin/';
+
+        //have to find out the 'name' of the usb stick - it will be the only device in media
+        fs.readdir(usbstickPath, function(err,list){
+            if( list.length!= 0)
+            {
+                list.forEach(function (file) {
+                    // Full path of that file
+                    var path = usbstickPath + "/" + file;
+                    console.log("path: " + path)
+                    spawn(mongoDirectory + 'mongodump', ['-o', destinationPath]).on('exit',function(code){
+                        console.log('finished ' + code);
+                        fse.copyRecursive(destinationPath , path + '/dump', function (err) {
+                            if (err) {
+                                console.log('error '+ err);
+                            }
+                            comlib.websocketsend("Successfully Copied All Data to USB Stick");
+                            console.log("Successfully Copied " + destinationPath + " to " + usbstickPath);
+                        });
+                    });
+                });
+            }
+            else
+            {
+                comlib.websocketsend("USB stick is not detected.  Please insert USB stick and try again ");
+                console.log("USB stick is not detected.  Please insert USB stick and try again ");
+            }
+        });
+    }
+}
+
+function copyFromUSB()
+{
+    // copies database from usbstick to destination path, then restores to mongoDb
+    // USBStick MUST be formatted to fat32
+
+    if(os.type() == 'Windows_NT')
+    {
+
+        usbstickPath = "G:/"; // this is based on particular usb stick
+        path = usbstickPath ;
+        sourcePath = "d://data/db"; // this is based on system install of mongo
+        destinationPath = "d:/bac/dump"; //this is particular to the system mongo is running on
+        mongoDirectory = 'd:/mongo/bin/'; //this is based on system install of mongo
+        try
+        {
+            fs.statSync(usbstickPath);
+            //remove files from existing directory
+            fse.rmrf(destinationPath, function (err) {
+                if (err) {
+                    console.error(err);
+                }
+                fse.copyRecursive(usbstickPath +'dump', destinationPath , function (err) {
+                    if (err) {
+                        console.log('error '+ err);
+                    }
+                    spawn(mongoDirectory + 'mongorestore', ['--db',collectionName , destinationPath + "/" + collectionName , '--drop', '-vvv']).on('exit',function(code){
+                        console.log('finished ' + code);
+                    });
+
+                    comlib.websocketsend("Successfully Copied All Data from USB Stick");
+                    console.log("Successfully Copied " + usbstickPath + " to " + destinationPath);
+                });
+            });
+        }
+        catch (er)
+        {
+            comlib.websocketsend("USB stick is not detected.  Please insert USB stick and try again ");
+            console.log("USB stick is not detected.  Please insert USB stick and try again ");
+        }
+    }
+    //this is for the pi
+    else
+    {
+        usbstickPath = "/media";
+        path = usbstickPath ;
+        sourcePath = "/data/db";
+        destinationPath = "/home/pi/dump"; // this wass abritrauraly chosen but now fixed
+        mongoDirectory = '/opt/mongo/bin/';
+
+        //have to find out the 'name' of the usb stick - it will be the only device in media
+        fs.readdir(usbstickPath, function(err,list){
+            if( list.length!= 0)
+            {
+                list.forEach(function (file) {
+                    // Full path of that file
+                    var path = usbstickPath + "/" + file;
+                    console.log("path: " + path)
+
+                    fse.rmrf(destinationPath, function (err) {
+                        if (err) {
+                            console.error(err);
                         }
-                    }
-                }
-                if(i >0){
-                    distance2 = pixelArray[i-1].normalPoint - x;
-                    if(distance > distance2){
-                        context.fillText(parseCue(pixelArray[point]),5,14,330);
-                    }
-                    else{
-                        context.fillText(parseCue(pixelArray[i-1]),5,14, 330);
-                    }
-                }
-                break;
+                        console.log('we are here dir removed');
+                        fse.copyRecursive(path +'/dump', destinationPath , function (err) {
+                            if (err) {
+                                console.log('error '+ err);
+                            }
+                            console.log('copied from usb');
+                            spawn(mongoDirectory + 'mongorestore', ['--db',collectionName , destinationPath + "/" + collectionName , '--drop', '-vvv']).on('exit',function(code){
+                                console.log('finished ' + code);
+                            });
+
+                            comlib.websocketsend("Successfully Copied All Data from USB Stick");
+                            console.log("Successfully Copied " + usbstickPath + " to " + destinationPath);
+                        });
+                    });
+                });
             }
-        }
-    }
-
-    context.fillStyle="black";
-}
-//------------------------------
-function zoomcanvasMouseover(event){
-    document.body.style.cursor  = 'pointer';
-    //   context.clearRect(0,0,300,300);
-    //   wrapText(context, event.clientX + " x pos " + event.clientY + " y pos", 100,200,200,10);
-
-}
-function zoomcanvasMouseout(event){
-    document.body.style.cursor  = 'default';
-    updateCanvas();
-}
-function zoomcanvasMousedown(event){
-    //document.body.style.cursor  = 'e-resize';
-    //   context.clearRect(2,2,300,50);
-    //  context.rect(15,15,295,45);
-    //  context.stroke();
-}
-function zoomcanvasMouseup(event){
-    // document.body.style.cursor  = 'move';
-}
-function zoomcanvasMousemove(event){
-    zoomcontext.globalAlpha = 1;
-    updateCanvas();
-    zoomcontext.strokeStyle = 'blue';
-    zoomcontext.clearRect(2,2,350,17);
-    zoomcontext.rect(2,2,350,17);
-    zoomcontext.stroke();
-    x = event.offsetX;
-    if(event.offsetY < zoomcanvasHeight/2){//we are in outgoing events part of canvas.  look at outgoing events
-        for(var i = 0; i < pixelArray.length; i++){
-            if(pixelArray[i].output && (x < pixelArray[i].zoomPoint)){
-                distance = x-pixelArray[i].zoomPoint; //get the parameters of where we are
-                point = i;
-                zoomcontext.fillStyle= 'red';
-                if(i>0){
-                    while(!pixelArray[i-1].output){
-                        i--;
-                        if(i==0){
-                            break;
-                        }
-                    }
-                }
-                if(i >0){
-                    distance2 = pixelArray[i-1].zoomPoint - x;
-                    if(distance > distance2){
-                        zoomcontext.fillText(pixelArray[point].output,5,14,330);
-                        selected=point;
-                    }
-                    else{
-                        zoomcontext.fillText(pixelArray[i-1].output,5,14,330);
-                        selected = i-1;
-                    }
-                }
-                zoomcontext.fillStyle= 'black';
-                break;
+            else
+            {
+                comlib.websocketsend("USB stick is not detected.  Please insert USB stick and try again ");
+                console.log("USB stick is not detected.  Please insert USB stick and try again ");
             }
-        }
-        if(selected >=0 || selected <=pixelArray.length){
-            drawSingleEvent(selected,'white', 'green');
-        }
-
+        });
     }
-    else{ //look at incoming events for a match
-        for(var i = 0; i < pixelArray.length; i++){
-            if(!pixelArray[i].output && (x < pixelArray[i].zoomPoint)){
-                distance = x-pixelArray[i].zoomPoint; //get the parameters of where we are
-                point = i;
-                zoomcontext.fillStyle= 'red';
-                if(i>0){
-                    while(pixelArray[i-1].output){
-                        i--;
-                        if(i==0){
-                            break;
-                        }
-                    }
-                }
-                if(i >0){
-                    distance2 = pixelArray[i-1].zoomPoint - x;
-                    if(distance > distance2){
-                        zoomcontext.fillText(parseCue(pixelArray[point]),5,14,330);
-                        selected = point;
-                    }
-                    else{
-                        zoomcontext.fillText(parseCue(pixelArray[i-1]),5,14, 330);
-                        selected = i-1;
-                    }
-                }
-                break;
-            }
-        }
-        zoomcontext.strokeStyle = 'yellow';
-        zoomcontext.moveTo(pixelArray[selected].zoomPoint, zoomcanvasHeight / 2 + 25);
-        zoomcontext.lineTo(pixelArray[selected].zoomPoint, zoomcanvasHeight  - 5);
-        zoomcontext.stroke();
-    }
-
-    zoomcontext.fillStyle="black";
-}
-function drawSingleEvent(element, colorstroke, colorfill){
-    zoomcontext.strokeStyle = colorstroke;
-    zoomcontext.fillStyle = colorfill;
-    pixelX = timeDifference(pixelArray[element].Time,startTimeZoom)/msPerPixelZoom;
-    if(pixelArray[element].output){//this is output data
-        //  zoomcontext.strokeStyle = 'blue';
-        zoomcontext.moveTo(pixelX, zoomcanvasHeight / 2 - 25);
-        zoomcontext.lineTo(pixelX, 15);
-        wrapText(zoomcontext, pixelArray[element].output, pixelX-1.5,zoomcanvasHeight/2-25,zoomcanvasHeight/2-25,10);
-    }
-    else{      //this in cue input data
-        // zoomcontext.strokeStyle = 'green';
-        zoomcontext.moveTo(pixelX, zoomcanvasHeight / 2 + 25);
-        zoomcontext.lineTo(pixelX, zoomcanvasHeight  - 5);
-        wrapText(zoomcontext, parseCue(pixelArray[element]), pixelX-1.5,zoomcanvasHeight  - 5,zoomcanvasHeight/2-25,10);
-    }
-    zoomcontext.stroke();
-    zoomcontext.strokeStyle = 'black';
-    zoomcontext.fillStyle = 'black';
-
 }
 
+function copyToInternal()
+{
+    // copies database to destinationPath.
+    if(os.type() == 'Windows_NT')
+    {
+        //  usbstickPath = "G:/"; // this is based on particular usbsticl
+        //   path = usbstickPath ;
+        //  sourcePath = "d://data/db"; // this is based on system install of mongo
+        destinationPath = "d:/mongoBackup/dump"; //this is particular to the system mongo is running on
+        mongoDirectory = 'd:/mongo/bin/'; //this is based on system install of mongo
+
+        spawn('d:/mongo/bin/mongodump', ['-o', destinationPath]).on('exit',function(code){
+            comlib.websocketsend("Successfully copied all data to internal storage");
+            console.log("Successfully copied all data to internal storage: "+ destinationPath + " " + code);
+
+        });
+    }
+    //this is for the pi
+    else
+    {
+        //  usbstickPath = "/media";
+        //  path = usbstickPath ;
+        //  sourcePath = "/data/db";
+        destinationPath = "/home/pi/mongoBackup/dump"; // this was arbitrarily chosen but now fixed
+        mongoDirectory = '/opt/mongo/bin/';
+
+        spawn(mongoDirectory + 'mongodump', ['-o', destinationPath]).on('exit',function(code){
+            comlib.websocketsend("Successfully copied all data to internal storage");
+            console.log("Successfully copied all data to internal storage: "+ destinationPath + " " + code);
+
+        });
+    }
+}
+
+function copyFromInternal()
+{
+    // restores database from from internal storage to Mongo data path
+
+    if(os.type() == 'Windows_NT')
+    {
+        destinationPath = "d:/mongoBackup/dump"; //this is particular to the system mongo is running on
+        mongoDirectory = 'd:/mongo/bin/'; //this is based on system install of mongo
+
+        spawn(mongoDirectory + 'mongorestore', ['--db',collectionName , destinationPath + "/" + collectionName , '--drop', '-vvv']).on('exit',function(code){
+            console.log('finished ' + code);
+            comlib.websocketsend("Successfully Copied All Data from Internal Storage");
+            console.log("Successfully Copied " + destinationPath + " to " + mongoDirectory);
+        });
+    }
+    //this is for the pi
+    else
+    {
+        destinationPath = "/home/pi/mongoBackup/dump"; // this was arbitrarily chosen but now fixed
+        mongoDirectory = '/opt/mongo/bin/';
+
+        spawn(mongoDirectory + 'mongorestore', ['--db',collectionName , destinationPath + "/" + collectionName , '--drop', '-vvv']).on('exit',function(code){
+            console.log('finished ' + code);
+            comlib.websocketsend("Successfully Copied All Data from Internal Storage");
+            console.log("Successfully Copied " + destinationPath + " to " + mongoDirectory);
+        });
+    }
+}
+
+exports.ledOn = function(){
+
+    if(os.type() != 'Windows_NT') // this is only for the pi
+    {
+        var led = require('fastgpio');
+        led.prepareGPIO(4);
+        led.set(4);
+    }
+    //send startup email
+    // setup e-mail data with unicode symbols
+    var mailOptions = {
+        from: "CS4 192.168.2.10 ✔ <stevewitz@gmail.com>", // sender address
+        to: "steve@wizcomputing.com      ", // comma seperated list of receivers
+        subject: "Message from CS4 ✔", // Subject line
+        text: "This CS4 has just been started", // plaintext body
+        html: "This CS4 has just been started" // html body
+    }
+
+// send mail with defined transport object
+    smtpTransport.sendMail(mailOptions, function(error, response){
+        if(error){
+            console.log(error);
+        }
+        else{
+            console.log("Message sent: " + response.message);
+        }
+    });
+};
+
+exports.ledOff = function(){
+
+    if(os.type() != 'Windows_NT') // this is only for the pi
+    {
+        var led = require('fastgpio');
+        led.prepareGPIO(4);
+        led.unset(4);
+    }
+};

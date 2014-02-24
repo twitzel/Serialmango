@@ -3,6 +3,8 @@
  */
 var status;
 var autoplot;
+var dataPacket = {};
+
 window.onload = init;
 function init(){
 
@@ -65,7 +67,9 @@ function onError(evt) {
 }
 
 function doSend(message) {
-    writeToScreen("SENT: " + message);  websocket.send(message);
+    writeToScreen("SENT: " + message);
+    dataPacket.Data = message;
+    websocket.send(JSON.stringify(dataPacket));
 }
 
 function writeToScreen(message) {
