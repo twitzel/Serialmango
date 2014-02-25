@@ -129,6 +129,7 @@ function undoclick(){
 
 function saveclick(){
     dataPacket.Type = 'CUECREATE';
+    dataPacket.Data = pixelArray;
     websocket.send(JSON.stringify(dataPacket));
 }
 

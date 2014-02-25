@@ -321,34 +321,53 @@ exports.websocketDataIn = function(dataSocket, Socket){
         }
         else if (dataSocket.Type == "CUECREATE"){
             copyToInternal();//copy to create a backup
-            collectionCue.remove({},function(err,numberRemoved){
+        /*    collectionCue.remove({},function(err,numberRemoved){
                 console.log("inside remove call back" + numberRemoved);
             });
-
-            for(i = 0; i< dataSocket.Data; i++){
-
+        */
+            for(i = 0; i< dataSocket.Data.length; i++){
+                lastCueReceivedEdit = {};
+                serialDataSocketEdit ={};
                 //setup lastcue received
                 //calculate delay for each cue
+                if(dataSocket.Data[i].OutData){ // this is an incoming cue, so put data in proper form
+                    lastCueReceivedEdit.InData = dataSocket.Data[i].InData;
+                    lastCueReceivedEdit.Source = dataSocket.Data[i].Source;
+                    lastCueReceivedEdit.Time = dataSocket.Data[i].Time;
+                    lastCueReceivedEdit = JSON.parse(JSON.stringify(lastCueReceivedEdit));
+                }
+                else{ //This is cue data.  Adjust delay and put data in proper form
+                    serialDataSocketEdit.Delay = new Date(dataSocket.Data[i].Time) - new Date(JSON.parse(lastCueReceivedEdit).Time);
+                    serialDataSocketEdit.Dir = dataSocket.Data[i].Data.Dir;
+                    serialDataSocketEdit.Dout = dataSocket.Data[i].Data.Dout;
+                    serialDataSocketEdit.Port = dataSocket.Data[i].Data.Port;
+                    serialDataSocketEdit.Showname = dataSocket.Data[i].Data.Showname;
+
+
+                    serialDataSocketEdit = JSON.parse(JSON.stringify(serialDataSocketEdit));
+
+                    collectionCue.update({'InData':lastCueReceivedEdit.InData}, {$set: lastCueReceivedEdit},{upsert:true, w:1},function(err,res){
+
+                        console.log('InData to collection Cue'+res);
+                    });
+
+                    collectionCue.update({'InData': lastCueReceivedEdit.InData}, {$push:serialDataSocketEdit},function(err,res){
+
+                        console.log('added Dout to collection Cue'+res);
+                    });
+
+                }
 
 
             }
 
-            serialDataSocket = JSON.parse(dataSocket.Data);
+           //////// serialDataSocketEdit = JSON.parse(dataSocket.Data);
             //now we know something is attached to the incoming cue so put it in Cue collection
             // incoming cue = lastCueReceived
             //lastCueReceived is a json parsed object from my io board
             // serialDataSocket is the array data from the websocket
 
             //
-            collectionCue.update({'InData':lastCueReceived.InData}, {$set: lastCueReceived},{upsert:true, w:1},function(err,res){
-
-                console.log('InData to collection Cue'+res);
-            });
-
-            collectionCue.update({'InData': lastCueReceived.InData}, {$push:serialDataSocket},function(err,res){
-
-                console.log('added Dout to collection Cue'+res);
-            });
 
 
         }
