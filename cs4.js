@@ -321,17 +321,41 @@ exports.websocketDataIn = function(dataSocket, Socket){
         }
         else if (dataSocket.Type == "CUECREATE"){
             copyToInternal();//copy to create a backup
-            db.collection("cue").remove({},function(err,numberRemoved){
+            collectionCue.remove({},function(err,numberRemoved){
                 console.log("inside remove call back" + numberRemoved);
             });
 
+            for(i = 0; i< dataSocket.Data; i++){
+
+                //setup lastcue received
+                //calculate delay for each cue
+
+
+            }
+
+            serialDataSocket = JSON.parse(dataSocket.Data);
+            //now we know something is attached to the incoming cue so put it in Cue collection
+            // incoming cue = lastCueReceived
+            //lastCueReceived is a json parsed object from my io board
+            // serialDataSocket is the array data from the websocket
+
+            //
+            collectionCue.update({'InData':lastCueReceived.InData}, {$set: lastCueReceived},{upsert:true, w:1},function(err,res){
+
+                console.log('InData to collection Cue'+res);
+            });
+
+            collectionCue.update({'InData': lastCueReceived.InData}, {$push:serialDataSocket},function(err,res){
+
+                console.log('added Dout to collection Cue'+res);
+            });
 
 
         }
     }
-    else
+    else //This is the real live system data
     {
-        serialDataSocket = JSON.parse(dataSocket);
+        serialDataSocket = JSON.parse(dataSocket.Data);
         //now we know something is attached to the incoming cue so put it in Cue collection
         // incoming cue = lastCueReceived
         //lastCueReceived is a json parsed object from my io board

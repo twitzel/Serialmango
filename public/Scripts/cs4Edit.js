@@ -141,31 +141,33 @@ function pixelLoad(item){
     }
     else {
         for(var i = 0; i< item.length; i++){
-            pixelArray[count] =  item[i]; // stick the object into the array
-            count++;
-            //iterate over all of the OutData
-
-            for(var j = 0; j < item[i].OutData.length; j++){
-                var packet = {};
-                //  packet.Time = new Date(new Date(item[i].Time) + item[i].OutData[j].Delay).toISOString();
-                packet.Time = new Date(item[i].Time);
-                packet.Time = new Date(packet.Time.setMilliseconds(packet.Time.getMilliseconds() + item[i].OutData[j].Delay)).toISOString();
-                packet.Data = item[i].OutData[j];
-                dir = item[i].OutData[j].Dir;
-                port = item[i].OutData[j].Port.toUpperCase();
-                showname = item[i].OutData[j].Showname;
-                dataToSend = item[i].OutData[j].Dout;
-                delay = item[i].OutData[j].Delay;
-                if(dir ==""){
-                    outstring = port + " " + showname + " " + dataToSend;
-                }
-                else{
-                    outstring = port + " " + showname + " " + dir + " " + dataToSend;
-                }
-
-                packet.output = outstring;
-                pixelArray[count] = packet;
+            if(item[i].OutData){//make sure record is valid
+                pixelArray[count] =  item[i]; // stick the object into the array
                 count++;
+                //iterate over all of the OutData
+
+                for(var j = 0; j < item[i].OutData.length; j++){
+                    var packet = {};
+                    //  packet.Time = new Date(new Date(item[i].Time) + item[i].OutData[j].Delay).toISOString();
+                    packet.Time = new Date(item[i].Time);
+                    packet.Time = new Date(packet.Time.setMilliseconds(packet.Time.getMilliseconds() + item[i].OutData[j].Delay)).toISOString();
+                    packet.Data = item[i].OutData[j];
+                    dir = item[i].OutData[j].Dir;
+                    port = item[i].OutData[j].Port.toUpperCase();
+                    showname = item[i].OutData[j].Showname;
+                    dataToSend = item[i].OutData[j].Dout;
+                    delay = item[i].OutData[j].Delay;
+                    if(dir ==""){
+                        outstring = port + " " + showname + " " + dataToSend;
+                    }
+                    else{
+                        outstring = port + " " + showname + " " + dir + " " + dataToSend;
+                    }
+
+                    packet.output = outstring;
+                    pixelArray[count] = packet;
+                    count++;
+                }
             }
         }
     }
