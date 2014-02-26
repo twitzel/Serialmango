@@ -325,13 +325,14 @@ exports.websocketDataIn = function(dataSocket, Socket){
                 console.log("inside remove call back" + numberRemoved);
             });
         */
-            lastCueReceivedEdit = {};
+
             for(i = 0; i< dataSocket.Data.length; i++){
 
                 serialDataSocketEdit ={};
                 //setup lastcue received
                 //calculate delay for each cue
                 if(dataSocket.Data[i].OutData){ // this is an incoming cue, so put data in proper form
+                    lastCueReceivedEdit = {};
                     lastCueTime = dataSocket.Data[i].Time;
                     lastCueReceivedEdit.InData = dataSocket.Data[i].InData;
                     lastCueReceivedEdit.Source = dataSocket.Data[i].Source;
@@ -346,15 +347,10 @@ exports.websocketDataIn = function(dataSocket, Socket){
 
                 }
                 else{ //This is cue data.  Adjust delay and put data in proper form
-                    a=dataSocket.Data[i].Time;
-                    b= new Date(dataSocket.Data[i].Time);
-                    c=lastCueReceivedEdit.Time;
-                    d= new Date(lastCueReceivedEdit.Time);
+
+                    serialDataSocketEdit = dataSocket.Data[i].Data;
                     serialDataSocketEdit.Delay = new Date(dataSocket.Data[i].Time) - new Date(lastCueTime);
-                    serialDataSocketEdit.Dir = dataSocket.Data[i].Data.Dir;
-                    serialDataSocketEdit.Dout = dataSocket.Data[i].Data.Dout;
-                    serialDataSocketEdit.Port = dataSocket.Data[i].Data.Port;
-                    serialDataSocketEdit.Showname = dataSocket.Data[i].Data.Showname;
+
                   //  serialDataSocketEdit = "{\"OutData\": {\"Delay\": "+serialDataSocketEdit.Delay+" , \"Port\":\""+ serialDataSocketEdit.Port +"\", \"Showname\":\""+ serialDataSocketEdit.Showname +"\", \"Dir\":\""+ serialDataSocketEdit.Dir +"\", \"Dout\":\"" + serialDataSocketEdit.Dout + "\"}}";
 
                    // serialDataSocketEdit = JSON.parse(JSON.stringify(serialDataSocketEdit));
