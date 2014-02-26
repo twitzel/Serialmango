@@ -320,40 +320,53 @@ exports.websocketDataIn = function(dataSocket, Socket){
             });
         }
         else if (dataSocket.Type == "CUECREATE"){
-            copyToInternal();//copy to create a backup
+         //   copyToInternal();//copy to create a backup
         /*    collectionCue.remove({},function(err,numberRemoved){
                 console.log("inside remove call back" + numberRemoved);
             });
         */
+            lastCueReceivedEdit = {};
             for(i = 0; i< dataSocket.Data.length; i++){
-                lastCueReceivedEdit = {};
+
                 serialDataSocketEdit ={};
                 //setup lastcue received
                 //calculate delay for each cue
                 if(dataSocket.Data[i].OutData){ // this is an incoming cue, so put data in proper form
+                    lastCueTime = dataSocket.Data[i].Time;
                     lastCueReceivedEdit.InData = dataSocket.Data[i].InData;
                     lastCueReceivedEdit.Source = dataSocket.Data[i].Source;
                     lastCueReceivedEdit.Time = dataSocket.Data[i].Time;
-                    lastCueReceivedEdit = JSON.parse(JSON.stringify(lastCueReceivedEdit));
+                  //  lastCueReceivedEdit =  "{\"InData\": "+lastCueReceivedEdit.InData+" , \"Source\":\""+ lastCueReceivedEdit.Source +"\", \"Time\":\"" + lastCueReceivedEdit.Time + "\"}}";
+                  //  lastCueReceivedEdit = JSON.parse(JSON.stringify(lastCueReceivedEdit));
+                  //9999999999999999999999999999999999
+                    //var test = {'red':'#FF0000', 'blue':'#0000FF'};
+                  //  delete test.blue; // or use => delete test['blue'];
+                   // console.log(test)
+
+
                 }
                 else{ //This is cue data.  Adjust delay and put data in proper form
-                    serialDataSocketEdit.Delay = new Date(dataSocket.Data[i].Time) - new Date(JSON.parse(lastCueReceivedEdit).Time);
+                    a=dataSocket.Data[i].Time;
+                    b= new Date(dataSocket.Data[i].Time);
+                    c=lastCueReceivedEdit.Time;
+                    d= new Date(lastCueReceivedEdit.Time);
+                    serialDataSocketEdit.Delay = new Date(dataSocket.Data[i].Time) - new Date(lastCueTime);
                     serialDataSocketEdit.Dir = dataSocket.Data[i].Data.Dir;
                     serialDataSocketEdit.Dout = dataSocket.Data[i].Data.Dout;
                     serialDataSocketEdit.Port = dataSocket.Data[i].Data.Port;
                     serialDataSocketEdit.Showname = dataSocket.Data[i].Data.Showname;
+                  //  serialDataSocketEdit = "{\"OutData\": {\"Delay\": "+serialDataSocketEdit.Delay+" , \"Port\":\""+ serialDataSocketEdit.Port +"\", \"Showname\":\""+ serialDataSocketEdit.Showname +"\", \"Dir\":\""+ serialDataSocketEdit.Dir +"\", \"Dout\":\"" + serialDataSocketEdit.Dout + "\"}}";
 
-
-                    serialDataSocketEdit = JSON.parse(JSON.stringify(serialDataSocketEdit));
+                   // serialDataSocketEdit = JSON.parse(JSON.stringify(serialDataSocketEdit));
 
                     collectionCue.update({'InData':lastCueReceivedEdit.InData}, {$set: lastCueReceivedEdit},{upsert:true, w:1},function(err,res){
 
-                        console.log('InData to collection Cue'+res);
+                        console.log('InData to collection Cue '+res + "error " + err);
                     });
 
                     collectionCue.update({'InData': lastCueReceivedEdit.InData}, {$push:serialDataSocketEdit},function(err,res){
 
-                        console.log('added Dout to collection Cue'+res);
+                        console.log('added Dout to collection Cue '+res + "error " + err);
                     });
 
                 }
