@@ -320,68 +320,40 @@ exports.websocketDataIn = function(dataSocket, Socket){
             });
         }
         else if (dataSocket.Type == "CUECREATE"){
-         //   copyToInternal();//copy to create a backup
-        /*    collectionCue.remove({},function(err,numberRemoved){
-                console.log("inside remove call back" + numberRemoved);
-            });
-        */
+            // copies database to destinationPath for a backup, then remove all records in cue file then insert records from client.
+            if(os.type() == 'Windows_NT')
+            {
+                //  usbstickPath = "G:/"; // this is based on particular usbsticl
+                //   path = usbstickPath ;
+                //  sourcePath = "d://data/db"; // this is based on system install of mongo
+                destinationPath = "d:/mongoBackup/dump"; //this is particular to the system mongo is running on
+                mongoDirectory = 'd:/mongo/bin/'; //this is based on system install of mongo
 
-            for(i = 0; i< dataSocket.Data.length; i++){
-
-                serialDataSocketEdit ={};
-                //setup lastcue received
-                //calculate delay for each cue
-                if(dataSocket.Data[i].OutData){ // this is an incoming cue, so put data in proper form
-                    lastCueReceivedEdit = {};
-                    lastCueTime = dataSocket.Data[i].Time;
-                    lastCueReceivedEdit.InData = dataSocket.Data[i].InData;
-                    lastCueReceivedEdit.Source = dataSocket.Data[i].Source;
-                    lastCueReceivedEdit.Time = dataSocket.Data[i].Time;
-                  //  lastCueReceivedEdit =  "{\"InData\": "+lastCueReceivedEdit.InData+" , \"Source\":\""+ lastCueReceivedEdit.Source +"\", \"Time\":\"" + lastCueReceivedEdit.Time + "\"}}";
-                  //  lastCueReceivedEdit = JSON.parse(JSON.stringify(lastCueReceivedEdit));
-                  //9999999999999999999999999999999999
-                    //var test = {'red':'#FF0000', 'blue':'#0000FF'};
-                  //  delete test.blue; // or use => delete test['blue'];
-                   // console.log(test)
-
-
-                }
-                else{ //This is cue data.  Adjust delay and put data in proper form
-
-                    serialDataSocketEdit = dataSocket.Data[i].Data;
-                    serialDataSocketEdit.Delay = new Date(dataSocket.Data[i].Time) - new Date(lastCueTime);
-
-                  //  serialDataSocketEdit = "{\"OutData\": {\"Delay\": "+serialDataSocketEdit.Delay+" , \"Port\":\""+ serialDataSocketEdit.Port +"\", \"Showname\":\""+ serialDataSocketEdit.Showname +"\", \"Dir\":\""+ serialDataSocketEdit.Dir +"\", \"Dout\":\"" + serialDataSocketEdit.Dout + "\"}}";
-
-                   // serialDataSocketEdit = JSON.parse(JSON.stringify(serialDataSocketEdit));
-
-                    collectionCue.update({'InData':lastCueReceivedEdit.InData}, {$set: lastCueReceivedEdit},{upsert:true, w:1},function(err,res){
-
-                        console.log('InData to collection Cue '+res + "error " + err);
-                    });
-
-                    collectionCue.update({'InData': lastCueReceivedEdit.InData}, {$push:serialDataSocketEdit},function(err,res){
-
-                        console.log('added Dout to collection Cue '+res + "error " + err);
-                    });
-
-                }
-
-
+                spawn('d:/mongo/bin/mongodump', ['-o', destinationPath]).on('exit',function(code){
+                    comlib.websocketsend("Successfully copied all data to internal storage");
+                    console.log("Successfully copied all data to internal storage: "+ destinationPath + " " + code);
+                    makeCueFile(dataSocket);
+                });
             }
+            //this is for the pi
+            else
+            {
+                //  usbstickPath = "/media";
+                //  path = usbstickPath ;
+                //  sourcePath = "/data/db";
+                destinationPath = "/home/pi/mongoBackup/dump"; // this was arbitrarily chosen but now fixed
+                mongoDirectory = '/opt/mongo/bin/';
 
-           //////// serialDataSocketEdit = JSON.parse(dataSocket.Data);
-            //now we know something is attached to the incoming cue so put it in Cue collection
-            // incoming cue = lastCueReceived
-            //lastCueReceived is a json parsed object from my io board
-            // serialDataSocket is the array data from the websocket
-
-            //
-
+                spawn(mongoDirectory + 'mongodump', ['-o', destinationPath]).on('exit',function(code){
+                    comlib.websocketsend("Successfully copied all data to internal storage");
+                    console.log("Successfully copied all data to internal storage: "+ destinationPath + " " + code);
+                    makeCueFile(dataSocket);
+                });
+            }
 
         }
     }
-    else //This is the real live system data
+    else //This is the real live system timing data
     {
         serialDataSocket = JSON.parse(dataSocket.Data);
         //now we know something is attached to the incoming cue so put it in Cue collection
@@ -586,6 +558,42 @@ function parseCue(data)
         return (serialData.Time.toISOString() + "  " + source + " " + indata);
     }
 
+}
+
+function makeCueFile(dataSocket){
+    collectionCue.remove({},function(err,numberRemoved){
+        console.log("inside remove call back" + numberRemoved);
+        for(i = 0; i< dataSocket.Data.length; i++){
+            serialDataSocketEdit = {};
+            if(dataSocket.Data[i].OutData){ // this is an incoming cue, so put data in proper form
+                lastCueReceivedEdit = {};
+                lastCueTime = dataSocket.Data[i].Time;
+                lastCueReceivedEdit.InData = dataSocket.Data[i].InData;
+                lastCueReceivedEdit.Source = dataSocket.Data[i].Source;
+                lastCueReceivedEdit.Time = dataSocket.Data[i].Time;
+            }
+            else{ //This is cue data.  Adjust delay and put data in proper form
+
+                serialDataSocketEdit.OutData = dataSocket.Data[i].Data;
+                serialDataSocketEdit.OutData.Delay = new Date(dataSocket.Data[i].Time) - new Date(lastCueTime);
+
+                collectionCue.update({'InData':lastCueReceivedEdit.InData}, {$set: lastCueReceivedEdit},{upsert:true, w:1},function(err,res){
+
+                    console.log('InData to collection Cue -- error: ' + err);
+                });
+
+                collectionCue.update({'InData': lastCueReceivedEdit.InData}, {$push:serialDataSocketEdit},function(err,res){
+
+                    console.log('added Dout to collection Cue -- error: ' + err);
+                });
+            }
+        }
+        message = {};
+        message.packetType = "message";
+        message.data = "Successfully Updated Cue File";
+        comlib.websocketsend(JSON.stringify(message));
+        console.log("Successfully Updated Cue File")
+    });
 }
 
 /**
@@ -793,7 +801,7 @@ function copyToInternal()
         spawn('d:/mongo/bin/mongodump', ['-o', destinationPath]).on('exit',function(code){
             comlib.websocketsend("Successfully copied all data to internal storage");
             console.log("Successfully copied all data to internal storage: "+ destinationPath + " " + code);
-
+            return(1);
         });
     }
     //this is for the pi
@@ -808,7 +816,7 @@ function copyToInternal()
         spawn(mongoDirectory + 'mongodump', ['-o', destinationPath]).on('exit',function(code){
             comlib.websocketsend("Successfully copied all data to internal storage");
             console.log("Successfully copied all data to internal storage: "+ destinationPath + " " + code);
-
+            return(1);
         });
     }
 }

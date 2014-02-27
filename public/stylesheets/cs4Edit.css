@@ -1,14 +1,19 @@
+.log{
+    border: 3px solid #333333;
+    background-color: #cccccc;
+}
+
 #canvasDiv{
     width:100%;
     color: #666;
 }
 #mainCanvas{
      margin-top: 1px;
-     border: 3px solid #333333;;
+     border: 3px solid #333333;
  }
 #zoomCanvas{
     margin-top: 1px;
-    border: 3px solid #333333;;
+    border: 3px solid #333333;
 }
 .slider{
     width: 300px;

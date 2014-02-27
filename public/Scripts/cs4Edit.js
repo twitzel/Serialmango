@@ -69,16 +69,18 @@ function onClose(evt) {
 
 function onMessage(evt)    {
     message = JSON.parse(evt.data);
-    if(message.packetType == 'cuefiledata'){
-        inMessage = message.data;
-        pixelLoad(inMessage);
-        canvasPlot();
-        updateCanvas();
+    if(message.packetType){
+        if(message.packetType == 'cuefiledata'){
+            inMessage = message.data;
+            pixelLoad(inMessage);
+            canvasPlot();
+            updateCanvas();
+        }
+        else if (message.packetType =='message'){
+            writeToScreen(message.data);
+            document.body.style.cursor  = 'default';
+        }
     }
-    else{
-        writeToScreen(inMessage);
-    }
-
 }
 
 function onError(evt) {
@@ -91,8 +93,9 @@ function doSend(message) {
 
 function writeToScreen(message) {
     // get time of incoming cue
-    lastCueTime = new Date();
-//  output.innerHTML = message + "<BR>" + output.innerHTML;
+   // lastCueTime = new Date();
+    output.innerHTML = message;
+  //output.innerHTML = message + "<BR>" + output.innerHTML;
 
 
 
@@ -108,7 +111,7 @@ function loadclick(){
 }
 
 function undoclick(){
-    if(arrayPrevious.length >0){//make sure there is some data there
+    if(arrayPrevious.length >1){//make sure there is some data there
         selectedPreviousZoomPoint = arrayPrevious.pop();
         for(i=0; i<pixelArray.length; i++){
             if(pixelArray[i].output == selectedPreviousZoomPoint.output){//we found it
@@ -122,15 +125,30 @@ function undoclick(){
         }
     }
     else{
-        alert("Nothing more to UNDO");
+        property = document.getElementById('undoButton');
+        property.style.backgroundColor = '';
     }
 
 }
 
 function saveclick(){
-    dataPacket.Type = 'CUECREATE';
-    dataPacket.Data = pixelArray;
-    websocket.send(JSON.stringify(dataPacket));
+
+    var warning=confirm("This will backup the Cue File to \nan internal location and create \na new file with this modified data");
+    if (warning ==true)
+    {
+        document.body.style.cursor  = 'wait';
+        dataPacket.Type = 'CUECREATE';
+        dataPacket.Data = pixelArray;
+        websocket.send(JSON.stringify(dataPacket));
+    }
+    else
+    {
+        alert('Save Cue File Cancelled!');
+    }
+
+
+
+
 }
 
 function pixelLoad(item){
@@ -539,6 +557,11 @@ function zoomcanvasMousedown(event){
         selectedPreviousZoomPoint.output = pixelArray[selected].output;
         selectedPreviousZoomPoint.Time = pixelArray[selected].Time;
         arrayPrevious.push(selectedPreviousZoomPoint);
+        if(arrayPrevious.length >0){
+            property = document.getElementById('undoButton');
+            property.style.backgroundColor = '#eeee00';
+
+        }
 
     }
 
