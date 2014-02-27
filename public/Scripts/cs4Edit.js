@@ -32,6 +32,7 @@ function init(){
     canvas.addEventListener("mouseup",canvasMouseup, false );
     canvas.addEventListener("mousemove",canvasMousemove, false );
     canvas.addEventListener("mousewheel",canvasMousewheel, false );
+    canvas.addEventListener("touchdown",canvasMousedown, false );
 
     document.getElementById('zoomCanvas').width =  document.getElementById('canvasDiv').offsetWidth;
     zoomcanvas = document.getElementById('zoomCanvas');
@@ -44,7 +45,7 @@ function init(){
     zoomcanvas.addEventListener("mouseup", zoomcanvasMouseup, false );
     zoomcanvas.addEventListener("mousemove", zoomcanvasMousemove, false );
     zoomcanvas.addEventListener("mousewheel", zoomcanvasMousewheel, false );
-
+    zoomcanvas.addEventListener("touchmove", zoomcanvasMousewheel, false );
     testWebSocket();
 }
 
@@ -106,6 +107,13 @@ function writeToScreen(message) {
 
 
     //output.value = message+"<BR>"+output.value;
+}
+
+function resize_canvas()
+{
+    document.getElementById('mainCanvas').width =  document.getElementById('canvasDiv').offsetWidth;
+    document.getElementById('zoomCanvas').width =  document.getElementById('canvasDiv').offsetWidth;
+    location.reload();
 }
 
 function loadclick(){
@@ -308,7 +316,7 @@ function updateCanvas(){
         drawTimeLine(startTime, endTime);
         drawData();
         context.fillStyle = 'gray';
-        context.globalAlpha = 0.5;
+        context.globalAlpha = 0.6;
         offset = (canvasWidth/2) * (zoomFactor/100);
         shift = offset * (50 - zoomLocation)/50;
         minPixel = offset-shift;
@@ -474,6 +482,7 @@ function canvasMouseover(event){
 }
 
 function canvasMousewheel(event){
+    event.preventDefault();
     zoomFactor += event.wheelDelta/50;
     zoomSlider.value = zoomFactor;
     if (zoomFactor <0){
@@ -624,7 +633,7 @@ function zoomcanvasMousemove(event){
             zoomcontext.clearRect(2,2,355,20);
             zoomcontext.rect(2,2,350,17);
             zoomcontext.stroke();
-            zoomcontext.fillText("Changed " +parseInt((event.offsetX  - selectedPreviousZoomPoint.Point)* msPerPixelZoom )/1000 + "  Seconds"  ,5,14,330);
+            zoomcontext.fillText("Changed " +parseInt((event.offsetX  - selectedPreviousZoomPoint.Point)* msPerPixelZoom )/zoomcanvasHeight + "  Seconds"  ,5,14,330);
         }
     }
     else{
