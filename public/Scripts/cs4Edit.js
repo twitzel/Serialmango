@@ -12,12 +12,14 @@ var arrayPrevious = [];
 var mouseDown = 0;
 var dataPacket = {};
 
-window.onload = init;
+
+    window.onload = init;
 function init(){
 
     wsUri = "ws://" + window.location.hostname + ":8080";
     output = document.getElementById("websocketlog");
-
+    zoomSlider = document.getElementById("zoom");
+    locationSlider = document.getElementById("location");
     document.getElementById('mainCanvas').width =  document.getElementById('canvasDiv').offsetWidth;
     canvas = document.getElementById('mainCanvas');
     context = canvas.getContext('2d');
@@ -29,6 +31,7 @@ function init(){
     canvas.addEventListener("mousedown",canvasMousedown, false );
     canvas.addEventListener("mouseup",canvasMouseup, false );
     canvas.addEventListener("mousemove",canvasMousemove, false );
+    canvas.addEventListener("mousewheel",canvasMousewheel, false );
 
     document.getElementById('zoomCanvas').width =  document.getElementById('canvasDiv').offsetWidth;
     zoomcanvas = document.getElementById('zoomCanvas');
@@ -40,6 +43,7 @@ function init(){
     zoomcanvas.addEventListener("mousedown", zoomcanvasMousedown, false );
     zoomcanvas.addEventListener("mouseup", zoomcanvasMouseup, false );
     zoomcanvas.addEventListener("mousemove", zoomcanvasMousemove, false );
+    zoomcanvas.addEventListener("mousewheel", zoomcanvasMousewheel, false );
 
     testWebSocket();
 }
@@ -291,22 +295,30 @@ function locationChange(value){
     updateCanvas();
 }
 
-function updateCanvas(){
-    context.clearRect(0,0,canvasWidth,canvasHeight);
-    drawTimeLine(startTime, endTime);
-    drawData();
-    context.fillStyle = 'gray';
-    context.globalAlpha = 0.5;
-    offset = (canvasWidth/2) * (zoomFactor/100);
-    shift = offset * (50 - zoomLocation)/50;
-    minPixel = offset-shift;
-    maxPixel = canvasWidth - (offset + shift);
-    context.fillRect(0,0,minPixel, canvasHeight);
-    context.fillRect(maxPixel,0, canvasWidth, canvasHeight);
-    context.stroke();
-    //Now put it in the zoomed canvas
-    drawZoomTimeLine(minPixel , maxPixel );
 
+
+
+
+
+
+
+function updateCanvas(){
+    if(startTime >=0 && endTime >=0){ //make sure we have valid time
+        context.clearRect(0,0,canvasWidth,canvasHeight);
+        drawTimeLine(startTime, endTime);
+        drawData();
+        context.fillStyle = 'gray';
+        context.globalAlpha = 0.5;
+        offset = (canvasWidth/2) * (zoomFactor/100);
+        shift = offset * (50 - zoomLocation)/50;
+        minPixel = offset-shift;
+        maxPixel = canvasWidth - (offset + shift);
+        context.fillRect(0,0,minPixel, canvasHeight);
+        context.fillRect(maxPixel,0, canvasWidth, canvasHeight);
+        context.stroke();
+        //Now put it in the zoomed canvas
+        drawZoomTimeLine(minPixel , maxPixel );
+    }
 }
 /////////////////////////////////
 function drawZoomTimeLine(start, end){
@@ -460,15 +472,29 @@ function canvasMouseover(event){
     //   wrapText(context, event.clientX + " x pos " + event.clientY + " y pos", 100,200,200,10);
 
 }
+
+function canvasMousewheel(event){
+    zoomFactor += event.wheelDelta/50;
+    zoomSlider.value = zoomFactor;
+    if (zoomFactor <0){
+        zoomFactor= 0;
+    }
+    if(zoomFactor>99.80){
+        zoomFactor = 99.8;
+    }
+    updateCanvas();
+}
+
 function canvasMouseout(event){
     document.body.style.cursor  = 'default';
     updateCanvas();
 }
 function canvasMousedown(event){
-    //document.body.style.cursor  = 'e-resize';
-    //   context.clearRect(2,2,300,50);
-    //  context.rect(15,15,295,45);
-    //  context.stroke();
+    zoomFactor = 80;
+    zoomSlider.value = zoomFactor;
+    zoomLocation = event.offsetX *100/canvasWidth;
+    locationSlider.value =event.offsetX *100/canvasWidth;
+    updateCanvas();
 }
 function canvasMouseup(event){
     // document.body.style.cursor  = 'move';
@@ -544,6 +570,19 @@ function zoomcanvasMouseover(event){
     //   wrapText(context, event.clientX + " x pos " + event.clientY + " y pos", 100,200,200,10);
 
 }
+
+function zoomcanvasMousewheel(event){
+    zoomLocation -= event.wheelDelta/50;
+    locationSlider.value = zoomLocation;
+    if (zoomFactor <0){
+        zoomFactor= 0;
+    }
+    if(zoomFactor>100){
+        zoomFactor =100;
+    }
+    updateCanvas();
+}
+
 function zoomcanvasMouseout(event){
     document.body.style.cursor  = 'default';
     mouseDown = 0;
