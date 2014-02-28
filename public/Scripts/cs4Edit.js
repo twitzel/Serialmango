@@ -612,10 +612,10 @@ function zoomcanvasTouchmove(event){
         ysquared = Math.pow(event.targetTouches[0].clientY  - event.targetTouches[1].clientY,2);
         touchDistance = xsquared + ysquared;
         if(touchDistanceStart < (xsquared + ysquared)){ // we are getting farther so zoom out
-            zoom = -1;
+            zoom = 1;
         }
         else{
-            zoom = 1;
+            zoom = -1;
         }
         zoomFactor += zoom/2;
         if(zoomFactor < 0){
