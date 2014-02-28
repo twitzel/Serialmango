@@ -11,6 +11,8 @@ var selectedPreviousZoomPoint = {};
 var arrayPrevious = [];
 var mouseDown = 0;
 var dataPacket = {};
+var touchStartX=0;
+var touchStartY=0;
 
 
     window.onload = init;
@@ -32,7 +34,7 @@ function init(){
     canvas.addEventListener("mouseup",canvasMouseup, false );
     canvas.addEventListener("mousemove",canvasMousemove, false );
     canvas.addEventListener("mousewheel",canvasMousewheel, false );
-    canvas.addEventListener("touchdown",canvasMousedown, false );
+    canvas.addEventListener("touchstart",canvasTouchstart, false );
 
     document.getElementById('zoomCanvas').width =  document.getElementById('canvasDiv').offsetWidth;
     zoomcanvas = document.getElementById('zoomCanvas');
@@ -41,11 +43,14 @@ function init(){
     zoomcanvasHeight = zoomcanvas.height;
     zoomcanvas.addEventListener("mouseover", zoomcanvasMouseover, false);
     zoomcanvas.addEventListener("mouseout", zoomcanvasMouseout, false );
+   //
     zoomcanvas.addEventListener("mousedown", zoomcanvasMousedown, false );
     zoomcanvas.addEventListener("mouseup", zoomcanvasMouseup, false );
     zoomcanvas.addEventListener("mousemove", zoomcanvasMousemove, false );
     zoomcanvas.addEventListener("mousewheel", zoomcanvasMousewheel, false );
-    zoomcanvas.addEventListener("touchmove", zoomcanvasMousewheel, false );
+    zoomcanvas.addEventListener("touchstart",zoomcanvasTouchstart, false );
+    zoomcanvas.addEventListener("touchmove", zoomcanvasTouchmove, false );
+
     testWebSocket();
 }
 
@@ -474,6 +479,10 @@ function parseCue(data){
     }
 }
 //............................................
+function canvasTouchstart(){
+
+}
+
 function canvasMouseover(event){
     document.body.style.cursor  = 'pointer';
     //   context.clearRect(0,0,300,300);
@@ -573,6 +582,25 @@ function canvasMousemove(event){
     context.fillStyle="black";
 }
 //------------------------------
+function zoomcanvasTouchstart(event){
+    event.preventDefault();
+    touchStartX = event.changedTouches[0].clientX;
+    touchStartY = event.changedTouches[0].clientY;
+}
+
+function zoomcanvasTouchmove(event){
+    event.preventDefault();
+    zoomLocation  +=(event.changedTouches[0].clientX - touchStartX )*2/canvasWidth;
+    if(zoomLocation < 0){
+        zoomLocation = 0;
+    }
+    if(zoomLocation > 100){
+        zoomLocation = 100;
+    }
+    locationSlider.value =zoomLocation;
+    updateCanvas();
+}
+
 function zoomcanvasMouseover(event){
     document.body.style.cursor  = 'pointer';
     //   context.clearRect(0,0,300,300);
@@ -598,6 +626,7 @@ function zoomcanvasMouseout(event){
     updateCanvas();
 }
 function zoomcanvasMousedown(event){
+    event.preventDefault();
     if(selected >=0 || selected <=pixelArray.length){
         selectedPreviousZoomPoint={};
         mouseDown = 1;
