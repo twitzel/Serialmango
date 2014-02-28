@@ -12,8 +12,10 @@ var arrayPrevious = [];
 var mouseDown = 0;
 var dataPacket = {};
 var touchStartX=0;
+var touchStartX1=0;
 var touchStartY=0;
-
+var touchStartY1=0;
+var touchDistanceStart;
 
     window.onload = init;
 function init(){
@@ -584,20 +586,67 @@ function canvasMousemove(event){
 //------------------------------
 function zoomcanvasTouchstart(event){
     event.preventDefault();
-    touchStartX = event.changedTouches[0].clientX;
-    touchStartY = event.changedTouches[0].clientY;
+
+    if(event.touches.length > 1){
+        touchStartX = event.targetTouches[0].clientX;
+        touchStartY = event.targetTouches[0].clientY;
+        touchStartX1 = event.targetTouches[1].clientX;
+        touchStartY1 = event.targetTouches[1].clientY;
+        xsquared = Math.pow(touchStartX  - touchStartX1,2);
+        ysquared = Math.pow(touchStartY  - touchStartY1,2);
+        touchDistanceStart = xsquared+ysquared;
+
+    }
+    else{
+        touchStartX = event.changedTouches[0].clientX;
+        touchStartY = event.changedTouches[0].clientY;
+    }
 }
 
 function zoomcanvasTouchmove(event){
     event.preventDefault();
-    zoomLocation  +=(event.changedTouches[0].clientX - touchStartX )*2/canvasWidth;
-    if(zoomLocation < 0){
-        zoomLocation = 0;
+    zoom = 1;
+    if(event.touches.length > 1){
+        //we have at least 2 fingers down lets do pinch zoom
+        xsquared = Math.pow(event.targetTouches[0].clientX  - event.targetTouches[1].clientX,2);
+        ysquared = Math.pow(event.targetTouches[0].clientY  - event.targetTouches[1].clientY,2);
+        touchDistance = xsquared + ysquared;
+        if(touchDistanceStart < (xsquared + ysquared)){ // we are getting farther so zoom out
+            zoom = -1;
+        }
+        else{
+            zoom = 1;
+        }
+        zoomFactor += zoom/2;
+        if(zoomFactor < 0){
+            zoomFactor = 0;
+        }
+        if(zoomFactor > 99.8){
+            zoomFactor = 99.8;
+        }
+        zoomSlider.value = zoomFactor;
+
     }
-    if(zoomLocation > 100){
-        zoomLocation = 100;
+    else{ //just scroll
+        direction = -1;
+        if((event.changedTouches[0].clientX - touchStartX) >0 ){
+            direction = +1;
+        }
+        else{
+            direction = -1;
+        }
+
+       // zoomLocation  +=(event.changedTouches[0].clientX - touchStartX )*2/canvasWidth;
+        zoomLocation += direction/2;
+        if(zoomLocation < 0){
+            zoomLocation = 0;
+        }
+        if(zoomLocation > 100){
+            zoomLocation = 100;
+        }
+        locationSlider.value =zoomLocation;
+
     }
-    locationSlider.value =zoomLocation;
     updateCanvas();
 }
 
