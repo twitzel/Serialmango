@@ -617,7 +617,8 @@ function zoomcanvasTouchmove(event){
         else{
             zoom = -1;
         }
-        zoomFactor += zoom/2;
+      //  zoomFactor += zoom/2;
+        zoomFactor -= (Math.sqrt(touchDistanceStart) - Math.sqrt(xsquared + ysquared))*100/canvasWidth;
         if(zoomFactor < 0){
             zoomFactor = 0;
         }
@@ -625,19 +626,22 @@ function zoomcanvasTouchmove(event){
             zoomFactor = 99.8;
         }
         zoomSlider.value = zoomFactor;
+        touchDistanceStart = xsquared + ysquared;
+
 
     }
     else{ //just scroll
         direction = -1;
         if((event.changedTouches[0].clientX - touchStartX) >0 ){
-            direction = +1;
+            direction = -1;
         }
         else{
-            direction = -1;
+            direction = +1;
         }
 
        // zoomLocation  +=(event.changedTouches[0].clientX - touchStartX )*2/canvasWidth;
-        zoomLocation += direction/2;
+        zoomLocation -= (event.changedTouches[0].clientX - touchStartX)*10/((zoomFactor*2)+1);
+       // zoomLocation += direction/2;
         if(zoomLocation < 0){
             zoomLocation = 0;
         }
@@ -645,7 +649,7 @@ function zoomcanvasTouchmove(event){
             zoomLocation = 100;
         }
         locationSlider.value =zoomLocation;
-
+        touchStartX = event.changedTouches[0].clientX;
     }
     updateCanvas();
 }
@@ -818,4 +822,22 @@ function zoomcanvasMousemove(event){
     }
 }
 
+function relayclick(){
+    property= document.getElementById("fieldset1");
+    property.style.backgroundColor = 'palegreen';
+    button = document.getElementById("insertrelay")
+    button.text = "x";
+}
+function serialclick(){
+
+}
+function smpteclick(){
+
+}
+function dmxclick(){
+
+}
+function dcaclick(){
+
+}
 

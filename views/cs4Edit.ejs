@@ -54,32 +54,88 @@
 </div>
 
 <div id="adddiv">
-    <div id = RELAYS class = elay >
+
+    <div id = relay class = relay >
         <fieldset id = "fieldset1">
             <legend><b>Relays</b></legend>
-
-
-
             <div>
-                Function:  Open <input id=relayopen name=relay value= "open" type=radio checked>
+                Open <input id=relayopen name=relay value= "open" type=radio checked>
                 Closed<input id=relayclosed name=relay value = "closed" type=radio >
             </div>
             <select id='relayselect'  onchange='relayChange();'>
-                <option value='-1' title='-select one-'>-Relay-</option>
-                <option value='1' title='1'>Relay1</option>
-                <option value='2' title='2'>Relay2</option>
-                <option value='3' title='3'>Relay3</option>
-                <option value='4' title='4'>Relay4</option>
+                <option value='-1' title='-select one-'>Relay</option>
+                <option value='1' title='1'>Relay 1</option>
+                <option value='2' title='2'>Relay 2</option>
+                <option value='3' title='3'>Relay 3</option>
+                <option value='4' title='4'>Relay 4</option>
             </select>
-
-
             <div id="buttondiv1">
-                <button id = "goButton1"  onmousedown = "cueclick1()"> GO 1 </button>
+                <button id = "insertrelay"  onmousedown = "relayclick()"> Insert </button>
+            </div>
+        </fieldset>
+    </div>
+
+    <div id = serial class = serial >
+        <fieldset id = "fieldset2">
+            <legend><b>Serial Ports</b></legend>
+            <div>
+                ASCII <input id=serialascii name=serialtype value= "ascii" type=radio checked>
+                HEX<input id=serialhex name=serialtype value = "hex" type=radio >
+            </div>
+            <select id='serialselect'  onchange='serialChange();'>
+                <option value='-1' title='-select one-'>Serial Port</option>
+                <option value='1' title='1'>Serial 1</option>
+                <option value='2' title='2'>Serial 2</option>
+                <option value='3' title='3'>Serial 33</option>
+            </select>
+            <input id=baud name=baud   value="9600" required style = "width: 8em" >BAUD</ul>
+            <input id=message name=message   value="text" required style = "width: 10em" >Message</ul>
+            <div id="buttondiv2">
+                <button id = "insertserial"  onmousedown = "serialclick()"> Insert </button>
+            </div>
+        </fieldset>
+    </div>
+
+    <div id = dmx class = dmx >
+        <fieldset id = "fieldset3">
+            <legend><b>DMX Channels</b></legend>
+            <input id=dmx1 name=dmx1   value="1" required style = "width: 2em" > </ul>
+            <input id=dmx2 name=dmx2   value="2" required style = "width: 2em" > </ul>
+            <input id=dmx3 name=dmx3   value="3" required style = "width: 2em" > </ul>
+            <div id="buttondiv3">
+                <button id = "insertdmx"  onmousedown = "dmxclick()"> Insert </button>
+            </div>
+        </fieldset>
+    </div>
+
+    <div id = smpte class = relay >
+        <fieldset id = "fieldset4">
+            <legend><b>SPMTE</b></legend>
+            <div>
+                On <input id=smpteon name=smpte value= "on" type=radio checked>
+                Off<input id=smteoff name=smpte value = "ff" type=radio >
             </div>
 
+            <div id="buttondiv4">
+                <button id = "insertsmpte"  onmousedown = "smpteclick()"> Insert </button>
+            </div>
         </fieldset>
-
     </div>
+
+    <div id = dac class = dac >
+        <fieldset id = "fieldset5">
+            <legend><b>DAC</b></legend>
+            <div>
+                Channel:  1 <input id=dac1 name=dac value= "1" type=radio checked>
+                2<input id=dac2 name=dac value = "2" type=radio >
+            </div>
+            <input id=dacout name=dacout   value="4000" required style = "width: 3em" >Millivolts</ul>
+            <div id="buttondiv5">
+                <button id = "insertdac"  onmousedown = "dacclick()"> Insert  </button>
+            </div>
+        </fieldset>
+    </div>
+
 </div>
 
 </body>
