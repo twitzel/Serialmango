@@ -47,10 +47,40 @@
     <h3 id = "in" > All Cue Data  </h3>
     <canvas id="mainCanvas" width= 1000px height=300px tabindex = "1">  </canvas>
     Zoom: 0<input type="range" class="slider" id="zoom" name="zoom" step = 0.25 value = 0 max = 99.80 onchange="zoomChange(this.value)" oninput="zoomChange(this.value)">100
-    Location: 0<input type="range" class="slider" id="location"  name="zoom1" step = 0.25 value = 50 onchange="locationChange(this.value)" oninput="locationChange(this.value)">100
+    Place: 0<input type="range" class="slider" id="location"  name="zoom1" step = 0.25 value = 50 onchange="locationChange(this.value)" oninput="locationChange(this.value)">100
     <h3 id = "out" >Zoom Cue Data</h3>
-    <canvas id="zoomCanvas" width= 1000px height=400px tabindex = "2"></canvas>
+    <canvas id="zoomCanvas" width= 1000px height=300px tabindex = "2"></canvas>
 
 </div>
+
+<div id="adddiv">
+    <div id = RELAYS class = elay >
+        <fieldset id = "fieldset1">
+            <legend><b>Relays</b></legend>
+
+
+
+            <div>
+                Function:  Open <input id=relayopen name=relay value= "open" type=radio checked>
+                Closed<input id=relayclosed name=relay value = "closed" type=radio >
+            </div>
+            <select id='relayselect'  onchange='relayChange();'>
+                <option value='-1' title='-select one-'>-Relay-</option>
+                <option value='1' title='1'>Relay1</option>
+                <option value='2' title='2'>Relay2</option>
+                <option value='3' title='3'>Relay3</option>
+                <option value='4' title='4'>Relay4</option>
+            </select>
+
+
+            <div id="buttondiv1">
+                <button id = "goButton1"  onmousedown = "cueclick1()"> GO 1 </button>
+            </div>
+
+        </fieldset>
+
+    </div>
+</div>
+
 </body>
 </html>
