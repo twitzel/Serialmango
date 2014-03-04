@@ -888,8 +888,21 @@ function relayclick(){
     insertReady = 1;
 }
 function serialclick(){
-
+    document.getElementById("fieldset2").style.backgroundColor = 'palegreen';
+    document.getElementById("insertserial").innerHTML = "Ready";
+    dataToSend = document.getElementById("serialselect").value;
+    dataToSend += document.getElementById("baudselect").value;
+    dataToSend += document.getElementById("parityselect").value;
+    if(document.getElementById('asciiselect').checked){
+        dataToSend += ' A ';
+    }
+    else{
+        dataToSend += ' H ';
+    }
+    dataToSend += document.getElementById('message').value.trim();
+    insertReady = 1;
 }
+
 function smpteclick(){
     document.getElementById("fieldset4").style.backgroundColor = 'palegreen';
     document.getElementById("insertsmpte").innerHTML = "Ready";
