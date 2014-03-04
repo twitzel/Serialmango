@@ -133,16 +133,17 @@ function smpteoffbutton(){
 
 //************************************  DAC  ******************************
 function dac1button(){
-    dataPacket.Data = document.getElementById('dac1output').value + '';
+
     dataPacket.Type ='SEND';
-    dataPacket.Data = 'SLAVE DAC1';
+    dataPacket.Data = 'SLAVE DAC1 ';
+    dataPacket.Data += document.getElementById('dac1output').value + '';
     websocket.send(JSON.stringify(dataPacket));
 }
 
 function dac2button(){
     dataPacket.Type ='SEND';
-    dataPacket.Data = 'SLAVE DAC2';
-    dataPacket.Data = document.getElementById('dac2output').value + '';
+    dataPacket.Data = 'SLAVE DAC2 ';
+    dataPacket.Data += document.getElementById('dac2output').value + '';
     websocket.send(JSON.stringify(dataPacket));
 }
 
@@ -152,7 +153,7 @@ function dmxchwatch(){
     var val1 = document.getElementById('dmx1').value;
     var val2 = document.getElementById('dmx2').value;
     var val3 = document.getElementById('dmx3').value;
-    dataPacket.Data = 'SLAVE DMX_CH ' + val1 +  " " + val2 + " " + val3 + ''
+    dataPacket.Data = 'SLAVE DMX_CH ' + val1 +  " " + val2 + " " + val3 + '';
     websocket.send(JSON.stringify(dataPacket));
 }
 

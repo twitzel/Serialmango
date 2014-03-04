@@ -16,6 +16,9 @@ var touchStartX1=0;
 var touchStartY=0;
 var touchStartY1=0;
 var touchDistanceStart;
+var touch=0;
+var insertReady=0;
+var dataToSend = {};
 
     window.onload = init;
 function init(){
@@ -52,6 +55,7 @@ function init(){
     zoomcanvas.addEventListener("mousewheel", zoomcanvasMousewheel, false );
     zoomcanvas.addEventListener("touchstart",zoomcanvasTouchstart, false );
     zoomcanvas.addEventListener("touchmove", zoomcanvasTouchmove, false );
+    zoomcanvas.addEventListener("touchleave", zoomcanvasTouchleave, false );
 
     testWebSocket();
 }
@@ -584,9 +588,13 @@ function canvasMousemove(event){
     context.fillStyle="black";
 }
 //------------------------------
+function zoomcanvasTouchleave(){
+    touch=0;
+}
 function zoomcanvasTouchstart(event){
-    event.preventDefault();
 
+    event.preventDefault();
+    touch=1;
     if(event.touches.length > 1){
         touchStartX = event.targetTouches[0].clientX;
         touchStartY = event.targetTouches[0].clientY;
@@ -604,54 +612,56 @@ function zoomcanvasTouchstart(event){
 }
 
 function zoomcanvasTouchmove(event){
-    event.preventDefault();
-    zoom = 1;
-    if(event.touches.length > 1){
-        //we have at least 2 fingers down lets do pinch zoom
-        xsquared = Math.pow(event.targetTouches[0].clientX  - event.targetTouches[1].clientX,2);
-        ysquared = Math.pow(event.targetTouches[0].clientY  - event.targetTouches[1].clientY,2);
-        touchDistance = xsquared + ysquared;
-        if(touchDistanceStart < (xsquared + ysquared)){ // we are getting farther so zoom out
-            zoom = 1;
-        }
-        else{
-            zoom = -1;
-        }
-      //  zoomFactor += zoom/2;
-        zoomFactor -= (Math.sqrt(touchDistanceStart) - Math.sqrt(xsquared + ysquared))*100/canvasWidth;
-        if(zoomFactor < 0){
-            zoomFactor = 0;
-        }
-        if(zoomFactor > 99.8){
-            zoomFactor = 99.8;
-        }
-        zoomSlider.value = zoomFactor;
-        touchDistanceStart = xsquared + ysquared;
+    if(touch){
+        event.preventDefault();
+        zoom = 1;
+        if(event.touches.length > 1){
+            //we have at least 2 fingers down lets do pinch zoom
+            xsquared = Math.pow(event.targetTouches[0].clientX  - event.targetTouches[1].clientX,2);
+            ysquared = Math.pow(event.targetTouches[0].clientY  - event.targetTouches[1].clientY,2);
+            touchDistance = xsquared + ysquared;
+            if(touchDistanceStart < (xsquared + ysquared)){ // we are getting farther so zoom out
+                zoom = 1;
+            }
+            else{
+                zoom = -1;
+            }
+          //  zoomFactor += zoom/2;
+            zoomFactor -= ((Math.sqrt(touchDistanceStart) - Math.sqrt(xsquared + ysquared))*100/canvasWidth)*zoomFactor/100;
+            if(zoomFactor < 0){
+                zoomFactor = 0;
+            }
+            if(zoomFactor > 99.8){
+                zoomFactor = 99.8;
+            }
+            zoomSlider.value = zoomFactor;
+            touchDistanceStart = xsquared + ysquared;
 
 
-    }
-    else{ //just scroll
-        direction = -1;
-        if((event.changedTouches[0].clientX - touchStartX) >0 ){
+        }
+        else{ //just scroll
             direction = -1;
-        }
-        else{
-            direction = +1;
-        }
+            if((event.changedTouches[0].clientX - touchStartX) >0 ){
+                direction = -1;
+            }
+            else{
+                direction = +1;
+            }
 
-       // zoomLocation  +=(event.changedTouches[0].clientX - touchStartX )*2/canvasWidth;
-        zoomLocation -= (event.changedTouches[0].clientX - touchStartX)*10/((zoomFactor*2)+1);
-       // zoomLocation += direction/2;
-        if(zoomLocation < 0){
-            zoomLocation = 0;
+           // zoomLocation  +=(event.changedTouches[0].clientX - touchStartX )*2/canvasWidth;
+            zoomLocation -= (event.changedTouches[0].clientX - touchStartX)*8/((zoomFactor*2)+1);
+           // zoomLocation += direction/2;
+            if(zoomLocation < 0){
+                zoomLocation = 0;
+            }
+            if(zoomLocation > 100){
+                zoomLocation = 100;
+            }
+            locationSlider.value =zoomLocation;
+            touchStartX = event.changedTouches[0].clientX;
         }
-        if(zoomLocation > 100){
-            zoomLocation = 100;
-        }
-        locationSlider.value =zoomLocation;
-        touchStartX = event.changedTouches[0].clientX;
+        updateCanvas();
     }
-    updateCanvas();
 }
 
 function zoomcanvasMouseover(event){
@@ -680,18 +690,46 @@ function zoomcanvasMouseout(event){
 }
 function zoomcanvasMousedown(event){
     event.preventDefault();
-    if(selected >=0 || selected <=pixelArray.length){
-        selectedPreviousZoomPoint={};
-        mouseDown = 1;
-        selectedPreviousZoomPoint.Point = parseInt(pixelArray[selected].zoomPoint);
-        selectedPreviousZoomPoint.output = pixelArray[selected].output;
-        selectedPreviousZoomPoint.Time = pixelArray[selected].Time;
-        arrayPrevious.push(selectedPreviousZoomPoint);
-        if(arrayPrevious.length >0){
-            property = document.getElementById('undoButton');
-            property.style.backgroundColor = '#eeee00';
-
+    if(insertReady == 0){
+        if(selected >=0 || selected <=pixelArray.length){
+            selectedPreviousZoomPoint={};
+            mouseDown = 1;
+            selectedPreviousZoomPoint.Point = parseInt(pixelArray[selected].zoomPoint);
+            selectedPreviousZoomPoint.output = pixelArray[selected].output;
+            selectedPreviousZoomPoint.Time = pixelArray[selected].Time;
+            arrayPrevious.push(selectedPreviousZoomPoint);
+            if(arrayPrevious.length >0){
+                property = document.getElementById('undoButton');
+                property.style.backgroundColor = '#eeee00';
+            }
         }
+    }
+    else if(document.body.style.cursor  == 'crosshair'){  //insert manual item here if we are in the right place
+        itemToInsert = {};
+        itemToInsert.Data = {};
+        incremental = new Date(startTimeZoom);
+        incremental = new Date(incremental.setMilliseconds(incremental.getMilliseconds() +  event.offsetX*msPerPixelZoom)).toISOString();
+        itemToInsert.Time = new Date(incremental);
+        itemToInsert.Data.Delay = 100;
+        itemToInsert.Data.Port = "";
+        itemToInsert.Data.Showname = "";
+        itemToInsert.Data.Dir = "";
+        itemToInsert.Data.Dout = dataToSend;
+        itemToInsert.output = dataToSend;
+        pixelArray.push(itemToInsert);
+        field = document.getElementsByClassName('field');
+        for(i=0; i<field.length; i++){
+            field[i].style.backgroundColor = '';
+        }
+        field = document.getElementsByClassName('but');
+        for(i=0; i<field.length; i++){
+            field[i].innerHTML = 'Insert';
+        }
+        insertReady = 0;
+        pixelArray.sort(function(a,b){ // sort
+            return new Date(a.Time) - new Date(b.Time);
+        });
+        updateCanvas();
 
     }
 
@@ -704,140 +742,184 @@ function zoomcanvasMouseup(event){
     });
 }
 function zoomcanvasMousemove(event){
-    if(mouseDown == 1){
-        if(selected >=0 && selected <=pixelArray.length){
-            //calculate a new time
-            incremental = new Date(pixelArray[selected].Time);
-            incremental = new Date(incremental.setMilliseconds(incremental.getMilliseconds() - (pixelArray[selected].zoomPoint - event.offsetX)*msPerPixelZoom  )).toISOString();
-            pixelArray[selected].Time = incremental;
+    if(insertReady == 0){
+        if(mouseDown == 1){
+            if(selected >=0 && selected <=pixelArray.length){
+                //calculate a new time
+                incremental = new Date(pixelArray[selected].Time);
+                incremental = new Date(incremental.setMilliseconds(incremental.getMilliseconds() - (pixelArray[selected].zoomPoint - event.offsetX)*msPerPixelZoom  )).toISOString();
+                pixelArray[selected].Time = incremental;
+                updateCanvas();
+                zoomcontext.strokeStyle = 'blue';
+                zoomcontext.clearRect(2,2,355,20);
+                zoomcontext.rect(2,2,350,17);
+                zoomcontext.stroke();
+                zoomcontext.fillText("Changed " +parseInt((event.offsetX  - selectedPreviousZoomPoint.Point)* msPerPixelZoom )/zoomcanvasHeight + "  Seconds"  ,5,14,330);
+            }
+        }
+        else{
+            zoomcontext.globalAlpha = 1;
             updateCanvas();
             zoomcontext.strokeStyle = 'blue';
+            zoomcontext.fillstyle = 'red';
             zoomcontext.clearRect(2,2,355,20);
             zoomcontext.rect(2,2,350,17);
             zoomcontext.stroke();
-            zoomcontext.fillText("Changed " +parseInt((event.offsetX  - selectedPreviousZoomPoint.Point)* msPerPixelZoom )/zoomcanvasHeight + "  Seconds"  ,5,14,330);
-        }
-    }
-    else{
-        zoomcontext.globalAlpha = 1;
-        updateCanvas();
-        zoomcontext.strokeStyle = 'blue';
-        zoomcontext.fillstyle = 'red';
-        zoomcontext.clearRect(2,2,355,20);
-        zoomcontext.rect(2,2,350,17);
-        zoomcontext.stroke();
 
-        x = event.offsetX;
-        if(event.offsetY < zoomcanvasHeight/2){//we are in outgoing events part of canvas.  look at outgoing events
-            for(var i = 0; i < pixelArray.length; i++){
-                if(pixelArray[i].output && (x < pixelArray[i].zoomPoint)){
-                    distance = x-pixelArray[i].zoomPoint; //get the parameters of where we are
-                    point = i;
-                    zoomcontext.fillStyle= 'red';
-                    if(i>0){
-                        while(!pixelArray[i-1].output){
-                            i--;
-                            if(i==0){
-                                break;
+            x = event.offsetX;
+            if(event.offsetY < zoomcanvasHeight/2){//we are in outgoing events part of canvas.  look at outgoing events
+                for(var i = 0; i < pixelArray.length; i++){
+                    if(pixelArray[i].output && (x < pixelArray[i].zoomPoint)){
+                        distance = x-pixelArray[i].zoomPoint; //get the parameters of where we are
+                        point = i;
+                        zoomcontext.fillStyle= 'red';
+                        if(i>0){
+                            while(!pixelArray[i-1].output){
+                                i--;
+                                if(i==0){
+                                    break;
+                                }
                             }
                         }
-                    }
-                    if(i >0){
-                        distance2 = pixelArray[i-1].zoomPoint - x;
-                        if(distance > distance2){
-                            zoomcontext.fillText(pixelArray[point].output,5,14,330);
-                            selected=point;
-                        }
-                        else{
-                            zoomcontext.fillText(pixelArray[i-1].output,5,14,330);
-                            selected = i-1;
-                        }
-                    }
-                    zoomcontext.fillStyle= 'black';
-                    break;
-                }
-            }
-            if(selected >=0 || selected <=pixelArray.length){
-                drawSingleEvent(selected,'red', 'red');
-            }
-
-        }
-        else{ //look at incoming events for a match
-            for(var i = 0; i < pixelArray.length; i++){
-                if(!pixelArray[i].output && (x < pixelArray[i].zoomPoint)){
-                    distance = x-pixelArray[i].zoomPoint; //get the parameters of where we are
-                    point = i;
-                    zoomcontext.fillStyle= 'red';
-                    if(i>0){
-                        while(pixelArray[i-1].output){
-                            i--;
-                            if(i==0){
-                                break;
+                        if(i >0){
+                            distance2 = pixelArray[i-1].zoomPoint - x;
+                            if(distance > distance2){
+                                zoomcontext.fillText(pixelArray[point].output,5,14,330);
+                                selected=point;
+                            }
+                            else{
+                                zoomcontext.fillText(pixelArray[i-1].output,5,14,330);
+                                selected = i-1;
                             }
                         }
+                        zoomcontext.fillStyle= 'black';
+                        break;
                     }
-                    if(i >0){
-                        distance2 = pixelArray[i-1].zoomPoint - x;
-                        if(distance > distance2){
-                            zoomcontext.fillText(parseCue(pixelArray[point]),5,14,330);
-                            selected = point;
-                        }
-                        else{
-                            zoomcontext.fillText(parseCue(pixelArray[i-1]),5,14, 330);
-                            selected = i-1;
-                        }
-                    }
-                    break;
                 }
+                if(selected >=0 || selected <=pixelArray.length){
+                    drawSingleEvent(selected,'red', 'red');
+                }
+
             }
-       //     zoomcontext.strokeStyle = 'yellow';
-       //     zoomcontext.moveTo(pixelArray[selected].zoomPoint, zoomcanvasHeight / 2 + 25);
-       //     zoomcontext.lineTo(pixelArray[selected].zoomPoint, zoomcanvasHeight  - 5);
-       //     zoomcontext.stroke();
+            else{ //look at incoming events for a match
+                for(var i = 0; i < pixelArray.length; i++){
+                    if(!pixelArray[i].output && (x < pixelArray[i].zoomPoint)){
+                        distance = x-pixelArray[i].zoomPoint; //get the parameters of where we are
+                        point = i;
+                        zoomcontext.fillStyle= 'red';
+                        if(i>0){
+                            while(pixelArray[i-1].output){
+                                i--;
+                                if(i==0){
+                                    break;
+                                }
+                            }
+                        }
+                        if(i >0){
+                            distance2 = pixelArray[i-1].zoomPoint - x;
+                            if(distance > distance2){
+                                zoomcontext.fillText(parseCue(pixelArray[point]),5,14,330);
+                                selected = point;
+                            }
+                            else{
+                                zoomcontext.fillText(parseCue(pixelArray[i-1]),5,14, 330);
+                                selected = i-1;
+                            }
+                        }
+                        break;
+                    }
+                }
+           //     zoomcontext.strokeStyle = 'yellow';
+           //     zoomcontext.moveTo(pixelArray[selected].zoomPoint, zoomcanvasHeight / 2 + 25);
+           //     zoomcontext.lineTo(pixelArray[selected].zoomPoint, zoomcanvasHeight  - 5);
+           //     zoomcontext.stroke();
+            }
         }
-
-        zoomcontext.fillStyle="black";
+            zoomcontext.fillStyle="black";
     }
-    function drawSingleEvent(element, colorstroke, colorfill){
-        zoomcontext.strokeStyle = colorstroke;
-        zoomcontext.fillStyle = colorfill;
-        pixelX = timeDifference(pixelArray[element].Time,startTimeZoom)/msPerPixelZoom;
-        if(pixelArray[element].output){//this is output data
-            //  zoomcontext.strokeStyle = 'blue';
-            zoomcontext.moveTo(pixelX, zoomcanvasHeight / 2 - 25);
-            zoomcontext.lineTo(pixelX, 15);
-
-            wrapText(zoomcontext, pixelArray[element].output, pixelX-1.5,zoomcanvasHeight/2-25,zoomcanvasHeight/2-25,10);
-        }
-        else{      //this in cue input data
-            // zoomcontext.strokeStyle = 'green';
-            zoomcontext.moveTo(pixelX, zoomcanvasHeight / 2 + 25);
-            zoomcontext.lineTo(pixelX, zoomcanvasHeight  - 5);
-            wrapText(zoomcontext, parseCue(pixelArray[element]), pixelX-1.5,zoomcanvasHeight  - 5,zoomcanvasHeight/2-25,10);
-        }
-        zoomcontext.stroke();
-
-        zoomcontext.strokeStyle = 'black';
-        zoomcontext.fillStyle = 'black';
+    else{ // we can insert manual stuff here
+            if(event.offsetY > zoomcanvasHeight/2){//we are at bottom half of canvas
+                document.body.style.cursor  = 'not-allowed';
+            }
+            else if(event.offsetX <= pixelArray[0].zoomPoint){
+                document.body.style.cursor  = 'not-allowed';
+            }
+            else{
+                document.body.style.cursor  = 'crosshair';
+            }
     }
 }
+function drawSingleEvent(element, colorstroke, colorfill){
+    zoomcontext.strokeStyle = colorstroke;
+    zoomcontext.fillStyle = colorfill;
+    pixelX = timeDifference(pixelArray[element].Time,startTimeZoom)/msPerPixelZoom;
+    if(pixelArray[element].output){//this is output data
+        //  zoomcontext.strokeStyle = 'blue';
+        zoomcontext.moveTo(pixelX, zoomcanvasHeight / 2 - 25);
+        zoomcontext.lineTo(pixelX, 15);
+
+        wrapText(zoomcontext, pixelArray[element].output, pixelX-1.5,zoomcanvasHeight/2-25,zoomcanvasHeight/2-25,10);
+    }
+    else{      //this in cue input data
+        // zoomcontext.strokeStyle = 'green';
+        zoomcontext.moveTo(pixelX, zoomcanvasHeight / 2 + 25);
+        zoomcontext.lineTo(pixelX, zoomcanvasHeight  - 5);
+        wrapText(zoomcontext, parseCue(pixelArray[element]), pixelX-1.5,zoomcanvasHeight  - 5,zoomcanvasHeight/2-25,10);
+    }
+    zoomcontext.stroke();
+
+    zoomcontext.strokeStyle = 'black';
+    zoomcontext.fillStyle = 'black';
+}
+
+
+
 
 function relayclick(){
-    property= document.getElementById("fieldset1");
-    property.style.backgroundColor = 'palegreen';
-    button = document.getElementById("insertrelay")
-    button.text = "x";
+    dataToSend = document.getElementById('relayselect').value;
+    if(document.getElementById('relayopen').checked){
+        dataToSend += " 0";
+    }
+    else{
+        dataToSend += " 1";
+    }
+    document.getElementById("fieldset1").style.backgroundColor = 'palegreen';
+    document.getElementById("insertrelay").innerHTML = "Ready";
+    insertReady = 1;
 }
 function serialclick(){
 
 }
 function smpteclick(){
-
+    document.getElementById("fieldset4").style.backgroundColor = 'palegreen';
+    document.getElementById("insertsmpte").innerHTML = "Ready";
+    insertReady = 1;
+    if(document.getElementById('smpteon').checked){
+        dataToSend = 'SLAVE SMPTE ON';
+    }
+    else{
+        dataToSend = 'SLAVE SMPTE OFF';
+    }
 }
 function dmxclick(){
-
+    document.getElementById("fieldset3").style.backgroundColor = 'palegreen';
+    document.getElementById("insertdmx").innerHTML = "Ready";
+    var val1 = document.getElementById('dmx1').value;
+    var val2 = document.getElementById('dmx2').value;
+    var val3 = document.getElementById('dmx3').value;
+    dataToSend = 'SLAVE DMX_CH ' + val1 +  " " + val2 + " " + val3 + '';
+    insertReady = 1;
 }
-function dcaclick(){
-
+function dacclick(){
+    document.getElementById("fieldset5").style.backgroundColor = 'palegreen';
+    document.getElementById("insertdac").innerHTML = "Ready";
+    insertReady = 1;
+    if(document.getElementById('dac1').checked){
+        dataToSend = 'SLAVE DAC1 ';
+    }
+    else{
+        dataToSend = 'SLAVE DAC2 ';
+    }
+    dataToSend += document.getElementById('dacout').value + '';
 }
 
