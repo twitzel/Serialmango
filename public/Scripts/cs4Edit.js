@@ -30,8 +30,6 @@ function init(){
     document.getElementById('mainCanvas').width =  document.getElementById('canvasDiv').offsetWidth;
     canvas = document.getElementById('mainCanvas');
     context = canvas.getContext('2d');
-    canvasWidth = canvas.width;
-    canvasHeight = canvas.height;
     rect = canvas.getBoundingClientRect();
     canvas.addEventListener("mouseover",canvasMouseover, false);
     canvas.addEventListener("mouseout",canvasMouseout, false );
@@ -44,8 +42,6 @@ function init(){
     document.getElementById('zoomCanvas').width =  document.getElementById('canvasDiv').offsetWidth;
     zoomcanvas = document.getElementById('zoomCanvas');
     zoomcontext = zoomcanvas.getContext('2d');
-    zoomcanvasWidth = zoomcanvas.width;
-    zoomcanvasHeight = zoomcanvas.height;
     zoomcanvas.addEventListener("mouseover", zoomcanvasMouseover, false);
     zoomcanvas.addEventListener("mouseout", zoomcanvasMouseout, false );
    //
@@ -75,7 +71,7 @@ function onOpen(evt) {
     // autoplot = setInterval(function(){movedata()},30);
     dataPacket.Type = 'EDIT';
     websocket.send(JSON.stringify(dataPacket));
-    context.clearRect(0,0,canvasWidth,canvasHeight);
+    context.clearRect(0,0,canvas.width,canvas.height);
 }
 
 function onClose(evt) {
@@ -130,7 +126,7 @@ function resize_canvas()
 function loadclick(){
     dataPacket.Type = 'EDIT';
     websocket.send(JSON.stringify(dataPacket));
-    context.clearRect(0,0,canvasWidth,canvasHeight);
+    context.clearRect(0,0,canvas.width,canvas.height);
 }
 
 function undoclick(){
@@ -247,14 +243,14 @@ function timeDifference(time, start){
 
 function drawTimeLine(start, end){
     context.globalAlpha = 1;
-    for(var i = 10; i< canvasWidth; i+=10){
+    for(var i = 10; i< canvas.width; i+=10){
         if (i % 100 == 0) {
             context.beginPath();
             context.strokeStyle = 'red';
-            context.moveTo(i, canvasHeight / 2 - 10);
-            context.lineTo(i, canvasHeight / 2 + 10);
+            context.moveTo(i, canvas.height / 2 - 10);
+            context.lineTo(i, canvas.height / 2 + 10);
             new Date().toLocaleTimeString().substring(0,8);
-            context.fillText( new Date(new Date(start).setMilliseconds(new Date(start).getMilliseconds() + i*msPerPixelMain)).toLocaleTimeString().substring(0,8),i-15, canvasHeight/2+20);
+            context.fillText( new Date(new Date(start).setMilliseconds(new Date(start).getMilliseconds() + i*msPerPixelMain)).toLocaleTimeString().substring(0,8),i-15, canvas.height/2+20);
 
             context.stroke();
         }
@@ -262,8 +258,8 @@ function drawTimeLine(start, end){
         else {
             context.beginPath();
             context.strokeStyle = 'black';
-            context.moveTo(i, canvasHeight / 2 - 5);
-            context.lineTo(i, canvasHeight / 2 + 5);
+            context.moveTo(i, canvas.height / 2 - 5);
+            context.lineTo(i, canvas.height / 2 + 5);
             context.stroke();
         }
     }
@@ -281,20 +277,20 @@ function drawData(){
             countTop++;
 
             context.strokeStyle = 'blue';
-            context.moveTo(pixelX, canvasHeight / 2 - 25);
+            context.moveTo(pixelX, canvas.height / 2 - 25);
             context.lineTo(pixelX, 15);
             if((countTop%5 ==0) || (countTop ==1)){
-                wrapText(context, pixelArray[i].output, pixelX-1.5,canvasHeight/2-25,canvasHeight/2-25,10);
+                wrapText(context, pixelArray[i].output, pixelX-1.5,canvas.height/2-25,canvas.height/2-25,10);
             }
         }
         else{      //this in cue input data
             countBottom++;
             context.strokeStyle = 'green';
             x=timeDifference(pixelArray[i].Time, startTime);
-            context.moveTo(pixelX, canvasHeight / 2 + 25);
-            context.lineTo(pixelX, canvasHeight - 5);
+            context.moveTo(pixelX, canvas.height / 2 + 25);
+            context.lineTo(pixelX, canvas.height - 5);
             if((countBottom%5 ==0) || (countBottom ==1)){
-                wrapText(context, parseCue(pixelArray[i]), pixelX-1.5,canvasHeight  - 5,canvasHeight/2-25,10);
+                wrapText(context, parseCue(pixelArray[i]), pixelX-1.5,canvas.height  - 5,canvas.height/2-25,10);
             }
         }
         context.stroke();
@@ -311,7 +307,7 @@ function canvasPlot(){
     //timeDifference = new Date(pixelArray[pixelArray.length -1].Time) - new Date(pixelArray[0].Time);
     // timeDifference = new Date(pixelArray[pixelArray.length -1].Time) - new Date(startTime);
     timediff = timeDifference(endTime, startTime);
-    msPerPixelMain = timeDifference(endTime, startTime)/canvasWidth;
+    msPerPixelMain = timeDifference(endTime, startTime)/canvas.width;
     t = msPerPixelMain;
     drawTimeLine(startTime, endTime);
     drawData();
@@ -337,17 +333,17 @@ function locationChange(value){
 
 function updateCanvas(){
     if(startTime >=0 && endTime >=0){ //make sure we have valid time
-        context.clearRect(0,0,canvasWidth,canvasHeight);
+        context.clearRect(0,0,canvas.width,canvas.height);
         drawTimeLine(startTime, endTime);
         drawData();
         context.fillStyle = 'gray';
         context.globalAlpha = 0.6;
-        offset = (canvasWidth/2) * (zoomFactor/100);
+        offset = (canvas.width/2) * (zoomFactor/100);
         shift = offset * (50 - zoomLocation)/50;
         minPixel = offset-shift;
-        maxPixel = canvasWidth - (offset + shift);
-        context.fillRect(0,0,minPixel, canvasHeight);
-        context.fillRect(maxPixel,0, canvasWidth, canvasHeight);
+        maxPixel = canvas.width - (offset + shift);
+        context.fillRect(0,0,minPixel, canvas.height);
+        context.fillRect(maxPixel,0, canvas.width, canvas.height);
         context.stroke();
         //Now put it in the zoomed canvas
         drawZoomTimeLine(minPixel , maxPixel );
@@ -358,20 +354,20 @@ function drawZoomTimeLine(start, end){
     zoomcontext.globalAlpha = 1;
     startTimeZoom =  new Date(new Date(startTime).setMilliseconds(new Date(startTime).getMilliseconds() + minPixel*msPerPixelMain));
     endTimeZoom =    new Date(new Date(startTime).setMilliseconds(new Date(startTime).getMilliseconds() + minPixel*msPerPixelMain + maxPixel*msPerPixelMain));
-    msPerPixelZoom = (maxPixel - minPixel)*msPerPixelMain/zoomcanvasWidth;
-    zoomcontext.clearRect(0,0,zoomcanvasWidth,zoomcanvasHeight);
-    for(var i = 10; i< zoomcanvasWidth; i+=10){
+    msPerPixelZoom = (maxPixel - minPixel)*msPerPixelMain/zoomcanvas.width;
+    zoomcontext.clearRect(0,0,zoomcanvas.width,zoomcanvas.height);
+    for(var i = 10; i< zoomcanvas.width; i+=10){
         zoomcontext.beginPath();
         if (i % 100 == 0) {
             zoomcontext.strokeStyle = 'red';
-            zoomcontext.moveTo(i, zoomcanvasHeight / 2 - 10);
-            zoomcontext.lineTo(i, zoomcanvasHeight / 2 + 10);
-            zoomcontext.fillText( new Date(new Date(startTime).setMilliseconds(new Date(startTime).getMilliseconds() + minPixel*msPerPixelMain + i*msPerPixelZoom)).toLocaleTimeString().substring(0,8),i-15, zoomcanvasHeight/2+20);
+            zoomcontext.moveTo(i, zoomcanvas.height / 2 - 10);
+            zoomcontext.lineTo(i, zoomcanvas.height / 2 + 10);
+            zoomcontext.fillText( new Date(new Date(startTime).setMilliseconds(new Date(startTime).getMilliseconds() + minPixel*msPerPixelMain + i*msPerPixelZoom)).toLocaleTimeString().substring(0,8),i-15, zoomcanvas.height/2+20);
         }
         else {
             zoomcontext.strokeStyle = 'black';
-            zoomcontext.moveTo(i, zoomcanvasHeight / 2 - 5);
-            zoomcontext.lineTo(i, zoomcanvasHeight / 2 + 5);
+            zoomcontext.moveTo(i, zoomcanvas.height / 2 - 5);
+            zoomcontext.lineTo(i, zoomcanvas.height / 2 + 5);
         }
         zoomcontext.stroke();
     }
@@ -389,17 +385,17 @@ function drawZoomTimeLine(start, end){
             pixelArray[i].zoomPoint = pixelX;
             if(pixelArray[i].output){//this is output data
                 zoomcontext.strokeStyle = 'blue';
-                zoomcontext.moveTo(pixelX, zoomcanvasHeight / 2 - 25);
+                zoomcontext.moveTo(pixelX, zoomcanvas.height / 2 - 25);
                 zoomcontext.lineTo(pixelX, 15);
-                // rotateText(zoomcontext,pixelArray[i].output , pixelX-1.5, zoomcanvasHeight / 2 - 25);
-                wrapText(zoomcontext, pixelArray[i].output, pixelX-1.5,zoomcanvasHeight/2-25,zoomcanvasHeight/2-25,10);
+                // rotateText(zoomcontext,pixelArray[i].output , pixelX-1.5, zoomcanvas.height / 2 - 25);
+                wrapText(zoomcontext, pixelArray[i].output, pixelX-1.5,zoomcanvas.height/2-25,zoomcanvas.height/2-25,10);
             }
             else{      //this in cue input data
                 zoomcontext.strokeStyle = 'green';
-                zoomcontext.moveTo(pixelX, zoomcanvasHeight / 2 + 25);
-                zoomcontext.lineTo(pixelX, zoomcanvasHeight  - 5);
-                wrapText(zoomcontext, parseCue(pixelArray[i]), pixelX-1.5,zoomcanvasHeight  - 5,zoomcanvasHeight/2-25,10);
-                // rotateText(zoomcontext,parseCue(pixelArray[i]) , pixelX-1.5, zoomcanvasHeight  - 5);
+                zoomcontext.moveTo(pixelX, zoomcanvas.height / 2 + 25);
+                zoomcontext.lineTo(pixelX, zoomcanvas.height  - 5);
+                wrapText(zoomcontext, parseCue(pixelArray[i]), pixelX-1.5,zoomcanvas.height  - 5,zoomcanvas.height/2-25,10);
+                // rotateText(zoomcontext,parseCue(pixelArray[i]) , pixelX-1.5, zoomcanvas.height  - 5);
             }
             zoomcontext.stroke();
         }
@@ -444,7 +440,7 @@ function rotateText(cxt,text, x,y){
      */
     cxt.save();
     cxt.rotate(-Math.PI/2);
-    cxt.fillText(text,-y, x, zoomcanvasHeight/2 -30); // fix coordinates for rotated change
+    cxt.fillText(text,-y, x, zoomcanvas.height/2 -30); // fix coordinates for rotated change
     cxt.restore();
 }
 function parseCue(data){
@@ -530,8 +526,8 @@ function canvasMouseout(event){
 function canvasMousedown(event){
     zoomFactor = 80;
     zoomSlider.value = zoomFactor;
-    zoomLocation = event.offsetX *100/canvasWidth;
-    locationSlider.value =event.offsetX *100/canvasWidth;
+    zoomLocation = event.offsetX *100/canvas.width;
+    locationSlider.value =event.offsetX *100/canvas.width;
     updateCanvas();
 }
 function canvasMouseup(event){
@@ -544,7 +540,7 @@ function canvasMousemove(event){
     context.stroke();
     //x = event.clientX -rect.left;
     x= event.offsetX;
-    if(event.offsetY < canvasHeight/2){//we are in outgoing events part of canvas.  look at outgoing events
+    if(event.offsetY < canvas.height/2){//we are in outgoing events part of canvas.  look at outgoing events
         for(var i = 0; i < pixelArray.length; i++){
             if(pixelArray[i].output && (x < pixelArray[i].normalPoint)){
                 distance = x-pixelArray[i].normalPoint; //get the parameters of where we are
@@ -641,7 +637,7 @@ function zoomcanvasTouchmove(event){
                 zoom = -1;
             }
           //  zoomFactor += zoom/2;
-            zoomFactor -= ((Math.sqrt(touchDistanceStart) - Math.sqrt(xsquared + ysquared))*100/canvasWidth)*zoomFactor/100;
+            zoomFactor -= ((Math.sqrt(touchDistanceStart) - Math.sqrt(xsquared + ysquared))*100/canvas.width)*zoomFactor/100;
             if(zoomFactor < 0){
                 zoomFactor = 0;
             }
@@ -662,7 +658,7 @@ function zoomcanvasTouchmove(event){
                 direction = +1;
             }
 
-           // zoomLocation  +=(event.changedTouches[0].clientX - touchStartX )*2/canvasWidth;
+           // zoomLocation  +=(event.changedTouches[0].clientX - touchStartX )*2/canvas.width;
             zoomLocation -= (event.changedTouches[0].clientX - touchStartX)*8/((zoomFactor*2)+1);
            // zoomLocation += direction/2;
             if(zoomLocation < 0){
@@ -768,7 +764,7 @@ function zoomcanvasMousemove(event){
                 zoomcontext.clearRect(2,2,355,20);
                 zoomcontext.rect(2,2,350,17);
                 zoomcontext.stroke();
-                zoomcontext.fillText("Changed " +parseInt((event.offsetX  - selectedPreviousZoomPoint.Point)* msPerPixelZoom )/zoomcanvasHeight + "  Seconds"  ,5,14,330);
+                zoomcontext.fillText("Changed " +parseInt((event.offsetX  - selectedPreviousZoomPoint.Point)* msPerPixelZoom )/zoomcanvas.height + "  Seconds"  ,5,14,330);
             }
         }
         else{
@@ -781,7 +777,7 @@ function zoomcanvasMousemove(event){
             zoomcontext.stroke();
 
             x = event.offsetX;
-            if(event.offsetY < zoomcanvasHeight/2){//we are in outgoing events part of canvas.  look at outgoing events
+            if(event.offsetY < zoomcanvas.height/2){//we are in outgoing events part of canvas.  look at outgoing events
                 for(var i = 0; i < pixelArray.length; i++){
                     if(pixelArray[i].output && (x < pixelArray[i].zoomPoint)){
                         distance = x-pixelArray[i].zoomPoint; //get the parameters of where we are
@@ -844,15 +840,15 @@ function zoomcanvasMousemove(event){
                     }
                 }
            //     zoomcontext.strokeStyle = 'yellow';
-           //     zoomcontext.moveTo(pixelArray[selected].zoomPoint, zoomcanvasHeight / 2 + 25);
-           //     zoomcontext.lineTo(pixelArray[selected].zoomPoint, zoomcanvasHeight  - 5);
+           //     zoomcontext.moveTo(pixelArray[selected].zoomPoint, zoomcanvas.height / 2 + 25);
+           //     zoomcontext.lineTo(pixelArray[selected].zoomPoint, zoomcanvas.height  - 5);
            //     zoomcontext.stroke();
             }
         }
             zoomcontext.fillStyle="black";
     }
     else{ // we can insert manual stuff here
-            if(event.offsetY > zoomcanvasHeight/2){//we are at bottom half of canvas
+            if(event.offsetY > zoomcanvas.height/2){//we are at bottom half of canvas
                 document.body.style.cursor  = 'not-allowed';
             }
             else if(event.offsetX <= pixelArray[0].zoomPoint){
@@ -869,16 +865,16 @@ function drawSingleEvent(element, colorstroke, colorfill){
     pixelX = timeDifference(pixelArray[element].Time,startTimeZoom)/msPerPixelZoom;
     if(pixelArray[element].output){//this is output data
         //  zoomcontext.strokeStyle = 'blue';
-        zoomcontext.moveTo(pixelX, zoomcanvasHeight / 2 - 25);
+        zoomcontext.moveTo(pixelX, zoomcanvas.height / 2 - 25);
         zoomcontext.lineTo(pixelX, 15);
 
-        wrapText(zoomcontext, pixelArray[element].output, pixelX-1.5,zoomcanvasHeight/2-25,zoomcanvasHeight/2-25,10);
+        wrapText(zoomcontext, pixelArray[element].output, pixelX-1.5,zoomcanvas.height/2-25,zoomcanvas.height/2-25,10);
     }
     else{      //this in cue input data
         // zoomcontext.strokeStyle = 'green';
-        zoomcontext.moveTo(pixelX, zoomcanvasHeight / 2 + 25);
-        zoomcontext.lineTo(pixelX, zoomcanvasHeight  - 5);
-        wrapText(zoomcontext, parseCue(pixelArray[element]), pixelX-1.5,zoomcanvasHeight  - 5,zoomcanvasHeight/2-25,10);
+        zoomcontext.moveTo(pixelX, zoomcanvas.height / 2 + 25);
+        zoomcontext.lineTo(pixelX, zoomcanvas.height  - 5);
+        wrapText(zoomcontext, parseCue(pixelArray[element]), pixelX-1.5,zoomcanvas.height  - 5,zoomcanvas.height/2-25,10);
     }
     zoomcontext.stroke();
 
