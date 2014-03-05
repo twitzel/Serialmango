@@ -40,10 +40,10 @@
 </div>
 <div id = "canvasDiv">
 
-
+    <button id = "addButton"  onmousedown = "addclick()">Add Cues</button>
     <button id = "saveButton"  onmousedown = "saveclick()">Save Cue File</button>
     <button id = "undoButton"  onmousedown = "undoclick()">Undo Last Edit</button>
-    <button id = "loadButton"  onmousedown = "loadclick()">Load Cue File </button>
+    <button id = "loadButton"  onmousedown = "loadclick()">Load Cue File</button>
     <h3 id = "in" > All Cue Data  </h3>
     <canvas id="mainCanvas" width= 1000px height=300px tabindex = "1">  </canvas>
     Zoom: 0<input type="range" class="slider" id="zoom" name="zoom" step = 0.25 value = 0 max = 99.80 onchange="zoomChange(this.value)" oninput="zoomChange(this.value)">100

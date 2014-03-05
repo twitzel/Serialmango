@@ -168,10 +168,12 @@ function saveclick(){
     {
         alert('Save Cue File Cancelled!');
     }
+}
 
-
-
-
+function addclick(){
+    document.getElementById('mainCanvas').height = 200;
+    document.getElementById('zoomCanvas').height = 275;
+    document.getElementById('adddiv').style.display = "block";
 }
 
 function pixelLoad(item){
