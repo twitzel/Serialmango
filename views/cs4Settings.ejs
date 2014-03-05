@@ -146,24 +146,38 @@
 
     </fieldset>
 
-    <fieldset id = "serial">
-        <legend>Serial Send</legend>
-        <label>Serial 1 Data</label>
-        <input id=serial1data name=serial1data type=text value="serial 1 data" required style = "width: 8em" >
-        <label>Serial 1 Baud Rate</label>
-        <input id=serial1baud name=serial1baud type=number value="9600" required style = "width: 8em" >
-        <button id = "sendserial1"  onmousedown = "sendserial1()"> Serial 1 Send </button>
-        <label>Serial 2 Data</label>
-        <input id=serial2data name=serial2data type=text value="serial 2 data" required style = "width: 8em" >
-        <label>Serial 2 Baud Rate</label>
-        <input id=serial2baud name=serial2baud type=number value="9600" required style = "width: 8em" >
-        <button id = "sendserial2"  onmousedown = "sendserial2()"> Serial 2 Send </button>
-        <label>Serial 3 Data</label>
-        <input id=serial3data name=serial3data type=text value="serial 3 data" required style = "width: 8em" >
-        <label>Serial 3 Baud Rate</label>
-        <input id=serial3baud name=serial3baud type=number value="9600" required style = "width: 8em" >
-        <button id = "sendserial3"  onmousedown = "sendserial3()"> Serial 3 Send </button>
-
+    <fieldset id = "fieldset2" class = field>
+        <legend><b>Serial Ports</b></legend>
+        <div>
+            ASCII <input id= 'asciiselect' name=serialtype value= " A" type=radio checked>
+            HEX<input id= 'serialhex' name=serialtype value = " H" type=radio >
+        </div>
+        <select id='serialselect' >
+            <option value=' SLAVE SER1' title='1'>Serial 1</option>
+            <option value=' SLAVE SER2' title='2'>Serial 2</option>
+            <option value=' SLAVE SER3' title='3'>Serial 3</option>
+        </select>
+        <select id= baudselect >
+            <option value=' 9600' title='9600'>9600 Baud</option>
+            <option value=' 1200' title='1200'>1200</option>
+            <option value=' 4800' title='4800'>4800</option>
+            <option value=' 9600' title='9600'>9600</option>
+            <option value=' 14400' title='14400'>14400</option>
+            <option value=' 19200' title='19200'>19200</option>
+            <option value=' 28800' title='28800'>28800</option>
+            <option value=' 38400' title='38400'>38400</option>
+            <option value=' 57600' title='57600'>57600</option>
+            <option value=' 115200' title='115200'>115200</option>
+        </select>
+        <select id= parityselect >
+            Parity: <option value=' N' title='NONE'>Parity: NONE</option>
+            <option value=' O' title='ODD'>Parity: ODD</option>
+            <option value=' E' title='EVEN'>Parity: EVEN</option>
+        </select>
+        <input id=message name=message   value="text" required style = "width: 10em" >Message</ul>
+        <div id="buttondiv2">
+            <button id = "sendserial"   class = but  onmousedown = "sendserial()"> Send </button>
+        </div>
     </fieldset>
 
     <fieldset id = "dac">

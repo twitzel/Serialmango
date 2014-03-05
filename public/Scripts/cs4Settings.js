@@ -167,6 +167,21 @@ function sendtext(){
 }
 
 //************************************  SERIAL  ******************************
+function sendserial(){
+    dataPacket.Type ='SEND';
+    dataPacket.Data = document.getElementById("serialselect").value;
+    dataPacket.Data += document.getElementById("baudselect").value;
+    dataPacket.Data += document.getElementById("parityselect").value;
+    if(document.getElementById('asciiselect').checked){
+        dataPacket.Data += ' A ';
+    }
+    else{
+        dataPacket.Data += ' H ';
+    }
+    dataPacket.Data += document.getElementById('message').value.trim();
+    dataPacket.Data += '';
+    websocket.send(JSON.stringify(dataPacket));
+}
 function sendserial1(){
     dataPacket.Type ='SEND';
     var baud = document.getElementById('serial1baud').value;
