@@ -54,6 +54,31 @@
 </div>
 
 <div id="adddiv">
+    <div id = smpte class = relay >
+        <fieldset id = "fieldset4" class = field>
+            <legend><b>SPMTE</b></legend>
+            <div>
+                On <input id=smpteon name=smpte value= "on" type=radio checked>
+                Off<input id=smteoff name=smpte value = "ff" type=radio >
+            </div>
+
+            <div id="buttondiv4">
+                <button id = "insertsmpte"   class = but  onmousedown = "smpteclick()"> Insert </button>
+            </div>
+        </fieldset>
+    </div>
+
+    <div id = dmx class = dmx >
+        <fieldset id = "fieldset3" class = field>
+            <legend><b>DMX Channels</b></legend>
+            <input id=dmx1 name=dmx1   value="1" required style = "width: 2em" > </ul>
+            <input id=dmx2 name=dmx2   value="2" required style = "width: 2em" > </ul>
+            <input id=dmx3 name=dmx3   value="3" required style = "width: 2em" > </ul>
+            <div id="buttondiv3">
+                <button id = "insertdmx"   class = but  onmousedown = "dmxclick()"> Insert </button>
+            </div>
+        </fieldset>
+    </div>
 
     <div id = relay class = relay >
         <fieldset id = "fieldset1" class = field>
@@ -70,6 +95,20 @@
             </select>
             <div id="buttondiv1">
                 <button id = "insertrelay"  class = but onmousedown = "relayclick()"> Insert </button>
+            </div>
+        </fieldset>
+    </div>
+
+    <div id = dac class = dac >
+        <fieldset id = "fieldset5" class = field>
+            <legend><b>DAC</b></legend>
+            <div>
+                Channel:  1 <input id=dac1 name=dac value= "1" type=radio checked>
+                2<input id=dac2 name=dac value = "2" type=radio >
+            </div>
+            <input id=dacout name=dacout   value="4000" required style = "width: 3em" >Millivolts</ul>
+            <div id="buttondiv5">
+                <button id = "insertdac"    class = but onmousedown = "dacclick()"> Insert  </button>
             </div>
         </fieldset>
     </div>
@@ -106,46 +145,6 @@
             <input id=message name=message   value="text" required style = "width: 10em" >Message</ul>
             <div id="buttondiv2">
                 <button id = "insertserial"   class = but  onmousedown = "serialclick()"> Insert </button>
-            </div>
-        </fieldset>
-    </div>
-
-    <div id = dmx class = dmx >
-        <fieldset id = "fieldset3" class = field>
-            <legend><b>DMX Channels</b></legend>
-            <input id=dmx1 name=dmx1   value="1" required style = "width: 2em" > </ul>
-            <input id=dmx2 name=dmx2   value="2" required style = "width: 2em" > </ul>
-            <input id=dmx3 name=dmx3   value="3" required style = "width: 2em" > </ul>
-            <div id="buttondiv3">
-                <button id = "insertdmx"   class = but  onmousedown = "dmxclick()"> Insert </button>
-            </div>
-        </fieldset>
-    </div>
-
-    <div id = smpte class = relay >
-        <fieldset id = "fieldset4" class = field>
-            <legend><b>SPMTE</b></legend>
-            <div>
-                On <input id=smpteon name=smpte value= "on" type=radio checked>
-                Off<input id=smteoff name=smpte value = "ff" type=radio >
-            </div>
-
-            <div id="buttondiv4">
-                <button id = "insertsmpte"   class = but  onmousedown = "smpteclick()"> Insert </button>
-            </div>
-        </fieldset>
-    </div>
-
-    <div id = dac class = dac >
-        <fieldset id = "fieldset5" class = field>
-            <legend><b>DAC</b></legend>
-            <div>
-                Channel:  1 <input id=dac1 name=dac value= "1" type=radio checked>
-                2<input id=dac2 name=dac value = "2" type=radio >
-            </div>
-            <input id=dacout name=dacout   value="4000" required style = "width: 3em" >Millivolts</ul>
-            <div id="buttondiv5">
-                <button id = "insertdac"    class = but onmousedown = "dacclick()"> Insert  </button>
             </div>
         </fieldset>
     </div>

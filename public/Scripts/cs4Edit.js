@@ -171,9 +171,21 @@ function saveclick(){
 }
 
 function addclick(){
-    document.getElementById('mainCanvas').height = 200;
-    document.getElementById('zoomCanvas').height = 275;
-    document.getElementById('adddiv').style.display = "block";
+    if(document.getElementById('addButton').innerHTML == "Add Cues"){
+        document.getElementById('mainCanvas').height = 200;
+        document.getElementById('zoomCanvas').height = 275;
+        document.getElementById('adddiv').style.display = "block";
+        document.getElementById('addButton').innerHTML = 'Normal View';
+        updateCanvas();
+    }
+    else{
+        document.getElementById('mainCanvas').height = 300;
+        document.getElementById('zoomCanvas').height = 300;
+        document.getElementById('adddiv').style.display = "none";
+        document.getElementById('addButton').innerHTML = 'Add Cues';
+        updateCanvas();
+    }
+
 }
 
 function pixelLoad(item){
