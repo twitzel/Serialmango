@@ -782,16 +782,28 @@ function zoomcanvasMousemove(event){
     if(insertReady == 0){
         if(mouseDown == 1){
             if(selected >=0 && selected <=pixelArray.length){
-                //calculate a new time
-                incremental = new Date(pixelArray[selected].Time);
-                incremental = new Date(incremental.setMilliseconds(incremental.getMilliseconds() - (pixelArray[selected].zoomPoint - event.offsetX)*msPerPixelZoom  )).toISOString();
-                pixelArray[selected].Time = incremental;
-                updateCanvas();
-                zoomcontext.strokeStyle = 'blue';
-                zoomcontext.clearRect(2,2,355,20);
-                zoomcontext.rect(2,2,350,17);
-                zoomcontext.stroke();
-                zoomcontext.fillText("Changed " +parseInt((event.offsetX  - selectedPreviousZoomPoint.Point)* msPerPixelZoom )/zoomcanvas.height + "  Seconds"  ,5,14,330);
+                //check if before first cue
+                if(event.offsetX > pixelArray[0].zoomPoint){
+                    document.body.style.cursor  = 'pointer';
+                    //calculate a new time
+                    incremental = new Date(pixelArray[selected].Time);
+                    incremental = new Date(incremental.setMilliseconds(incremental.getMilliseconds() - (pixelArray[selected].zoomPoint - event.offsetX)*msPerPixelZoom  )).toISOString();
+                    pixelArray[selected].Time = incremental;
+                    updateCanvas();
+                    zoomcontext.strokeStyle = 'blue';
+                    zoomcontext.clearRect(2,2,355,20);
+                    zoomcontext.rect(2,2,350,17);
+                    zoomcontext.stroke();
+                    zoomcontext.fillText("Changed " +parseInt((event.offsetX  - selectedPreviousZoomPoint.Point)* msPerPixelZoom )/zoomcanvas.height + "  Seconds"  ,5,14,330);
+                }
+                else{
+                    document.body.style.cursor  = 'not-allowed';
+                    zoomcontext.strokeStyle = 'red';
+                    zoomcontext.clearRect(2,2,355,20);
+                    zoomcontext.rect(2,2,350,17);
+                    zoomcontext.stroke();
+                    zoomcontext.fillText("Can NOT be before first CUE"  ,5,14,330);
+                }
             }
         }
         else{
