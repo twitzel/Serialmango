@@ -172,7 +172,7 @@ function saveclick(){
 function addclick(){
     if(document.getElementById('addButton').innerHTML == "Add Cues"){
         document.getElementById('mainCanvas').height = 200;
-        document.getElementById('zoomCanvas').height = 275;
+      //  document.getElementById('zoomCanvas').height = 275;
         document.getElementById('adddiv').style.display = "block";
         document.getElementById('addButton').innerHTML = 'Normal View';
         updateCanvas();

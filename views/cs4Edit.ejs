@@ -22,7 +22,7 @@
     <nav id = "menunav">
         <ul>
             <li><a href="cs4Home">Home</a></li>
-            <li class="active"><a href="cs4VerticalScroll" >Scrolling</a></li>
+            <li><a href="cs4VerticalScroll" >Scrolling</a></li>
             <li ><a href="cs4Info" >Info</a></li>
             <li><a href="cs4Timing">Timing</a></li>
             <li><a href="cs4Settings">Settings</a></li>
@@ -30,7 +30,6 @@
         </ul>
     </nav>
 </header>
-
 <body class = 'body' onresize="resize_canvas()">
 <div id = "title" >
 
@@ -142,9 +141,10 @@
                 <option value=' O' title='ODD'>Parity: ODD</option>
                 <option value=' E' title='EVEN'>Parity: EVEN</option>
             </select>
-            <input id=message name=message   value="text" required style = "width: 10em" >Message</ul>
             <div id="buttondiv2">
                 <button id = "insertserial"   class = but  onmousedown = "serialclick()"> Insert </button>
+                <input id=message name=message   value="text" required style = "width: 10em" >Message</ul>
+
             </div>
         </fieldset>
     </div>
