@@ -531,6 +531,10 @@ function canvasMousedown(event){
     if((event.offsetX >= minPixel) && (event.offsetX <= maxPixel)){//we re withing the zoomed area
         canvasMousedownZoom = 1;
         document.body.style.cursor  = 'e-resize';
+        zoomSlider.value = zoomFactor;
+        zoomLocation = event.offsetX *100/canvas.width;
+        locationSlider.value =event.offsetX *100/canvas.width;
+        updateCanvas();
     }
     if(zoomFactor == 0){
         zoomFactor = 80;
@@ -540,7 +544,7 @@ function canvasMousedown(event){
         updateCanvas();
 
     }
-    else if((event.offsetX < minPixel) || (event.offsetX > maxPixel)){
+    if((event.offsetX < minPixel) || (event.offsetX > maxPixel)){
         zoomSlider.value = zoomFactor;
         zoomLocation = event.offsetX *100/canvas.width;
         locationSlider.value =event.offsetX *100/canvas.width;
@@ -557,6 +561,7 @@ function canvasMouseup(event){
 function canvasMousemove(event){
     if(canvasMousedownZoom){ //move the zoomed area
         zoomLocation = event.offsetX *100/canvas.width;
+        locationSlider.value =event.offsetX *100/canvas.width;
         updateCanvas();
     }
     else{
