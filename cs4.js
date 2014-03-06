@@ -899,7 +899,7 @@ function ledInfoOn(GPIOnum){
     {
         var led = require('fastgpio');
         led.prepareGPIO(GPIOnum);
-        led.set(4);
+        led.set(GPIOnum);
     }
 }
 
@@ -908,6 +908,6 @@ function ledInfoOff(GPIOnum){
     {
         var led = require('fastgpio');
         led.prepareGPIO(GPIOnum);
-        led.unset(4);
+        led.unset(GPIOnum);
     }
 }
