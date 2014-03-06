@@ -49,7 +49,7 @@ sendOutput = function (dataToSend)
         timedOut = false;
         comlib.write("         " + dataToSend + "\n\r"); // add spaces at beginning for R4 zigbee stuff and terminate\n\r
         ledInfoOn(27);
-        setTimeout(function(){ledInfoOff(27);}, 1000);
+        setTimeout(function(){ledInfoOff(27);}, 250);
         setTimeout(function(){timedOut = true;}, timedOutInterval);
         timerStartTime = new Date();
         console.log(dataToSend);
@@ -496,7 +496,7 @@ else
 function parseCue(data)
 {
     ledInfoOn(17);
-    setTimeout(function(){ledInfoOff(17);}, 1000);
+    setTimeout(function(){ledInfoOff(17);}, 250);
     serialData = JSON.parse(data);
     serialData.Time = new Date(serialData.Time);
 
