@@ -48,6 +48,8 @@ sendOutput = function (dataToSend)
     {
         timedOut = false;
         comlib.write("         " + dataToSend + "\n\r"); // add spaces at beginning for R4 zigbee stuff and terminate\n\r
+        ledInfoOn(27);
+        setTimeout(function(){ledInfoOff(27);}, 1000);
         setTimeout(function(){timedOut = true;}, timedOutInterval);
         timerStartTime = new Date();
         console.log(dataToSend);
@@ -468,6 +470,7 @@ if(data.length >= 35) // this is to let GETTIME come through and get logged GETT
     lastCueReceivedExternalTime = new Date(lastCueReceived);
 
     //Log the data into the collection
+
     collectionLog.insert(serialData, {w: 1}, function (err, result) {
         console.log(result);
     });
@@ -492,6 +495,8 @@ else
 
 function parseCue(data)
 {
+    ledInfoOn(17);
+    setTimeout(function(){ledInfoOff(17);}, 1000);
     serialData = JSON.parse(data);
     serialData.Time = new Date(serialData.Time);
 
@@ -888,3 +893,21 @@ exports.ledOff = function(){
         led.unset(4);
     }
 };
+
+function ledInfoOn(GPIOnum){
+    if(os.type() != 'Windows_NT') // this is only for the pi
+    {
+        var led = require('fastgpio');
+        led.prepareGPIO(GPIOnum);
+        led.set(4);
+    }
+}
+
+function ledInfoOff(GPIOnum){
+    if(os.type() != 'Windows_NT') // this is only for the pi
+    {
+        var led = require('fastgpio');
+        led.prepareGPIO(GPIOnum);
+        led.unset(4);
+    }
+}
