@@ -159,7 +159,7 @@ function saveclick(){
     if (warning ==true)
     {
         document.body.style.cursor  = 'wait';
-        dataPacket.Type = 'CUECREATE';
+
         dataPacket.Data = pixelArray;
         websocket.send(JSON.stringify(dataPacket));
     }
@@ -732,7 +732,7 @@ function zoomcanvasMouseout(event){
 }
 function zoomcanvasMousedown(event){
     event.preventDefault();
-    if(insertReady == 0){
+    if((insertReady == 0) && (event.offsetY < zoomcanvas.height/2)){
         if(selected >=0 || selected <=pixelArray.length){
             selectedPreviousZoomPoint={};
             mouseDown = 1;

@@ -300,13 +300,13 @@ exports.websocketDataIn = function(dataSocket, Socket){
         {
             copyFromUSB();
         }
-        else if(dataSocket.Type == "COPYTOINTERNAL")
+        else if(dataSocket.Type.substr(0,14) == "COPYTOINTERNAL")
         {
-            copyToInternal();
+            copyToInternal(dataSocket.Type.substr(15,1));
         }
-        else if(dataSocket.Type == "COPYFROMINTERNAL")
+        else if(dataSocket.Type.substr(0,16) == "COPYFROMINTERNAL")
         {
-            copyFromInternal();
+            copyFromInternal(dataSocket.Type.substr(17,1));
         }
         else if(dataSocket.Type == "EDIT"){
             collectionCue.find({},{}).sort({"Time": 1}).toArray(function(error,cuefile){
@@ -332,8 +332,8 @@ exports.websocketDataIn = function(dataSocket, Socket){
                 mongoDirectory = 'd:/mongo/bin/'; //this is based on system install of mongo
 
                 spawn('d:/mongo/bin/mongodump', ['-o', destinationPath]).on('exit',function(code){
-                    comlib.websocketsend("Successfully copied all data to internal storage");
-                    console.log("Successfully copied all data to internal storage: "+ destinationPath + " " + code);
+                    comlib.websocketsend("Successfully copied all data to default storage");
+                    console.log("Successfully copied all data to default storage: "+ destinationPath + " " + code);
                     makeCueFile(dataSocket);
                 });
             }
@@ -347,13 +347,47 @@ exports.websocketDataIn = function(dataSocket, Socket){
                 mongoDirectory = '/opt/mongo/bin/';
 
                 spawn(mongoDirectory + 'mongodump', ['-o', destinationPath]).on('exit',function(code){
-                    comlib.websocketsend("Successfully copied all data to internal storage");
-                    console.log("Successfully copied all data to internal storage: "+ destinationPath + " " + code);
+                    comlib.websocketsend("Successfully copied all data to default storage");
+                    console.log("Successfully copied all data to default storage: "+ destinationPath + " " + code);
                     makeCueFile(dataSocket);
                 });
             }
 
         }
+        else if(dataSocket.Type == "DELETECUE"){
+            // copies database to destinationPath for a backup, then deletes all records in cue file.
+            if(os.type() == 'Windows_NT')
+            {
+                //  usbstickPath = "G:/"; // this is based on particular usbsticl
+                //   path = usbstickPath ;
+                //  sourcePath = "d://data/db"; // this is based on system install of mongo
+                destinationPath = "d:/mongoBackup/dump"; //this is particular to the system mongo is running on
+                mongoDirectory = 'd:/mongo/bin/'; //this is based on system install of mongo
+            }
+            //this is for the pi
+            else
+            {
+                //  usbstickPath = "/media";
+                //  path = usbstickPath ;
+                //  sourcePath = "/data/db";
+                destinationPath = "/home/pi/mongoBackup/dump"; // this was arbitrarily chosen but now fixed
+                mongoDirectory = '/opt/mongo/bin/';
+            }
+            spawn(mongoDirectory + 'mongodump', ['-o', destinationPath]).on('exit',function(code){
+                comlib.websocketsend("Successfully copied all data to default storage and deleted the cue file");
+                console.log("Successfully copied all data to default storage: "+ destinationPath + " " + code);
+                collectionCue.remove({},function(err,numberRemoved){
+                    console.log("inside remove call back" + numberRemoved);
+                });
+
+            });
+
+
+
+        }
+
+
+
     }
     else //This is the real live system timing data
     {
@@ -792,7 +826,7 @@ function copyFromUSB()
     }
 }
 
-function copyToInternal()
+function copyToInternal(location)
 {
     // copies database to destinationPath.
     if(os.type() == 'Windows_NT')
@@ -800,14 +834,8 @@ function copyToInternal()
       //  usbstickPath = "G:/"; // this is based on particular usbsticl
      //   path = usbstickPath ;
       //  sourcePath = "d://data/db"; // this is based on system install of mongo
-        destinationPath = "d:/mongoBackup/dump"; //this is particular to the system mongo is running on
+        destinationPath = "d:/mongoBackup/dump" + location; //this is particular to the system mongo is running on
         mongoDirectory = 'd:/mongo/bin/'; //this is based on system install of mongo
-
-        spawn('d:/mongo/bin/mongodump', ['-o', destinationPath]).on('exit',function(code){
-            comlib.websocketsend("Successfully copied all data to internal storage");
-            console.log("Successfully copied all data to internal storage: "+ destinationPath + " " + code);
-            return(1);
-        });
     }
     //this is for the pi
     else
@@ -815,43 +843,42 @@ function copyToInternal()
       //  usbstickPath = "/media";
       //  path = usbstickPath ;
       //  sourcePath = "/data/db";
-        destinationPath = "/home/pi/mongoBackup/dump"; // this was arbitrarily chosen but now fixed
+        destinationPath = "/home/pi/mongoBackup/dump" + location; // this was arbitrarily chosen but now fixed
         mongoDirectory = '/opt/mongo/bin/';
-
-        spawn(mongoDirectory + 'mongodump', ['-o', destinationPath]).on('exit',function(code){
-            comlib.websocketsend("Successfully copied all data to internal storage");
-            console.log("Successfully copied all data to internal storage: "+ destinationPath + " " + code);
-            return(1);
-        });
     }
+    spawn('d:/mongo/bin/mongodump', ['-o', destinationPath]).on('exit',function(code){
+        comlib.websocketsend("Successfully copied all data to internal storage location " + location);
+        console.log("Successfully copied all data to internal storage: "+ destinationPath + " " + code);
+        return(1);
+    });
 }
 
-function copyFromInternal()
+function copyFromInternal(location)
 {
     // restores database from from internal storage to Mongo data path
 
     if(os.type() == 'Windows_NT')
     {
-        destinationPath = "d:/mongoBackup/dump"; //this is particular to the system mongo is running on
+        destinationPath = "d:/mongoBackup/dump"+ location; //this is particular to the system mongo is running on
         mongoDirectory = 'd:/mongo/bin/'; //this is based on system install of mongo
-
-        spawn(mongoDirectory + 'mongorestore', ['--db',collectionName , destinationPath + "/" + collectionName , '--drop', '-vvv']).on('exit',function(code){
-            console.log('finished ' + code);
-            comlib.websocketsend("Successfully Copied All Data from Internal Storage");
-            console.log("Successfully Copied " + destinationPath + " to " + mongoDirectory);
-        });
     }
     //this is for the pi
     else
     {
-        destinationPath = "/home/pi/mongoBackup/dump"; // this was arbitrarily chosen but now fixed
+        destinationPath = "/home/pi/mongoBackup/dump" + location; // this was arbitrarily chosen but now fixed
         mongoDirectory = '/opt/mongo/bin/';
-
+    }
+    if (fs.existsSync(destinationPath)) { //make sure it exists
         spawn(mongoDirectory + 'mongorestore', ['--db',collectionName , destinationPath + "/" + collectionName , '--drop', '-vvv']).on('exit',function(code){
             console.log('finished ' + code);
-            comlib.websocketsend("Successfully Copied All Data from Internal Storage");
+            comlib.websocketsend("Successfully Copied All Data from Internal Storage Location " + location);
             console.log("Successfully Copied " + destinationPath + " to " + mongoDirectory);
         });
+
+    }
+    else{
+        comlib.websocketsend("Internal Storage Location "+ location+ ' does not exist' );
+        console.log(destinationPath + " does not exist");
     }
 }
 

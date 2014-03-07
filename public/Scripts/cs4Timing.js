@@ -229,3 +229,15 @@ function buttonBackground(){
     }
 
 }
+
+function buttonDelete(){
+    var inputConfirm =confirm("This will permanently DELETE the current CUE file. \n A backup will be created the default location.\n\n Are you sure you want to continue?");
+    if (inputConfirm==true)
+    {
+        dataPacket.Type = 'DELETECUE';
+        websocket.send(JSON.stringify(dataPacket));
+    }
+
+
+
+}

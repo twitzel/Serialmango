@@ -421,13 +421,23 @@ function copyFromUSB(){
 }
 
 function copyToInternal(){
-    dataPacket.Type ="COPYTOINTERNAL";
-    websocket.send(JSON.stringify(dataPacket));
+    if(document.getElementById('internalLocation').value == -1){
+        alert('Please Select Internal Storage Location');
+    }
+    else{
+        dataPacket.Type ="COPYTOINTERNAL" + document.getElementById('internalLocation').value;
+        websocket.send(JSON.stringify(dataPacket));
+    }
 }
 
 function copyFromInternal(){
-    dataPacket.Type ="COPYFROMINTERNAL"
-    websocket.send(JSON.stringify(dataPacket));
+    if(document.getElementById('internalLocation').value == -1){
+        alert('Please Select Internal Storage Location');
+    }
+    else{
+        dataPacket.Type ="COPYFROMINTERNAL" + document.getElementById('internalLocation').value;
+        websocket.send(JSON.stringify(dataPacket));
+    }
 }
 //************************************  TIME  ******************************
 
