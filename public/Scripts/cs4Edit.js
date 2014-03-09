@@ -75,6 +75,7 @@ function onOpen(evt) {
     dataPacket.Type = 'EDIT';
     websocket.send(JSON.stringify(dataPacket));
     context.clearRect(0,0,canvas.width,canvas.height);
+    document.body.style.cursor  = 'wait';
 }
 
 function onClose(evt) {
@@ -93,9 +94,10 @@ function onMessage(evt)    {
         }
         else if (message.packetType =='message'){
             writeToScreen(message.data);
-            document.body.style.cursor  = 'default';
+
         }
     }
+    document.body.style.cursor  = 'default';
 }
 
 function onError(evt) {
