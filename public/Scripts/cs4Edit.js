@@ -8,7 +8,7 @@ var zoomFactor = 0;
 var zoomLocation = 50;
 var minPixel;
 var maxPixel;
-var selected;
+var selected = -1;
 var selectedPreviousZoomPoint = {};
 var arrayPrevious = [];
 var canvasMousedownZoom = 0;
@@ -125,7 +125,8 @@ function resize_canvas()
 {
     document.getElementById('mainCanvas').width =  document.getElementById('canvasDiv').offsetWidth;
     document.getElementById('zoomCanvas').width =  document.getElementById('canvasDiv').offsetWidth;
-    location.reload();
+    updateCanvas();
+    //location.reload();
 }
 
 function loadclick(){
@@ -157,11 +158,11 @@ function undoclick(){
 
 function saveclick(){
 
-    var warning=confirm("This will backup the Cue File to \nan internal location and create \na new file with this modified data");
+    var warning=confirm("This will backup the Cue File to \nan internal location and create \na new file with this modified data.");
     if (warning ==true)
     {
         document.body.style.cursor  = 'wait';
-
+        dataPacket.Type = 'CUECREATE';
         dataPacket.Data = pixelArray;
         websocket.send(JSON.stringify(dataPacket));
     }
@@ -730,50 +731,72 @@ function zoomcanvasMousewheel(event){
 function zoomcanvasMouseout(event){
     document.body.style.cursor  = 'default';
     mouseDown = 0;
+    selected = -1;
     updateCanvas();
 }
 function zoomcanvasMousedown(event){
     event.preventDefault();
-    if((insertReady == 0) && (event.offsetY < zoomcanvas.height/2)){
-        if(selected >=0 || selected <=pixelArray.length){
-            selectedPreviousZoomPoint={};
-            mouseDown = 1;
-            selectedPreviousZoomPoint.Point = parseInt(pixelArray[selected].zoomPoint);
-            selectedPreviousZoomPoint.output = pixelArray[selected].output;
-            selectedPreviousZoomPoint.Time = pixelArray[selected].Time;
-            arrayPrevious.push(selectedPreviousZoomPoint);
-            if(arrayPrevious.length >0){
-                property = document.getElementById('undoButton');
-                property.style.backgroundColor = '#eeee00';
+    if(event.which == 1){ //left mouse button
+        if((insertReady == 0) && (event.offsetY < zoomcanvas.height/2)){
+            if(selected >=0 || selected <=pixelArray.length){
+                selectedPreviousZoomPoint={};
+                mouseDown = 1;
+                selectedPreviousZoomPoint.Point = parseInt(pixelArray[selected].zoomPoint);
+                selectedPreviousZoomPoint.output = pixelArray[selected].output;
+                selectedPreviousZoomPoint.Time = pixelArray[selected].Time;
+                arrayPrevious.push(selectedPreviousZoomPoint);
+                if(arrayPrevious.length >0){
+                    property = document.getElementById('undoButton');
+                    property.style.backgroundColor = '#eeee00';
+                }
             }
         }
+        else if(document.body.style.cursor  == 'crosshair'){  //insert manual item here if we are in the right place
+            itemToInsert = {};
+            itemToInsert.Data = {};
+            incremental = new Date(startTimeZoom);
+            incremental = new Date(incremental.setMilliseconds(incremental.getMilliseconds() +  event.offsetX*msPerPixelZoom)).toISOString();
+            itemToInsert.Time = new Date(incremental);
+            itemToInsert.Data.Delay = 100;
+            itemToInsert.Data.Port = "";
+            itemToInsert.Data.Showname = "";
+            itemToInsert.Data.Dir = "";
+            itemToInsert.Data.Dout = dataToSend;
+            itemToInsert.output = dataToSend;
+            pixelArray.push(itemToInsert);
+            field = document.getElementsByClassName('field');
+            for(i=0; i<field.length; i++){
+                field[i].style.backgroundColor = '';
+            }
+            field = document.getElementsByClassName('but');
+            for(i=0; i<field.length; i++){
+                field[i].innerHTML = 'Insert';
+            }
+            insertReady = 0;
+            pixelArray.sort(function(a,b){ // sort
+                return new Date(a.Time) - new Date(b.Time);
+            });
+            updateCanvas();
+        }
     }
-    else if(document.body.style.cursor  == 'crosshair'){  //insert manual item here if we are in the right place
-        itemToInsert = {};
-        itemToInsert.Data = {};
-        incremental = new Date(startTimeZoom);
-        incremental = new Date(incremental.setMilliseconds(incremental.getMilliseconds() +  event.offsetX*msPerPixelZoom)).toISOString();
-        itemToInsert.Time = new Date(incremental);
-        itemToInsert.Data.Delay = 100;
-        itemToInsert.Data.Port = "";
-        itemToInsert.Data.Showname = "";
-        itemToInsert.Data.Dir = "";
-        itemToInsert.Data.Dout = dataToSend;
-        itemToInsert.output = dataToSend;
-        pixelArray.push(itemToInsert);
-        field = document.getElementsByClassName('field');
-        for(i=0; i<field.length; i++){
-            field[i].style.backgroundColor = '';
-        }
-        field = document.getElementsByClassName('but');
-        for(i=0; i<field.length; i++){
-            field[i].innerHTML = 'Insert';
-        }
-        insertReady = 0;
-        pixelArray.sort(function(a,b){ // sort
-            return new Date(a.Time) - new Date(b.Time);
-        });
-        updateCanvas();
+    else if (event.which == 3){ //we have right button pressed
+       mouseDown = 3;
+       var text;
+       if(selected != -1){
+           if(event.offsetY < zoomcanvas.height/2){//we are in outgoing events part of canvas.  look at outgoing events
+             text =  pixelArray[selected].output;
+           }
+           else{
+             text = parseCue(pixelArray[selected]);
+           }
+
+           r = confirm('Are you sure you want to permanently remove cue \n' + text + '?\nThis action can not be undone');
+           if(r == true){
+               pixelArray.splice(selected,1);
+               updateCanvas();
+           }
+
+       }
 
     }
 
@@ -893,7 +916,7 @@ function zoomcanvasMousemove(event){
         }
             zoomcontext.fillStyle="black";
     }
-    else{ // we can insert manual stuff here
+    else{ // we can insert manual cues here
             if(event.offsetY > zoomcanvas.height/2){//we are at bottom half of canvas
                 document.body.style.cursor  = 'not-allowed';
             }
@@ -905,6 +928,7 @@ function zoomcanvasMousemove(event){
             }
     }
 }
+
 function drawSingleEvent(element, colorstroke, colorfill){
     zoomcontext.strokeStyle = colorstroke;
     zoomcontext.fillStyle = colorfill;
