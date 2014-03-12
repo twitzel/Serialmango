@@ -147,7 +147,7 @@ exports.setup = function()
             // if we are open the required com port
             //if not open the pi port
             console.log("Host System Name: " + os.type());
-            var baud = 115200;
+            var baud = 230400;
             if(os.type() == 'Windows_NT')
             {
                 comlib.openSerialPort('com19', baud); //windows
