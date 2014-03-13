@@ -291,7 +291,7 @@ exports.websocketDataIn = function(dataSocket, Socket){
         }
         else if (dataSocket.Type == "SEND") // these are commands to send directly to the CS4I/0
         {
-            comlib.write(dataSocket.Data+ '\r'); // send it out the serial port
+            comlib.write("         " +dataSocket.Data+ '\r'); // send it out the serial port
             ledInfoOn(27); // light to output light
             setTimeout(function(){ledInfoOff(27);}, 100); // turn it off
             setTimeout(function(){timedOut = true;}, timedOutInterval);

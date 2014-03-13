@@ -162,7 +162,7 @@ function sendtext(){
     dataPacket.Type ='SEND';
     var name = document.getElementById('showname').value.trim();
     var text = document.getElementById('texttosend').value.trim();
-    dataPacket.Data = 'DISP' + name +  " Text " + text + '';
+    dataPacket.Data = 'DISP ' + name +  " Text " + text + '';
     websocket.send(JSON.stringify(dataPacket));
 }
 
