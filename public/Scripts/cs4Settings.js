@@ -369,6 +369,7 @@ function r4CueAuto(message){
         document.getElementById('r4CueAuto').innerHTML = "Stop Cue Auto"  ;
         document.getElementById("r4CueAuto").style.background='#FF0000';
         cueAuto(); //start settimeout and repeats forever -- unless stopped
+        autocue = setTimeout(function(){cueAuto()}, parseInt(document.getElementById('delay').value)*1000);
     }
     else{
         document.getElementById('r4CueAuto').innerHTML = "Send Cue Auto"  ;
@@ -377,7 +378,10 @@ function r4CueAuto(message){
     }
 }
 
-function cueAuto(){
+function r4CueManual(message){
+    cueAuto(); //
+}
+function cueAuto(){ //now it's mis named only sends once.
     var counter = parseInt(cue.value);
     var showName = document.getElementById('showname').value.trim();
     var directory = document.getElementById('directory').value.trim();
@@ -406,7 +410,7 @@ function cueAuto(){
     dataPacket.Type ='SEND';
     dataPacket.Data = 'ZIG1' + ' ' + showName + ' ' + directory + ' ' + dataOut;
     websocket.send(JSON.stringify(dataPacket));
-    autocue = setTimeout(function(){cueAuto()}, parseInt(document.getElementById('delay').value)*1000);
+
 }
 
 
