@@ -150,7 +150,8 @@ exports.setup = function()
             var baud = 230400;
             if(os.type() == 'Windows_NT')
             {
-                comlib.openSerialPort('com19', baud); //windows
+               // comlib.openSerialPort('com19', baud); //windows
+                comlib.openSerialPort('com22', baud); //windows
             }
             else
             {
@@ -504,6 +505,9 @@ if(data.length >= 35) // this is to let GETTIME come through and get logged GETT
 {
     lastCueReceived = (JSON.parse(JSON.stringify(serialData))); // store the data here in case of Cue file generation
     //get the internal system time or this event so we and keep track of it
+
+
+
     lastCueReceivedInternalTime = new Date();
     lastCueReceivedExternalTime = new Date(lastCueReceived);
 
