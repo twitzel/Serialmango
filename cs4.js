@@ -150,7 +150,7 @@ exports.setup = function()
             var baud = 230400;
             if(os.type() == 'Windows_NT')
             {
-                comlib.openSerialPort('com19', baud); //windows
+                comlib.openSerialPort('com22', baud); //windows
             }
             else
             {
@@ -211,7 +211,7 @@ dataSocket.Type
 dataSocket.Data
 
  */
-exports.websocketDataIn = function(dataSocket, Socket){
+exports.websocketDataIn = function(dataSocket, Socket){ //data received from ethernet
     dataSocket = JSON.parse(dataSocket);
     if(dataSocket.Type){
 
@@ -440,8 +440,7 @@ exports.websocketDataIn = function(dataSocket, Socket){
 // sets output timers to send data back to CS-4 IO via serial.
 
 
-exports.socketDataOut = function (data) {
-    var type = "";
+exports.socketDataOut = function (data) { // this is data from CS4 I/O Board
     var indata;
     var source;
     var serialData;
@@ -466,7 +465,7 @@ exports.socketDataOut = function (data) {
     // and send output data to log file
 
     //added search fields: must match InData and Source
-    if (serialData.InData != null) {
+    if (serialData.InData != null) { //see if it's in the cue file
         collectionCue.find({$and: [{'InData': serialData.InData} , {'Source': serialData.Source }]}).toArray(function (err, item) {
         //collectionCue.find({'InData': serialData.InData }).toArray(function (err, item) {
             if (item.length == 0) {
@@ -501,19 +500,20 @@ exports.socketDataOut = function (data) {
     }
 
 if(data.length >= 35) // this is to let GETTIME come through and get logged GETTIME returns a string 34 characters
-{
+{ //log data
     lastCueReceived = (JSON.parse(JSON.stringify(serialData))); // store the data here in case of Cue file generation
     //get the internal system time or this event so we and keep track of it
-    lastCueReceivedInternalTime = new Date();
-    lastCueReceivedExternalTime = new Date(lastCueReceived);
-
+    if(serialData.Source != 'zigbee2:'){ //zigbee2: is not a cue - it is only for monitoring received data
+        lastCueReceivedInternalTime = new Date();
+        lastCueReceivedExternalTime = new Date(lastCueReceived);
+    }
     //Log the data into the collection
 
     collectionLog.insert(serialData, {w: 1}, function (err, result) {
         console.log(result);
     });
 
-    //parse the incoming cue data
+    //parse the incoming cue data and send it out to anyone connected
    comlib.websocketsend(parseCue(data));
 }
 else
