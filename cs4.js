@@ -151,7 +151,7 @@ exports.setup = function()
             if(os.type() == 'Windows_NT')
             {
                // comlib.openSerialPort('com19', baud); //windows
-                comlib.openSerialPort('com22', baud); //windows
+                comlib.openSerialPort('com19', baud); //windows
             }
             else
             {

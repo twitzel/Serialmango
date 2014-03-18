@@ -144,6 +144,10 @@ function undoclick(){
                 pixelArray.sort(function(a,b){//sort array by time to put every thing back
                     return new Date(a.Time) - new Date(b.Time);
                 });
+                if(arrayPrevious.length == 1){//make sure there is nothing there
+                    property = document.getElementById('undoButton');
+                    property.style.backgroundColor = '';
+                }
                 updateCanvas(); //redraw
                 break; // get out our work here is finished
             }
