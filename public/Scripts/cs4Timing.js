@@ -23,8 +23,8 @@ function init()
     cuevalue2 = document.getElementById("cue2");
     cuevalue3 = document.getElementById("cue3");
 
-/*
-    var password =prompt("This is a system level protected area.  ANY changes entered here will affect CS4 System operation.  Please enter password to continue." ,"");
+
+    var password =prompt("This is a system level protected area.  ANY changes entered here will affect CS4 System operation.  \n\nPlease enter password to continue." ,"");
 
     if(password != "" && password !== null) //check for cancel button
     {
@@ -41,7 +41,7 @@ function init()
     {
 
     }
-*/
+
     //remove this line
     document.getElementById("blackout").style.visibility="visible"; //if correct password make visible
 }
@@ -231,7 +231,7 @@ function buttonBackground(){
 }
 
 function buttonDelete(){
-    var inputConfirm =confirm("This will permanently DELETE the current CUE file. \n A backup will be created the default location.\n\n Are you sure you want to continue?");
+    var inputConfirm =confirm("This will permanently DELETE the current CUE file. \n A backup will be created in the default location.\n\n Are you sure you want to continue?");
     if (inputConfirm==true)
     {
         dataPacket.Type = 'DELETECUE';

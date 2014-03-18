@@ -166,11 +166,12 @@ exports.setup = function()
     //set up all routes HERE
     //set up all routes HERE
     app.get('/com', routes.com);
-    app.get('/', routes.index);
+
     app.get('/users', user.list);
     app.get('/data', routes.data);
     app.get('/data2', routes.data2);
     app.get('/data3', routes.data3);
+    app.get('/', routes.cs4Home);
     app.get('/cs4Start', routes.cs4Start);
     app.get('/cs4Home', routes.cs4Home);
     app.get('/cs4Timing', routes.cs4Timing);

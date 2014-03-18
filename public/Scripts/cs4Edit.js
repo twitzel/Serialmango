@@ -90,6 +90,10 @@ function onMessage(evt)    {
             inMessage = message.data;
             pixelLoad(inMessage);
             canvasPlot();
+            zoomFactor = 85; // now setup initial zoom location and factor
+            zoomSlider.value = zoomFactor;
+            zoomLocation = 1 *100/canvas.width;
+            locationSlider.value = 1*100/canvas.width;
             updateCanvas();
         }
         else if (message.packetType =='message'){
@@ -241,8 +245,8 @@ function pixelLoad(item){
 
 function timeRound(time, interval){
     diff = new Date(time);
-    diff.setMinutes(diff.getMinutes() + interval);
-    diff.setSeconds(0);
+    diff.setSeconds(diff.getSeconds() + interval);
+   // diff.setSeconds(0);
     diff.setMilliseconds(0);
     return diff;
 }
@@ -311,9 +315,8 @@ function canvasPlot(){
     //plot all of the pixelArray data on the canvas
     //find time difference between first and last event.
 
-    startTime = timeRound(pixelArray[0].Time, -0); //round down to nearest minute
-    endTime = timeRound(pixelArray[pixelArray.length -1].Time, 1);
-
+    startTime = timeRound(pixelArray[0].Time, -2); //round down 2 seconds
+    endTime = timeRound(pixelArray[pixelArray.length -1].Time, 2); //round up 2 seconds
     //timeDifference = new Date(pixelArray[pixelArray.length -1].Time) - new Date(pixelArray[0].Time);
     // timeDifference = new Date(pixelArray[pixelArray.length -1].Time) - new Date(startTime);
     timediff = timeDifference(endTime, startTime);
