@@ -39,7 +39,7 @@ function init()
     }
     else
     {
-
+        window.location.href = "cs4Home";
     }
 
     //remove this line

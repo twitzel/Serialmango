@@ -165,19 +165,19 @@ exports.setup = function()
     //set up all routes HERE
     //set up all routes HERE
     //set up all routes HERE
-    app.get('/com', routes.com);
+  //  app.get('/com', routes.com);
 
-    app.get('/users', user.list);
-    app.get('/data', routes.data);
-    app.get('/data2', routes.data2);
-    app.get('/data3', routes.data3);
+ //   app.get('/users', user.list);
+ //   app.get('/data', routes.data);
+ //   app.get('/data2', routes.data2);
+ //   app.get('/data3', routes.data3);
     app.get('/', routes.cs4Home);
-    app.get('/cs4Start', routes.cs4Start);
+ //   app.get('/cs4Start', routes.cs4Start);
     app.get('/cs4Home', routes.cs4Home);
     app.get('/cs4Timing', routes.cs4Timing);
     app.get('/cs4Info', routes.cs4Info);
     app.get('/cs4VerticalScroll', routes.cs4VerticalScroll);
-    app.get('/cs4Help', routes.cs4Help);
+ //   app.get('/cs4Help', routes.cs4Help);
     app.get('/cs4Settings', routes.cs4Settings);
     app.get('/cs4Edit', routes.cs4Edit);
 
