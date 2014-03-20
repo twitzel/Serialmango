@@ -87,7 +87,7 @@
         </div>
 
         <div>
-            Directory:     <input id=directory name=directory type=text value="English" style = "width: 8em" required>
+            Directory:     <input id=directory name=directory type=text  style = "width: 8em" required>
             Next Cue: <input id=cue name=cue type=number value=1 required style = "width: 5em">
             Delay: <input id=delay name=delay type=number value=5 required style = "width: 5em">
         </div>
@@ -136,102 +136,102 @@
         <button id = "dmxbutton"  onmousedown = "dmxbutton()"> DMX </button>
 
     </fieldset>
+    <!--
+        <fieldset id = "display">
+            <legend>Display Text</legend>
+            <label>Text To Send</label>
+            <input id=texttosend name=texttosend type=text value="This text will be sent to R4 Receivers" required style = "width: 8em" >
+            <label>Show Name</label>
+            <input id=showname name=showname type=text value="show" required style = "width: 8em" >
+            <button id = "sendtext"  onmousedown = "sendtext()"> Send To Display </button>
 
-    <fieldset id = "display">
-        <legend>Display Text</legend>
-        <label>Text To Send</label>
-        <input id=texttosend name=texttosend type=text value="This text will be sent to R4 Receivers" required style = "width: 8em" >
-        <label>Show Name</label>
-        <input id=showname name=showname type=text value="show" required style = "width: 8em" >
-        <button id = "sendtext"  onmousedown = "sendtext()"> Send To Display </button>
+        </fieldset>
+    -->
+        <fieldset id = "fieldset2" class = field>
+            <legend><b>Serial Ports</b></legend>
+            <div>
+                ASCII <input id= 'asciiselect' name=serialtype value= " A" type=radio checked>
+                HEX<input id= 'serialhex' name=serialtype value = " H" type=radio >
+            </div>
+            <select id='serialselect' >
+                <option value=' SLAVE SER1' title='1'>Serial 1</option>
+                <option value=' SLAVE SER2' title='2'>Serial 2</option>
+                <option value=' SLAVE SER3' title='3'>Serial 3</option>
+            </select>
+            <select id= baudselect >
+                <option value=' 9600' title='9600'>9600 Baud</option>
+                <option value=' 1200' title='1200'>1200</option>
+                <option value=' 4800' title='4800'>4800</option>
+                <option value=' 9600' title='9600'>9600</option>
+                <option value=' 14400' title='14400'>14400</option>
+                <option value=' 19200' title='19200'>19200</option>
+                <option value=' 28800' title='28800'>28800</option>
+                <option value=' 38400' title='38400'>38400</option>
+                <option value=' 57600' title='57600'>57600</option>
+                <option value=' 115200' title='115200'>115200</option>
+            </select>
+            <select id= parityselect >
+                Parity: <option value=' N' title='NONE'>Parity: NONE</option>
+                <option value=' O' title='ODD'>Parity: ODD</option>
+                <option value=' E' title='EVEN'>Parity: EVEN</option>
+            </select>
+            <input id=message name=message   value="text" required style = "width: 10em" >Message</ul>
+            <div id="buttondiv2">
+                <button id = "sendserial"   class = but  onmousedown = "sendserial()"> Send </button>
+            </div>
+        </fieldset>
 
-    </fieldset>
+        <fieldset id = "dac">
+            <legend>DAC</legend>
+            <label>DAC 1 (Millivolts)</label>
+            <input id=dac1output name=dac1output type=number min="0" max="5000" value="3000" required style = "width: 8em" >
+            <button id = "dac1button"  onmousedown = "dac1button()"> DAC 1 </button>
+            <label>DAC 2 (Millivolts)</label>
+            <input id=dac2output name=dac2output type=number  min="0" max="5000" value="2000" required style = "width: 8em" >
+            <button id = "dac2button"  onmousedown = "dac2button()"> DAC 2 </button>
 
-    <fieldset id = "fieldset2" class = field>
-        <legend><b>Serial Ports</b></legend>
-        <div>
-            ASCII <input id= 'asciiselect' name=serialtype value= " A" type=radio checked>
-            HEX<input id= 'serialhex' name=serialtype value = " H" type=radio >
-        </div>
-        <select id='serialselect' >
-            <option value=' SLAVE SER1' title='1'>Serial 1</option>
-            <option value=' SLAVE SER2' title='2'>Serial 2</option>
-            <option value=' SLAVE SER3' title='3'>Serial 3</option>
-        </select>
-        <select id= baudselect >
-            <option value=' 9600' title='9600'>9600 Baud</option>
-            <option value=' 1200' title='1200'>1200</option>
-            <option value=' 4800' title='4800'>4800</option>
-            <option value=' 9600' title='9600'>9600</option>
-            <option value=' 14400' title='14400'>14400</option>
-            <option value=' 19200' title='19200'>19200</option>
-            <option value=' 28800' title='28800'>28800</option>
-            <option value=' 38400' title='38400'>38400</option>
-            <option value=' 57600' title='57600'>57600</option>
-            <option value=' 115200' title='115200'>115200</option>
-        </select>
-        <select id= parityselect >
-            Parity: <option value=' N' title='NONE'>Parity: NONE</option>
-            <option value=' O' title='ODD'>Parity: ODD</option>
-            <option value=' E' title='EVEN'>Parity: EVEN</option>
-        </select>
-        <input id=message name=message   value="text" required style = "width: 10em" >Message</ul>
-        <div id="buttondiv2">
-            <button id = "sendserial"   class = but  onmousedown = "sendserial()"> Send </button>
-        </div>
-    </fieldset>
+        </fieldset>
 
-    <fieldset id = "dac">
-        <legend>DAC</legend>
-        <label>DAC 1 (Millivolts)</label>
-        <input id=dac1output name=dac1output type=number min="0" max="5000" value="3000" required style = "width: 8em" >
-        <button id = "dac1button"  onmousedown = "dac1button()"> DAC 1 </button>
-        <label>DAC 2 (Millivolts)</label>
-        <input id=dac2output name=dac2output type=number  min="0" max="5000" value="2000" required style = "width: 8em" >
-        <button id = "dac2button"  onmousedown = "dac2button()"> DAC 2 </button>
+        <fieldset id = "SMPTE Output">
+            <legend>SMTPE Output</legend>
+            <button id = "smpteonbutton"  onmousedown = "smpteonbutton()"> SMPTE ON </button>
+            <button id = "smpteoffbutton"  onmousedown = "smpteoffbutton()"> SMPTE OFF </button>
 
-    </fieldset>
+        </fieldset>
 
-    <fieldset id = "SMPTE Output">
-        <legend>SMTPE Output</legend>
-        <button id = "smpteonbutton"  onmousedown = "smpteonbutton()"> SMPTE ON </button>
-        <button id = "smpteoffbutton"  onmousedown = "smpteoffbutton()"> SMPTE OFF </button>
+        <fieldset id = "dmxch">
+            <legend>DMX Channel Select</legend>
+            <label>1st Channel</label>
+            <input id=dmx1 name=dmx1 type=number value="1" min="1" max="512" style = "width: 3.3em" >
+            <label>2nd Channel</label>
+            <input id=dmx2 name=dmx2 type=number value="2" min="1" max="512" required style = "width: 3.3em" >
+            <label>3rd Chanel</label>
+            <input id=dmx3 name=dmx3 type=number value="3" min="1" max="512" required style = "width: 3.3em" >
+            <button id = "dmxchwatch"  onmousedown = "dmxchwatch()"> Update DMX Channel Watch </button>
 
-    </fieldset>
+        </fieldset>
 
-    <fieldset id = "dmxch">
-        <legend>DMX Channel Select</legend>
-        <label>1st Channel</label>
-        <input id=dmx1 name=dmx1 type=number value="1" min="1" max="512" style = "width: 3.3em" >
-        <label>2nd Channel</label>
-        <input id=dmx2 name=dmx2 type=number value="2" min="1" max="512" required style = "width: 3.3em" >
-        <label>3rd Chanel</label>
-        <input id=dmx3 name=dmx3 type=number value="3" min="1" max="512" required style = "width: 3.3em" >
-        <button id = "dmxchwatch"  onmousedown = "dmxchwatch()"> Update DMX Channel Watch </button>
+        <fieldset id = "copy">
+            <legend>Data Base Files</legend>
 
-    </fieldset>
+            <button id = "copyToUSB"  onmousedown = "copyToUSB()">Copy Data TO USB </button>
+            <button id = "copyFromUSB"  onmousedown = "copyFromUSB()">Copy Data From USB </button>
+            <button id = "copyToInternal"  onmousedown = "copyToInternal()">Backup Data TO Internal </button>
+            <button id = "copyFromInternal"  onmousedown = "copyFromInternal()">Restore Data FROM Internal </button>
+            <select id= internalLocation >
+                <option value='-1' >Select Internal Location</option>
+                <option value='' >Default Location</option>
+                <option value=' 1' >Internal Location 1</option>
+                <option value=' 2' >Internal Location 2</option>
+                <option value=' 3' >Internal Location 3</option>
+                <option value=' 4' >Internal Location 4</option>
+            </select>
 
-    <fieldset id = "copy">
-        <legend>Data Base Files</legend>
+        </fieldset>
 
-        <button id = "copyToUSB"  onmousedown = "copyToUSB()">Copy Data TO USB </button>
-        <button id = "copyFromUSB"  onmousedown = "copyFromUSB()">Copy Data From USB </button>
-        <button id = "copyToInternal"  onmousedown = "copyToInternal()">Backup Data TO Internal </button>
-        <button id = "copyFromInternal"  onmousedown = "copyFromInternal()">Restore Data FROM Internal </button>
-        <select id= internalLocation >
-            <option value='-1' >Select Internal Location</option>
-            <option value='' >Default Location</option>
-            <option value=' 1' >Internal Location 1</option>
-            <option value=' 2' >Internal Location 2</option>
-            <option value=' 3' >Internal Location 3</option>
-            <option value=' 4' >Internal Location 4</option>
-        </select>
-
-    </fieldset>
-
-</body>
-
-
+    </body>
 
 
-</html>
+
+
+    </html>
