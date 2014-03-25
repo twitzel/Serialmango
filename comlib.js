@@ -26,7 +26,9 @@ exports.openSerialPort = function(portname, baud)
           serialPort.write("GETTIME\n\r"); //get time to log as starting up time
            //we are now up and working
             //turn status LED on
-          cs4.ledOn();
+           cs4.getSettings();
+       //    cs4.ledOn();
+
        }
 
 

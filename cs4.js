@@ -32,7 +32,8 @@ var mongoDirectory;
 var collectionName = 'WizDb';
 var smtpTransport;
 var dataPacket = {};
-
+var settings = {};
+var ignoreSource = 0; // set to 1 to ignore incoming source
 //routine to ensure that serial data is not sent more than
 // every timedOutInterval
 //
@@ -126,6 +127,7 @@ exports.setup = function()
          //   collectionLog.ensureIndex({Time:1},function (err,res){});
             global.collectionCue = db.collection('cue');
             global.collectionStartup = db.collection('startup');
+            global.collectionSettings = db.collection('settings');
             collectionCue.ensureIndex({InData:1},function (err,res){});
 
 
@@ -250,24 +252,24 @@ exports.websocketDataIn = function(dataSocket, Socket){
             {
                     comlib.websocketsend("* Preparing Data For Display. \n* Please Wait. \n* (may take several seconds) ", Socket) ;
                     collectionLog.find({},{}).sort({"Time": -1}).limit(1000).toArray(function(error,logfile){
-                    for(var i = 0; i <logfile.length;i++)
-                    {
-                        logfileData = JSON.stringify(logfile[i]);
+                        for(var i = 0; i <logfile.length;i++)
+                        {
+                            logfileData = JSON.stringify(logfile[i]);
 
-                        if(logfile[i].Dout)
-                        {
-                            //comlib.websocketsend(".    Sent: " + logfileData, Socket) ;
-                            dataToSend = dataToSend + ".    Sent: " + logfileData + "\n" ;
+                            if(logfile[i].Dout)
+                            {
+                                //comlib.websocketsend(".    Sent: " + logfileData, Socket) ;
+                                dataToSend = dataToSend + ".    Sent: " + logfileData + "\n" ;
+                            }
+                            else
+                            {
+                                //comlib.websocketsend(parseCue(logfileData),Socket);
+                                dataToSend = dataToSend + parseCue(logfileData) + "\n" ;
+                            }
                         }
-                        else
-                        {
-                            //comlib.websocketsend(parseCue(logfileData),Socket);
-                            dataToSend = dataToSend + parseCue(logfileData) + "\n" ;
-                        }
-                    }
                         comlib.websocketsend(dataToSend, Socket) ;
 
-                });
+                    });
             }
             else
             {
@@ -890,7 +892,37 @@ function copyFromInternal(location)
     }
 }
 
-exports.ledOn = function(){
+exports.getSettings = function(){
+    collectionSettings.find({},{}).toArray(function(error,settings){
+        if(settings.length < 1){ // there are no settings create them
+
+            settings.ignoreSource = 'NO';
+            settings.enableZigbee2 = 'YES';
+            settings.emailAddress = 'steve@wizcomputing.com';
+            collectionSettings.insert(settings, {w: 1}, function (err, result) {
+                console.log(result);
+            })
+        }
+
+        if(settings[0].enableZigbee2 == 'YES'){
+            comlib.write("         SLAVE ZIGBEE2 YES \r"); // send it out the serial port
+        }
+        else if(settings[0].enableZigbee2 == 'NO'){
+            comlib.write("         SLAVE ZIGBEE2 NO \r"); // send it out the serial port
+        }
+
+        if(settings[0].ignoreSource == 'NO'){
+            ignoreSource = 0;
+        }
+        else if(settings[0].ignoreSource =='YES'){
+            ignoreSource = 1;
+        }
+
+        exports.ledOn(settings[0].emailAddress);
+    });
+};
+
+exports.ledOn = function(emailadd){
 
     if(os.type() != 'Windows_NT') // this is only for the pi
     {
@@ -902,7 +934,8 @@ exports.ledOn = function(){
     // setup e-mail data with unicode symbols
     var mailOptions = {
         from: "CS4 192.168.2.10 ✔ <stevewitz@gmail.com>", // sender address
-        to: "steve@wizcomputing.com      ", // comma seperated list of receivers
+        to: emailadd,
+       // to: "steve@wizcomputing.com      ", // comma seperated list of receivers
         subject: "Message from CS4 ✔", // Subject line
         text: "This CS4 has just been started", // plaintext body
         html: "This CS4 has just been started" // html body
