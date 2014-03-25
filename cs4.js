@@ -32,8 +32,7 @@ var mongoDirectory;
 var collectionName = 'WizDb';
 var smtpTransport;
 var dataPacket = {};
-var settings = {};
-var ignoreSource = 0; // set to 1 to ignore incoming source
+global.cs4Settings = {};
 //routine to ensure that serial data is not sent more than
 // every timedOutInterval
 //
@@ -893,36 +892,44 @@ function copyFromInternal(location)
 }
 
 exports.getSettings = function(){
-    collectionSettings.find({},{}).toArray(function(error,settings){
-        if(settings.length < 1){ // there are no settings create them
-
-            settings.ignoreSource = 'NO';
-            settings.enableZigbee2 = 'YES';
-            settings.emailAddress = 'steve@wizcomputing.com';
-            collectionSettings.insert(settings, {w: 1}, function (err, result) {
+    collectionSettings.findOne({},function(error,result){
+        if(result){
+            cs4Settings = result;
+        }
+        else{// there are no settings create them
+            cs4Settings.type = 'cs4';
+            cs4Settings.ignoreSource = 'NO';
+            cs4Settings.enableZigbee2 = 'YES';
+            cs4Settings.emailAddress = 'steve@wizcomputing.com';
+            collectionSettings.insert(cs4Settings, {w: 1}, function (err, result) {
                 console.log(result);
             })
         }
-
-        if(settings[0].enableZigbee2 == 'YES'){
+        if(cs4Settings.enableZigbee2 == 'YES'){
             comlib.write("         SLAVE ZIGBEE2 YES \r"); // send it out the serial port
         }
-        else if(settings[0].enableZigbee2 == 'NO'){
+        else if(cs4Settings.enableZigbee2 == 'NO'){
             comlib.write("         SLAVE ZIGBEE2 NO \r"); // send it out the serial port
         }
 
-        if(settings[0].ignoreSource == 'NO'){
+        if(cs4Settings.ignoreSource == 'NO'){
             ignoreSource = 0;
         }
-        else if(settings[0].ignoreSource =='YES'){
+        else if(cs4Settings.ignoreSource =='YES'){
             ignoreSource = 1;
         }
 
-        exports.ledOn(settings[0].emailAddress);
+        exports.ledOn();
     });
 };
 
-exports.ledOn = function(emailadd){
+exports.saveSettings = function(){
+    collectionSettings.update({'type':'cs4'}, cs4Settings, {upsert:true, w:1},function(err, res){
+        console.log ('cs4Settings has been updated');
+    });
+}
+
+exports.ledOn = function(){
 
     if(os.type() != 'Windows_NT') // this is only for the pi
     {
@@ -933,8 +940,9 @@ exports.ledOn = function(emailadd){
     //send startup email
     // setup e-mail data with unicode symbols
     var mailOptions = {
-        from: "CS4 192.168.2.10 ✔ <stevewitz@gmail.com>", // sender address
-        to: emailadd,
+        from: "CS4 @ " + myuri + "✔ <stevewitz@gmail.com>",
+      //  from: "CS4 192.168.2.10 ✔ <stevewitz@gmail.com>", // sender address
+        to: cs4Settings.emailAddress,
        // to: "steve@wizcomputing.com      ", // comma seperated list of receivers
         subject: "Message from CS4 ✔", // Subject line
         text: "This CS4 has just been started", // plaintext body
