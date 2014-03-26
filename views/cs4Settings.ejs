@@ -4,7 +4,12 @@
     <script  src = "./Scripts/cs4Menu.js"> </script>
     <link rel='stylesheet'  href='./stylesheets/cs4Settings.css'>
     <link rel='stylesheet'  href='./stylesheets/cs4Menu.css'>
+<script>
+   // window.addEventListener("init",onload, false);
 
+    var cs4Settings=<%-JSON.stringify(cs4Settings)%> ;// load the settings from the setting collection
+
+</script>
 <html>
 
 <head>
@@ -52,6 +57,16 @@
             <h4> Waiting for connection...</h4>
         </div>
     </pre>
+
+    <fieldset id = "setup">
+        <legend>Startup Parameters</legend>
+
+        <div>
+            Ignore Input Source:   e <input id=r4slidescue name=outputcue value= "r4slidescue" type=radio checked>
+            R4 Audio<input id=r4audiocue name=outputcue value = "r4audiocue" type=radio >
+        </div>
+    </fieldset>
+
     <fieldset id = "midi">
         <legend>Midi Send</legend>
 

@@ -153,6 +153,15 @@ exports.cs4Help = function(req, res){
 };
 
 exports.cs4Settings = function(req, res){
+    collectionSettings.findOne({},function(error,result){
+        if(result){
+            cs4Settings = result;
+        }
+        else{
+            cs4Settings = {};
+        }
+    });
+
     res.render('cs4Settings.ejs',{ title: 'CS-4 Scroll', myuri:"ws://localhost:8080" });
 };
 

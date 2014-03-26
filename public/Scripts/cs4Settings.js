@@ -8,7 +8,8 @@ var dataToShow = "";
 var bkgnd = 0;
 var dataPacket = {};
 
-function init(){
+
+    function init(){
     wsUri = "ws://" + window.location.hostname + ":8080";
     output = document.getElementById("websocketlog");
     //    context.canvas.width  = window.innerWidth;
