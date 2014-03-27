@@ -901,6 +901,9 @@ exports.getSettings = function(){
             cs4Settings.ignoreSource = 'NO';
             cs4Settings.enableZigbee2 = 'YES';
             cs4Settings.emailAddress = 'steve@wizcomputing.com';
+            cs4Settings.dmx1 = 10;
+            cs4Settings.dmx2 = 20;
+            cs4Settings.dmx3 = 30;
             collectionSettings.insert(cs4Settings, {w: 1}, function (err, result) {
                 console.log(result);
             })

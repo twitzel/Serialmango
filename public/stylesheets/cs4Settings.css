@@ -31,6 +31,12 @@
     overflow-y: auto;
     font-size: 1.1em;
 }
+#setup{
+    display: none;
+}
+#dmxsetup{
+    width:50%;
+}
 legend{
     font-weight: bold;
 }

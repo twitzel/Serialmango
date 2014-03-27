@@ -47,6 +47,7 @@
 
         <button id = "buttonBackground"  onmousedown = "buttonBackground()"> BkGnd </button>
         <button id = "buttonClear"  onmousedown = "buttonClear()"> Clear</button>
+        <button id = "buttonStartupParameters"  onmousedown = "buttonStartupParameters()"> Show Startup Parameters</button>
         <h2 >Event Log</h2>
 
 
@@ -62,9 +63,32 @@
         <legend>Startup Parameters</legend>
 
         <div>
-            Ignore Input Source:   e <input id=r4slidescue name=outputcue value= "r4slidescue" type=radio checked>
-            R4 Audio<input id=r4audiocue name=outputcue value = "r4audiocue" type=radio >
+            Ignore Input Source:   Yes <input id=inputsourceyes name=inputsource value= "sourceyes" type=radio checked>
+            No<input id=inputsourceno name=inputsource value = "sourceno" type=radio >
         </div>
+        <div>
+            Enable Zigbee Monitor:   Yes <input id=zigbeemonitoryes name=zigbeemonitor value= "monitoryes" type=radio checked>
+            No<input id=igbeemonitorno name=zigbeemonitor value = "monitorno" type=radio >
+        </div>
+
+        <div>
+            <label>Email Address For Messages</label>
+            <input id=email name=email  style = "width: 15em" >
+        </div>
+        <div>
+            <fieldset id = dmxsetup>
+                <legend>DMX Channel Monitor</legend>
+                    <label>1st Channel</label>
+                    <input id=startupdmx1 name=startupdmx1 type=number value="1" min="1" max="512" style = "width: 3.3em" >
+                    <label>2nd Channel</label>
+                    <input id=startupdmx2 name=startupdmx2 type=number value="2" min="1" max="512" required style = "width: 3.3em" >
+                    <label>3rd Chanel</label>
+                    <input id=startupdmx3 name=startupdmx3 type=number value="3" min="1" max="512" required style = "width: 3.3em" >
+            </fieldset>
+        </div>
+        <button id = "saveparameters"  onmousedown = "saveParameters()">Save Startup Parameters</button>
+        <button id = "closepparameters"  onmousedown = "closeParameters()">Close Startup Parameters</button>
+
     </fieldset>
 
     <fieldset id = "midi">
