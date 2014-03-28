@@ -944,20 +944,7 @@ exports.getSettings = function(){
                 console.log(result);
             })
         }
-   /*     if(cs4Settings.enableZigbee2 == 'YES'){
-            comlib.write("         SLAVE ZIGBEE2 YES \r"); // send it out the serial port
-        }
-        else if(cs4Settings.enableZigbee2 == 'NO'){
-            comlib.write("         SLAVE ZIGBEE2 NO \r"); // send it out the serial port
-        }
 
-        if(cs4Settings.ignoreSource == 'NO'){
-            ignoreSource = 0;
-        }
-        else if(cs4Settings.ignoreSource =='YES'){
-            ignoreSource = 1;
-        }
-*/
         dataToSend = '          SLAVE DMX_CH ' + cs4Settings.dmx1 +  " " + cs4Settings.dmx2 + " " + cs4Settings.dmx3 + '' + '\r'; //update the DMX channels
         comlib.write(dataToSend) ;
         dataToSend = '          SLAVE ZIGEN ' + cs4Settings.enableZigbee2 + '\r'; //update the DMX channels
