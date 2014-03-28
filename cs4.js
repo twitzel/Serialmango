@@ -394,8 +394,8 @@ exports.websocketDataIn = function(dataSocket, Socket){
         else if(dataSocket.Type == "SETTINGS") {
             cs4Settings = dataSocket.Data; // get the data
             exports.saveSettings(); // save it
-           // dataToSend = '          SLAVE DMX_CH ' + cs4Settings.dmx1 +  " " + cs4Settings.dmx2 + " " + cs4Settings.dmx3 + '' + '\r'; //update the DMX channels
-         //   comlib.write(dataToSend, Socket) ;
+            dataToSend = '          SLAVE DMX_CH ' + cs4Settings.dmx1 +  " " + cs4Settings.dmx2 + " " + cs4Settings.dmx3 + '' + '\r'; //update the DMX channels
+            comlib.write(dataToSend, Socket) ;
             comlib.websocketsend("Successfully updated settings file");
             dataToSend = '          SLAVE ZIGEN ' + cs4Settings.enableZigbee2 + '\r'; //update the DMX channels
             comlib.write(dataToSend, Socket) ;
