@@ -395,10 +395,10 @@ exports.websocketDataIn = function(dataSocket, Socket){
             cs4Settings = dataSocket.Data; // get the data
             exports.saveSettings(); // save it
             dataToSend = '          SLAVE DMX_CH ' + cs4Settings.dmx1 +  " " + cs4Settings.dmx2 + " " + cs4Settings.dmx3 + '' + '\r'; //update the DMX channels
-            comlib.write(dataToSend, Socket) ;
+            comlib.write(dataToSend) ;
             comlib.websocketsend("Successfully updated settings file");
             dataToSend = '          SLAVE ZIGEN ' + cs4Settings.enableZigbee2 + '\r'; //update the DMX channels
-            comlib.write(dataToSend, Socket) ;
+            comlib.write(dataToSend) ;
         }
 
 
@@ -944,7 +944,7 @@ exports.getSettings = function(){
                 console.log(result);
             })
         }
-        if(cs4Settings.enableZigbee2 == 'YES'){
+   /*     if(cs4Settings.enableZigbee2 == 'YES'){
             comlib.write("         SLAVE ZIGBEE2 YES \r"); // send it out the serial port
         }
         else if(cs4Settings.enableZigbee2 == 'NO'){
@@ -957,7 +957,11 @@ exports.getSettings = function(){
         else if(cs4Settings.ignoreSource =='YES'){
             ignoreSource = 1;
         }
-
+*/
+        dataToSend = '          SLAVE DMX_CH ' + cs4Settings.dmx1 +  " " + cs4Settings.dmx2 + " " + cs4Settings.dmx3 + '' + '\r'; //update the DMX channels
+        comlib.write(dataToSend) ;
+        dataToSend = '          SLAVE ZIGEN ' + cs4Settings.enableZigbee2 + '\r'; //update the DMX channels
+        comlib.write(dataToSend) ;
         exports.ledOn();
     });
 };
