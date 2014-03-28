@@ -208,7 +208,8 @@ exports.setup = function()
     COPYTOINTERNAL          Copies all mongodb files to internal location
     COPYFROMINTERNAL        Copies all mongodb files from internal location
     EDIT                    Sends all Cue collection data to client
-    CUECREATE               MAkse a copy of all files to internal, deletes the cue file and recreates it form cue editor data.
+    CUECREATE               Makes a copy of all files to internal, deletes the cue file and recreates it form cue editor data.
+    SETTINGS                Saves any changes to the settings collection
 
 dataSocket.Type
 dataSocket.Data
@@ -389,10 +390,16 @@ exports.websocketDataIn = function(dataSocket, Socket){
 
             });
 
-
-
         }
-
+        else if(dataSocket.Type == "SETTINGS") {
+            cs4Settings = dataSocket.Data; // get the data
+            exports.saveSettings(); // save it
+           // dataToSend = '          SLAVE DMX_CH ' + cs4Settings.dmx1 +  " " + cs4Settings.dmx2 + " " + cs4Settings.dmx3 + '' + '\r'; //update the DMX channels
+         //   comlib.write(dataToSend, Socket) ;
+            comlib.websocketsend("Successfully updated settings file");
+            dataToSend = '          SLAVE ZIGEN ' + cs4Settings.enableZigbee2 + '\r'; //update the DMX channels
+            comlib.write(dataToSend, Socket) ;
+        }
 
 
     }
@@ -470,37 +477,66 @@ exports.socketDataOut = function (data) {
 
     //added search fields: must match InData and Source
     if (serialData.InData != null) {
-        collectionCue.find({$and: [{'InData': serialData.InData} , {'Source': serialData.Source }]}).toArray(function (err, item) {
-        //collectionCue.find({'InData': serialData.InData }).toArray(function (err, item) {
-            if (item.length == 0) {
-                console.log("not Found");
-            }
-            else {
 
-               for(var i = 0; i< item[0].OutData.length; i++)
-               {
-                    dir = item[0].OutData[i].Dir;    // ****** needs to ba added to R4-4 Receiver Parsing ****** //
-                   // dir = "xxxx";
-                    port = item[0].OutData[i].Port.toUpperCase();
-                    showname = item[0].OutData[i].Showname;
-                    dataToSend = item[0].OutData[i].Dout;
-                    delay = item[0].OutData[i].Delay;
-                    if(dir =="")
-                    {
-                        outstring = port + " " + showname + " " + dataToSend;
-                    }
-                    else
-                    {
-                        outstring = port + " " + showname + " " + dir + " " + dataToSend;
+        if (cs4Settings.ignoreSource == 'NO') { // match source
+            collectionCue.find({$and: [{'InData': serialData.InData} ,{'Source': serialData.Source }]}).toArray(function (err, item) {
+                //collectionCue.find({'InData': serialData.InData }).toArray(function (err, item) {
+                if (item.length == 0) {
+                    console.log("not Found");
+                }
+                else {
+
+                    for (var i = 0; i < item[0].OutData.length; i++) {
+                        dir = item[0].OutData[i].Dir;    // ****** needs to ba added to R4-4 Receiver Parsing ****** //
+                        // dir = "xxxx";
+                        port = item[0].OutData[i].Port.toUpperCase();
+                        showname = item[0].OutData[i].Showname;
+                        dataToSend = item[0].OutData[i].Dout;
+                        delay = item[0].OutData[i].Delay;
+                        if (dir == "") {
+                            outstring = port + " " + showname + " " + dataToSend;
+                        }
+                        else {
+                            outstring = port + " " + showname + " " + dir + " " + dataToSend;
+                        }
+
+                        setTimeout(sendOutput, delay, outstring);
+                        console.log(item[0].OutData[i].Dout + "  Delay " + item[0].OutData[i].Delay);
                     }
 
-                    setTimeout(sendOutput, delay, outstring);
-                    console.log(item[0].OutData[i].Dout + "  Delay "+item[0].OutData[i].Delay);
                 }
 
-            }
+            });
+        }
+        else{
+            collectionCue.find({'InData': serialData.InData }).toArray(function (err, item) { // ignore source
+                if (item.length == 0) {
+                    console.log("not Found");
+                }
+                else {
 
-        });
+                    for (var i = 0; i < item[0].OutData.length; i++) {
+                        dir = item[0].OutData[i].Dir;    // ****** needs to ba added to R4-4 Receiver Parsing ****** //
+                        // dir = "xxxx";
+                        port = item[0].OutData[i].Port.toUpperCase();
+                        showname = item[0].OutData[i].Showname;
+                        dataToSend = item[0].OutData[i].Dout;
+                        delay = item[0].OutData[i].Delay;
+                        if (dir == "") {
+                            outstring = port + " " + showname + " " + dataToSend;
+                        }
+                        else {
+                            outstring = port + " " + showname + " " + dir + " " + dataToSend;
+                        }
+
+                        setTimeout(sendOutput, delay, outstring);
+                        console.log(item[0].OutData[i].Dout + "  Delay " + item[0].OutData[i].Delay);
+                    }
+
+                }
+
+            });
+        }
     }
 
 if(data.length >= 35) // this is to let GETTIME come through and get logged GETTIME returns a string 34 characters
@@ -927,9 +963,15 @@ exports.getSettings = function(){
 };
 
 exports.saveSettings = function(){
-    collectionSettings.update({'type':'cs4'}, cs4Settings, {upsert:true, w:1},function(err, res){
+    delete cs4Settings._id;
+    collectionSettings.update({'type':"cs4"},cs4Settings , {upsert:true, w:1},function(err, res){
+
         console.log ('cs4Settings has been updated');
     });
+
+
+
+
 }
 
 exports.ledOn = function(){

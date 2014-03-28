@@ -102,7 +102,26 @@ function buttonStartupParameters(){
 
 //************************************  Startup Parameters ******************************
 function saveParameters(){
+    if(document.getElementById('inputsourceno').checked){
+        cs4Settings.ignoreSource = "NO";
+    }
+    else{
+        cs4Settings.ignoreSource = "YES"
+    }
+    if(document.getElementById('zigbeemonitorno').checked){
+        cs4Settings.enableZigbee2 = "NO";
+    }
+    else{
+        cs4Settings.enableZigbee2 = "YES"
+    }
+    cs4Settings.emailAddress = document.getElementById('email').value;
+    cs4Settings.dmx1 = document.getElementById('startupdmx1').value;
+    cs4Settings.dmx2 = document.getElementById('startupdmx2').value;
+    cs4Settings.dmx3 = document.getElementById('startupdmx3').value;
 
+    dataPacket.Type ='SETTINGS';
+    dataPacket.Data = cs4Settings;
+    websocket.send(JSON.stringify(dataPacket));
 }
 
 function closeParameters(){
