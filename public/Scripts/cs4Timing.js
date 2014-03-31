@@ -138,7 +138,7 @@ function cueclick1(message){
     cuevalue1.value = counter +1; //update the cue count
     delay = (new Date()-lastCueTime);
    // websocket.send("{\"OutData\": [{\"Delay\": "+delay+" , \"Port\":\"Zig1\", \"Showname\":\""+ showName +"\", \"Dir\":\""+ directory +"\", \"Dout\":\"" + dataOut + "\"}]}");
-    dataPacket.Data = "{\"OutData\": {\"Delay\": "+delay+" , \"Port\":\"Zig1\", \"Showname\":\""+ showName +"\", \"Dir\":\""+ directory +"\", \"Dout\":\"" + dataOut + "\"}}";
+    dataPacket.Data = "{\"OutData\": {\"Delay\": "+delay+" , \"Port\":\"ZIG1\", \"Showname\":\""+ showName +"\", \"Dir\":\""+ directory +"\", \"Dout\":\"" + dataOut + "\"}}";
     websocket.send(JSON.stringify(dataPacket));
     if(testing ==1){
         setTimeout(function(){cueclick1( );}, 5000);
@@ -175,7 +175,7 @@ function cueclick2(message){
     }
     cuevalue2.value = counter +1; //update the cue count
     delay = (new Date()-lastCueTime);
-    dataPacket.Data = ("{\"OutData\": {\"Delay\": "+delay+" , \"Port\":\"Zig1\", \"Showname\":\""+ showName +"\", \"Dir\":\""+ directory +"\", \"Dout\":\"" + dataOut + "\"}}");
+    dataPacket.Data = ("{\"OutData\": {\"Delay\": "+delay+" , \"Port\":\"ZIG1\", \"Showname\":\""+ showName +"\", \"Dir\":\""+ directory +"\", \"Dout\":\"" + dataOut + "\"}}");
     websocket.send(JSON.stringify(dataPacket));
 
 }
@@ -210,7 +210,7 @@ function cueclick3(message){
     }
     cuevalue3.value = counter +1; //update the cue count
     delay = (new Date()-lastCueTime);
-    dataPacket.Data = ("{\"OutData\": {\"Delay\": "+delay+" , \"Port\":\"Zig1\", \"Showname\":\""+ showName +"\", \"Dir\":\""+ directory +"\", \"Dout\":\"" + dataOut + "\"}}");
+    dataPacket.Data = ("{\"OutData\": {\"Delay\": "+delay+" , \"Port\":\"ZIG1\", \"Showname\":\""+ showName +"\", \"Dir\":\""+ directory +"\", \"Dout\":\"" + dataOut + "\"}}");
     websocket.send(JSON.stringify(dataPacket));
 }
 
