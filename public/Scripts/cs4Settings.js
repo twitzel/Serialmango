@@ -291,7 +291,7 @@ function dmxbutton(){
 function midi1button(){
     if(document.getElementById('light').checked)
     {
-        var start = "MIDI1 F07F05020101";
+        var start = "MIDI1 F07F01020101";
         var cue = document.getElementById('lightcuenumber').value.trim();
 
         for (var i = 0; i < cue.length; i ++)  // convert cue info to hex string be adding 0x30
