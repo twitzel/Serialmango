@@ -47,7 +47,7 @@ sendOutput = function (dataToSend)
     if (timedOut)
     {
         timedOut = false;
-        comlib.write("         " + dataToSend + "\n\r"); // add spaces at beginning for R4 zigbee stuff and terminate\n\r
+        comlib.write("         " + dataToSend + "\r"); // add spaces at beginning for R4 zigbee stuff and terminate\n\r
         ledInfoOn(27);
         setTimeout(function(){ledInfoOff(27);}, 100);
         setTimeout(function(){timedOut = true;}, timedOutInterval);
