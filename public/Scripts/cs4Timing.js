@@ -12,7 +12,7 @@ var cuevalue3;
 var bkgnd = 0;
 var incue = 0;
 var dataPacket = {};
-
+var testing = 0;
 //window.onload = init;
 window.addEventListener("load", init, true);
 function init()
@@ -140,6 +140,9 @@ function cueclick1(message){
    // websocket.send("{\"OutData\": [{\"Delay\": "+delay+" , \"Port\":\"Zig1\", \"Showname\":\""+ showName +"\", \"Dir\":\""+ directory +"\", \"Dout\":\"" + dataOut + "\"}]}");
     dataPacket.Data = "{\"OutData\": {\"Delay\": "+delay+" , \"Port\":\"Zig1\", \"Showname\":\""+ showName +"\", \"Dir\":\""+ directory +"\", \"Dout\":\"" + dataOut + "\"}}";
     websocket.send(JSON.stringify(dataPacket));
+    if(testing ==1){
+        setTimeout(function(){cueclick1( );}, 5000);
+    }
 }
 
 function cueclick2(message){
@@ -209,7 +212,6 @@ function cueclick3(message){
     delay = (new Date()-lastCueTime);
     dataPacket.Data = ("{\"OutData\": {\"Delay\": "+delay+" , \"Port\":\"Zig1\", \"Showname\":\""+ showName +"\", \"Dir\":\""+ directory +"\", \"Dout\":\"" + dataOut + "\"}}");
     websocket.send(JSON.stringify(dataPacket));
-
 }
 
 function buttonClear(){
@@ -227,7 +229,6 @@ function buttonBackground(){
         document.getElementById("websocketlog").style.backgroundColor =  '#ececec';
         bkgnd = 0;
     }
-
 }
 
 function buttonDelete(){
@@ -237,7 +238,8 @@ function buttonDelete(){
         dataPacket.Type = 'DELETECUE';
         websocket.send(JSON.stringify(dataPacket));
     }
+}
 
-
-
+function buttonTest(){
+    testing=1;
 }

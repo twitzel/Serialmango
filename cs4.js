@@ -76,7 +76,7 @@ sendOutput = function (dataToSend)
     else
     {
         //since we are not ready for this to go out (or we wouldn't be here) -- reset a timer with actual time left.
-        setTimeout(function(){sendOutput(dataToSend);}, ( timedOutInterval -(timerStartTime - Date())))
+        setTimeout(function(){sendOutput(dataToSend);}, ( timedOutInterval -(timerStartTime - Date())));
     }
 
 };
