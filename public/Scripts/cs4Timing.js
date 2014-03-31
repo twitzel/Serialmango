@@ -238,6 +238,7 @@ function buttonDelete(){
         dataPacket.Type = 'DELETECUE';
         websocket.send(JSON.stringify(dataPacket));
     }
+    dataPacket.Type = ''; // reset the packet type
 }
 
 function buttonTest(){
