@@ -486,16 +486,17 @@ exports.socketDataOut = function (data) {
                 }
                 else {
                     //added to stop any pending cues frim firing if new cue comes in
-                    if (global.timoutlist != undefined){
-                        for (var i=0;i<global.timoutlist.len-1;++i){
+                    if (global.timeoutlist != undefined){
+                        for (var i=0;i<global.timeoutlist.length;++i){
 
-                            clearTimeout(global.timoutlist[i])
+                            clearTimeout(global.timeoutlist[i])
                         }
                     }
 
+                    global.timeoutlist=[];
 
                     for (var i = 0; i < item[0].OutData.length; i++) {
-                        dir = item[0].OutData[i].Dir;    // ****** needs to ba added to R4-4 Receiver Parsing ****** //
+                        dir = item[0].OutData[i].Dir;    // ****** needs to be added to R4-4 Receiver Parsing ****** //
                         // dir = "xxxx";
                         port = item[0].OutData[i].Port.toUpperCase();
                         showname = item[0].OutData[i].Showname;
