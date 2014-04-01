@@ -485,6 +485,14 @@ exports.socketDataOut = function (data) {
                     console.log("not Found");
                 }
                 else {
+                    //added to stop any pending cues frim firing if new cue comes in
+                    if (global.timoutlist != undefined){
+                        for (var i=0;i<global.timoutlist.len-1;++i){
+
+                            clearTimeout(global.timoutlist[i])
+                        }
+                    }
+
 
                     for (var i = 0; i < item[0].OutData.length; i++) {
                         dir = item[0].OutData[i].Dir;    // ****** needs to ba added to R4-4 Receiver Parsing ****** //
@@ -500,7 +508,7 @@ exports.socketDataOut = function (data) {
                             outstring = port + " " + showname + " " + dir + " " + dataToSend;
                         }
 
-                        setTimeout(sendOutput, delay, outstring);
+                        global.timeoutlist[i]=   setTimeout(sendOutput, delay, outstring);
                         console.log(item[0].OutData[i].Dout + "  Delay " + item[0].OutData[i].Delay);
                     }
 
