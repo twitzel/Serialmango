@@ -582,6 +582,9 @@ if(data.length >= 35) // this is to let GETTIME come through and get logged GETT
     });
 
     //parse the incoming cue data
+    if(serialData.Source != 'zigbee2:'){
+        delete serialData.Time;
+    }
    comlib.websocketsend(parseCue(data));
 }
 else
