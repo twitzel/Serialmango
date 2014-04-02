@@ -251,10 +251,11 @@ exports.websocketDataIn = function(dataSocket, Socket){
             if(dataSocket.Type == "LOG 1000")
             {
                     comlib.websocketsend("* Preparing Data For Display. \n* Please Wait. \n* (may take several seconds) ", Socket) ;
-                 //   collectionLog.find({},{}).sort({"Time": -1}).limit(1000).toArray(function(error,logfile){
-                    collectionLog.find({},{}).sort({ $natural: -1 }).limit(1000).toArray(function(error,logfile){
+                    collectionLog.find({},{_id:0}).sort({"Time": -1}).limit(1000).toArray(function(error,logfile){
+                 //   collectionLog.find({},{_id:0}).sort({ $natural: 1 }).limit(1000).toArray(function(error,logfile){
                         for(var i = 0; i <logfile.length;i++)
                         {
+
                             logfileData = JSON.stringify(logfile[i]);
 
                             if(logfile[i].Dout)
@@ -275,8 +276,8 @@ exports.websocketDataIn = function(dataSocket, Socket){
             else
             {
                 comlib.websocketsend("* Preparing Data For Display. \n* Please Wait. \n* (may take up to 1 minute) ", Socket) ;
-                //collectionLog.find({},{}).sort({"Time": 1}).toArray(function(error,logfile){
-                collectionLog.find({},{}).sort({ $natural: -1 }).toArray(function(error,logfile){
+                collectionLog.find({},{_id:0}).sort({"Time": 1}).toArray(function(error,logfile){
+               // collectionLog.find({},{_id:0}).sort({ $natural: 1 }).toArray(function(error,logfile){
                     for(var i = 0; i <logfile.length;i++)
                     {
                         logfileData = JSON.stringify(logfile[i]);
