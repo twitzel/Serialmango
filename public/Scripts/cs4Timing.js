@@ -97,7 +97,7 @@ function writeToScreen(message) {
     // get time of incoming cue
     if(message.substring(0,1) != " ") //make sure it's an incoming cue
     {
-        lastCueTime = new Date();
+        lastCueTime = new Date().getTime();
     }
 
     output.innerHTML = message + "<BR>" + output.innerHTML.substr(0, 20000);
@@ -136,7 +136,7 @@ function cueclick1(message){
       dataOut = "GO audio" + counter + ".mp3";
     }
     cuevalue1.value = counter +1; //update the cue count
-    delay = (new Date()-lastCueTime);
+    delay = (new Date().getTime() - lastCueTime);
    // websocket.send("{\"OutData\": [{\"Delay\": "+delay+" , \"Port\":\"Zig1\", \"Showname\":\""+ showName +"\", \"Dir\":\""+ directory +"\", \"Dout\":\"" + dataOut + "\"}]}");
     dataPacket.Data = "{\"OutData\": {\"Delay\": "+delay+" , \"Port\":\"ZIG1\", \"Showname\":\""+ showName +"\", \"Dir\":\""+ directory +"\", \"Dout\":\"" + dataOut + "\"}}";
     websocket.send(JSON.stringify(dataPacket));
@@ -174,7 +174,7 @@ function cueclick2(message){
         dataOut = "GO audio" + counter + ".mp3";
     }
     cuevalue2.value = counter +1; //update the cue count
-    delay = (new Date()-lastCueTime);
+    delay = (new Date().getTime() - lastCueTime);
     dataPacket.Data = ("{\"OutData\": {\"Delay\": "+delay+" , \"Port\":\"ZIG1\", \"Showname\":\""+ showName +"\", \"Dir\":\""+ directory +"\", \"Dout\":\"" + dataOut + "\"}}");
     websocket.send(JSON.stringify(dataPacket));
 
@@ -209,7 +209,7 @@ function cueclick3(message){
         dataOut = "GO audio" + counter + ".mp3";
     }
     cuevalue3.value = counter +1; //update the cue count
-    delay = (new Date()-lastCueTime);
+    delay = (new Date().getTime() - lastCueTime);
     dataPacket.Data = ("{\"OutData\": {\"Delay\": "+delay+" , \"Port\":\"ZIG1\", \"Showname\":\""+ showName +"\", \"Dir\":\""+ directory +"\", \"Dout\":\"" + dataOut + "\"}}");
     websocket.send(JSON.stringify(dataPacket));
 }

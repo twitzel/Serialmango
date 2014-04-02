@@ -23,7 +23,7 @@ var nodemailer = require("nodemailer");
 var lastCueReceived = {"Time" : "10/09/13 15:20:04.20", "Source" : "Midi1", "InData" : "F0 7F 05 02 01 01 31 2E 30 30 F7 "};
 var serialDataSocket;
 var lastCueReceivedInternalTime= new Date();
-var lastCueReceivedExternalTime = new Date();
+//var lastCueReceivedExternalTime = new Date();
 var usbstickPath;
 var path;
 var sourcePath;
@@ -51,13 +51,13 @@ sendOutput = function (dataToSend)
         ledInfoOn(27);
         setTimeout(function(){ledInfoOff(27);}, 100);
         setTimeout(function(){timedOut = true;}, timedOutInterval);
-        timerStartTime = new Date();
+        timerStartTime = new Date().getTime();
         console.log(dataToSend);
         //
 
 
     //change the time of data sent to correlate with CS-4 I/O clock
-    lastconverted   = new Date(lastCueReceived.Time);
+    lastconverted   = new Date(lastCueReceivedInternalTime.Time);
     addTime = addTime + "\""+  (new Date( lastconverted.setMilliseconds(lastconverted.getMilliseconds() + (timerStartTime -lastCueReceivedInternalTime)))).toISOString() +"\", \"Dout\" : \"" + dataToSend + "\"}";
 
     //send it out the socket
@@ -487,6 +487,7 @@ exports.socketDataOut = function (data) {
                     console.log("not Found");
                 }
                 else {
+
                     //added to stop any pending cues frim firing if new cue comes in
                     if (global.timeoutlist != undefined){
                         for (var i=0;i<global.timeoutlist.length;++i){
@@ -496,6 +497,7 @@ exports.socketDataOut = function (data) {
                     }
 
                     global.timeoutlist=[];
+                    lastCueReceivedInternalTime = new Date().getTime();
 
                     for (var i = 0; i < item[0].OutData.length; i++) {
                         dir = item[0].OutData[i].Dir;    // ****** needs to be added to R4-4 Receiver Parsing ****** //
@@ -515,6 +517,7 @@ exports.socketDataOut = function (data) {
                         console.log(item[0].OutData[i].Dout + "  Delay " + item[0].OutData[i].Delay);
                     }
 
+
                 }
 
             });
@@ -525,6 +528,7 @@ exports.socketDataOut = function (data) {
                     console.log("not Found");
                 }
                 else {
+
                     //added to stop any pending cues frim firing if new cue comes in
                     if (global.timeoutlist != undefined){
                         for (var i=0;i<global.timeoutlist.length;++i){
@@ -534,6 +538,7 @@ exports.socketDataOut = function (data) {
                     }
 
                     global.timeoutlist=[];
+                    lastCueReceivedInternalTime = new Date().getTime();
 
                     for (var i = 0; i < item[0].OutData.length; i++) {
                         dir = item[0].OutData[i].Dir;    // ****** needs to ba added to R4-4 Receiver Parsing ****** //
@@ -553,6 +558,7 @@ exports.socketDataOut = function (data) {
                         console.log(item[0].OutData[i].Dout + "  Delay " + item[0].OutData[i].Delay);
                     }
 
+
                 }
 
             });
@@ -564,10 +570,11 @@ if(data.length >= 35) // this is to let GETTIME come through and get logged GETT
     lastCueReceived = (JSON.parse(JSON.stringify(serialData))); // store the data here in case of Cue file generation
     //get the internal system time or this event so we and keep track of it
 
-    if(serialData.Source != 'zigbee2:'){ //only update if real cue NOT zigbee2
-        lastCueReceivedInternalTime = new Date();
-        lastCueReceivedExternalTime = new Date(lastCueReceived);
+ /*   if(serialData.Source != 'zigbee2:'){ //only update if real cue NOT zigbee2
+        lastCueReceivedInternalTime = new Date().getTime();
+       // lastCueReceivedExternalTime = new Date(lastCueReceived.Time);
     }
+    */
     //Log the data into the collection
 
     collectionLog.insert(serialData, {w: 1}, function (err, result) {
