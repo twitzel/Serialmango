@@ -583,10 +583,16 @@ if(data.length >= 35) // this is to let GETTIME come through and get logged GETT
     });
 
     //parse the incoming cue data
-    if(serialData.Source != 'zigbee2:'){
+    if(serialData.Source == 'zigbee2:'){
         delete serialData.Time;
+        delete serialData._id;
+        comlib.websocketsend("    ZIGBEE2 RECEIVED OK: " + serialData.InData);
     }
-   comlib.websocketsend(parseCue(data));
+    else{
+        comlib.websocketsend(parseCue(data));
+    }
+
+  //  comlib.websocketsend(parseCue(serialData));
 }
 else
 {   //we have startup time from the CS4 I/O board
