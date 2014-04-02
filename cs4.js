@@ -57,7 +57,7 @@ sendOutput = function (dataToSend)
 
 
     //change the time of data sent to correlate with CS-4 I/O clock
-    lastconverted   = new Date(lastCueReceivedInternalTime.Time);
+    lastconverted   = new Date(lastCueReceivedInternalTime);
     addTime = addTime + "\""+  (new Date( lastconverted.setMilliseconds(lastconverted.getMilliseconds() + (timerStartTime -lastCueReceivedInternalTime)))).toISOString() +"\", \"Dout\" : \"" + dataToSend + "\"}";
 
     //send it out the socket
