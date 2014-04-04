@@ -123,7 +123,7 @@ exports.cs4Info = function(req, res){
                             timeZone = 'US/Eastern'; // this is the default time zone if nothing is set
                         }
 
-                        res.render('cs4Info.ejs',{ title: 'CS-4 Info', startup:startup, countCue:counter, countLog:countLog, timeZone:timeZone, countStartup:countStartup, curTime: new Date() });
+                        res.render('cs4Info.ejs',{ title: 'CS-4 Info', Test: req.params.Test, startup:startup, countCue:counter, countLog:countLog, timeZone:timeZone, countStartup:countStartup, curTime: new Date() });
                     });
                 });
 

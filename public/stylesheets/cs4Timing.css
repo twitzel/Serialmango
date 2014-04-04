@@ -19,6 +19,10 @@
 
 }
 
+#butttest{
+    background-color: #ff0000;
+}
+
 .log{
     height: 350px;
     background-color: rgba(220, 203, 204, 0.56);

@@ -177,6 +177,7 @@ exports.setup = function()
     app.get('/cs4Timing', routes.cs4Timing);
     app.get('/cs4Timing/:Test', routes.cs4Timing);
     app.get('/cs4Info', routes.cs4Info);
+    app.get('/cs4Info/:Test', routes.cs4Info);
     app.get('/cs4VerticalScroll', routes.cs4VerticalScroll);
  //   app.get('/cs4Help', routes.cs4Help);
     app.get('/cs4Settings', routes.cs4Settings);

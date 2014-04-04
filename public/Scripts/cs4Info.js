@@ -7,6 +7,8 @@ var dataPacket = {};
 window.onload = init;
 function init()
 {
+
+    output = document.getElementById("websocketlog");
     testWebSocket();
 
     outputStartup = document.getElementById("startup");
@@ -34,6 +36,15 @@ function init()
     // Setup Timezone combo box
     outputTimeZone.innerHTML = "Current Time Zone: " + timeZone.toString().bold();
 
+    if(Test== 'test' || Test == 'Test'){
+
+        document.getElementById('test').style.display = 'block';
+        document.getElementById('websocketlog').style.display = 'block';
+    }
+    else{
+        document.getElementById('test').style.display = "none";
+        document.getElementById('websocketlog').style.display = "none";
+    }
 
 }
 
@@ -47,21 +58,22 @@ function testWebSocket()
 }
 
 function onOpen(evt) {
-
-   // var send = SetCS4Time();
-  //  var send = new Date();
-  //  websocket.send("TME " + send); // SET the CS4 I/O clock to current browser time - ignores time zone offset
+    output.innerHTML = "";
+    writeToScreen("CONNECTED TO CS4");
+    // change background color on connection
+    var logweb = document.getElementById('websocketlog')
+    logweb.style.backgroundColor = '#ececec';
 }
 
 function onClose(evt) {
- //   writeToScreen("DISCONNECTED");
+    writeToScreen("DISCONNECTED");
   //  var logweb = document.getElementById('websocketlog')
   //  logweb.style.backgroundColor = '#ff6559';
  //   setTimeout(testWebSocket(),1000);
 }
 
 function onMessage(evt)    {
-   // writeToScreen(evt.data);
+    writeToScreen(evt.data);
 }
 
 function onError(evt) {
@@ -77,7 +89,7 @@ function writeToScreen(message) {
  //   var logweb = document.getElementById('websocketlog')
  //   logweb.innerHTML = "NOT !!!!  CONNECTED";
 
-    //output.value = message+"<BR>"+output.value;
+    output.innerHTML = message + "<BR>" + output.innerHTML;
 }
 
 

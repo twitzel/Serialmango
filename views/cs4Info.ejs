@@ -1,9 +1,14 @@
 <!DOCTYPE html>
 
-    <script  src = "./Scripts/cs4Info.js"> </script>
-    <script  src = "./Scripts/cs4Menu.js"> </script>
-    <link rel='stylesheet'  href='./stylesheets/cs4Info.css'>
-    <link rel='stylesheet'  href='./stylesheets/cs4Menu.css'>
+    <script  src = "/Scripts/cs4Info.js"> </script>
+    <script  src = "/Scripts/cs4Menu.js"> </script>
+    <link rel='stylesheet'  href='/stylesheets/cs4Info.css'>
+    <link rel='stylesheet'  href='/stylesheets/cs4Menu.css'>
+<script>
+
+    var Test =    "<%=Test%>" ;
+
+</script>
 
 <html>
 
@@ -30,15 +35,24 @@
         </div>
         <nav id = "menunav">
             <ul>
-                <li><a href="cs4Home">Home</a></li>
+                <li><a href="/cs4Home">Home</a></li>
                 <li><a href="cs4VerticalScroll" >Scrolling</a></li>
                 <li class="active"><a href="cs4Info" >Info</a></li>
                 <li><a href="cs4Timing">Timing</a></li>
                 <li><a href="cs4Settings">Settings</a></li>
-                <li><a href="./images/CS4Help.pdf" target="_blank">Help</a></li>
+                <li><a href="/images/CS4Help.pdf" target="_blank">Help</a></li>
             </ul>
         </nav>
     </header>
+
+    <div id="websocketlog" class="log">
+        <h4> Waiting for connection...</h4>
+    </div>
+    <div id = "test">
+
+    </div>
+
+
 
     <div id = "maindiv">
 
@@ -75,9 +89,7 @@
 
     </div>
 
-    <div id ="websocketlog">
 
-    </div>
 
     <div class="tz">
         <div id = "timezone">

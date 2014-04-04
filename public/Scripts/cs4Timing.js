@@ -23,12 +23,6 @@ function init()
     cuevalue1 = document.getElementById("cue1");
     cuevalue2 = document.getElementById("cue2");
     cuevalue3 = document.getElementById("cue3");
-    if(Test){
-        var a = 5;
-    }
-    else{
-        var a = 0;
-    }
 
     var password =prompt("This is a system level protected area.  ANY changes entered here will affect CS4 System operation.  \n\nPlease enter password to continue." ,"");
 
@@ -45,11 +39,18 @@ function init()
     }
     else
     {
-        window.location.href = "cs4Home";
+        window.location.href = "/cs4Home";
     }
 
     //remove this line
     document.getElementById("blackout").style.visibility="visible"; //if correct password make visible
+    if(Test== 'test' || Test == 'Test'){
+
+        document.getElementById('test').style.display = 'block';
+    }
+    else{
+        document.getElementById('test').style.display = "none";
+    }
 }
 
 
