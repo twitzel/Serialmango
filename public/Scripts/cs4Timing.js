@@ -13,6 +13,7 @@ var bkgnd = 0;
 var incue = 0;
 var dataPacket = {};
 var testing = 0;
+
 //window.onload = init;
 window.addEventListener("load", init, true);
 function init()
@@ -22,7 +23,12 @@ function init()
     cuevalue1 = document.getElementById("cue1");
     cuevalue2 = document.getElementById("cue2");
     cuevalue3 = document.getElementById("cue3");
-
+    if(Test){
+        var a = 5;
+    }
+    else{
+        var a = 0;
+    }
 
     var password =prompt("This is a system level protected area.  ANY changes entered here will affect CS4 System operation.  \n\nPlease enter password to continue." ,"");
 

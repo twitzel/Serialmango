@@ -158,7 +158,6 @@ exports.setup = function()
             {
                 comlib.openSerialPort("/dev/ttyUSB0", baud); //not windows - Raspberry PI
             }
-
         }
     });
 
@@ -176,6 +175,7 @@ exports.setup = function()
  //   app.get('/cs4Start', routes.cs4Start);
     app.get('/cs4Home', routes.cs4Home);
     app.get('/cs4Timing', routes.cs4Timing);
+    app.get('/cs4Timing/:Test', routes.cs4Timing);
     app.get('/cs4Info', routes.cs4Info);
     app.get('/cs4VerticalScroll', routes.cs4VerticalScroll);
  //   app.get('/cs4Help', routes.cs4Help);
@@ -231,8 +231,6 @@ exports.websocketDataIn = function(dataSocket, Socket){
                     collectionStartup.update({'TimeZoneSet':{$exists:true}}, {$set:{'TimeZoneSet' : datain}},{upsert:true, w:1},function(err,res){
 
                     console.log('Time Zone Updated '+res + " "+ datain);
-
-
                 });
             }
             else
@@ -255,7 +253,6 @@ exports.websocketDataIn = function(dataSocket, Socket){
                  //   collectionLog.find({},{_id:0}).sort({ $natural: 1 }).limit(1000).toArray(function(error,logfile){
                         for(var i = 0; i <logfile.length;i++)
                         {
-
                             logfileData = JSON.stringify(logfile[i]);
 
                             if(logfile[i].Dout)
@@ -270,7 +267,6 @@ exports.websocketDataIn = function(dataSocket, Socket){
                             }
                         }
                         comlib.websocketsend(dataToSend, Socket) ;
-
                     });
             }
             else
@@ -293,7 +289,6 @@ exports.websocketDataIn = function(dataSocket, Socket){
                     }
                     comlib.websocketsend(dataToSend, Socket) ;
                 });
-
             }
         }
         else if (dataSocket.Type == "SEND") // these are commands to send directly to the CS4I/0
@@ -566,47 +561,47 @@ exports.socketDataOut = function (data) {
         }
     }
 
-if(data.length >= 35) // this is to let GETTIME come through and get logged GETTIME returns a string 34 characters
-{
-    lastCueReceived = (JSON.parse(JSON.stringify(serialData))); // store the data here in case of Cue file generation
-    //get the internal system time or this event so we and keep track of it
+    if(data.length >= 35) // this is to let GETTIME come through and get logged GETTIME returns a string 34 characters
+    {
+        lastCueReceived = (JSON.parse(JSON.stringify(serialData))); // store the data here in case of Cue file generation
+        //get the internal system time or this event so we and keep track of it
 
- /*   if(serialData.Source != 'zigbee2:'){ //only update if real cue NOT zigbee2
-        lastCueReceivedInternalTime = new Date().getTime();
-       // lastCueReceivedExternalTime = new Date(lastCueReceived.Time);
-    }
-    */
-    //Log the data into the collection
-
-    collectionLog.insert(serialData, {w: 1}, function (err, result) {
-        console.log(result);
-    });
-
-    //parse the incoming cue data
-    if(serialData.Source == 'zigbee2:'){
-        delete serialData.Time;
-        delete serialData._id;
-        comlib.websocketsend("    ZIGBEE2 RECEIVED OK: " + serialData.InData);
-    }
-    else{
-        comlib.websocketsend(parseCue(data));
-    }
-
-  //  comlib.websocketsend(parseCue(serialData));
-}
-else
-{   //we have startup time from the CS4 I/O board
-    collectionStartup.insert(serialData, {w: 1}, function (err, result) {
-        console.log(result);
-        try{
-           comlib.websocketsend("CS4 Current time is:" + data);
+     /*   if(serialData.Source != 'zigbee2:'){ //only update if real cue NOT zigbee2
+            lastCueReceivedInternalTime = new Date().getTime();
+           // lastCueReceivedExternalTime = new Date(lastCueReceived.Time);
         }
-        catch(err)
-        {//do nothing
-        }
-    });
+        */
+        //Log the data into the collection
 
-}
+        collectionLog.insert(serialData, {w: 1}, function (err, result) {
+            console.log(result);
+        });
+
+        //parse the incoming cue data
+        if(serialData.Source == 'zigbee2:'){
+            delete serialData.Time;
+            delete serialData._id;
+            comlib.websocketsend("    ZIGBEE2 RECEIVED OK: " + serialData.InData);
+        }
+        else{
+            comlib.websocketsend(parseCue(data));
+        }
+
+      //  comlib.websocketsend(parseCue(serialData));
+    }
+    else
+    {   //we have startup time from the CS4 I/O board
+        collectionStartup.insert(serialData, {w: 1}, function (err, result) {
+            console.log(result);
+            try{
+               comlib.websocketsend("CS4 Current time is:" + data);
+            }
+            catch(err)
+            {//do nothing
+            }
+        });
+
+    }
 };
 
 function parseCue(data)
