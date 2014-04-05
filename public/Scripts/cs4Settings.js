@@ -519,5 +519,9 @@ function timeZoneChange(){
     value = timeZone.value;
     dataPacket.Data = value;
     websocket.send(JSON.stringify(dataPacket));
+}
 
+function systemtestbutton(){
+    dataPacket.Type ="SYSTEMTEST";
+    websocket.send(JSON.stringify(dataPacket));
 }

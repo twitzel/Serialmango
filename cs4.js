@@ -211,6 +211,7 @@ exports.setup = function()
     EDIT                    Sends all Cue collection data to client
     CUECREATE               Makes a copy of all files to internal, deletes the cue file and recreates it form cue editor data.
     SETTINGS                Saves any changes to the settings collection
+    SYSTEMTEST              Sends a cue and makes sure a received zigbee return channel is logged
 
 dataSocket.Type
 dataSocket.Data
@@ -398,6 +399,9 @@ exports.websocketDataIn = function(dataSocket, Socket){
             comlib.websocketsend("Successfully updated settings file");
             dataToSend = '          SLAVE ZIGEN ' + cs4Settings.enableZigbee2 + '\r'; //update the DMX channels
             comlib.write(dataToSend) ;
+        }
+        else if(dataSocket.Type == "SYSTEMTEST") {
+            x = 'test';
         }
 
 
