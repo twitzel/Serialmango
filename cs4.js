@@ -14,7 +14,7 @@ var express = require('express');
 var routes = require('./routes');
 var user = require('./routes/user');
 var time = require('time');
-var timedOutInterval = 200; //time to wait between serial transmitts
+var timedOutInterval = 250; //time to wait between serial transmitts
 var timedOut = true; // set to false will delay transmission;
 var comlib = require('./comlib');
 var spawn = require('child_process').spawn;
@@ -33,6 +33,7 @@ var collectionName = 'WizDb';
 var smtpTransport;
 var dataPacket = {};
 global.cs4Settings = {};
+var zigbee2State;
 //routine to ensure that serial data is not sent more than
 // every timedOutInterval
 //
@@ -401,7 +402,17 @@ exports.websocketDataIn = function(dataSocket, Socket){
             comlib.write(dataToSend) ;
         }
         else if(dataSocket.Type == "SYSTEMTEST") {
-            x = 'test';
+           if(cs4Settings.enableZigbee2 =='NO'){ // make sure we can receive zigbee2.  If not enable it
+               zigbee2State = 'NO';
+               dataToSend = '          SLAVE ZIGEN ' + 'YES' + '\r'; //Enable the zigee2 channel
+               comlib.write(dataToSend) ;
+           }
+            for(var i = 0; i < 8 ; i++){
+                sendOutput('ZIG1' + ' ' + 'TEST '  + "GO slide1111.jpg NEXT slide2222.jpg");
+            }
+            ledInfoOn(27); // light to output light
+            setTimeout(function(){ledInfoOff(27);}, 100); // turn it off
+            setTimeout(function(){checkForZigbee();}, 5000); // check for results after delay
         }
 
 
@@ -1059,4 +1070,72 @@ function ledInfoOff(GPIOnum){
         led.prepareGPIO(GPIOnum);
         led.unset(GPIOnum);
     }
+}
+
+function checkForZigbee(){
+    var success = 0;
+
+    if(zigbee2State =='NO'){ // make sure to put zigbee2 channel back where it was before test
+        dataToSend = '          SLAVE ZIGEN ' + 'NO' + '\r'; //Disable the zigee2 channel
+        comlib.write(dataToSend) ;
+    }
+   // collectionLog.find({},{_id:0}).sort({"Time": -1}).limit(6).toArray(function(error,logfile) {
+    collectionLog.find({},{_id:0}).sort({ $natural: -1}).limit(6).toArray(function(error,logfile) {
+
+    for( var i = 0; i < logfile.length; i++){
+                    t = logfile[i].Source;
+                if(logfile[i].Source == 'zigbee2:'){
+                    if(logfile[i].InData.trim().substr(0,4) == 'TEST'){
+                    success = 1;
+                    }
+                }
+            }
+
+        if(success){
+            //send success email
+            comlib.websocketsend(" ***" );
+            comlib.websocketsend("    SYSTEM TEST COMPLETED SUCCESSFULLY");
+            comlib.websocketsend(" ***" );
+            var mailOptions = {
+                from: "CS4 @ " + myuri + "✔ <stevewitz@gmail.com>",
+                //  from: "CS4 192.168.2.10 ✔ <stevewitz@gmail.com>", // sender address
+                to: cs4Settings.emailAddress,
+                // to: "steve@wizcomputing.com      ", // comma seperated list of receivers
+                subject: "Success Message from CS4 ✔", // Subject line
+                text: "This CS4 has just passed the SYSTEM TEST", // plaintext body
+                html: "This CS4 has just passed the SYSTEM TEST" // html body
+            }
+            sendMail(mailOptions);
+
+        }
+        else{
+            //send fail email
+            comlib.websocketsend(" ***   ***" );
+            comlib.websocketsend("    SYSTEM TEST FAILED !!!!");
+            comlib.websocketsend(" ***   ***" );
+            var mailOptions = {
+                from: "CS4 @ " + myuri + "✔ <stevewitz@gmail.com>",
+                //  from: "CS4 192.168.2.10 ✔ <stevewitz@gmail.com>", // sender address
+                to: cs4Settings.emailAddress,
+                // to: "steve@wizcomputing.com      ", // comma seperated list of receivers
+                subject: "Error Message from CS4 ✔", // Subject line
+                text: "This CS4 has just FAILED the SYSTEM TEST", // plaintext body
+                html: "This CS4 has just FAILED the SYSTEM TEST" // html body
+            }
+            sendMail(mailOptions);
+        }
+    });
+
+}
+
+function sendMail(mailOptions){
+    smtpTransport.sendMail(mailOptions, function(error, response){
+        if(error){
+            console.log(error);
+        }
+        else{
+            console.log("Message sent: " + response.message);
+        }
+    });
+
 }
