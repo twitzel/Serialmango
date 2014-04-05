@@ -45,11 +45,29 @@
         </nav>
     </header>
 
-    <div id="websocketlog" class="log">
-        <h4> Waiting for connection...</h4>
-    </div>
     <div id = "test">
+        <div id="websocketlog" class="log">
+            <h4> Waiting for connection...</h4>
+        </div>
+        <button id = "clearButton"  onmousedown = "clearclick()"> Clear </button>
+        <div id = 'data'>
+            <legend><b>Incoming Cues</b></legend>
+            <fieldset id = "incues">
+                <legend><b>Incoming Cues</b></legend>
+            </fieldset>
+            <legend><b>Outgoing Cues</b></legend>
+            <fieldset id = "outcues">
 
+            </fieldset>
+            <legend><b>Zigbee Responses</b></legend>
+            <fieldset id = "zigbee">
+
+            </fieldset>
+            <legend><b>Unknowm Responses</b></legend>
+            <fieldset id = "unknown">
+
+            </fieldset>
+        </div>
     </div>
 
 

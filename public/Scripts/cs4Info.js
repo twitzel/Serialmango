@@ -19,6 +19,15 @@ function init()
     outputUpTime = document.getElementById("uptime");
     outputTimeZone = document.getElementById("timezone");
 
+    incues = document.getElementById("incues");
+    outcues = document.getElementById("outcues");
+    zigbee = document.getElementById("zigbee");
+    unknown = document.getElementById("unknown");
+    incues.innerHTML = 0;
+    outcues.innerHTML = 0;
+    zigbee.innerHTML = 0;
+    unknown.innerHTML = 0;
+
     UpTime(); //get uptime and update it every second
 
     outputStartup.innerHTML =  "1.  " + new Date(startup[0].Time).toString().substr(0,25); // this to eliminate blank line at top
@@ -74,6 +83,7 @@ function onClose(evt) {
 
 function onMessage(evt)    {
     writeToScreen(evt.data);
+
 }
 
 function onError(evt) {
@@ -90,6 +100,22 @@ function writeToScreen(message) {
  //   logweb.innerHTML = "NOT !!!!  CONNECTED";
 
     output.innerHTML = message + "<BR>" + output.innerHTML;
+    var val = message.trim().substring(2,0);
+    if(val== "20"){
+        incues.innerHTML = incues.innerHTML*1 + 1;
+    }
+    else if(val== "Se"){
+        outcues.innerHTML = outcues.innerHTML*1 + 1;
+    }
+    else if(val== "ZI"){
+        zigbee.innerHTML = zigbee.innerHTML*1 + 1;
+    }
+    else if(val== "CO"){//ignore connected response
+
+    }
+    else{
+        unknown.innerHTML = incues.innerHTML*1 + 1;
+    }
 }
 
 
@@ -168,5 +194,10 @@ function passWord(){
         x="Hello " + person + "! How are you today?";
         document.getElementById("demo").innerHTML=x;
     }
+}
 
+function clearclick(){
+    incues.innerHTML = 0;
+    outcues.innerHTML = 0;
+    zigbee.innerHTML = 0;
 }
