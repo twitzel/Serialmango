@@ -390,8 +390,8 @@ exports.websocketDataIn = function(dataSocket, Socket){
                 });
 
             });
-
         }
+
         else if(dataSocket.Type == "SETTINGS") {
             cs4Settings = dataSocket.Data; // get the data
             exports.saveSettings(); // save it
@@ -401,18 +401,9 @@ exports.websocketDataIn = function(dataSocket, Socket){
             dataToSend = '          SLAVE ZIGEN ' + cs4Settings.enableZigbee2 + '\r'; //update the DMX channels
             comlib.write(dataToSend) ;
         }
+
         else if(dataSocket.Type == "SYSTEMTEST") {
-           if(cs4Settings.enableZigbee2 =='NO'){ // make sure we can receive zigbee2.  If not enable it
-               zigbee2State = 'NO';
-               dataToSend = '          SLAVE ZIGEN ' + 'YES' + '\r'; //Enable the zigee2 channel
-               comlib.write(dataToSend) ;
-           }
-            for(var i = 0; i < 8 ; i++){
-                sendOutput('ZIG1' + ' ' + 'TEST '  + "GO slide1111.jpg NEXT slide2222.jpg");
-            }
-            ledInfoOn(27); // light to output light
-            setTimeout(function(){ledInfoOff(27);}, 100); // turn it off
-            setTimeout(function(){checkForZigbee();}, 5000); // check for results after delay
+          startSystemTest();
         }
 
 
@@ -1070,6 +1061,21 @@ function ledInfoOff(GPIOnum){
         led.prepareGPIO(GPIOnum);
         led.unset(GPIOnum);
     }
+}
+
+function startSystemTest(){
+    if(cs4Settings.enableZigbee2 =='NO'){ // make sure we can receive zigbee2.  If not enable it
+        zigbee2State = 'NO';
+        dataToSend = '          SLAVE ZIGEN ' + 'YES' + '\r'; //Enable the zigee2 channel
+        comlib.write(dataToSend) ;
+    }
+    for(var i = 0; i < 8 ; i++){
+        sendOutput('ZIG1' + ' ' + 'TEST '  + "GO slide1111.jpg NEXT slide2222.jpg");
+    }
+    ledInfoOn(27); // light to output light
+    setTimeout(function(){ledInfoOff(27);}, 100); // turn it off
+    setTimeout(function(){checkForZigbee();}, 5000); // check for results after delay
+
 }
 
 function checkForZigbee(){
