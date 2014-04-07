@@ -34,6 +34,8 @@ var smtpTransport;
 var dataPacket = {};
 global.cs4Settings = {};
 var zigbee2State;
+var blink;
+
 //routine to ensure that serial data is not sent more than
 // every timedOutInterval
 //
@@ -988,8 +990,11 @@ exports.getSettings = function(){
         comlib.write(dataToSend) ;
         dataToSend = '          SLAVE ZIGEN ' + cs4Settings.enableZigbee2 + '\r'; //update the DMX channels
         comlib.write(dataToSend) ;
-        exports.ledOn();
+      //  exports.ledOn();
+        setTimeout(function(){startSystemTest();}, 1500); // check for results after delay
+        setAutoTest();
     });
+
 };
 
 exports.saveSettings = function(){
@@ -1011,6 +1016,7 @@ exports.ledOn = function(){
         var led = require('fastgpio');
         led.prepareGPIO(4);
         led.set(4);
+        clearInterval(blink);
     }
     //send startup email
     // setup e-mail data with unicode symbols
@@ -1042,7 +1048,9 @@ exports.ledOff = function(){
         var led = require('fastgpio');
         led.prepareGPIO(4);
         led.unset(4);
+        clearInterval(blink);
     }
+
 };
 
 function ledInfoOn(GPIOnum){
@@ -1063,7 +1071,14 @@ function ledInfoOff(GPIOnum){
     }
 }
 
-function startSystemTest(){
+function ledInfoBlink(GPIOnum){
+    ledInfoOn(GPIOnum); // turn it on
+    setTimeout(function(){ledInfoOn(GPIOnum);}, 500); // turn it off
+    blink = setTimeout(function(){ledInfoBlink(GPIOnum);}, 1000); // restart
+
+}
+
+function startSystemTest(auto){
     if(cs4Settings.enableZigbee2 =='NO'){ // make sure we can receive zigbee2.  If not enable it
         zigbee2State = 'NO';
         dataToSend = '          SLAVE ZIGEN ' + 'YES' + '\r'; //Enable the zigee2 channel
@@ -1074,11 +1089,11 @@ function startSystemTest(){
     }
     ledInfoOn(27); // light to output light
     setTimeout(function(){ledInfoOff(27);}, 100); // turn it off
-    setTimeout(function(){checkForZigbee();}, 5000); // check for results after delay
+    setTimeout(function(){checkForZigbee(auto);}, 5000); // check for results after delay
 
 }
 
-function checkForZigbee(){
+function checkForZigbee(auto){
     var success = 0;
 
     if(zigbee2State =='NO'){ // make sure to put zigbee2 channel back where it was before test
@@ -1088,14 +1103,14 @@ function checkForZigbee(){
    // collectionLog.find({},{_id:0}).sort({"Time": -1}).limit(6).toArray(function(error,logfile) {
     collectionLog.find({},{_id:0}).sort({ $natural: -1}).limit(6).toArray(function(error,logfile) {
 
-    for( var i = 0; i < logfile.length; i++){
+        for( var i = 0; i < logfile.length; i++){
                     t = logfile[i].Source;
                 if(logfile[i].Source == 'zigbee2:'){
                     if(logfile[i].InData.trim().substr(0,4) == 'TEST'){
-                    success = 1;
+                        success = 1;
                     }
                 }
-            }
+        }
 
         if(success){
             //send success email
@@ -1130,9 +1145,42 @@ function checkForZigbee(){
             }
             sendMail(mailOptions);
         }
+
+        if(auto){
+            setTimeout(function(){startSystemTest(1);}, 1000*60*60*24); // start again in 24 hours
+        }
     });
 
 }
+
+function setAutoTest(){
+    var offsetTime;
+    //get latest time from startup data base and calculate how long to delay before starting test
+    collectionStartup.find({},{_id:0}).sort({"Time": -1}).limit(1).toArray(function(error,Startupfile) {
+        //   collectionLog.find({},{_id:0}).sort({ $natural: 1 }).limit(1000).toArray(function(error,logfile){
+
+
+        startDate = new Date(Startupfile[0].Time);
+        currentHours = startDate.getHours();
+        currentMinutes = startDate.getMinutes();
+        currentSeconds = startDate.getSeconds();
+        currentMilli = startDate.getMilliseconds();
+        wantedTime = parseInt(cs4Settings.testTime.substr(0,2));
+        offsetTime = wantedTime - currentHours;
+        if(offsetTime < 0){
+            offsetTime += 24;
+        };
+
+        //calculate milliseconds until start of test
+        offsetTime = offsetTime*60*60*1000 - currentMinutes*60*1000 - currentSeconds*1000 - currentMilli;
+
+
+    });
+
+    setTimeout(function(){startSystemTest(1);}, offsetTime); // start again in 24 hours
+
+}
+
 
 function sendMail(mailOptions){
     smtpTransport.sendMail(mailOptions, function(error, response){
