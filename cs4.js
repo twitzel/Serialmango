@@ -36,7 +36,7 @@ global.cs4Settings = {};
 var zigbee2State;
 var blink;
 var autoTest;
-
+var autoTest1;
 
 
 //routine to ensure that serial data is not sent more than
@@ -406,6 +406,7 @@ exports.websocketDataIn = function(dataSocket, Socket){
             dataToSend = '          SLAVE ZIGEN ' + cs4Settings.enableZigbee2 + '\r'; //update the DMX channels
             comlib.write(dataToSend) ;
             clearInterval(autoTest); // if any previous timers are set, delete them
+            clearInterval(autoTest1); // if any previous timers are set, delete them
             setAutoTest(); //setup for auto test
         }
 
@@ -997,7 +998,7 @@ exports.getSettings = function(){
         comlib.write(dataToSend) ;
       //  exports.ledOn();
         setTimeout(function(){startSystemTest();}, 1500); // check for results after delay
-        setAutoTest();
+        setTimeout(function(){setAutoTest();}, 3000);
     });
 
 };
@@ -1092,8 +1093,8 @@ function startSystemTest(auto){
     for(var i = 0; i < 8 ; i++){
         sendOutput('ZIG1' + ' ' + 'TEST '  + "GO slide1111.jpg NEXT slide2222.jpg");
     }
-    ledInfoOn(27); // light to output light
-    setTimeout(function(){ledInfoOff(27);}, 100); // turn it off
+   // ledInfoOn(27); // light to output light
+   // setTimeout(function(){ledInfoOff(27);}, 100); // turn it off
     setTimeout(function(){checkForZigbee(auto);}, 5000); // check for results after delay
 
 }
@@ -1154,7 +1155,7 @@ function checkForZigbee(auto){
         }
 
         if(auto){
-            setTimeout(function(){startSystemTest(1);}, 1000*60*60*24); // start again in 24 hours
+      autoTest1 = setTimeout(function(){startSystemTest(1);}, 1000*60*60*24); // start again in 24 hours
         }
     });
 
