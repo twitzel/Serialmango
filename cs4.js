@@ -987,6 +987,8 @@ exports.getSettings = function(){
             cs4Settings.dmx1 = 10;
             cs4Settings.dmx2 = 20;
             cs4Settings.dmx3 = 30;
+            cs4Settings.testTime = "00:00:00";
+            cs4Settings.systemName = "CS4 System";
             collectionSettings.insert(cs4Settings, {w: 1}, function (err, result) {
                 console.log(result);
             })
