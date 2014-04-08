@@ -35,6 +35,9 @@ var dataPacket = {};
 global.cs4Settings = {};
 var zigbee2State;
 var blink;
+var autoTest;
+
+
 
 //routine to ensure that serial data is not sent more than
 // every timedOutInterval
@@ -402,6 +405,8 @@ exports.websocketDataIn = function(dataSocket, Socket){
             comlib.websocketsend("Successfully updated settings file");
             dataToSend = '          SLAVE ZIGEN ' + cs4Settings.enableZigbee2 + '\r'; //update the DMX channels
             comlib.write(dataToSend) ;
+            clearInterval(autoTest); // if any previous timers are set, delete them
+            setAutoTest(); //setup for auto test
         }
 
         else if(dataSocket.Type == "SYSTEMTEST") {
@@ -1122,10 +1127,11 @@ function checkForZigbee(auto){
                 //  from: "CS4 192.168.2.10 ✔ <stevewitz@gmail.com>", // sender address
                 to: cs4Settings.emailAddress,
                 // to: "steve@wizcomputing.com      ", // comma seperated list of receivers
-                subject: "Success Message from CS4 ✔", // Subject line
-                text: "This CS4 has just passed the SYSTEM TEST", // plaintext body
-                html: "This CS4 has just passed the SYSTEM TEST" // html body
-            }
+                subject: "Success Message from CS4 ✔: "+ cs4Settings.systemName, // Subject line
+                text: cs4Settings.systemName+ " CS4 has just PASSED the SYSTEM TEST.", // plaintext body
+                html: cs4Settings.systemName+ " CS4 has just PASSED the SYSTEM TEST." // html body
+            };
+            ledInfoOn(4); // turn on the light
             sendMail(mailOptions);
 
         }
@@ -1139,10 +1145,11 @@ function checkForZigbee(auto){
                 //  from: "CS4 192.168.2.10 ✔ <stevewitz@gmail.com>", // sender address
                 to: cs4Settings.emailAddress,
                 // to: "steve@wizcomputing.com      ", // comma seperated list of receivers
-                subject: "Error Message from CS4 ✔", // Subject line
-                text: "This CS4 has just FAILED the SYSTEM TEST", // plaintext body
-                html: "This CS4 has just FAILED the SYSTEM TEST" // html body
-            }
+                subject: "Error Message from CS4 ✔: "+ cs4Settings.systemName, // Subject line
+                text: cs4Settings.systemName+ " CS4 has just FAILED the SYSTEM TEST.", // plaintext body
+                html: cs4Settings.systemName+ " CS4 has just FAILED the SYSTEM TEST." // html body
+            };
+            ledInfoBlink(4); // blink the light to indicate error
             sendMail(mailOptions);
         }
 
@@ -1173,11 +1180,9 @@ function setAutoTest(){
 
         //calculate milliseconds until start of test
         offsetTime = offsetTime*60*60*1000 - currentMinutes*60*1000 - currentSeconds*1000 - currentMilli;
-
+     autoTest =  setTimeout(function(){startSystemTest(1);}, offsetTime); // start again in 24 hours
 
     });
-
-    setTimeout(function(){startSystemTest(1);}, offsetTime); // start again in 24 hours
 
 }
 
@@ -1191,5 +1196,4 @@ function sendMail(mailOptions){
             console.log("Message sent: " + response.message);
         }
     });
-
 }
