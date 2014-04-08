@@ -1081,7 +1081,7 @@ function ledInfoOff(GPIOnum){
 
 function ledInfoBlink(GPIOnum){
     ledInfoOn(GPIOnum); // turn it on
-    setTimeout(function(){ledInfoOn(GPIOnum);}, 500); // turn it off
+    setTimeout(function(){ledInfoOff(GPIOnum);}, 500); // turn it off
     blink = setTimeout(function(){ledInfoBlink(GPIOnum);}, 1000); // restart
 
 }
