@@ -407,7 +407,7 @@ exports.websocketDataIn = function(dataSocket, Socket){
             sendOutput(dataToSend) ;
             clearInterval(autoTest); // if any previous timers are set, delete them
             clearInterval(autoTest1); // if any previous timers are set, delete them
-            sendOutput('GETTIME');
+            sendOutput('TIMEGET');
             setAutoTest(); //setup for auto test
         }
 
@@ -479,7 +479,9 @@ exports.socketDataOut = function (data) {
     // put the time string into proper form
 
     serialData = JSON.parse(data);
-    serialData.Time = new Date(serialData.Time);
+    if(serialData.Time) {
+        serialData.Time = new Date(serialData.Time);
+    }
 
 
     // make sure this is incoming cue data
@@ -995,11 +997,12 @@ exports.getSettings = function(){
             })
         }
 
-        dataToSend = '          SLAVE DMX_CH ' + cs4Settings.dmx1 +  " " + cs4Settings.dmx2 + " " + cs4Settings.dmx3 + '' + '\r'; //update the DMX channels
-        comlib.write(dataToSend) ;
-        dataToSend = '          SLAVE ZIGEN ' + cs4Settings.enableZigbee2 + '\r'; //update the DMX channels
-        comlib.write(dataToSend) ;
+        dataToSend = '          SLAVE DMX_CH ' + cs4Settings.dmx1 +  " " + cs4Settings.dmx2 + " " + cs4Settings.dmx3 + ''; //update the DMX channels
+        sendOutput(dataToSend) ;
+        dataToSend = '          SLAVE ZIGEN ' + cs4Settings.enableZigbee2 + ''; //update the DMX channels
+        sendOutput(dataToSend) ;
       //  exports.ledOn();
+        sendOutput('TIMEGET')
         setTimeout(function(){startSystemTest();}, 1500); // check for results after delay
         setTimeout(function(){setAutoTest();}, 3000);
     });
@@ -1167,11 +1170,11 @@ function checkForZigbee(auto){
 function setAutoTest(){
     var offsetTime;
     //get latest time from startup data base and calculate how long to delay before starting test
-    collectionStartup.find({},{_id:0}).sort({"Time": -1}).limit(1).toArray(function(error,Startupfile) {
+    collectionStartup.find({},{_id:0}).sort({"Tme1": -1}).limit(1).toArray(function(error,Startupfile) {
         //   collectionLog.find({},{_id:0}).sort({ $natural: 1 }).limit(1000).toArray(function(error,logfile){
 
 
-        startDate = new Date(Startupfile[0].Time);
+        startDate = new Date(Startupfile[0].Tme1);
         currentHours = startDate.getHours();
         currentMinutes = startDate.getMinutes();
         currentSeconds = startDate.getSeconds();

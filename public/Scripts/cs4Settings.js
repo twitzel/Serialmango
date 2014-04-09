@@ -504,7 +504,7 @@ function copyFromInternal(){
 
 function gettimebutton(){
     dataPacket.Type ="SEND";
-    dataPacket.Data = 'GETTIME';
+    dataPacket.Data = 'TIMEGET';
     websocket.send(JSON.stringify(dataPacket));
 }
 
