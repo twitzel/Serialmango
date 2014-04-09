@@ -23,10 +23,11 @@ exports.openSerialPort = function(portname, baud)
         console.log("Port open success:"+portname);
         //if CS4 branch then get time from io board
        if( branch == 'cs4'){
-          serialPort.write("GETTIME\n\r"); //get time to log as starting up time
+         // serialPort.write("GETTIME\n\r"); //get time to log as starting up time
            //we are now up and working
             //turn status LED on
-           cs4.getSettings();
+           setTimeout(function(){cs4.getSettings();}, 1500); // let things settle for a bit
+
        //    cs4.ledOn();
 
        }
@@ -44,7 +45,7 @@ exports.openSerialPort = function(portname, baud)
         }
         else if(branch == 'cs4')
         {
-            cs4.socketDataOut(data);
+            cs4.usbSerialDataIn(data);
 
 
         }

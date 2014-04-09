@@ -37,7 +37,7 @@ var zigbee2State;
 var blink;
 var autoTest;
 var autoTest1;
-
+var usbInputEnabled = 0;
 
 //routine to ensure that serial data is not sent more than
 // every timedOutInterval
@@ -464,7 +464,7 @@ exports.websocketDataIn = function(dataSocket, Socket){
 // sets output timers to send data back to CS-4 IO via serial.
 
 
-exports.socketDataOut = function (data) {
+exports.usbSerialDataIn = function (data) {
     var type = "";
     var indata;
     var source;
@@ -477,7 +477,9 @@ exports.socketDataOut = function (data) {
     var dir; // ****** needs to ba added to R4-4 Receiver Parsing ****** //
 
     // put the time string into proper form
-
+    if(!usbInputEnabled){ // if we are not ready for data - just get out!!!
+        return;
+    }
     serialData = JSON.parse(data);
     if(serialData.Time) {
         serialData.Time = new Date(serialData.Time);
@@ -978,6 +980,9 @@ function copyFromInternal(location)
 }
 
 exports.getSettings = function(){
+    usbInputEnabled = 1; //let the usb data through
+    sendOutput('GETTIME'); // get the system time as the startup time
+
     collectionSettings.findOne({},function(error,result){
         if(result){
             cs4Settings = result;
@@ -1006,7 +1011,6 @@ exports.getSettings = function(){
         setTimeout(function(){startSystemTest();}, 1500); // check for results after delay
         setTimeout(function(){setAutoTest();}, 3000);
     });
-
 };
 
 exports.saveSettings = function(){
