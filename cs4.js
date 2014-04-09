@@ -1179,11 +1179,11 @@ function setAutoTest(){
         offsetTime = wantedTime - currentHours;
         if(offsetTime < 0){
             offsetTime += 24;
-        };
+        }
 
         //calculate milliseconds until start of test
         offsetTime = offsetTime*60*60*1000 - currentMinutes*60*1000 - currentSeconds*1000 - currentMilli;
-     autoTest =  setTimeout(function(){startSystemTest(1);}, offsetTime); // start again in 24 hours
+        autoTest =  setTimeout(function(){startSystemTest(1);}, offsetTime); // start again in 24 hours
 
     });
 
