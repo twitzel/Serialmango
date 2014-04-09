@@ -400,13 +400,14 @@ exports.websocketDataIn = function(dataSocket, Socket){
         else if(dataSocket.Type == "SETTINGS") {
             cs4Settings = dataSocket.Data; // get the data
             exports.saveSettings(); // save it
-            dataToSend = '          SLAVE DMX_CH ' + cs4Settings.dmx1 +  " " + cs4Settings.dmx2 + " " + cs4Settings.dmx3 + '' + '\r'; //update the DMX channels
-            comlib.write(dataToSend) ;
+            dataToSend = '          SLAVE DMX_CH ' + cs4Settings.dmx1 +  " " + cs4Settings.dmx2 + " " + cs4Settings.dmx3 + ''; //update the DMX channels
+            sendOutput(dataToSend) ;
             comlib.websocketsend("Successfully updated settings file");
-            dataToSend = '          SLAVE ZIGEN ' + cs4Settings.enableZigbee2 + '\r'; //update the DMX channels
-            comlib.write(dataToSend) ;
+            dataToSend = '          SLAVE ZIGEN ' + cs4Settings.enableZigbee2 ; //update the DMX channels
+            sendOutput(dataToSend) ;
             clearInterval(autoTest); // if any previous timers are set, delete them
             clearInterval(autoTest1); // if any previous timers are set, delete them
+            sendOutput('GETTIME');
             setAutoTest(); //setup for auto test
         }
 
