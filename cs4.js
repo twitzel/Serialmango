@@ -312,7 +312,9 @@ exports.websocketDataIn = function(dataSocket, Socket){
         }
         else if(dataSocket.Type == "COPYFROMUSB")
         {
+           stopIO(1); //stop accesses to mongp
             copyFromUSB();
+            stopIO(0); //restart all io
         }
         else if(dataSocket.Type.substr(0,14) == "COPYTOINTERNAL")
         {
@@ -320,7 +322,9 @@ exports.websocketDataIn = function(dataSocket, Socket){
         }
         else if(dataSocket.Type.substr(0,16) == "COPYFROMINTERNAL")
         {
+            stopIO(1); //stop accesses to mongp
             copyFromInternal(dataSocket.Type.substr(17,1));
+            stopIO(0); //restart all io
         }
         else if(dataSocket.Type == "EDIT"){
             collectionCue.find({},{}).sort({"Time": 1}).toArray(function(error,cuefile){
@@ -1041,9 +1045,9 @@ exports.ledOn = function(){
       //  from: "CS4 192.168.2.10 ✔ <stevewitz@gmail.com>", // sender address
         to: cs4Settings.emailAddress,
        // to: "steve@wizcomputing.com      ", // comma seperated list of receivers
-        subject: "Message from CS4 ✔", // Subject line
-        text: "This CS4 has just been started", // plaintext body
-        html: "This CS4 has just been started" // html body
+        subject: "Start Up Message from CS4 ✔: "+ cs4Settings.systemName, // Subject line
+        text: cs4Settings.systemName+ " CS4 has just started.", // plaintext body
+        html: cs4Settings.systemName+ " CS4 has just started." // html body
     }
 
 // send mail with defined transport object
@@ -1173,6 +1177,7 @@ function checkForZigbee(auto){
 
 function setAutoTest(){
     var offsetTime;
+    exports.ledOn();//send email that we have started
     //get latest time from startup data base and calculate how long to delay before starting test
     collectionStartup.find({},{_id:0}).sort({"Tme1": -1}).limit(1).toArray(function(error,Startupfile) {
         //   collectionLog.find({},{_id:0}).sort({ $natural: 1 }).limit(1000).toArray(function(error,logfile){
@@ -1207,4 +1212,22 @@ function sendMail(mailOptions){
             console.log("Message sent: " + response.message);
         }
     });
+}
+
+function stopIO(state){
+    if(state){
+        //stop any pending cues frim firing if new cue comes in
+        if (global.timeoutlist != undefined){
+            for (var i=0;i<global.timeoutlist.length;++i){
+
+                clearTimeout(global.timeoutlist[i])
+            }
+        }
+        //stop input from cs4 IO board
+        usbInputEnabled = 0;
+    }
+    else{ // start inputs from CS4 IO Board
+        usbInputEnabled = 1;
+
+    }
 }
