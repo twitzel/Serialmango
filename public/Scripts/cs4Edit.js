@@ -214,25 +214,27 @@ function pixelLoad(item){
 
                 for(var j = 0; j < item[i].OutData.length; j++){
                     var packet = {};
-                    //  packet.Time = new Date(new Date(item[i].Time) + item[i].OutData[j].Delay).toISOString();
-                    packet.Time = new Date(item[i].Time);
-                    packet.Time = new Date(packet.Time.setMilliseconds(packet.Time.getMilliseconds() + item[i].OutData[j].Delay)).toISOString();
-                    packet.Data = item[i].OutData[j];
-                    dir = item[i].OutData[j].Dir;
-                    port = item[i].OutData[j].Port.toUpperCase();
-                    showname = item[i].OutData[j].Showname;
-                    dataToSend = item[i].OutData[j].Dout;
-                    delay = item[i].OutData[j].Delay;
-                    if(dir ==""){
-                        outstring = port + " " + showname + " " + dataToSend;
-                    }
-                    else{
-                        outstring = port + " " + showname + " " + dir + " " + dataToSend;
-                    }
+                    if(item[i].OutData) {
+                        //  packet.Time = new Date(new Date(item[i].Time) + item[i].OutData[j].Delay).toISOString();
+                        packet.Time = new Date(item[i].Time);
+                        packet.Time = new Date(packet.Time.setMilliseconds(packet.Time.getMilliseconds() + item[i].OutData[j].Delay)).toISOString();
+                        packet.Data = item[i].OutData[j];
+                        dir = item[i].OutData[j].Dir;
+                        port = item[i].OutData[j].Port.toUpperCase();
+                        showname = item[i].OutData[j].Showname;
+                        dataToSend = item[i].OutData[j].Dout;
+                        delay = item[i].OutData[j].Delay;
+                        if (dir == "") {
+                            outstring = port + " " + showname + " " + dataToSend;
+                        }
+                        else {
+                            outstring = port + " " + showname + " " + dir + " " + dataToSend;
+                        }
 
-                    packet.output = outstring;
-                    pixelArray[count] = packet;
-                    count++;
+                        packet.output = outstring;
+                        pixelArray[count] = packet;
+                        count++;
+                    }
                 }
             }
         }
@@ -725,6 +727,12 @@ function zoomcanvasMouseover(event){
 
 function zoomcanvasMousewheel(event){
     zoomLocation -= event.wheelDelta/50;
+    if(zoomLocation <0){
+        zoomLocation = 0;
+    }
+    if(zoomLocation > 100){
+        zoomLocation = 100;
+    }
     locationSlider.value = zoomLocation;
     if (zoomFactor <0){
         zoomFactor= 0;

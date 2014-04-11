@@ -38,6 +38,8 @@ var blink;
 var autoTest;
 var autoTest1;
 var usbInputEnabled = 0;
+var tempcntincoming = 0;
+var tempcntoutgoing = 0;
 
 //routine to ensure that serial data is not sent more than
 // every timedOutInterval
@@ -701,6 +703,8 @@ function parseCue(data)
 }
 
 function makeCueFile(dataSocket){
+    tempcntincoming=0;
+    tempcntoutgoing = 0;
     collectionCue.remove({},function(err,numberRemoved){
         console.log("inside remove call back" + numberRemoved);
         for(i = 0; i< dataSocket.Data.length; i++){
@@ -711,20 +715,26 @@ function makeCueFile(dataSocket){
                 lastCueReceivedEdit.InData = dataSocket.Data[i].InData;
                 lastCueReceivedEdit.Source = dataSocket.Data[i].Source;
                 lastCueReceivedEdit.Time = dataSocket.Data[i].Time;
+                tempcntincoming ++;
             }
             else{ //This is cue data.  Adjust delay and put data in proper form
-
+                tempcntoutgoing ++;
                 serialDataSocketEdit.OutData = dataSocket.Data[i].Data;
                 serialDataSocketEdit.OutData.Delay = new Date(dataSocket.Data[i].Time) - new Date(lastCueTime);
 
                 collectionCue.update({'InData':lastCueReceivedEdit.InData}, {$set: lastCueReceivedEdit},{upsert:true, w:1},function(err,res){
 
-                    console.log('InData to collection Cue -- error: ' + err);
+                   if(err){
+                       console.log('InData to collection Cue -- error: ' + err);
+                   }
+
                 });
 
                 collectionCue.update({'InData': lastCueReceivedEdit.InData}, {$push:serialDataSocketEdit},function(err,res){
+                    if(err){
+                        console.log('added Dout to collection Cue -- error: ' + err);
+                    }
 
-                    console.log('added Dout to collection Cue -- error: ' + err);
                 });
             }
         }
@@ -947,10 +957,11 @@ function copyToInternal(location)
         destinationPath = "/home/pi/mongoBackup/dump" + location; // this was arbitrarily chosen but now fixed
         mongoDirectory = '/opt/mongo/bin/';
     }
-    spawn('d:/mongo/bin/mongodump', ['-o', destinationPath]).on('exit',function(code){
-        comlib.websocketsend("Successfully copied all data to internal storage location " + location);
-        console.log("Successfully copied all data to internal storage: "+ destinationPath + " " + code);
-        return(1);
+    spawn(mongoDirectory + 'mongodump', ['-o', destinationPath]).on('exit',function(code){
+ // spawn('d:/mongo/bin/mongodump', ['-o', destinationPath]).on('exit',function(code){
+    comlib.websocketsend("Successfully copied all data to internal storage location " + location);
+    console.log("Successfully copied all data to internal storage: "+ destinationPath + " " + code);
+    return(1);
     });
 }
 
@@ -971,9 +982,9 @@ function copyFromInternal(location)
     }
     if (fs.existsSync(destinationPath)) { //make sure it exists
         spawn(mongoDirectory + 'mongorestore', ['--db',collectionName , destinationPath + "/" + collectionName , '--drop', '-vvv']).on('exit',function(code){
-            console.log('finished ' + code);
-            comlib.websocketsend("Successfully Copied All Data from Internal Storage Location " + location);
-            console.log("Successfully Copied " + destinationPath + " to " + mongoDirectory);
+        console.log('finished ' + code);
+        comlib.websocketsend("Successfully Copied All Data from Internal Storage Location " + location);
+        console.log("Successfully Copied " + destinationPath + " to " + mongoDirectory);
         });
 
     }
