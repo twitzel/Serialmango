@@ -100,13 +100,21 @@ exports.cs4Start = function(req, res){
 exports.cs4Info = function(req, res){
     var startup=0;
     var counter=0;
+    var notcounted = 0;
+    var notindex = 0;
     collectionStartup.find({'Time':{$exists:true}}).sort({"Time": -1}).limit(25).toArray(function(error,startup){
 
         collectionCue.find().toArray(function(error,countCue){
             var counter = 0;
             for(var i=0; i< countCue.length; i++)
             {
-                counter += countCue[i].OutData.length
+                if(countCue[i].OutData) {
+                    counter += countCue[i].OutData.length
+                }
+                else{
+                   notcounted +=1;
+                   notindex = i;
+                }
             }
 
 
