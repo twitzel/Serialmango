@@ -1021,7 +1021,7 @@ exports.getSettings = function(){
         sendOutput(dataToSend) ;
         dataToSend = '          SLAVE ZIGEN ' + cs4Settings.enableZigbee2 + ''; //update the DMX channels
         sendOutput(dataToSend) ;
-      //  exports.ledOn();
+        exports.ledOn();
         sendOutput('TIMEGET')
         setTimeout(function(){startSystemTest();}, 1500); // check for results after delay
         setTimeout(function(){setAutoTest();}, 3000);
@@ -1188,7 +1188,6 @@ function checkForZigbee(auto){
 
 function setAutoTest(){
     var offsetTime;
-    exports.ledOn();//send email that we have started
     //get latest time from startup data base and calculate how long to delay before starting test
     collectionStartup.find({},{_id:0}).sort({"Tme1": -1}).limit(1).toArray(function(error,Startupfile) {
         //   collectionLog.find({},{_id:0}).sort({ $natural: 1 }).limit(1000).toArray(function(error,logfile){
