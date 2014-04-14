@@ -1206,6 +1206,7 @@ function setAutoTest(){
 
         //calculate milliseconds until start of test
         offsetTime = offsetTime*60*60*1000 - currentMinutes*60*1000 - currentSeconds*1000 - currentMilli;
+        clearInterval(autoTest1); //erase any previous timeouts
         autoTest =  setTimeout(function(){startSystemTest(1);}, offsetTime); // start again in 24 hours
 
     });
