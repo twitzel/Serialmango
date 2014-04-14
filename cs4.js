@@ -67,7 +67,6 @@ sendOutput = function (dataToSend)
     //change the time of data sent to correlate with CS-4 I/O clock
     lastconverted   = new Date(lastCueReceivedInternalTime);
     addTime = addTime + "\""+  (new Date( lastconverted.setMilliseconds(lastconverted.getMilliseconds() + (timerStartTime -lastCueReceivedInternalTime)))).toISOString() +"\", \"Dout\" : \"" + dataToSend + "\"}";
-
     //send it out the socket
     comlib.websocketsend("  Sent: " + addTime) ;
 
@@ -259,8 +258,8 @@ exports.websocketDataIn = function(dataSocket, Socket){
             if(dataSocket.Type == "LOG 1000")
             {
                     comlib.websocketsend("* Preparing Data For Display. \n* Please Wait. \n* (may take several seconds) ", Socket) ;
-                    collectionLog.find({},{_id:0}).sort({"Time": -1}).limit(1000).toArray(function(error,logfile){
-                 //   collectionLog.find({},{_id:0}).sort({ $natural: 1 }).limit(1000).toArray(function(error,logfile){
+                        collectionLog.find({},{_id:0}).sort({"Time": -1}).limit(1000).toArray(function(error,logfile){
+                      //collectionLog.find({},{_id:0}).sort({ $natural: -1 }).limit(1000).toArray(function(error,logfile){
                         for(var i = 0; i <logfile.length;i++)
                         {
                             logfileData = JSON.stringify(logfile[i]);
@@ -1024,7 +1023,7 @@ exports.getSettings = function(){
         exports.ledOn();
         sendOutput('TIMEGET')
         setTimeout(function(){startSystemTest();}, 1500); // check for results after delay
-        setTimeout(function(){setAutoTest();}, 3000);
+        setTimeout(function(){setAutoTest(0);}, 3000);
     });
 };
 
@@ -1200,7 +1199,7 @@ function setAutoTest(){
         currentMilli = startDate.getMilliseconds();
         wantedTime = parseInt(cs4Settings.testTime.substr(0,2));
         offsetTime = wantedTime - currentHours;
-        if(offsetTime < 0){
+        if(offsetTime <= 0){
             offsetTime += 24;
         }
 
