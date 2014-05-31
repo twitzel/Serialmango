@@ -936,6 +936,28 @@ function copyFromUSB()
     }
 }
 
+function copyToInternal(){
+    // copies database to destinationPath.
+    if(os.type() == 'Windows_NT')
+    {
+        destinationPath = "d:/Dev/Git Projects/Serialmango/public/images"; //this is particular to the system mongo is running on
+        mongoDirectory = 'd:/mongo/bin/'; //this is based on system install of mongo
+    }
+    //this is for the pi
+    else
+    {
+        destinationPath = "/home/pi/Serialmango/public/images"; // this was arbitrarily chosen but now fixed
+        mongoDirectory = '/opt/mongo/bin/';
+    }
+    spawn(mongoDirectory + 'mongodump', ['-o', destinationPath]).on('exit',function(code){
+        // spawn('d:/mongo/bin/mongodump', ['-o', destinationPath]).on('exit',function(code){
+        comlib.websocketsend("Successfully copied all data to internal storage location " + location);
+        console.log("Successfully copied all data to internal storage: "+ destinationPath + " " + code);
+        return(1);
+    });
+
+}
+
 function copyToInternal(location)
 {
     // copies database to destinationPath.

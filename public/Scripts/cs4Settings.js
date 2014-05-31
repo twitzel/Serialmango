@@ -61,6 +61,9 @@ function onClose(evt) {
 
 function onMessage(evt)    {
     writeToScreen(evt.data);
+    if(evt.data = "Data Ready To Download"){
+
+    }
 }
 
 function onError(evt) {
