@@ -108,6 +108,7 @@ exports.setup = function()
     console.log('My IP Address is: ' + addresses[0]);
 
 
+
     //MongoClient.connect("mongodb://localhost:27017/WizDb", function(err, db)
    // MongoClient.connect("mongodb://192.168.2.10:27017/WizDb", function(err, db)
 
@@ -326,6 +327,10 @@ exports.websocketDataIn = function(dataSocket, Socket){
             stopIO(1); //stop accesses to mongp
             copyFromInternal(dataSocket.Type.substr(17,1));
             stopIO(0); //restart all io
+        }
+        else if(dataSocket.Type == "COPYTOPUBLIC")
+        {
+            copyToPublic();
         }
         else if(dataSocket.Type == "EDIT"){
             collectionCue.find({},{}).sort({"Time": 1}).toArray(function(error,cuefile){
@@ -936,28 +941,6 @@ function copyFromUSB()
     }
 }
 
-function copyToInternal(){
-    // copies database to destinationPath.
-    if(os.type() == 'Windows_NT')
-    {
-        destinationPath = "d:/Dev/Git Projects/Serialmango/public/images"; //this is particular to the system mongo is running on
-        mongoDirectory = 'd:/mongo/bin/'; //this is based on system install of mongo
-    }
-    //this is for the pi
-    else
-    {
-        destinationPath = "/home/pi/Serialmango/public/images"; // this was arbitrarily chosen but now fixed
-        mongoDirectory = '/opt/mongo/bin/';
-    }
-    spawn(mongoDirectory + 'mongodump', ['-o', destinationPath]).on('exit',function(code){
-        // spawn('d:/mongo/bin/mongodump', ['-o', destinationPath]).on('exit',function(code){
-        comlib.websocketsend("Successfully copied all data to internal storage location " + location);
-        console.log("Successfully copied all data to internal storage: "+ destinationPath + " " + code);
-        return(1);
-    });
-
-}
-
 function copyToInternal(location)
 {
     // copies database to destinationPath.
@@ -1013,6 +996,28 @@ function copyFromInternal(location)
         comlib.websocketsend("Internal Storage Location "+ location+ ' does not exist' );
         console.log(destinationPath + " does not exist");
     }
+}
+
+function copyToPublic(){
+    comlib.websocketsend("Preparing Data To Download");
+    // copies database to destinationPath.
+    if(os.type() == 'Windows_NT')
+    {
+        destinationPath = "d:/Dev/Git Projects/Serialmango/public/images"; //this is particular to the system mongo is running on
+        mongoDirectory = 'd:/mongo/bin/'; //this is based on system install of mongo
+    }
+    //this is for the pi
+    else
+    {
+        destinationPath = "/home/pi/Serialmango/public/images"; // this was arbitrarily chosen but now fixed
+        mongoDirectory = '/opt/mongo/bin/';
+    }
+    spawn(mongoDirectory + 'mongodump', ['-o', destinationPath]).on('exit',function(code){
+        comlib.websocketsend("Data Ready To Download");//this message is checked in the script
+        console.log("Successfully copied all data to Public/images: "+ destinationPath + " " + code);
+        return(1);
+    });
+
 }
 
 exports.getSettings = function(){
@@ -1263,3 +1268,4 @@ function stopIO(state){
 
     }
 }
+

@@ -41,6 +41,9 @@ legend{
     font-weight: bold;
 }
 
+.hide{
+    display: none;
+}
 @media only screen  and (max-device-width: 761px),(max-width: 761px)  {
     .log{
         font-size: 1em;
@@ -53,7 +56,5 @@ legend{
         margin-left: 1%;
         font-size: 1.3em;
     }
-
-
 }
 

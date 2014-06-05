@@ -61,8 +61,8 @@ function onClose(evt) {
 
 function onMessage(evt)    {
     writeToScreen(evt.data);
-    if(evt.data = "Data Ready To Download"){
-
+    if(evt.data == "Data Ready To Download"){
+        downLoadFiles();
     }
 }
 
@@ -502,6 +502,29 @@ function copyFromInternal(){
         dataPacket.Type ="COPYFROMINTERNAL" + document.getElementById('internalLocation').value;
         websocket.send(JSON.stringify(dataPacket));
     }
+}
+
+function copyToPublic(){
+    dataPacket.Type ="COPYTOPUBLIC";
+    websocket.send(JSON.stringify(dataPacket));
+}
+
+function downLoadFiles(){
+    //generate keyclicks to force downloads
+   // window.location.href = "/images/sailogo.jpg";
+ //   window.open("/images/sailogo.jpg",'Download');
+    document.getElementById('dl1').click();
+    document.getElementById('dl2').click();
+    document.getElementById('dl3').click();
+    document.getElementById('dl4').click();
+    document.getElementById('dl5').click();
+    document.getElementById('dl6').click();
+    document.getElementById('dl7').click();
+    document.getElementById('dl8').click();
+    document.getElementById('dl9').click();
+
+
+
 }
 //************************************  TIME  ******************************
 
