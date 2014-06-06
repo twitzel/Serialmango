@@ -1013,7 +1013,7 @@ function copyToPublic(){
         mongoDirectory = '/opt/mongo/bin/';
     }
     spawn(mongoDirectory + 'mongodump', ['-o', destinationPath]).on('exit',function(code){
-        comlib.websocketsend("Data Ready To Download");//this message is checked in the script
+        comlib.websocketsend("Data Is Ready");//this message is checked in the script
         console.log("Successfully copied all data to Public/images: "+ destinationPath + " " + code);
         return(1);
     });
