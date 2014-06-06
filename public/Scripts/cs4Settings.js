@@ -522,7 +522,7 @@ function downLoadFiles(){
     document.getElementById('dl7').click();
     document.getElementById('dl8').click();
     document.getElementById('dl9').click();
-
+    writeToScreen("Download Finished");
 
 
 }
