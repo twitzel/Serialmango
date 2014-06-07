@@ -145,7 +145,7 @@ exports.cs4Info = function(req, res){
 
 
 exports.cs4Home = function(req, res){
-    res.render('cs4Home.ejs',{ title: 'CS-4 Home', myuri:"ws://localhost:8080" });
+    res.render('cs4Home.ejs',{ title: 'CS-4 Home', myuri:"ws://localhost:8080",Test: req.params.Test  });
 };
 
 exports.cs4Timing = function(req, res){
@@ -153,7 +153,7 @@ exports.cs4Timing = function(req, res){
 };
 
 exports.cs4VerticalScroll = function(req, res){
-    res.render('CS4VerticalScroll.ejs',{ title: 'CS-4 Scroll', myuri:"ws://localhost:8080" });
+    res.render('CS4VerticalScroll.ejs',{ title: 'CS-4 Scroll', Test: req.params.Test });
 };
 
 exports.cs4Help = function(req, res){

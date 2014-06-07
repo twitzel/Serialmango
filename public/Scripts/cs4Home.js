@@ -10,6 +10,13 @@ function init(){
     //    context.canvas.width  = window.innerWidth;
 
     testWebSocket();
+    if(Test== 'test' || Test == 'Test'){
+
+        document.getElementById('test').style.display = 'block';
+    }
+    else{
+        document.getElementById('test').style.display = "none";
+    }
 }
 
 function testWebSocket()
