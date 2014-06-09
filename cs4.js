@@ -1095,8 +1095,8 @@ exports.ledOn = function(){
             to: cs4Settings.emailAddress,
             // to: "steve@wizcomputing.com      ", // comma seperated list of receivers
             subject: "Start Up Message from CS4 ✔: "+ cs4Settings.systemName, // Subject line
-            text: cs4Settings.systemName+ " CS4 has just started.\n  External IP address: " + externalIP + ":3000", // plaintext body
-            html: cs4Settings.systemName+ " CS4 has just started.\n  External IP address: " + externalIP + ":3000" // html body
+            text: cs4Settings.systemName+ " CS4 has just started.\n  External IP address:  http://" + externalIP + ":3000", // plaintext body
+            html: cs4Settings.systemName+ " CS4 has just started.\n  External IP address:  http://" + externalIP + ":3000" // html body
         };
 
 // send mail with defined transport object
