@@ -1084,7 +1084,7 @@ exports.ledOn = function(){
         //send startup email
         // setup e-mail data with unicode symbols
         if(err ==0){
-            externalIP = rslt;
+            externalIP = rslt.externalIP;
         }
         else{
             externalIP = "None";
@@ -1163,7 +1163,7 @@ function startSystemTest(auto){
     pmp.getExternalAddress('',function(err,rslt){
         console.log(err,rslt);
         if(err ==0){
-            externalIP = rslt;
+            externalIP = rslt.externalIP;
         }
         else{
             externalIP = "None";
