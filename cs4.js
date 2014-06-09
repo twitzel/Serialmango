@@ -19,6 +19,7 @@ var timedOut = true; // set to false will delay transmission;
 var comlib = require('./comlib');
 var spawn = require('child_process').spawn;
 var nodemailer = require("nodemailer");
+var pmp = require('pmp');
 
 var lastCueReceived = {"Time" : "10/09/13 15:20:04.20", "Source" : "Midi1", "InData" : "F0 7F 05 02 01 01 31 2E 30 30 F7 "};
 var serialDataSocket;
@@ -40,6 +41,7 @@ var autoTest1;
 var usbInputEnabled = 0;
 var tempcntincoming = 0;
 var tempcntoutgoing = 0;
+var extrnalIP ="";
 
 //routine to ensure that serial data is not sent more than
 // every timedOutInterval
@@ -1063,12 +1065,10 @@ exports.saveSettings = function(){
         console.log ('cs4Settings has been updated');
     });
 
-
-
-
-}
+};
 
 exports.ledOn = function(){
+
 
     if(os.type() != 'Windows_NT') // this is only for the pi
     {
@@ -1077,27 +1077,42 @@ exports.ledOn = function(){
         led.set(4);
         clearInterval(blink);
     }
-    //send startup email
-    // setup e-mail data with unicode symbols
-    var mailOptions = {
-        from: "CS4 @ " + myuri + "✔ <stevewitz@gmail.com>",
-      //  from: "CS4 192.168.2.10 ✔ <stevewitz@gmail.com>", // sender address
-        to: cs4Settings.emailAddress,
-       // to: "steve@wizcomputing.com      ", // comma seperated list of receivers
-        subject: "Start Up Message from CS4 ✔: "+ cs4Settings.systemName, // Subject line
-        text: cs4Settings.systemName+ " CS4 has just started.", // plaintext body
-        html: cs4Settings.systemName+ " CS4 has just started." // html body
-    }
+    //get ip address
+    pmp.getExternalAddress('',function(err,rslt){
+        console.log(err,rslt);
 
-// send mail with defined transport object
-    smtpTransport.sendMail(mailOptions, function(error, response){
-        if(error){
-            console.log(error);
+        //send startup email
+        // setup e-mail data with unicode symbols
+        if(err ==0){
+            externalIP = rslt;
         }
         else{
-            console.log("Message sent: " + response.message);
+            externalIP = "None";
         }
+        var mailOptions = {
+            from: "CS4 @ " + myuri + "✔ <stevewitz@gmail.com>",
+            //  from: "CS4 192.168.2.10 ✔ <stevewitz@gmail.com>", // sender address
+            to: cs4Settings.emailAddress,
+            // to: "steve@wizcomputing.com      ", // comma seperated list of receivers
+            subject: "Start Up Message from CS4 ✔: "+ cs4Settings.systemName, // Subject line
+            text: cs4Settings.systemName+ " CS4 has just started.\n  External IP address: " + externalIP + ":3000", // plaintext body
+            html: cs4Settings.systemName+ " CS4 has just started.\n  External IP address: " + externalIP + ":3000" // html body
+        };
+
+// send mail with defined transport object
+        smtpTransport.sendMail(mailOptions, function(error, response){
+            if(error){
+                console.log(error);
+            }
+            else{
+                console.log("Message sent: " + response.message);
+            }
+        });
+
+
     });
+
+
 };
 
 exports.ledOff = function(){
@@ -1111,6 +1126,7 @@ exports.ledOff = function(){
     }
 
 };
+
 
 function ledInfoOn(GPIOnum){
     if(os.type() != 'Windows_NT') // this is only for the pi
@@ -1143,13 +1159,23 @@ function startSystemTest(auto){
         dataToSend = '          SLAVE ZIGEN ' + 'YES' + '\r'; //Enable the zigee2 channel
         comlib.write(dataToSend) ;
     }
-    for(var i = 0; i < 8 ; i++){
-        sendOutput('ZIG1' + ' ' + 'TEST '  + "GO slide1111.jpg NEXT slide2222.jpg");
-    }
-   // ledInfoOn(27); // light to output light
-   // setTimeout(function(){ledInfoOff(27);}, 100); // turn it off
-    setTimeout(function(){checkForZigbee(auto);}, 5000); // check for results after delay
 
+    pmp.getExternalAddress('',function(err,rslt){
+        console.log(err,rslt);
+        if(err ==0){
+            externalIP = rslt;
+        }
+        else{
+            externalIP = "None";
+        }
+        for(var i = 0; i < 8 ; i++){
+            sendOutput('ZIG1' + ' ' + 'TEST '  + "GO slide1111.jpg NEXT slide2222.jpg");
+        }
+        // ledInfoOn(27); // light to output light
+        // setTimeout(function(){ledInfoOff(27);}, 100); // turn it off
+        setTimeout(function(){checkForZigbee(auto);}, 5000); // check for results after delay
+
+    });
 }
 
 function checkForZigbee(auto){
@@ -1182,8 +1208,8 @@ function checkForZigbee(auto){
                 to: cs4Settings.emailAddress,
                 // to: "steve@wizcomputing.com      ", // comma seperated list of receivers
                 subject: "Success Message from CS4 ✔: "+ cs4Settings.systemName, // Subject line
-                text: cs4Settings.systemName+ " CS4 has just PASSED the SYSTEM TEST.", // plaintext body
-                html: cs4Settings.systemName+ " CS4 has just PASSED the SYSTEM TEST." // html body
+                text: cs4Settings.systemName+ " CS4 has just PASSED the SYSTEM TEST.\n  External IP address: " + externalIP + ":3000", // plaintext body
+                html: cs4Settings.systemName+ " CS4 has just PASSED the SYSTEM TEST.\n  External IP address: " + externalIP + ":3000" // html body
             };
             ledInfoOn(4); // turn on the light
             sendMail(mailOptions);
@@ -1200,8 +1226,8 @@ function checkForZigbee(auto){
                 to: cs4Settings.emailAddress,
                 // to: "steve@wizcomputing.com      ", // comma seperated list of receivers
                 subject: "Error Message from CS4 ✔: "+ cs4Settings.systemName, // Subject line
-                text: cs4Settings.systemName+ " CS4 has just FAILED the SYSTEM TEST.", // plaintext body
-                html: cs4Settings.systemName+ " CS4 has just FAILED the SYSTEM TEST." // html body
+                text: cs4Settings.systemName+ " CS4 has just FAILED the SYSTEM TEST.\n  External IP address: " + externalIP + ":3000", // plaintext body
+                html: cs4Settings.systemName+ " CS4 has just FAILED the SYSTEM TEST.\n  External IP address: " + externalIP + ":3000" // html body
             };
             ledInfoBlink(4); // blink the light to indicate error
             sendMail(mailOptions);
