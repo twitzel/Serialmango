@@ -1208,8 +1208,8 @@ function checkForZigbee(auto){
                 to: cs4Settings.emailAddress,
                 // to: "steve@wizcomputing.com      ", // comma seperated list of receivers
                 subject: "Success Message from CS4 ✔: "+ cs4Settings.systemName, // Subject line
-                text: cs4Settings.systemName+ " CS4 has just PASSED the SYSTEM TEST.\n  External IP address: " + externalIP + ":3000", // plaintext body
-                html: cs4Settings.systemName+ " CS4 has just PASSED the SYSTEM TEST.\n  External IP address: " + externalIP + ":3000" // html body
+                text: cs4Settings.systemName+ " CS4 has just PASSED the SYSTEM TEST.\n  External IP address:  http://" + externalIP + ":3000", // plaintext body
+                html: cs4Settings.systemName+ " CS4 has just PASSED the SYSTEM TEST.\n  External IP address:  http://" + externalIP + ":3000" // html body
             };
             ledInfoOn(4); // turn on the light
             sendMail(mailOptions);
@@ -1226,8 +1226,8 @@ function checkForZigbee(auto){
                 to: cs4Settings.emailAddress,
                 // to: "steve@wizcomputing.com      ", // comma seperated list of receivers
                 subject: "Error Message from CS4 ✔: "+ cs4Settings.systemName, // Subject line
-                text: cs4Settings.systemName+ " CS4 has just FAILED the SYSTEM TEST.\n  External IP address: " + externalIP + ":3000", // plaintext body
-                html: cs4Settings.systemName+ " CS4 has just FAILED the SYSTEM TEST.\n  External IP address: " + externalIP + ":3000" // html body
+                text: cs4Settings.systemName+ " CS4 has just FAILED the SYSTEM TEST.\n  External IP address:  http://" + externalIP + ":3000", // plaintext body
+                html: cs4Settings.systemName+ " CS4 has just FAILED the SYSTEM TEST.\n  External IP address:  http://" + externalIP + ":3000" // html body
             };
             ledInfoBlink(4); // blink the light to indicate error
             sendMail(mailOptions);
