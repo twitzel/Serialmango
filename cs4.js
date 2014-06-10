@@ -1091,6 +1091,9 @@ exports.ledOn = function(){
                 pmp.portMap(rslt.externalIP, 3000, 3000, 350000, function (err, rslt) {
                     console.log(err, rslt);
                 });
+                pmp.portMap(rslt.externalIP, 8080, 8080, 350000, function (err, rslt) {
+                    console.log(err, rslt);
+                });
             }
             else{//if windows map external port 1 higher
                 pmp.portMap(rslt.externalIP, 3000, 3001, 350000, function (err, rslt) {
@@ -1175,6 +1178,9 @@ function startSystemTest(auto){
             if(os.type() != 'Windows_NT') { // this is only for the pi
 
                 pmp.portMap(rslt.externalIP, 3000, 3000, 350000, function (err, rslt) {
+                    console.log(err, rslt);
+                });
+                pmp.portMap(rslt.externalIP, 8080, 8080, 350000, function (err, rslt) {
                     console.log(err, rslt);
                 });
             }
