@@ -197,7 +197,7 @@ exports.setup = function()
 
     //set timezone of pi
    // time.tzset('US/Pacific');
-    time.tzset('US/Eastern');
+  //  time.tzset('US/Eastern');
     //set up email
     smtpTransport = nodemailer.createTransport("SMTP",{
         service: "Gmail",
