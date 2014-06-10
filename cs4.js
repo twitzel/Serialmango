@@ -1077,7 +1077,7 @@ exports.ledOn = function(){
         led.set(4);
         clearInterval(blink);
     }
-    //get ip address
+    //get ip address with pmp
     pmp.getExternalAddress('',function(err,rslt){
         console.log(err,rslt);
 
@@ -1098,6 +1098,18 @@ exports.ledOn = function(){
             text: cs4Settings.systemName+ " CS4 has just started.\n  External IP address:  http://" + externalIP + ":3000", // plaintext body
             html: cs4Settings.systemName+ " CS4 has just started.\n  External IP address:  http://" + externalIP + ":3000" // html body
         };
+        //setup portmapping for the router
+        if(os.type() != 'Windows_NT') { // this is only for the pi
+
+            pmp.portMap('', 3000, 3000, 350000, function (err, rslt) {
+                console.log(err, rslt);
+            });
+        }
+        else{//if windows map external port 1 higher
+            pmp.portMap('', 3000, 3001, 350000, function (err, rslt) {
+                console.log(err, rslt);
+            });
+        }
 
 // send mail with defined transport object
         smtpTransport.sendMail(mailOptions, function(error, response){
@@ -1108,11 +1120,7 @@ exports.ledOn = function(){
                 console.log("Message sent: " + response.message);
             }
         });
-
-
     });
-
-
 };
 
 exports.ledOff = function(){
@@ -1124,7 +1132,6 @@ exports.ledOff = function(){
         led.unset(4);
         clearInterval(blink);
     }
-
 };
 
 
@@ -1176,6 +1183,18 @@ function startSystemTest(auto){
         setTimeout(function(){checkForZigbee(auto);}, 5000); // check for results after delay
 
     });
+    //refresh portmapping for the router  lease expire in 4 days
+    if(os.type() != 'Windows_NT') { // this is only for the pi
+
+        pmp.portMap('', 3000, 3000, 350000, function (err, rslt) {
+            console.log(err, rslt);
+        });
+    }
+    else{//if windows map external port 1 higher
+        pmp.portMap('', 3000, 3001, 350000, function (err, rslt) {
+            console.log(err, rslt);
+        });
+    }
 }
 
 function checkForZigbee(auto){
