@@ -1085,6 +1085,18 @@ exports.ledOn = function(){
         // setup e-mail data with unicode symbols
         if(err ==0){
             externalIP = rslt.externalIP;
+            //setup portmapping for the router
+            if(os.type() != 'Windows_NT') { // this is only for the pi
+
+                pmp.portMap(rslt.externalIP, 3000, 3000, 350000, function (err, rslt) {
+                    console.log(err, rslt);
+                });
+            }
+            else{//if windows map external port 1 higher
+                pmp.portMap(rslt.externalIP, 3000, 3001, 350000, function (err, rslt) {
+                    console.log(err, rslt);
+                });
+            }
         }
         else{
             externalIP = "None";
@@ -1098,18 +1110,6 @@ exports.ledOn = function(){
             text: cs4Settings.systemName+ " CS4 has just started.\n  External IP address:  http://" + externalIP + ":3000", // plaintext body
             html: cs4Settings.systemName+ " CS4 has just started.\n  External IP address:  http://" + externalIP + ":3000" // html body
         };
-        //setup portmapping for the router
-//        if(os.type() != 'Windows_NT') { // this is only for the pi
-//
-//            pmp.portMap('', 3000, 3000, 350000, function (err, rslt) {
-//                console.log(err, rslt);
-//            });
-//        }
-//        else{//if windows map external port 1 higher
-//            pmp.portMap('', 3000, 3001, 350000, function (err, rslt) {
-//                console.log(err, rslt);
-//            });
-//        }
 
 // send mail with defined transport object
         smtpTransport.sendMail(mailOptions, function(error, response){
@@ -1171,6 +1171,19 @@ function startSystemTest(auto){
         console.log(err,rslt);
         if(err ==0){
             externalIP = rslt.externalIP;
+            //refresh portmapping for the router  lease expire in 4 days
+            if(os.type() != 'Windows_NT') { // this is only for the pi
+
+                pmp.portMap(rslt.externalIP, 3000, 3000, 350000, function (err, rslt) {
+                    console.log(err, rslt);
+                });
+            }
+            else{//if windows map external port 1 higher
+                pmp.portMap(rslt.externalIP, 3000, 3001, 350000, function (err, rslt) {
+                    console.log(err, rslt);
+                });
+            }
+
         }
         else{
             externalIP = "None";
@@ -1183,18 +1196,7 @@ function startSystemTest(auto){
         setTimeout(function(){checkForZigbee(auto);}, 5000); // check for results after delay
 
     });
-    //refresh portmapping for the router  lease expire in 4 days
-//    if(os.type() != 'Windows_NT') { // this is only for the pi
-//
-//        pmp.portMap('', 3000, 3000, 350000, function (err, rslt) {
-//            console.log(err, rslt);
-//        });
-//    }
-//    else{//if windows map external port 1 higher
-//        pmp.portMap('', 3000, 3001, 350000, function (err, rslt) {
-//            console.log(err, rslt);
-//        });
-//    }
+
 }
 
 function checkForZigbee(auto){
