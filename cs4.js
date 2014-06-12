@@ -1174,23 +1174,31 @@ function startSystemTest(auto){
     }
 
     pmp.getExternalAddress('',function(err,rslt){
-        console.log("1st",err,rslt);
-        if(err ==0){
+        console.log(err,rslt);
+        if(!err){
             externalIP = rslt.externalIP;
+            console.log("got external address",rslt.extervalIP);
             //refresh portmapping for the router  lease expire in 4 days
             if(os.type() != 'Windows_NT') { // this is only for the pi
 
                 pmp.portMap('192.168.2.200', 3000, 3000, 350000, function (err, rslt) {
-                    console.log('2nd', err, rslt);
+                    if (!err){
+                        console.log("success map port 3000");
+                    }else{
+                        console.log("port mapping 3000 fail",err,rslt);}
+
+
                     pmp.portMap('192.168.2.200', 8080, 8080, 350000, function (err, rslt) {
-                        console.log('3rd',err, rslt);
+                        if (!err){
+                            console.log("success map port 8080");
+                        }else{
+                            console.log("port mapping 8080 fail",err,rslt);}
                     });
                 });
-
             }
             else{//if windows map external port 1 higher
                 pmp.portMap(rslt.gateway, 3000, 3001, 350000, function (err, rslt) {
-                    console.log('4th' ,err, rslt);
+                    console.log(err, rslt);
                 });
             }
 
@@ -1206,6 +1214,40 @@ function startSystemTest(auto){
         setTimeout(function(){checkForZigbee(auto);}, 5000); // check for results after delay
 
     });
+
+//    pmp.getExternalAddress('',function(err,rslt){
+//        console.log("1st",err,rslt);
+//        if(err ==0){
+//            externalIP = rslt.externalIP;
+//            //refresh portmapping for the router  lease expire in 4 days
+//            if(os.type() != 'Windows_NT') { // this is only for the pi
+//
+//                pmp.portMap('192.168.2.200', 3000, 3000, 350000, function (err, rslt) {
+//                    console.log('2nd', err, rslt);
+//                    pmp.portMap('192.168.2.200', 8080, 8080, 350000, function (err, rslt) {
+//                        console.log('3rd',err, rslt);
+//                    });
+//                });
+//
+//            }
+//            else{//if windows map external port 1 higher
+//                pmp.portMap(rslt.gateway, 3000, 3001, 350000, function (err, rslt) {
+//                    console.log('4th' ,err, rslt);
+//                });
+//            }
+//
+//        }
+//        else{
+//            externalIP = "None";
+//        }
+//        for(var i = 0; i < 8 ; i++){
+//            sendOutput('ZIG1' + ' ' + 'TEST '  + "GO slide1111.jpg NEXT slide2222.jpg");
+//        }
+//        // ledInfoOn(27); // light to output light
+//        // setTimeout(function(){ledInfoOff(27);}, 100); // turn it off
+//        setTimeout(function(){checkForZigbee(auto);}, 5000); // check for results after delay
+//
+//    });
 
 }
 
