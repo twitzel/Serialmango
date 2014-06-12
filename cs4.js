@@ -1174,17 +1174,17 @@ function startSystemTest(auto){
     }
 
     pmp.getExternalAddress('',function(err,rslt){
-        console.log(err,rslt);
+        console.log("1st",err,rslt);
         if(err ==0){
             externalIP = rslt.externalIP;
             //refresh portmapping for the router  lease expire in 4 days
             if(os.type() != 'Windows_NT') { // this is only for the pi
 
                 pmp.portMap('192.168.2.200', 3000, 3000, 350000, function (err, rslt) {
-                    console.log(err, rslt);
+                    console.log('2nd', err, rslt);
                 });
                 pmp.portMap('192.168.2.200', 8080, 8080, 350000, function (err, rslt) {
-                    console.log(err, rslt);
+                    console.log('3rd',err, rslt);
                 });
             }
             else{//if windows map external port 1 higher
