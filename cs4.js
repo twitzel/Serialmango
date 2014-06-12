@@ -1190,7 +1190,7 @@ function startSystemTest(auto){
             }
             else{//if windows map external port 1 higher
                 pmp.portMap(rslt.gateway, 3000, 3001, 350000, function (err, rslt) {
-                    console.log(err, rslt);
+                    console.log('4th' ,err, rslt);
                 });
             }
 
