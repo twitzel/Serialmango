@@ -1276,7 +1276,7 @@ function checkForZigbee(auto){
         }
 
         if(auto){
-      autoTest1 = setTimeout(function(){startSystemTest(1);}, 1000*60*60*24); // start again in 24 hours
+            autoTest1 = setTimeout(function(){startSystemTest(1);}, 1000*60*60*24); // start again in 24 hours
         }
     });
 
@@ -1303,11 +1303,18 @@ function setAutoTest(){
         //calculate milliseconds until start of test
         offsetTime = offsetTime*60*60*1000 - currentMinutes*60*1000 - currentSeconds*1000 - currentMilli;
         clearInterval(autoTest1); //erase any previous timeouts
+        clearInterval(autoTest); //erase any previous timeouts
         autoTest =  setTimeout(function(){startSystemTest(1);}, offsetTime); // start again in 24 hours
-
+        autoTestTemp =  setTimeout(function(){sendConsole();}, 30000); // start again in 24 hours
     });
 
 }
+
+function sendConsole(){
+    console.log('Delays ', startDate, currentHours, wantedTime);
+}
+
+
 
 
 function sendMail(mailOptions){
