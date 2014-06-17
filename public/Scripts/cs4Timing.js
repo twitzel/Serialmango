@@ -125,27 +125,22 @@ function cueclick1(message){
     var radioButtons = document.getElementsByName('output1');
     var dataFormat;
     var dataOut;
+    var desc;
 
-    for (var i = 0, length = radioButtons.length; i < length; i++) {
-        if (radioButtons[i].checked) {
+    desc = document.getElementById('description1').value;
+    dataFormat = document.getElementById('type1').value;
 
-           dataFormat = (radioButtons[i].value);
-
-            // get out of loop now that we have value
-            break;
-        }
+    if(dataFormat == 'slide'){
+        dataOut =  "GO slide" + counter +".jpg NEXT slide"+(counter +1) +".jpg";
+    }
+    else{
+        dataOut = "GO " + dataFormat + counter + ".mp3";
     }
 
-    if(dataFormat == 'r4slides'){
-      dataOut =  "GO slide" + counter +".jpg NEXT slide"+(counter +1) +".jpg";
-    }
-    else if(dataFormat == 'r4audio'){
-      dataOut = "GO audio" + counter + ".mp3";
-    }
     cuevalue1.value = counter +1; //update the cue count
     delay = (new Date().getTime() - lastCueTime);
    // websocket.send("{\"OutData\": [{\"Delay\": "+delay+" , \"Port\":\"Zig1\", \"Showname\":\""+ showName +"\", \"Dir\":\""+ directory +"\", \"Dout\":\"" + dataOut + "\"}]}");
-    dataPacket.Data = "{\"OutData\": {\"Delay\": "+delay+" , \"Port\":\"ZIG1\", \"Showname\":\""+ showName +"\", \"Dir\":\""+ directory +"\", \"Dout\":\"" + dataOut + "\"}}";
+    dataPacket.Data = "{\"OutData\": {\"Desc\":\""+ desc +"\",\"Delay\": "+delay+" , \"Port\":\"ZIG1\", \"Showname\":\""+ showName +"\", \"Dir\":\""+ directory +"\", \"Dout\":\"" + dataOut + "\"}}";
     websocket.send(JSON.stringify(dataPacket));
     if(testing ==1){
         setTimeout(function(){cueclick1( );}, 5000);
@@ -163,26 +158,20 @@ function cueclick2(message){
     var radioButtons = document.getElementsByName('output2');
     var dataFormat;
     var dataOut;
+    var desc;
 
-    for (var i = 0, length = radioButtons.length; i < length; i++) {
-        if (radioButtons[i].checked) {
+    desc = document.getElementById('description2').value;
+    dataFormat = document.getElementById('type2').value;
 
-            dataFormat = (radioButtons[i].value);
-
-            // get out of loop now that we have value
-            break;
-        }
-    }
-
-    if(dataFormat == 'r4slides'){
+    if(dataFormat == 'slide'){
         dataOut =  "GO slide" + counter +".jpg NEXT slide"+(counter +1) +".jpg";
     }
-    else if(dataFormat == 'r4audio'){
-        dataOut = "GO audio" + counter + ".mp3";
+    else{
+        dataOut = "GO " + dataFormat + counter + ".mp3";
     }
     cuevalue2.value = counter +1; //update the cue count
     delay = (new Date().getTime() - lastCueTime);
-    dataPacket.Data = ("{\"OutData\": {\"Delay\": "+delay+" , \"Port\":\"ZIG1\", \"Showname\":\""+ showName +"\", \"Dir\":\""+ directory +"\", \"Dout\":\"" + dataOut + "\"}}");
+    dataPacket.Data = ("{\"OutData\": {\"Desc\":\""+ desc +"\",\"Delay\": "+delay+" , \"Port\":\"ZIG1\", \"Showname\":\""+ showName +"\", \"Dir\":\""+ directory +"\", \"Dout\":\"" + dataOut + "\"}}");
     websocket.send(JSON.stringify(dataPacket));
 
 }
@@ -198,26 +187,20 @@ function cueclick3(message){
     var radioButtons = document.getElementsByName('output3');
     var dataFormat;
     var dataOut;
+    var desc;
 
-    for (var i = 0, length = radioButtons.length; i < length; i++) {
-        if (radioButtons[i].checked) {
+    desc = document.getElementById('description3').value;
+    dataFormat = document.getElementById('type3').value;
 
-            dataFormat = (radioButtons[i].value);
-
-            // get out of loop now that we have value
-            break;
-        }
-    }
-
-    if(dataFormat == 'r4slides'){
+    if(dataFormat == 'slide'){
         dataOut =  "GO slide" + counter +".jpg NEXT slide"+(counter +1) +".jpg";
     }
-    else if(dataFormat == 'r4audio'){
-        dataOut = "GO audio" + counter + ".mp3";
+    else{
+        dataOut = "GO " + dataFormat + counter + ".mp3";
     }
     cuevalue3.value = counter +1; //update the cue count
     delay = (new Date().getTime() - lastCueTime);
-    dataPacket.Data = ("{\"OutData\": {\"Delay\": "+delay+" , \"Port\":\"ZIG1\", \"Showname\":\""+ showName +"\", \"Dir\":\""+ directory +"\", \"Dout\":\"" + dataOut + "\"}}");
+    dataPacket.Data = ("{\"OutData\": {\"Desc\":\""+ desc +"\",\"Delay\": "+delay+" , \"Port\":\"ZIG1\", \"Showname\":\""+ showName +"\", \"Dir\":\""+ directory +"\", \"Dout\":\"" + dataOut + "\"}}");
     websocket.send(JSON.stringify(dataPacket));
 }
 

@@ -518,7 +518,7 @@ exports.usbSerialDataIn = function (data) {
                 }
                 else {
 
-                    //added to stop any pending cues frim firing if new cue comes in
+                    //added to stop any pending cues from firing if new cue comes in
                     if (global.timeoutlist != undefined){
                         for (var i=0;i<global.timeoutlist.length;++i){
 
