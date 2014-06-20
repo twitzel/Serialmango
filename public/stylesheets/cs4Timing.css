@@ -18,20 +18,59 @@
     color: #5c5c5c;
 
 }
+#cuetitle{
+    height:  20px;
+}
+#cuetitle h2{
 
-#butttest{
-    background-color: #ff0000;
+    width: 350px;
+    margin-left: 5.2%;
+    line-height: 10px;
+    color: #5c5c5c;
+}
+#cuetitle h3{
+
+    width: 650px;
+    margin-left: 10px;
+    line-height: 10px;
+    color: #5c5c5c;
 }
 
-.log{
-    height: 350px;
+#cueinfo{
+    height: 125px;
     background-color: rgba(220, 203, 204, 0.56);
     border: 2px solid #333333;
     border-radius: 5px;
     box-shadow: 3px 3px 3px #333;
     padding-left: 10px;
     padding-right: 10px;
-    padding-bottom: 15px;
+    padding-bottom: 10px;
+    overflow-y: auto;
+    font-size: 1.1em;
+}
+#butttest{
+    background-color: #ff0000;
+}
+
+#retime{
+    height: 50px;
+}
+.retimebutton{
+    margin-right: 5.2%;
+    float:left;
+    border-radius:5px;
+    /* background: linear-gradient(to bottom, rgba(63,76,107,0.1) 26%,rgba(63,76,107,0.15) 33%,rgba(0,0,0,0.42) 75%,rgba(0,0,0,0.49) 86%);*/
+    font-weight: bold;
+}
+.log{
+    height: 225px;
+    background-color: rgba(220, 203, 204, 0.56);
+    border: 2px solid #333333;
+    border-radius: 5px;
+    box-shadow: 3px 3px 3px #333;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 10px;
     overflow-y: auto;
     font-size: 1.1em;
 }

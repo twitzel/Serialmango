@@ -224,6 +224,8 @@ exports.setup = function()
     CUECREATE               Makes a copy of all files to internal, deletes the cue file and recreates it form cue editor data.
     SETTINGS                Saves any changes to the settings collection
     SYSTEMTEST              Sends a cue and makes sure a received zigbee return channel is logged
+    DELETECUE               Copies all mongodb files to the default directory and then deletes the cue collection
+    DELETEONECUE            Copies all mongodb files to the default directory and then deletes one cue DESC from the collection
 
 dataSocket.Type
 dataSocket.Data
@@ -406,6 +408,34 @@ exports.websocketDataIn = function(dataSocket, Socket){
                 console.log("Successfully copied all data to default storage: "+ destinationPath + " " + code);
                 collectionCue.remove({},function(err,numberRemoved){
                     console.log("inside remove call back" + numberRemoved);
+                });
+
+            });
+        }
+        else if(dataSocket.Type == "DELETEONECUE"){
+            // copies database to destinationPath for a backup, then deletes one Cue Desc in cue file.
+            if(os.type() == 'Windows_NT')
+            {
+                //  usbstickPath = "G:/"; // this is based on particular usbsticl
+                //   path = usbstickPath ;
+                //  sourcePath = "d://data/db"; // this is based on system install of mongo
+                destinationPath = "d:/mongoBackup/dump"; //this is particular to the system mongo is running on
+                mongoDirectory = 'd:/mongo/bin/'; //this is based on system install of mongo
+            }
+            //this is for the pi
+            else
+            {
+                //  usbstickPath = "/media";
+                //  path = usbstickPath ;
+                //  sourcePath = "/data/db";
+                destinationPath = "/home/pi/mongoBackup/dump"; // this was arbitrarily chosen but now fixed
+                mongoDirectory = '/opt/mongo/bin/';
+            }
+            spawn(mongoDirectory + 'mongodump', ['-o', destinationPath]).on('exit',function(code){
+                comlib.websocketsend("Successfully backed up all data to default storage and removed " + dataSocket.data + " from the cue file");
+                console.log("Successfully backed up all data to default storage: "+ destinationPath + " " + code);
+                collectionCue.update({}, {$pull: {OutData: {Desc: dataSocket.data}}}, {multi: true}, function(err, item){
+                    console.log("inside cues with desc" + item);
                 });
 
             });

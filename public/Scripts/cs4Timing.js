@@ -13,6 +13,7 @@ var bkgnd = 0;
 var incue = 0;
 var dataPacket = {};
 var testing = 0;
+var cueStats = [];
 
 //window.onload = init;
 window.addEventListener("load", init, true);
@@ -51,6 +52,19 @@ function init()
     else{
         document.getElementById('test').style.display = "none";
     }
+    if(Desc) {
+
+        Desc = JSON.parse(Desc.replace(/&quot;/g, '"'));
+        var item = [];
+        var TAB = "\t";
+        var cueHistory =document.getElementById("cueinfo");
+        var dropdown = document.getElementById("retimeDesc");
+        for (var i = 0; i < Desc.length; i++) {
+            cueStats[i] = Desc[i][0] + TAB + TAB + TAB + Desc[i][1] + TAB +TAB + Desc[i][2] + TAB + TAB + Desc[i][3];
+            cueHistory.innerHTML = cueStats[i] + "<BR>" + cueHistory.innerHTML;
+            dropdown[dropdown.length] = new Option(Desc[i][0], Desc[i][0]);
+        }
+    }
 }
 
 
@@ -81,6 +95,7 @@ function onClose(evt) {
 }
 
 function onMessage(evt)    {
+
     writeToScreen(evt.data);
     if(evt.data.substr(0,1) == '2'){
         incue = 1;
@@ -230,6 +245,40 @@ function buttonDelete(){
     }
     dataPacket.Type = ''; // reset the packet type
 }
+
+function buttonRetime() {
+    document.getElementById('retime').style.display = "block";
+}
+
+function buttonRetimeContinue(){
+    var inputConfirm =confirm("This will permanently DELETE the \n"+ document.getElementById("retimeDesc").value + " timing in the cue file. \n A backup will be created in the default location.\n\n Are you sure you want to continue?");
+    if (inputConfirm==true)
+    {
+        dataPacket.Type = 'DELETEONECUE';
+        dataPacket.data = document.getElementById("retimeDesc").value;
+        websocket.send(JSON.stringify(dataPacket));
+        //now update cue info
+        var TAB = "\t";
+        var cueHistory =document.getElementById("cueinfo");
+        var dropdown = document.getElementById("retimeDesc");
+        cueHistory.innerHTML =""; // clear div
+        dropdown.options.length = 0;//clear select box
+        for (var i = 0; i < Desc.length; i++) {
+            cueStats[i] = Desc[i][0] + TAB + TAB + TAB + Desc[i][1] + TAB + TAB + Desc[i][2] + TAB + TAB + Desc[i][3];
+            if (dataPacket.data != Desc[i][0]) {
+                cueHistory.innerHTML = cueStats[i] + "<BR>" + cueHistory.innerHTML;
+                dropdown[dropdown.length] = new Option(Desc[i][0], Desc[i][0]);
+            }
+        }
+    }
+    document.getElementById('retime').style.display = "none";
+    dataPacket.Type = ''; // reset the packet type
+}
+
+function buttonRetimeCancel(){
+    document.getElementById('retime').style.display = "none";
+}
+
 
 function buttonTest(){
     testing=1;
