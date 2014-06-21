@@ -22,6 +22,8 @@ var touchDistanceStart;
 var touch=0;
 var insertReady=0;
 var dataToSend = {};
+var oneCueFile = 0;
+var oneCueFileName;
 
     window.onload = init;
 function init(){
@@ -57,6 +59,16 @@ function init(){
     zoomcanvas.addEventListener("touchleave", zoomcanvasTouchleave, false );
 
     testWebSocket();
+    if(Desc) {
+
+        Desc = JSON.parse(Desc.replace(/&quot;/g, '"'));
+        var item = [];
+        var TAB = "\t";
+        var dropdown = document.getElementById("retimeDesc");
+        for (var i = 0; i < Desc.length; i++) {
+            dropdown[dropdown.length] = new Option(Desc[i][0], Desc[i][0]);
+        }
+    }
 }
 
 function testWebSocket()
@@ -134,9 +146,28 @@ function resize_canvas()
 }
 
 function loadclick(){
+    oneCueFile = 0;// all cue files
     dataPacket.Type = 'EDIT';
     websocket.send(JSON.stringify(dataPacket));
     context.clearRect(0,0,canvas.width,canvas.height);
+    document.getElementById('retime').style.display = "none";
+}
+
+function loadOneclick(){
+    document.getElementById('retime').style.display = "block";
+}
+
+function buttonOneContinue(){
+    oneCueFile = 1; // all cue files
+    oneCueFileName =  document.getElementById("retimeDesc").value;
+    dataPacket.Type = 'EDIT';
+    websocket.send(JSON.stringify(dataPacket));
+    context.clearRect(0,0,canvas.width,canvas.height);
+}
+
+function buttonOneCancel(){
+    oneCueFile = 0;// all cue files
+    document.getElementById('retime').style.display = "none";
 }
 
 function undoclick(){
@@ -146,7 +177,7 @@ function undoclick(){
             if(pixelArray[i].output == selectedPreviousZoomPoint.output){//we found it
                 pixelArray[i].Time = selectedPreviousZoomPoint.Time;
                 pixelArray.sort(function(a,b){//sort array by time to put every thing back
-                    return new Date(a.Time) - new Date(b.Time);
+                    return new Date(a.InData) - new Date(b.InData);
                 });
                 if(arrayPrevious.length == 1){//make sure there is nothing there
                     property = document.getElementById('undoButton');
@@ -172,7 +203,15 @@ function saveclick(){
         document.body.style.cursor  = 'wait';
         dataPacket.Type = 'CUECREATE';
         dataPacket.Data = pixelArray;
+        if(oneCueFile == 1){
+            dataPacket.File = oneCueFileName;
+        }
+        else{
+            dataPacket.File = '';
+        }
         websocket.send(JSON.stringify(dataPacket));
+        property = document.getElementById('undoButton');
+        property.style.backgroundColor = '';
     }
     else
     {
@@ -214,26 +253,52 @@ function pixelLoad(item){
 
                 for(var j = 0; j < item[i].OutData.length; j++){
                     var packet = {};
-                    if(item[i].OutData) {
-                        //  packet.Time = new Date(new Date(item[i].Time) + item[i].OutData[j].Delay).toISOString();
-                        packet.Time = new Date(item[i].Time);
-                        packet.Time = new Date(packet.Time.setMilliseconds(packet.Time.getMilliseconds() + item[i].OutData[j].Delay)).toISOString();
-                        packet.Data = item[i].OutData[j];
-                        dir = item[i].OutData[j].Dir;
-                        port = item[i].OutData[j].Port.toUpperCase();
-                        showname = item[i].OutData[j].Showname;
-                        dataToSend = item[i].OutData[j].Dout;
-                        delay = item[i].OutData[j].Delay;
-                        if (dir == "") {
-                            outstring = port + " " + showname + " " + dataToSend;
-                        }
-                        else {
-                            outstring = port + " " + showname + " " + dir + " " + dataToSend;
+                    if(oneCueFile ==1){ // we only want one descrtption to be edited
+                        if (item[i].OutData[j].Desc == oneCueFileName ) {
+                            //  packet.Time = new Date(new Date(item[i].Time) + item[i].OutData[j].Delay).toISOString();
+                            packet.Time = new Date(item[i].Time);
+                            packet.Time = new Date(packet.Time.setMilliseconds(packet.Time.getMilliseconds() + item[i].OutData[j].Delay)).toISOString();
+                            packet.Data = item[i].OutData[j];
+                            dir = item[i].OutData[j].Dir;
+                            port = item[i].OutData[j].Port.toUpperCase();
+                            showname = item[i].OutData[j].Showname;
+                            dataToSend = item[i].OutData[j].Dout;
+                            delay = item[i].OutData[j].Delay;
+                            if (dir == "") {
+                                outstring = port + " " + showname + " " + dataToSend;
+                            }
+                            else {
+                                outstring = port + " " + showname + " " + dir + " " + dataToSend;
+                            }
+
+                            packet.output = outstring;
+                            pixelArray[count] = packet;
+                            count++;
                         }
 
-                        packet.output = outstring;
-                        pixelArray[count] = packet;
-                        count++;
+                    }
+                    else {
+                        if (item[i].OutData) {
+                            //  packet.Time = new Date(new Date(item[i].Time) + item[i].OutData[j].Delay).toISOString();
+                            packet.Time = new Date(item[i].Time);
+                            packet.Time = new Date(packet.Time.setMilliseconds(packet.Time.getMilliseconds() + item[i].OutData[j].Delay)).toISOString();
+                            packet.Data = item[i].OutData[j];
+                            dir = item[i].OutData[j].Dir;
+                            port = item[i].OutData[j].Port.toUpperCase();
+                            showname = item[i].OutData[j].Showname;
+                            dataToSend = item[i].OutData[j].Dout;
+                            delay = item[i].OutData[j].Delay;
+                            if (dir == "") {
+                                outstring = port + " " + showname + " " + dataToSend;
+                            }
+                            else {
+                                outstring = port + " " + showname + " " + dir + " " + dataToSend;
+                            }
+
+                            packet.output = outstring;
+                            pixelArray[count] = packet;
+                            count++;
+                        }
                     }
                 }
             }
@@ -241,7 +306,8 @@ function pixelLoad(item){
     }
     //sort array by time in case there are some re-done cues
     pixelArray.sort(function(a,b){
-        return new Date(a.Time) - new Date(b.Time);
+       // return new Date(a.Time) - new Date(b.Time);
+        return new Date(a.InData) - new Date(b.InData);
     });
 }
 
@@ -789,7 +855,7 @@ function zoomcanvasMousedown(event){
             }
             insertReady = 0;
             pixelArray.sort(function(a,b){ // sort
-                return new Date(a.Time) - new Date(b.Time);
+                return new Date(a.InData) - new Date(b.InData);
             });
             updateCanvas();
         }
@@ -820,7 +886,7 @@ function zoomcanvasMouseup(event){
     mouseDown = 0;
     //sort array by time in case there are some re-done cues
     pixelArray.sort(function(a,b){
-        return new Date(a.Time) - new Date(b.Time);
+        return new Date(a.InData) - new Date(b.InData);
     });
 }
 function zoomcanvasMousemove(event){

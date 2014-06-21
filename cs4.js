@@ -364,7 +364,7 @@ exports.websocketDataIn = function(dataSocket, Socket){
                 spawn('d:/mongo/bin/mongodump', ['-o', destinationPath]).on('exit',function(code){
                     comlib.websocketsend("Successfully copied all data to default storage");
                     console.log("Successfully copied all data to default storage: "+ destinationPath + " " + code);
-                    makeCueFile(dataSocket);
+                    makeCueFile(dataSocket, dataSocket.File);
                 });
             }
             //this is for the pi
@@ -379,7 +379,7 @@ exports.websocketDataIn = function(dataSocket, Socket){
                 spawn(mongoDirectory + 'mongodump', ['-o', destinationPath]).on('exit',function(code){
                     comlib.websocketsend("Successfully copied all data to default storage");
                     console.log("Successfully copied all data to default storage: "+ destinationPath + " " + code);
-                    makeCueFile(dataSocket);
+                    makeCueFile(dataSocket, dataSocket.File);
                 });
             }
 
@@ -576,10 +576,7 @@ exports.usbSerialDataIn = function (data) {
                         global.timeoutlist[i]=   setTimeout(sendOutput, delay, outstring);
                         console.log(item[0].OutData[i].Dout + "  Delay " + item[0].OutData[i].Delay);
                     }
-
-
                 }
-
             });
         }
         else{
@@ -617,10 +614,7 @@ exports.usbSerialDataIn = function (data) {
                         global.timeoutlist[i]= setTimeout(sendOutput, delay, outstring);
                         console.log(item[0].OutData[i].Dout + "  Delay " + item[0].OutData[i].Delay);
                     }
-
-
                 }
-
             });
         }
     }
@@ -740,48 +734,91 @@ function parseCue(data)
 
 }
 
-function makeCueFile(dataSocket){
+function makeCueFile(dataSocket, fileName){
     tempcntincoming=0;
     tempcntoutgoing = 0;
-    collectionCue.remove({},function(err,numberRemoved){
-        console.log("inside remove call back" + numberRemoved);
-        for(i = 0; i< dataSocket.Data.length; i++){
-            serialDataSocketEdit = {};
-            if(dataSocket.Data[i].OutData){ // this is an incoming cue, so put data in proper form
-                lastCueReceivedEdit = {};
-                lastCueTime = dataSocket.Data[i].Time;
-                lastCueReceivedEdit.InData = dataSocket.Data[i].InData;
-                lastCueReceivedEdit.Source = dataSocket.Data[i].Source;
-                lastCueReceivedEdit.Time = dataSocket.Data[i].Time;
-                tempcntincoming ++;
+    if(fileName !=""){  //this is a one Desc file edit!  just remove one Desc
+        collectionCue.update({}, {$pull: {OutData: {Desc: fileName}}}, {multi: true}, function(err, item){
+            console.log("inside remove call back" + item);
+            for(i = 0; i< dataSocket.Data.length; i++){
+                serialDataSocketEdit = {};
+                if(dataSocket.Data[i].OutData){ // this is an incoming cue, so put data in proper form
+                    lastCueReceivedEdit = {};
+                    lastCueTime = dataSocket.Data[i].Time;
+                    lastCueReceivedEdit.InData = dataSocket.Data[i].InData;
+                    lastCueReceivedEdit.Source = dataSocket.Data[i].Source;
+                    lastCueReceivedEdit.Time = dataSocket.Data[i].Time;
+                    tempcntincoming ++;
+                }
+                else{ //This is cue data.  Adjust delay and put data in proper form
+                    tempcntoutgoing ++;
+                    serialDataSocketEdit.OutData = dataSocket.Data[i].Data;
+                    serialDataSocketEdit.OutData.Delay = new Date(dataSocket.Data[i].Time) - new Date(lastCueTime);
+
+                    collectionCue.update({'InData':lastCueReceivedEdit.InData}, {$set: lastCueReceivedEdit},{upsert:true, w:1},function(err,res){
+
+                        if(err){
+                            console.log('InData to collection Cue -- error: ' + err);
+                        }
+
+                    });
+
+                    collectionCue.update({'InData': lastCueReceivedEdit.InData}, {$push:serialDataSocketEdit},function(err,res){
+                        if(err){
+                            console.log('added Dout to collection Cue -- error: ' + err);
+                        }
+
+                    });
+                }
             }
-            else{ //This is cue data.  Adjust delay and put data in proper form
-                tempcntoutgoing ++;
-                serialDataSocketEdit.OutData = dataSocket.Data[i].Data;
-                serialDataSocketEdit.OutData.Delay = new Date(dataSocket.Data[i].Time) - new Date(lastCueTime);
+            message = {};
+            message.packetType = "message";
+            message.data = "Successfully Updated Cue File";
+            comlib.websocketsend(JSON.stringify(message));
+            console.log("Successfully Updated Cue File")
+        });
+    }
+    else{
+        collectionCue.remove({},function(err,numberRemoved){
+            console.log("inside remove call back" + numberRemoved);
+            for(i = 0; i< dataSocket.Data.length; i++){
+                serialDataSocketEdit = {};
+                if(dataSocket.Data[i].OutData){ // this is an incoming cue, so put data in proper form
+                    lastCueReceivedEdit = {};
+                    lastCueTime = dataSocket.Data[i].Time;
+                    lastCueReceivedEdit.InData = dataSocket.Data[i].InData;
+                    lastCueReceivedEdit.Source = dataSocket.Data[i].Source;
+                    lastCueReceivedEdit.Time = dataSocket.Data[i].Time;
+                    tempcntincoming ++;
+                }
+                else{ //This is cue data.  Adjust delay and put data in proper form
+                    tempcntoutgoing ++;
+                    serialDataSocketEdit.OutData = dataSocket.Data[i].Data;
+                    serialDataSocketEdit.OutData.Delay = new Date(dataSocket.Data[i].Time) - new Date(lastCueTime);
 
-                collectionCue.update({'InData':lastCueReceivedEdit.InData}, {$set: lastCueReceivedEdit},{upsert:true, w:1},function(err,res){
+                    collectionCue.update({'InData':lastCueReceivedEdit.InData}, {$set: lastCueReceivedEdit},{upsert:true, w:1},function(err,res){
 
-                   if(err){
-                       console.log('InData to collection Cue -- error: ' + err);
-                   }
+                       if(err){
+                           console.log('InData to collection Cue -- error: ' + err);
+                       }
 
-                });
+                    });
 
-                collectionCue.update({'InData': lastCueReceivedEdit.InData}, {$push:serialDataSocketEdit},function(err,res){
-                    if(err){
-                        console.log('added Dout to collection Cue -- error: ' + err);
-                    }
+                    collectionCue.update({'InData': lastCueReceivedEdit.InData}, {$push:serialDataSocketEdit},function(err,res){
+                        if(err){
+                            console.log('added Dout to collection Cue -- error: ' + err);
+                        }
 
-                });
+                    });
+                }
             }
-        }
-        message = {};
-        message.packetType = "message";
-        message.data = "Successfully Updated Cue File";
-        comlib.websocketsend(JSON.stringify(message));
-        console.log("Successfully Updated Cue File")
-    });
+            message = {};
+            message.packetType = "message";
+            message.data = "Successfully Updated Cue File";
+            comlib.websocketsend(JSON.stringify(message));
+            console.log("Successfully Updated Cue File")
+        });
+    }
 }
 
 /**
