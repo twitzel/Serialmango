@@ -23,11 +23,16 @@
     border-radius:10px;
 }
 
+#retime{
+    height: 50px;
+    margin-top: 25px;
+}
 .retimebutton{
+    margin-right: 5.2%;
+    float:left;
+    margin-left: 5.2%;
     border-radius:5px;
     font-weight: bold;
-    float:left;
-    margin-left: 30px;
 }
 
 #canvasDiv button{

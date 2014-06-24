@@ -8,7 +8,7 @@ function initmenu(){
     if(window.innerWidth < 761)
     {
         document.getElementById("menunav").style.display="none";
-        document.getElementById("menubutton").style.display="block";
+        document.getElementById("menubutton").style.display="inline-block";
     }
     else{
         document.getElementById("menubutton").style.display="none";
