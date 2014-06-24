@@ -19,16 +19,28 @@
 }
 
 #buttonMenu{
+
     position: absolute;
     right: 10px;
     top: 5px;
-    text-align: right;
-    margin: 0;
-    border-radius:5px;
-    font-weight: bold;
-    font-size: 140%;
-    background-color: #e0ffe1;
-    display: none;
+    text-decoration:none;
+    font-size:30px;
+    font-weight:800;
+    display:inline-block;
+    transform:rotate(90deg);
+    -ms-transform:rotate(90deg);
+    /* IE 9 */
+    -webkit-transform:rotate(90deg);
+    /* Opera, Chrome, and Safari */
+    color:black;
+    letter-spacing:-0px;
+    height:34px;
+    width:34px;
+}
+#buttontext{
+    position: relative;
+    right:  2px;
+    bottom:6px;
 }
 
 .mainheader nav{
