@@ -16,40 +16,26 @@
     margin-left: 5.2%;
     line-height: 30px;
     color: #5c5c5c;
-
 }
-#cuetitle{
-    height:  20px;
-}
-#cuetitle h2{
 
-    width: 350px;
+#cuetitle {
+
     margin-left: 5.2%;
-    line-height: 10px;
-    color: #5c5c5c;
-}
-#cuetitle h3{
 
-    width: 650px;
-    margin-left: 10px;
     line-height: 10px;
     color: #5c5c5c;
 }
 
-#cueinfo{
-    height: 125px;
-    background-color: rgba(220, 203, 204, 0.56);
-    border: 2px solid #333333;
-    border-radius: 5px;
-    box-shadow: 3px 3px 3px #333;
-    padding-left: 10px;
-    padding-right: 10px;
-    padding-bottom: 10px;
-    overflow-y: auto;
-    font-size: 1.1em;
-}
 #butttest{
     background-color: #ff0000;
+}
+#cuetable{
+    margin-left: 40px;
+    margin-bottom: 20px;
+    font-size: 1.05em;
+    border: 2px solid #333333;
+    border-radius: 5px;
+    box-shadow: 2px 2px 2px #333;
 }
 
 #retime{

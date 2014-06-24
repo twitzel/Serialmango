@@ -151,6 +151,7 @@ function loadclick(){
     websocket.send(JSON.stringify(dataPacket));
     context.clearRect(0,0,canvas.width,canvas.height);
     document.getElementById('retime').style.display = "none";
+    document.getElementById("out").innerText = "Zoom Cue Data";
 }
 
 function loadOneclick(){
@@ -163,6 +164,8 @@ function buttonOneContinue(){
     dataPacket.Type = 'EDIT';
     websocket.send(JSON.stringify(dataPacket));
     context.clearRect(0,0,canvas.width,canvas.height);
+    document.getElementById('retime').style.display = "none";
+    document.getElementById("out").innerText = "Zoom Cue Data " + oneCueFileName;
 }
 
 function buttonOneCancel(){

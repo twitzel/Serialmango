@@ -60,10 +60,26 @@ function init()
         var cueHistory =document.getElementById("cueinfo");
         var dropdown = document.getElementById("retimeDesc");
         for (var i = 0; i < Desc.length; i++) {
-            cueStats[i] = Desc[i][0] + TAB + TAB + TAB + Desc[i][1] + TAB +TAB + Desc[i][2] + TAB + TAB + Desc[i][3];
-            cueHistory.innerHTML = cueStats[i] + "<BR>" + cueHistory.innerHTML;
+           // cueStats[i] = Desc[i][0] + TAB + TAB + TAB + Desc[i][1] + TAB +TAB + Desc[i][2] + TAB + TAB + Desc[i][3];
+          //  cueHistory.innerHTML = cueStats[i] + "<BR>" + cueHistory.innerHTML;
             dropdown[dropdown.length] = new Option(Desc[i][0], Desc[i][0]);
         }
+        var table = document.getElementById("cuetable");
+
+        var row;
+        var cell = [];
+
+        for(var i = 0; i<Desc.length; i++){
+            row = table.insertRow(1+i);
+            for(var j =0; j< 4; j++){
+                row.insertCell(j).innerHTML = Desc[i][j];
+            }
+
+        }
+
+
+
+
     }
 }
 
