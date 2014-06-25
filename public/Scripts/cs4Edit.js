@@ -152,6 +152,7 @@ function loadclick(){
     context.clearRect(0,0,canvas.width,canvas.height);
     document.getElementById('retime').style.display = "none";
     document.getElementById("out").innerText = "Zoom Cue Data";
+    document.getElementById("in").innerText = "All Cue Data";
 }
 
 function loadOneclick(){
@@ -166,6 +167,7 @@ function buttonOneContinue(){
     context.clearRect(0,0,canvas.width,canvas.height);
     document.getElementById('retime').style.display = "none";
     document.getElementById("out").innerText = "Zoom Cue Data " + oneCueFileName;
+    document.getElementById("in").innerText = oneCueFileName + " Data";
 }
 
 function buttonOneCancel(){
