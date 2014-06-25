@@ -180,7 +180,7 @@ function undoclick(){
             if(pixelArray[i].output == selectedPreviousZoomPoint.output){//we found it
                 pixelArray[i].Time = selectedPreviousZoomPoint.Time;
                 pixelArray.sort(function(a,b){//sort array by time to put every thing back
-                    return new Date(a.InData) - new Date(b.InData);
+                    return new Date(a.Time) - new Date(b.Time);
                 });
                 if(arrayPrevious.length == 1){//make sure there is nothing there
                     property = document.getElementById('undoButton');
@@ -309,8 +309,8 @@ function pixelLoad(item){
     }
     //sort array by time in case there are some re-done cues
     pixelArray.sort(function(a,b){
-       // return new Date(a.Time) - new Date(b.Time);
-        return new Date(a.InData) - new Date(b.InData);
+        return new Date(a.Time) - new Date(b.Time);
+       // return new Date(a.InData) - new Date(b.InData);
     });
 }
 
@@ -654,6 +654,7 @@ function canvasMousemove(event){
         x= event.offsetX;
         if(event.offsetY < canvas.height/2){//we are in outgoing events part of canvas.  look at outgoing events
             for(var i = 0; i < pixelArray.length; i++){
+                var xx =pixelArray[i].output;
                 if(pixelArray[i].output && (x < pixelArray[i].normalPoint)){
                     distance = x-pixelArray[i].normalPoint; //get the parameters of where we are
                     point = i;
@@ -858,7 +859,7 @@ function zoomcanvasMousedown(event){
             }
             insertReady = 0;
             pixelArray.sort(function(a,b){ // sort
-                return new Date(a.InData) - new Date(b.InData);
+                return new Date(a.Time) - new Date(b.Time);
             });
             updateCanvas();
         }
@@ -889,7 +890,7 @@ function zoomcanvasMouseup(event){
     mouseDown = 0;
     //sort array by time in case there are some re-done cues
     pixelArray.sort(function(a,b){
-        return new Date(a.InData) - new Date(b.InData);
+        return new Date(a.Time) - new Date(b.Time);
     });
 }
 function zoomcanvasMousemove(event){
