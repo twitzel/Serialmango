@@ -4,7 +4,7 @@
 
 
 #title button{
-    margin-right: 5.2%;
+    margin-right: 1%;
     float:right;
     border-radius:5px;
    /* background: linear-gradient(to bottom, rgba(63,76,107,0.1) 26%,rgba(63,76,107,0.15) 33%,rgba(0,0,0,0.42) 75%,rgba(0,0,0,0.49) 86%);*/
@@ -163,17 +163,69 @@ form#timing1 fieldset {
     visibility: hidden;
 }
 
-@media only screen  and (max-device-width: 400px),(max-width: 400px)  {
+@media only screen  and (max-device-width: 761px),(max-width: 761px)  {
     .log{
-        height: 200px;
+        font-size: 1em;
+        margin-top: 5px;
+    }
+    #title{
+        margin-top: 5px;
+    }
+    #title button{
+        margin-right: .1%;
+        font-size: .8em;
+    }
+    #title h2{
+        margin-left: .5%;
+        font-size: .85em;
+    }
+    #cuetitle {
+        margin-top:-20px;
+        margin-left: .1%;
+        font-size: .8em;
+        line-height: 10px;
+        color: #5c5c5c;
+    }
+    #cuetable{
+        margin-left:1px;
+        margin-bottom:15px;
+        font-size: .85em;
+        border: 2px solid #333333;
+        border-radius: 5px;
+        box-shadow: 2px 2px 2px #333;
+    }
+    .timing{
+        margin-top:  5px;
+        width: 25%;
+        height: 26%;
+        margin-left: 10px;
+        float:left;
+    }
+
+
+    #goButton1{
+        font-size: 2em;
+    }
+    #goButton2{
+        font-size: 2em;
+    }
+    #goButton3{
+        font-size: 2em;
+    }
+}
+
+@media only screen  and (max-device-width: 525px),(max-width: 525px)  {
+    .log{
+        height: 150px;
         margin-bottom: 0;
+        margin-top: 20px;
     }
     #timing3{
         display: none;
        
     }
     .timing{
-        margin-top:  -20px;
+        margin-top:  0px;
         width: 25%;
         height: 26%;
         margin-left: 10px;
@@ -186,5 +238,23 @@ form#timing1 fieldset {
         float: right;
         margin-right: 55px;
         background-color: rgba(131, 157, 255, 0.21);
+    }
+    #bigdiv{
+        font-size: .8em;
+    }
+    #cuetitle {
+        margin-top:-20px;
+        margin-left: .1%;
+        font-size: .6em;
+        line-height: 8px;
+        color: #5c5c5c;
+    }
+    #cuetable{
+        margin-left:1px;
+        margin-bottom:5px;
+        font-size: .6em;
+        border: 2px solid #333333;
+        border-radius: 5px;
+        box-shadow: 2px 2px 2px #333;
     }
 }
