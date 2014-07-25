@@ -67,7 +67,7 @@ if (!period){period = 1;}
     collectionLog.find({},{Time : 1 ,_id: 0 }).sort( { _id : -1 } ).limit(1).toArray(function(err,item){
         console.log("latest item "+item[0].Time);
 
-       if (period == 1){item[0].Time = new Date(item[0].Time.setSeconds(0)-60000);}
+       if (period == 1) {item[0].Time = new Date(item[0].Time.setSeconds(0)-60000);}
         if (period > 1 && period < 60){
             item[0].Time.setMinutes((~~(item[0].Time.getMinutes()/period)*period)-period);
         }
