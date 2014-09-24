@@ -150,32 +150,56 @@ exports.cs4Home = function(req, res){
 };
 
 exports.cs4Timing = function(req, res){
-    var results = [];
-    var i;
-    var counter=0;
-    var item;
-    var items;
-    var itemsWaiting = 0;
-    var count;
     itemInfoFinal = [];
-    itemInfoFinal.length=0; // clear the array
-    collectionCue.aggregate([{"$unwind":"$OutData"},{"$group":{"_id":"$OutData.Desc",  "sum":{"$sum":1}}}],function (err, item) {
-        for(i =0;i<item.length;i++) {
-            itemsWaiting++;
-                collectionCue.aggregate({ $unwind : "$OutData" },{ $match : {"OutData.Desc": item[i]._id}},{$limit:1}, function(err1, itemInfo){
-                    itemsWaiting--;
-                    for(j=0; item.length; j++){ //connect the sum with the proper description
-                        if(item[j]._id == itemInfo[0].OutData.Desc){
-                            count = item[j].sum;
-                            break;
+    itemInfoFinal.length = 0; // clear the array
+    collectionCue.find().toArray(function(error,countCue) {
+        var counter = 0;
+        for (var i = 0; i < countCue.length; i++) {
+            if (countCue[i].OutData) {
+                counter += countCue[i].OutData.length
+            }
+            else {
+                notcounted += 1;
+                notindex = i;
+            }
+        }
+        if (counter > 0) {
+            //////////////////////////////////////////////////////
+            var results = [];
+            var i;
+            var counter = 0;
+            var item;
+            var items;
+            var itemsWaiting = 0;
+            var count;
+            itemInfoFinal = [];
+            itemInfoFinal.length = 0; // clear the array
+            collectionCue.aggregate([
+                {"$unwind": "$OutData"},
+                {"$group": {"_id": "$OutData.Desc", "sum": {"$sum": 1}}}
+            ], function (err, item) {
+                for (i = 0; i < item.length; i++) {
+                    itemsWaiting++;
+                    collectionCue.aggregate({ $unwind: "$OutData" }, { $match: {"OutData.Desc": item[i]._id}}, {$limit: 1}, function (err1, itemInfo) {
+                        itemsWaiting--;
+                        for (j = 0; item.length; j++) { //connect the sum with the proper description
+                            if (item[j]._id == itemInfo[0].OutData.Desc) {
+                                count = item[j].sum;
+                                break;
+                            }
                         }
-                    }
-                    itemInfoFinal.push([itemInfo[0].OutData.Desc, count, itemInfo[0].OutData.Showname, itemInfo[0].OutData.Dout]);
-                    if(itemsWaiting == 0){
-                        allDoneTiming(req, res);
-                    }
-                });
+                        itemInfoFinal.push([itemInfo[0].OutData.Desc, count, itemInfo[0].OutData.Showname, itemInfo[0].OutData.Dout]);
+                        if (itemsWaiting == 0) {
+                            allDoneTiming(req, res);
+                        }
+                    });
 
+                }
+            });
+            /////////////////////////////////////////////////
+        }
+        else{
+            allDoneTiming(req, res);
         }
     });
 };
@@ -213,6 +237,21 @@ exports.cs4Settings = function(req, res){
 };
 
 exports.cs4Edit = function(req, res){
+    itemInfoFinal = [];
+    itemInfoFinal.length=0; // clear the array
+    collectionCue.find().toArray(function(error,countCue) {
+        var counter = 0;
+        for (var i = 0; i < countCue.length; i++) {
+            if (countCue[i].OutData) {
+                counter += countCue[i].OutData.length
+            }
+            else {
+                notcounted += 1;
+                notindex = i;
+            }
+        }
+        if (counter > 0) {
+            //////////////////////////////////////////////////////
     var results = [];
     var i;
     var counter=0;
@@ -239,6 +278,12 @@ exports.cs4Edit = function(req, res){
                 }
             });
 
+        }
+    });
+            /////////////////////////////////////////////////
+        }
+        else{
+            allDoneEdit(req, res);
         }
     });
 };
