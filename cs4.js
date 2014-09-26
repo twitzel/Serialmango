@@ -1152,7 +1152,7 @@ exports.ledOn = function(){
     pmp.getExternalAddress('',function(err,rslt){
         console.log(err,rslt);
         if(!err){
-            externalIP = rslt.externalIP;
+            global.externalIP = rslt.externalIP;
             console.log("got external address",rslt.extervalIP);
             //refresh portmapping for the router  lease expire in 4 days
             if(os.type() != 'Windows_NT') { // this is only for the pi
@@ -1188,8 +1188,8 @@ exports.ledOn = function(){
             to: cs4Settings.emailAddress,
             // to: "steve@wizcomputing.com      ", // comma seperated list of receivers
             subject: "Start Up Message from CS4 ✔: "+ cs4Settings.systemName, // Subject line
-            text: cs4Settings.systemName+ " CS4 has just started.\n  External IP address:  http://" + externalIP + ":3000" + " - and internal IP address: "  +global.myuri+ ":3000", // plaintext body
-            html: cs4Settings.systemName+ " CS4 has just started.\n  External IP address:  http://" + externalIP + ":3000" + " - and internal IP address: "  +global.myuri+ ":3000"// html body
+            text: cs4Settings.systemName+ " CS4 has just started.\n  External IP address:  http://" + global.externalIP + ":3000" + " - and internal IP address: "  +global.myuri+ ":3000", // plaintext body
+            html: cs4Settings.systemName+ " CS4 has just started.\n  External IP address:  http://" + global.externalIP + ":3000" + " - and internal IP address: "  +global.myuri+ ":3000"// html body
         };
 
 // send mail with defined transport object
@@ -1321,8 +1321,8 @@ function checkForZigbee(auto){
                 to: cs4Settings.emailAddress,
                 // to: "steve@wizcomputing.com      ", // comma seperated list of receivers
                 subject: "Success Message from CS4 ✔: "+ cs4Settings.systemName, // Subject line
-                text: cs4Settings.systemName+ " CS4 has just PASSED the SYSTEM TEST.\n  External IP address:  http://" + externalIP + ":3000"+ " - and internal IP address: "  +global.myuri+ ":3000", // plaintext body
-                html: cs4Settings.systemName+ " CS4 has just PASSED the SYSTEM TEST.\n  External IP address:  http://" + externalIP + ":3000" + " - and internal IP address: "  +global.myuri+ ":3000"// html body
+                text: cs4Settings.systemName+ " CS4 has just PASSED the SYSTEM TEST.\n  External IP address:  http://" + global.externalIP + ":3000"+ " - and internal IP address: "  +global.myuri+ ":3000", // plaintext body
+                html: cs4Settings.systemName+ " CS4 has just PASSED the SYSTEM TEST.\n  External IP address:  http://" + global.externalIP + ":3000" + " - and internal IP address: "  +global.myuri+ ":3000"// html body
             };
             ledInfoOn(4); // turn on the light
             sendMail(mailOptions);
@@ -1339,8 +1339,8 @@ function checkForZigbee(auto){
                 to: cs4Settings.emailAddress,
                 // to: "steve@wizcomputing.com      ", // comma seperated list of receivers
                 subject: "Error Message from CS4 ✔: "+ cs4Settings.systemName, // Subject line
-                text: cs4Settings.systemName+ " CS4 has just FAILED the SYSTEM TEST.\n  External IP address:  http://" + externalIP + ":3000"+ " - and internal IP address: "  +global.myuri+ ":3000", // plaintext body
-                html: cs4Settings.systemName+ " CS4 has just FAILED the SYSTEM TEST.\n  External IP address:  http://" + externalIP + ":3000" + " - and internal IP address: "  +global.myuri+ ":3000"// html body
+                text: cs4Settings.systemName+ " CS4 has just FAILED the SYSTEM TEST.\n  External IP address:  http://" + global.externalIP + ":3000"+ " - and internal IP address: "  +global.myuri+ ":3000", // plaintext body
+                html: cs4Settings.systemName+ " CS4 has just FAILED the SYSTEM TEST.\n  External IP address:  http://" + global.externalIP + ":3000" + " - and internal IP address: "  +global.myuri+ ":3000"// html body
             };
             ledInfoBlink(4); // blink the light to indicate error
             sendMail(mailOptions);

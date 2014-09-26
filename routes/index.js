@@ -146,8 +146,8 @@ exports.cs4Info = function(req, res){
 
 
 exports.cs4Home = function(req, res){
-    res.render('cs4Home.ejs',{ title: 'CS-4 Home', myuri:"ws://localhost:8080",Test: req.params.Test  });
-};
+    res.render('cs4Home.ejs',{ title: 'CS-4 Home', myuri:"ws://localhost:8080",Test: req.params.Test, externalIP:global.externalIP + ":3000", internalIP:global.myuri+ ":3000" });
+}
 
 exports.cs4Timing = function(req, res){
     itemInfoFinal = [];

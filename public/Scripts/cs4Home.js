@@ -8,11 +8,15 @@ function init(){
     wsUri = "ws://" + window.location.hostname + ":8080";
     output = document.getElementById("websocketlog");
     //    context.canvas.width  = window.innerWidth;
-
+    systemStatus = document.getElementById("test");
     testWebSocket();
     if(Test== 'test' || Test == 'Test'){
 
         document.getElementById('test').style.display = 'block';
+        systemStatus.style.fontSize = "1.1em";
+        systemStatus.style.color = "#5c5c5c";
+        systemStatus.innerHTML = "&nbsp&nbsp&nbsp&nbspExternal IP address:&nbsp&nbsp".bold() + externalIP.bold();
+        systemStatus.innerHTML = systemStatus.innerHTML + "<BR>"+ "&nbsp&nbsp&nbsp&nbspInternal IP address:&nbsp&nbsp".bold() + internalIP.bold();
     }
     else{
         document.getElementById('test').style.display = "none";

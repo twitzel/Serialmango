@@ -31,6 +31,7 @@ var path = require('path');
 
 global.comlib = require('./comlib');
 global.myuri;
+global.externalIP;
 
 //Set up all express stuff
 app = express();

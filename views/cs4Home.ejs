@@ -1,9 +1,21 @@
 <!DOCTYPE html>
 
-    <script  src = "./Scripts/cs4Home.js"> </script>
-    <script  src = "./Scripts/cs4Menu.js"> </script>
-    <link rel='stylesheet'  href='./stylesheets/cs4Home.css'>
-    <link rel='stylesheet'  href='./stylesheets/cs4Menu.css'>
+    <script  src = "/Scripts/cs4Home.js"> </script>
+    <script  src = "/Scripts/cs4Menu.js"> </script>
+    <link rel='stylesheet'  href='/stylesheets/cs4Home.css'>
+    <link rel='stylesheet'  href='/stylesheets/cs4Menu.css'>
+
+<script>
+
+    var Test =    "<%=Test%>" ;
+
+</script>
+
+<script>
+    <%-"var externalIP = "+JSON.stringify(externalIP)%>
+    <%-"var internalIP = "+JSON.stringify(internalIP)%>
+
+</script>
 
 <html>
 
@@ -36,7 +48,10 @@
             </nav>
         </header>
 
+        <div id = "test">
 
+
+        </div>
 
         <div id = "title" >
 
