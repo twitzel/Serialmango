@@ -204,7 +204,7 @@ exports.setup = function()
         service: "Gmail",
         auth: {
             user: "stevewitz@gmail.com",
-            pass: "panema2020"
+            pass: "panema2020!"
         }
     });
 
