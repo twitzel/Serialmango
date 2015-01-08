@@ -65,9 +65,9 @@
 
 #goButton1{
     width:70%;
-    height:40%;
+    height:50%;
     background-color: #06b00a;
-    font-size:3em;
+    font-size:4em;
     font-weight: bolder;
     border-radius: 10px;
     box-shadow: 3px 3px 3px #333;
@@ -78,7 +78,7 @@
     width:70%;
     height:40%;
     background-color: #06b00a;
-    font-size:3em;
+    font-size:4em;
     font-weight: bolder;
     border-radius: 10px;
     box-shadow: 3px 3px 3px #333;
@@ -89,7 +89,7 @@
     width:70%;
     height:40%;
     background-color: #06b00a;
-    font-size:3em;
+    font-size:4em;
     font-weight: bolder;
     border-radius: 10px;
     box-shadow: 3px 3px 3px #333;
@@ -204,13 +204,13 @@ form#timing1 fieldset {
 
 
     #goButton1{
-        font-size: 2em;
+        font-size: 4em;
     }
     #goButton2{
-        font-size: 2em;
+        font-size: 4em;
     }
     #goButton3{
-        font-size: 2em;
+        font-size: 4em;
     }
 }
 

@@ -30,8 +30,11 @@ function init(){
     }
     document.getElementById("email").value = cs4Settings.emailAddress;
     document.getElementById("startupdmx1").value = cs4Settings.dmx1;
+    document.getElementById("dmx1").value = cs4Settings.dmx1;
     document.getElementById("startupdmx2").value = cs4Settings.dmx2;
+    document.getElementById("dmx2").value = cs4Settings.dmx2;
     document.getElementById("startupdmx3").value = cs4Settings.dmx3;
+    document.getElementById("dmx3").value = cs4Settings.dmx3;
     document.getElementById("testtimeselect").value = cs4Settings.testTime;
     document.getElementById("systemname").value = cs4Settings.systemName;
 
