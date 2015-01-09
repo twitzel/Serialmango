@@ -37,6 +37,8 @@ function init(){
     document.getElementById("dmx3").value = cs4Settings.dmx3;
     document.getElementById("testtimeselect").value = cs4Settings.testTime;
     document.getElementById("systemname").value = cs4Settings.systemName;
+    document.getElementById("emailAccount").value = cs4Settings.emailAccount;
+    document.getElementById("emailAccountPassword").value = cs4Settings.emailAccountPassword;
 
     testWebSocket();
 }
@@ -127,6 +129,8 @@ function saveParameters(){
     cs4Settings.dmx3 = document.getElementById('startupdmx3').value;
     cs4Settings.testTime = document.getElementById("testtimeselect").value;
     cs4Settings.systemName = document.getElementById("systemname").value;
+    cs4Settings.emailAccount = document.getElementById("emailAccount").value;
+    cs4Settings.emailAccountPassword = document.getElementById("emailAccountPassword").value;
     dataPacket.Type ='SETTINGS';
     dataPacket.Data = cs4Settings;
     websocket.send(JSON.stringify(dataPacket));
