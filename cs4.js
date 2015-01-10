@@ -199,7 +199,7 @@ exports.setup = function()
     //set timezone of pi
    // time.tzset('US/Pacific');
   //  time.tzset('US/Eastern');
-
+    //set up email
 
 
  /*   smtpTransport = nodemailer.createTransport("SMTP",{
@@ -1110,8 +1110,8 @@ exports.getSettings = function(){
             cs4Settings.ignoreSource = 'NO';
             cs4Settings.enableZigbee2 = 'YES';
             cs4Settings.emailAddress = 'steve@wizcomputing.com';
-            cs4Settings.emailAccount = 'dummy@gmail.com';
-            cs4Settings.emailAccountPassword = '????';
+            cs4Settings.emailAccount = 'dummyaccount@gmail.com';
+            cs4Settings.emailAccountPassword = '?????';
             cs4Settings.dmx1 = 10;
             cs4Settings.dmx2 = 20;
             cs4Settings.dmx3 = 30;
@@ -1121,7 +1121,7 @@ exports.getSettings = function(){
                 console.log(result);
             })
         }
-        //set up email
+
         smtpTransport = nodemailer.createTransport("SMTP",{
             service: "Gmail",
             auth: {
@@ -1195,7 +1195,7 @@ exports.ledOn = function(){
             externalIP = "None";
         }
         var mailOptions = {
-            from: "CS4 @ " + myuri + "✔ <stevewitz@gmail.com>",
+            from: "CS4 @ " + myuri + "✔<"+ cs4Settings.emailAccount+">",
             //  from: "CS4 192.168.2.10 ✔ <stevewitz@gmail.com>", // sender address
             to: cs4Settings.emailAddress,
             // to: "steve@wizcomputing.com      ", // comma seperated list of receivers
@@ -1328,7 +1328,7 @@ function checkForZigbee(auto){
             comlib.websocketsend("    SYSTEM TEST COMPLETED SUCCESSFULLY");
             comlib.websocketsend(" ***" );
             var mailOptions = {
-                from: "CS4 @ " + myuri + "✔ <stevewitz@gmail.com>",
+                from: "CS4 @ " + myuri + "✔<"+ cs4Settings.emailAccount+">",
                 //  from: "CS4 192.168.2.10 ✔ <stevewitz@gmail.com>", // sender address
                 to: cs4Settings.emailAddress,
                 // to: "steve@wizcomputing.com      ", // comma seperated list of receivers
@@ -1346,7 +1346,7 @@ function checkForZigbee(auto){
             comlib.websocketsend("    SYSTEM TEST FAILED !!!!");
             comlib.websocketsend(" ***   ***" );
             var mailOptions = {
-                from: "CS4 @ " + myuri + "✔ <stevewitz@gmail.com>",
+                from: "CS4 @ " + myuri + "✔<"+ cs4Settings.emailAccount+">",
                 //  from: "CS4 192.168.2.10 ✔ <stevewitz@gmail.com>", // sender address
                 to: cs4Settings.emailAddress,
                 // to: "steve@wizcomputing.com      ", // comma seperated list of receivers
@@ -1357,7 +1357,7 @@ function checkForZigbee(auto){
             ledInfoBlink(4); // blink the light to indicate error
             sendMail(mailOptions);
         }
-
+////from: "CS4 @ " + myuri + "✔ <stevewitz@gmail.com>",
         if(auto){
             autoTest1 = setTimeout(function(){startSystemTest(1);}, 1000*60*60*24); // start again in 24 hours
         }
