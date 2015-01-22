@@ -200,24 +200,14 @@ exports.setup = function()
    // time.tzset('US/Pacific');
   //  time.tzset('US/Eastern');
     //set up email
-    var emailAccount = cs4Settings.emailAccount;
-    var emailAccountPassword = cs4Settings.emailAccountPassword;
-    if (emailAccount.si)
     smtpTransport = nodemailer.createTransport("SMTP",{
         service: "Gmail",
         auth: {
             user: "stevewitz@gmail.com",
-            pass: "panema2020!"
+            pass: "panema2020"
         }
     });
- /*   smtpTransport = nodemailer.createTransport("SMTP",{
-        service: "Gmail",
-        auth: {
-            user: "stevewitz@gmail.com",
-            pass: "panema2020!"
-        }
-    });
-    */
+
 };
 
 
