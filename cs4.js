@@ -1157,14 +1157,14 @@ exports.ledOn = function(){
             //refresh portmapping for the router  lease expire in 4 days
             if(os.type() != 'Windows_NT') { // this is only for the pi
 
-                pmp.portMap('192.168.2.200', 3000, 3000, 350000, function (err, rslt) {
+                pmp.portMap('', 3000, 3000, 350000, function (err, rslt) {
                     if (!err){
                         console.log("success map port 3000");
                     }else{
                         console.log("port mapping 3000 fail",err,rslt);}
 
 
-                    pmp.portMap('192.168.2.200', 8080, 8080, 350000, function (err, rslt) {
+                    pmp.portMap('', 8080, 8080, 350000, function (err, rslt) {
                         if (!err){
                             console.log("success map port 8080");
                         }else{
