@@ -1281,9 +1281,9 @@ function startSystemTest(auto){
         else{
             externalIP = "None";
         }
-        for(var i = 0; i < 8 ; i++){
-            sendOutput('ZIG1' + ' ' + 'TEST '  + "GO slide1111.jpg NEXT slide2222.jpg");
-        }
+ //       for(var i = 0; i < 8 ; i++){
+ //           sendOutput('ZIG1' + ' ' + 'TEST '  + "GO slide1111.jpg NEXT slide2222.jpg");
+ //       }
         // ledInfoOn(27); // light to output light
         // setTimeout(function(){ledInfoOff(27);}, 100); // turn it off
         setTimeout(function(){checkForZigbee(auto);}, 5000); // check for results after delay
