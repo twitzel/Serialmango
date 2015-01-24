@@ -1195,16 +1195,6 @@ exports.ledOn = function(){
         }
 
 
-// send mail with defined transport object
-        smtpTransport.sendMail(mailOptions, function(error, response){
-            if(error){
-                console.log(error);
-            }
-            else{
-                console.log("Message sent: " + response.message);
-            }
-        });
- //   });
         console.log('Ready to send START UP email message');
         var mailOptions = {
             from: "CS4 @ " + myuri + "✔ " + cs4Settings.emailAccount,
