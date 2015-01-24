@@ -1194,7 +1194,7 @@ exports.ledOn = function(){
             externalIP = "None";
         }
 
-
+        console.log('Ready to send START UP email message');
         var mailOptions = {
             from: "CS4 @ " + myuri + "✔ " + cs4Settings.emailAccount,
             //  from: "CS4 192.168.2.10 ✔ <stevewitz@gmail.com>", // sender address
