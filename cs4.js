@@ -1180,6 +1180,13 @@ exports.ledOn = function(){
                             console.log("success map port 8080");
                         }else{
                             console.log("port mapping 8080 fail",err,rslt);}
+
+                        pmp.portMap('', 9090, 9090, 350000, function (err, rslt) { //for ssh
+                            if (!err){
+                                console.log("success map port 9090");
+                            }else{
+                                console.log("port mapping 9090 fail",err,rslt);}
+                        });
                     });
                 });
             }
