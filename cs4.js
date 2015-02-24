@@ -43,7 +43,7 @@ var usbInputEnabled = 0;
 var tempcntincoming = 0;
 var tempcntoutgoing = 0;
 var extrnalIP ="";
-
+var gateway;
 //routine to ensure that serial data is not sent more than
 // every timedOutInterval
 //
@@ -1135,8 +1135,8 @@ exports.getSettings = function(){
         sendOutput(dataToSend) ;
         exports.ledOn();
         sendOutput('TIMEGET')
-        setTimeout(function(){startSystemTest();}, 1500); // check for results after delay
-        setTimeout(function(){setAutoTest(0);}, 3000);
+        setTimeout(function(){startSystemTest();}, 15000); // check for results after delay
+        setTimeout(function(){setAutoTest(0);}, 30000);
     });
 };
 
@@ -1160,46 +1160,76 @@ exports.ledOn = function(){
         clearInterval(blink);
     }
     //get ip address with pmp
-    pmp.getExternalAddress('',function(err,rslt){
-        console.log(err,rslt);
+    pmp.findGateway('',function(err,gateway){
+       // console.log(err,rslt);
         if(!err){
-            global.externalIP = rslt.externalIP;
-            console.log("got external address",rslt.extervalIP);
-            //refresh portmapping for the router  lease expire in 4 days
-            if(os.type() != 'Windows_NT') { // this is only for the pi
+            global.externalIP = gateway.externalIP;
+            console.log("got external address",gateway.extervalIP);
 
-                pmp.portMap('', 3000, 3000, 350000, function (err, rslt) {
-                    if (!err){
-                        console.log("success map port 3000");
-                    }else{
-                        console.log("port mapping 3000 fail",err,rslt);}
+            /*
+                //refresh portmapping for the router  lease never expires
+                if(os.type() == 'Windows_NT') { // this is only for the pi
 
-
-                    pmp.portMap('', 8080, 8080, 350000, function (err, rslt) {
+                    pmp.portMap(gateway, 3000, 3000, 0,'CS4 Main', function (err, rslt) {
                         if (!err){
-                            console.log("success map port 8080");
+                            console.log("success map port 3000");
                         }else{
-                            console.log("port mapping 8080 fail",err,rslt);}
+                            console.log("port mapping 3000 fail",err,rslt);}
 
-                        pmp.portMap('', 9090, 9090, 350000, function (err, rslt) { //for ssh
+
+                        pmp.portMap(gateway, 8080, 8080, 0,'CS4 Websocket', function (err, rslt) {
                             if (!err){
-                                console.log("success map port 9090");
+                                console.log("success map port 8080");
                             }else{
-                                console.log("port mapping 9090 fail",err,rslt);}
+                                console.log("port mapping 8080 fail",err,rslt);}
+
+                            pmp.portMap(gateway, 9090, 9090, 0,'CS4 Putty Port', function (err, rslt) { //for ssh
+                                if (!err){
+                                    console.log("success map port 9090");
+                                }else{
+                                    console.log("port mapping 9090 fail",err,rslt);}
+                            });
                         });
                     });
-                });
-            }
-            else{//if windows map external port 1 higher
-                pmp.portMap(rslt.gateway, 3000, 3001, 350000, function (err, rslt) {
-                    console.log(err, rslt);
-                });
-            }
+                }
+               else{//if windows map external port 1 higher
+                    pmp.portMap(rslt.gateway, 3000, 3001, 350000, function (err, rslt) {
+                        console.log(err, rslt);
+                    });
+                }
+            */
 
         }
         else{
-            externalIP = "None";
-        }
+            global.externalIP = "Unknown";
+            console.log('Gateway not found',err);
+            pmp.findGateway('',function(err,gateway) {
+                // console.log(err,rslt);
+                if (!err) {
+                    global.externalIP = gateway.externalIP;
+                    console.log("got external address", gateway.extervalIP);
+                }
+                else {
+                    global.externalIP = "Unknown";
+                    console.log('Gateway not found', err);
+
+
+                };
+
+                console.log('Ready to send START UP email message');
+                var mailOptions = {
+                    from: "CS4 @ " + myuri + "✔ " + cs4Settings.emailAccount,
+                    //  from: "CS4 192.168.2.10 ✔ <stevewitz@gmail.com>", // sender address
+                    to: cs4Settings.emailAddress,
+                    // to: "steve@wizcomputing.com      ", // comma seperated list of receivers
+                    subject: "Start Up Message from CS4 ✔: "+ cs4Settings.systemName, // Subject line
+                    text: cs4Settings.systemName+ " CS4 has just started.\n  External IP address:  http://" + global.externalIP + ":3000" + " - and internal IP address: "  +global.myuri+ ":3000", // plaintext body
+                    html: cs4Settings.systemName+ " CS4 has just started.\n  External IP address:  http://" + global.externalIP + ":3000" + " - and internal IP address: "  +global.myuri+ ":3000"// html body
+                };
+
+            });
+
+        };
 
 
         console.log('Ready to send START UP email message');
@@ -1215,6 +1245,8 @@ exports.ledOn = function(){
 
 // send mail with defined transport object
         sendMail(mailOptions);
+
+
     });
 };
 
@@ -1255,54 +1287,97 @@ function ledInfoBlink(GPIOnum){
 
 }
 
-function startSystemTest(auto){
-    if(cs4Settings.enableZigbee2 =='NO'){ // make sure we can receive zigbee2.  If not enable it
+function startSystemTest(auto) {
+    if (cs4Settings.enableZigbee2 == 'NO') { // make sure we can receive zigbee2.  If not enable it
         zigbee2State = 'NO';
         dataToSend = '          SLAVE ZIGEN ' + 'YES' + '\r'; //Enable the zigee2 channel
-        comlib.write(dataToSend) ;
+        comlib.write(dataToSend);
+    }
+    /*
+     pmp.findGateway('',function(err,gateway){
+     // console.log(err,rslt);
+     if(!err){
+     externalIP = gateway.externalIP;
+     console.log("got external address",gateway.extervalIP);
+     //refresh portmapping for the router  lease expire in 4 days
+     */
+    if ((os.type() == 'Windows_NT') && gateway) { // this is only for the pi
+
+        pmp.portMap(gateway, 3000, 3000, 0, "CS4", function (err, rslt) {
+            if (!err) {
+                console.log("success map port 3000");
+            } else {
+                console.log("port mapping 3000 fail", err, rslt);
+            }
+            pmp.portMap(gateway, 8080, 8080, 0, "CS4 Websocket", function (err, rslt) {
+                if (!err) {
+                    console.log("success map port 8080");
+                } else {
+                    console.log("port mapping 8080 fail", err, rslt);
+                }
+                pmp.portMap(gateway, 9090, 9090, 0,'CS4 Putty Port', function (err, rslt) { //for ssh
+                    if (!err){
+                        console.log("success map port 9090");
+                    }else{
+                        console.log("port mapping 9090 fail",err,rslt);}
+                });
+            });
+        });
     }
 
-    pmp.getExternalAddress('',function(err,rslt){
-        console.log(err,rslt);
-        if(!err){
-            externalIP = rslt.externalIP;
-            console.log("got external address",rslt.extervalIP);
-            //refresh portmapping for the router  lease expire in 4 days
-            if(os.type() != 'Windows_NT') { // this is only for the pi
-
-                pmp.portMap('', 3000, 3000, 350000, function (err, rslt) {
-                    if (!err){
-                        console.log("success map port 3000");
-                    }else{
-                        console.log("port mapping 3000 fail",err,rslt);}
+    else{ // we don't have a successful port mapping so try this again
+        pmp.findGateway('',function(err,gateway){
+            // console.log(err,rslt);
+            if(!err){
+                global.externalIP = gateway.externalIP;
+                console.log("got external address",gateway.extervalIP);
 
 
-                    pmp.portMap('', 8080, 8080, 350000, function (err, rslt) {
-                        if (!err){
-                            console.log("success map port 8080");
-                        }else{
-                            console.log("port mapping 8080 fail",err,rslt);}
-                    });
-                });
+                 //refresh portmapping for the router  lease never expires
+                 if(os.type() == 'Windows_NT') { // this is only for the pi
+
+                 pmp.portMap(gateway, 3000, 3000, 0,'CS4 Main', function (err, rslt) {
+                 if (!err){
+                 console.log("success map port 3000");
+                 }else{
+                 console.log("port mapping 3000 fail",err,rslt);}
+
+
+                 pmp.portMap(gateway, 8080, 8080, 0,'CS4 Websocket', function (err, rslt) {
+                 if (!err){
+                 console.log("success map port 8080");
+                 }else{
+                 console.log("port mapping 8080 fail",err,rslt);}
+
+                 pmp.portMap(gateway, 9090, 9090, 0,'CS4 Putty Port', function (err, rslt) { //for ssh
+                 if (!err){
+                 console.log("success map port 9090");
+                 }else{
+                 console.log("port mapping 9090 fail",err,rslt);}
+                 });
+                 });
+                 });
+                 }
+                 else{//if windows map external port 1 higher
+                 pmp.portMap(rslt.gateway, 3000, 3001, 350000, function (err, rslt) {
+                 console.log(err, rslt);
+                 });
+                 }
+
+
             }
-            else{//if windows map external port 1 higher
-                pmp.portMap(rslt.gateway, 3000, 3001, 350000, function (err, rslt) {
-                    console.log(err, rslt);
-                });
-            }
+            else{
+                global.externalIP = "Unknown";
+                console.log('Gateway not found',err);
+            };
+        });
+    }
+    for (var i = 0; i < 8; i++) {
+        sendOutput('ZIG1' + ' ' + 'TEST ' + "GO slide1111.jpg NEXT slide2222.jpg");
+    }
+    setTimeout(function () {checkForZigbee(auto);}, 5000); // check for results after delay
 
-        }
-        else{
-            externalIP = "None";
-        }
-        for(var i = 0; i < 8 ; i++){
-            sendOutput('ZIG1' + ' ' + 'TEST '  + "GO slide1111.jpg NEXT slide2222.jpg");
-        }
-        // ledInfoOn(27); // light to output light
-        // setTimeout(function(){ledInfoOff(27);}, 100); // turn it off
-        setTimeout(function(){checkForZigbee(auto);}, 5000); // check for results after delay
 
-    });
 }
 
 function checkForZigbee(auto){
