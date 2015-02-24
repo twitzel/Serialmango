@@ -1334,7 +1334,7 @@ function startSystemTest(auto) {
 
 
                  //refresh portmapping for the router  lease never expires
-                 if(os.type() == 'Windows_NT') { // this is only for the pi
+                 if(os.type() != 'Windows_NT') { // this is only for the pi
 
                  pmp.portMap(gateway, 3000, 3000, 0,'CS4 Main', function (err, rslt) {
                  if (!err){
