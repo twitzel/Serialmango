@@ -1336,34 +1336,34 @@ function startSystemTest(auto) {
                  //refresh portmapping for the router  lease never expires
                  if(os.type() != 'Windows_NT') { // this is only for the pi
 
-                 pmp.portMap(gateway, 3000, 3000, 0,'CS4 Main', function (err, rslt) {
-                 if (!err){
-                 console.log("success map port 3000");
-                 }else{
-                 console.log("port mapping 3000 fail",err,rslt);}
+                     pmp.portMap(gateway, 3000, 3000, 0,'CS4 Main', function (err, rslt) {
+                     if (!err){
+                     console.log("success map port 3000");
+                     }else{
+                     console.log("port mapping 3000 fail",err,rslt);}
 
 
-                 pmp.portMap(gateway, 8080, 8080, 0,'CS4 Websocket', function (err, rslt) {
-                 if (!err){
-                 console.log("success map port 8080");
-                 }else{
-                 console.log("port mapping 8080 fail",err,rslt);}
+                     pmp.portMap(gateway, 8080, 8080, 0,'CS4 Websocket', function (err, rslt) {
+                     if (!err){
+                     console.log("success map port 8080");
+                     }else{
+                     console.log("port mapping 8080 fail",err,rslt);}
 
-                 pmp.portMap(gateway, 9090, 9090, 0,'CS4 Putty Port', function (err, rslt) { //for ssh
-                 if (!err){
-                 console.log("success map port 9090");
-                 }else{
-                 console.log("port mapping 9090 fail",err,rslt);}
-                 });
-                 });
-                 });
+                     pmp.portMap(gateway, 9090, 9090, 0,'CS4 Putty Port', function (err, rslt) { //for ssh
+                     if (!err){
+                     console.log("success map port 9090");
+                     }else{
+                     console.log("port mapping 9090 fail",err,rslt);}
+                     });
+                     });
+                     });
                  }
-                 else{//if windows map external port 1 higher
+         /*        else{//if windows map external port 1 higher
                  pmp.portMap(rslt.gateway, 3000, 3001, 350000, function (err, rslt) {
                  console.log(err, rslt);
                  });
                  }
-
+*/
 
             }
             else{
