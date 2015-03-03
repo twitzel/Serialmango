@@ -256,6 +256,13 @@ exports.websocketDataIn = function(dataSocket, Socket){
                 datain = dataSocket.Data;
                 datain = SetCS4Time(datain);
                 comlib.write(datain);
+                // we have cs4 startup time so set system clock
+                if(os.type() == 'Windows_NT'){
+
+                    spawn(sudo [date -s, datain]);
+                }
+
+
             }
 
         }
@@ -527,7 +534,19 @@ exports.usbSerialDataIn = function (data) {
     }
     serialData = JSON.parse(data);
     if(serialData.Time) {
-        serialData.Time = new Date(serialData.Time);
+
+        if(os.type() != 'Windows_NT'){
+
+            spawn(sudo [date -s, serialData.Time]);
+        }
+
+        serialData.Time = new time.Date(serialData.Time);
+
+
+
+
+        var rr = serialData.Time.getTimezone;
+        console.log(rr);
     }
 
 
@@ -539,7 +558,7 @@ exports.usbSerialDataIn = function (data) {
     // and send output data to log file
 
     //added search fields: must match InData and Source
-    if (serialData.InData != null) {
+    if (serialData.InData !=null) {
 
         if (cs4Settings.ignoreSource == 'NO') { // match source
             collectionCue.find({$and: [{'InData': serialData.InData} ,{'Source': serialData.Source }]}).toArray(function (err, item) {
@@ -656,7 +675,8 @@ exports.usbSerialDataIn = function (data) {
         collectionStartup.insert(serialData, {w: 1}, function (err, result) {
             console.log(result);
             try{
-               comlib.websocketsend("CS4 Current time is:" + data);
+                var tt = serialData.Time.toString();
+               comlib.websocketsend("CS4 Current time is:" + serialData.Time.toString());
             }
             catch(err)
             {//do nothing
@@ -1115,6 +1135,7 @@ exports.getSettings = function(){
             cs4Settings.systemName = "CS4 System";
             cs4Settings.emailAccount = "stevewitz@gmail.com"
             cs4Settings.emailAccountPassword = "panema2020!"
+            cs4Settings.timezone = "US/Eastern"
             collectionSettings.insert(cs4Settings, {w: 1}, function (err, result) {
                 console.log(result);
             })
@@ -1301,7 +1322,7 @@ function startSystemTest(auto) {
      console.log("got external address",gateway.extervalIP);
      //refresh portmapping for the router  lease expire in 4 days
      */
-    if ((os.type() == 'Windows_NT') && gateway) { // this is only for the pi
+    if ((os.type() != 'Windows_NT') && gateway) { // this is only for the pi
 
         pmp.portMap(gateway, 3000, 3000, 0, "CS4", function (err, rslt) {
             if (!err) {
@@ -1343,19 +1364,19 @@ function startSystemTest(auto) {
                      console.log("port mapping 3000 fail",err,rslt);}
 
 
-                     pmp.portMap(gateway, 8080, 8080, 0,'CS4 Websocket', function (err, rslt) {
-                     if (!err){
-                     console.log("success map port 8080");
-                     }else{
-                     console.log("port mapping 8080 fail",err,rslt);}
+                         pmp.portMap(gateway, 8080, 8080, 0,'CS4 Websocket', function (err, rslt) {
+                         if (!err){
+                         console.log("success map port 8080");
+                         }else{
+                         console.log("port mapping 8080 fail",err,rslt);}
 
-                     pmp.portMap(gateway, 9090, 9090, 0,'CS4 Putty Port', function (err, rslt) { //for ssh
-                     if (!err){
-                     console.log("success map port 9090");
-                     }else{
-                     console.log("port mapping 9090 fail",err,rslt);}
-                     });
-                     });
+                             pmp.portMap(gateway, 9090, 9090, 0,'CS4 Putty Port', function (err, rslt) { //for ssh
+                             if (!err){
+                             console.log("success map port 9090");
+                             }else{
+                             console.log("port mapping 9090 fail",err,rslt);}
+                             });
+                        });
                      });
                  }
          /*        else{//if windows map external port 1 higher

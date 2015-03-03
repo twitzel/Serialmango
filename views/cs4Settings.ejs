@@ -115,6 +115,17 @@
                 <label>Email Address Password</label>
                 <input id=emailAccountPassword name=emailAccountPassword  style = "width: 15em" >
             </div>
+            <div>
+                <label>Select Time Zone</label>
+                <select id='timeZoneCombo'>
+                    <option value='US/Eastern' title='US/Eastern'>US/Eastern</option>
+                    <option value='US/Central' title='US/Central'>US/Central</option>
+                    <option value='US/Mountain' title='US/Mountain'>US/Mountain</option>
+                    <option value='US/Pacific' title='US/Pacific'>US/Pacific</option>
+                    <option value='GMT' title='GMT'>GMT</option>
+                </select>
+            </div>
+
         </div>
         <div>
             <fieldset id = dmxsetup>
@@ -127,6 +138,8 @@
                     <input id=startupdmx3 name=startupdmx3 type=number value="3" min="1" max="512" required style = "width: 3.3em" >
             </fieldset>
         </div>
+
+
         <button id = "saveparameters"  onmousedown = "saveParameters()">Save Startup Parameters</button>
         <button id = "closepparameters"  onmousedown = "closeParameters()">Close Startup Parameters</button>
 
@@ -188,14 +201,6 @@
         <legend>Date & Time</legend>
         <button id = 'gettimebutton' onmousedown="gettimebutton()"> Get CS4 Time</button>
         <button id = "timebutton"  onmousedown = "timebutton()"> Update CS4 Time to My Time </button>
-        <select id='timeZoneCombo'  onchange='timeZoneChange();'>
-            <option value='-1' title='-select one-'>-Select to Change Time Zone of CS4-</option>
-            <option value='US/Eastern' title='US/Eastern'>US/Eastern</option>
-            <option value='US/Central' title='US/Central'>US/Central</option>
-            <option value='US/Mountain' title='US/Mountain'>US/Mountain</option>
-            <option value='US/Pacific' title='US/Pacific'>US/Pacific</option>
-            <option value='GMT' title='GMT'>GMT</option>
-        </select>
     </fieldset>
 
     <fieldset id = "relay">

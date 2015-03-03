@@ -40,6 +40,8 @@ function init(){
     document.getElementById("emailAccount").value = cs4Settings.emailAccount;
     document.getElementById("emailAccountPassword").value = cs4Settings.emailAccountPassword;
 
+    document.getElementById("timeZoneCombo").value = cs4Settings.timezone;
+
     testWebSocket();
 }
 
@@ -131,6 +133,7 @@ function saveParameters(){
     cs4Settings.systemName = document.getElementById("systemname").value;
     cs4Settings.emailAccount = document.getElementById("emailAccount").value;
     cs4Settings.emailAccountPassword = document.getElementById("emailAccountPassword").value;
+    cs4Settings.timezone = document.getElementById("timeZoneCombo").value;
     dataPacket.Type ='SETTINGS';
     dataPacket.Data = cs4Settings;
     websocket.send(JSON.stringify(dataPacket));
@@ -547,7 +550,7 @@ function timebutton(){
     dataPacket.Data = send;
     websocket.send(JSON.stringify(dataPacket));// SET the CS4 I/O clock to current browser time - ignores time zone offset
 }
-
+/*
 function timeZoneChange(){
     dataPacket.Type = 'TME TZ';
     timeZone = document.getElementById('timeZoneCombo');
@@ -555,7 +558,7 @@ function timeZoneChange(){
     dataPacket.Data = value;
     websocket.send(JSON.stringify(dataPacket));
 }
-
+*/
 function systemtestbutton(){
     dataPacket.Type ="SYSTEMTEST";
     websocket.send(JSON.stringify(dataPacket));
