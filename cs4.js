@@ -74,7 +74,7 @@ sendOutput = function (dataToSend)
     lastconverted   = new Date(lastCueReceivedInternalTime);
     addTime = addTime + "\""+  (new Date( lastconverted.setMilliseconds(lastconverted.getMilliseconds() + (timerStartTime -lastCueReceivedInternalTime)))).toISOString() +"\", \"Dout\" : \"" + dataToSend + "\"}";
     //send it out the socket
-    comlib.websocketsend("  Sent: " + addTime) ;
+    comlib.websocketsend(".  Sent: " + addTime) ;
 
     //Log the data into the collection
     addTime = JSON.parse(addTime);
@@ -90,6 +90,11 @@ sendOutput = function (dataToSend)
     {
         //since we are not ready for this to go out (or we wouldn't be here) -- reset a timer with actual time left.
         setTimeout(function(){sendOutput(dataToSend);}, ( timedOutInterval -(timerStartTime - Date())));
+      //  var delay =  setTimeout(function(){sendOutput(dataToSend);}, ( timedOutInterval -(timerStartTime - Date())));
+
+
+
+
     }
 
 };
