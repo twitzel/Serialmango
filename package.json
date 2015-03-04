@@ -18,6 +18,7 @@
     "nodemailer": "*",
     "pmp": "*",
     "sudo": "*",
-    "moment": "*"
+    "moment": "*",
+    "moment-timezone": "*"
   }
 }
