@@ -47,11 +47,17 @@ var tempcntoutgoing = 0;
 var extrnalIP ="";
 var gateway;
 var fmt = "ddd, MMM DD YYYY, HH:mm:ss.SS"; // format string for moment time strings
+var timerStartTime;
+
+
+
 //routine to ensure that serial data is not sent more than
 // every timedOutInterval
 //
 // adds time stamp to Outgoing data and puts it in Log collection
 
+
+/*  THis is the origional sendOutput
 sendOutput = function (dataToSend)
 {
    var addTime = "{\"Time\":";
@@ -95,6 +101,43 @@ sendOutput = function (dataToSend)
 
 
 
+    }
+
+};
+*/
+sendOutput = function (dataToSend)
+{
+    var addTime = "{\"Time\":";
+    if (timedOut)
+    {
+        timedOut = false;
+        comlib.write("         " + dataToSend + "\r"); // add spaces at beginning for R4 zigbee stuff and terminate\n\r
+        ledInfoOn(27);
+        setTimeout(function(){ledInfoOff(27);}, 100);
+        setTimeout(function(){timedOut = true;}, timedOutInterval);
+
+        console.log(dataToSend);
+        //send it out the socket
+        comlib.websocketsend(".  Sent: " + moment(timerStartTime).format(fmt) + "   Dout: "  +  dataToSend) ;
+
+        addTime = addTime + "\""+  (timerStartTime).toISOString() +"\", \"Dout\" : \"" + dataToSend + "\"}";
+        //Log the data into the collection
+        addTime = JSON.parse(addTime);
+        addTime.Time = new Date(addTime.Time); //get to real time format.
+        collectionLog.insert(addTime, {w: 1}, function (err, result) {
+            console.log(result);
+        });
+    }
+    else
+    {
+       // var tme = new Date();
+       // var test2 = tme.getMilliseconds();
+       // var test3 = timerStartTime.getMilliseconds();
+
+      /// var test = timedOutInterval -(tme.getMilliseconds() - timerStartTime.getMilliseconds())+2;
+        //since we are not ready for this to go out (or we wouldn't be here) -- reset a timer with actual time left.
+        setTimeout(function(){sendOutput(dataToSend);}, (timedOutInterval -(tme.getMilliseconds() - timerStartTime.getMilliseconds())+2)); // pad with 2 extra ms
+        //  var delay =  setTimeout(function(){sendOutput(dataToSend);}, ( timedOutInterval -(timerStartTime - Date())));
     }
 
 };
@@ -1427,7 +1470,7 @@ function startSystemTest(auto) {
         sendOutput('ZIG1' + ' ' + 'TEST ' + "GO slide1111.jpg NEXT slide2222.jpg");
     }
     setTimeout(function () {checkForZigbee(auto);}, 5000); // check for results after delay
-
+    setTimeout(function(){sendOutput('GETTIME');}, 500); // this will update ti pi time to CS4 i/o time
 
 }
 
