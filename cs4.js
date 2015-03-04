@@ -21,7 +21,7 @@ var spawn = require('child_process').spawn;
 var nodemailer = require("nodemailer");
 var pmp = require('pmp');
 var sudo = require('sudo');
-var moment = require('moment');
+var moment = require('moment-timezone');
 
 var lastCueReceived = {"Time" : "10/09/13 15:20:04.20", "Source" : "Midi1", "InData" : "F0 7F 05 02 01 01 31 2E 30 30 F7 "};
 var serialDataSocket;
@@ -259,7 +259,8 @@ exports.websocketDataIn = function(dataSocket, Socket){
                 datain = dataSocket.Data;
                 datain = SetCS4Time(datain);
                 comlib.write(datain);
-                sendOutput('GETTIME');
+
+                setTimeout(function(){sendOutput('GETTIME');}, 500);
                 setTimeout(function(){setAutoTest();}, 3000); //setup for auto test with new time being set
             }
 
@@ -880,7 +881,10 @@ function SetCS4Time(curTime)
     var year = 0;
     var timeZoneOffset = 0;
     curTime = new Date(curTime);
-    timeZoneOffset = curTime.getTimezoneOffset();
+    curTime = moment.tz(curTime,cs4Settings.timezone); //convert to timezone
+    curTime = curTime.format(fmt); //finish converting to timezone
+    curTime = new Date(curTime); //restore to date format
+
     year = curTime.getFullYear().toString();
     month = parseInt(curTime.getMonth()) + 1; // months start with 1 in the timer chip
     day = curTime.getDate();
@@ -1169,8 +1173,8 @@ exports.getSettings = function(){
                 user: cs4Settings.emailAccount,
                 pass: cs4Settings.emailAccountPassword
             }
-        });
 
+        });
         dataToSend = '          SLAVE DMX_CH ' + cs4Settings.dmx1 +  " " + cs4Settings.dmx2 + " " + cs4Settings.dmx3 + ''; //update the DMX channels
         sendOutput(dataToSend) ;
         dataToSend = '          SLAVE ZIGEN ' + cs4Settings.enableZigbee2 + ''; //update the DMX channels
