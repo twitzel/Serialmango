@@ -21,7 +21,7 @@ var spawn = require('child_process').spawn;
 var nodemailer = require("nodemailer");
 var pmp = require('pmp');
 var sudo = require('sudo');
-
+var moment = require('moment');
 
 var lastCueReceived = {"Time" : "10/09/13 15:20:04.20", "Source" : "Midi1", "InData" : "F0 7F 05 02 01 01 31 2E 30 30 F7 "};
 var serialDataSocket;
@@ -46,6 +46,7 @@ var tempcntincoming = 0;
 var tempcntoutgoing = 0;
 var extrnalIP ="";
 var gateway;
+var fmt = "ddd, MMM DD YYYY, HH:mm:ss.SS"; // format string for moment time strings
 //routine to ensure that serial data is not sent more than
 // every timedOutInterval
 //
@@ -142,9 +143,9 @@ exports.setup = function()
             global.collectionSettings = db.collection('settings');
             collectionCue.ensureIndex({InData:1},function (err,res){});
 
-
+        // this is now is cs4Settiings.timezone
             //set timezone of pi
-           collectionStartup.findOne({'TimeZoneSet':{$exists:true}}, function(err,res){
+/*           collectionStartup.findOne({'TimeZoneSet':{$exists:true}}, function(err,res){
                 if(res){
                     var a = res.TimeZoneSet;
                     time.tzset(res.TimeZoneSet);
@@ -154,7 +155,7 @@ exports.setup = function()
                 }
 
                });
-
+*/
             // MOVED HERE = open serial port after mongo is running
 
             //now lets find out if we are on a windows system
@@ -258,10 +259,8 @@ exports.websocketDataIn = function(dataSocket, Socket){
                 datain = dataSocket.Data;
                 datain = SetCS4Time(datain);
                 comlib.write(datain);
-                // we have cs4 startup time so set system clock
-
-
-
+                sendOutput('GETTIME');
+                setTimeout(function(){setAutoTest();}, 3000); //setup for auto test with new time being set
             }
 
         }
@@ -281,7 +280,7 @@ exports.websocketDataIn = function(dataSocket, Socket){
                             if(logfile[i].Dout)
                             {
                                 //comlib.websocketsend(".    Sent: " + logfileData, Socket) ;
-                                dataToSend = dataToSend + ".    Sent: " + logfileData + "\n" ;
+                                dataToSend = dataToSend + ".    Sent: " +formatLogData(logfileData) + "\n" ;
                             }
                             else
                             {
@@ -295,7 +294,7 @@ exports.websocketDataIn = function(dataSocket, Socket){
             else
             {
                 comlib.websocketsend("* Preparing Data For Display. \n* Please Wait. \n* (may take up to 1 minute) ", Socket) ;
-                collectionLog.find({},{_id:0}).sort({"Time": 1}).toArray(function(error,logfile){
+                collectionLog.find({},{_id:0}).sort({"Time": -1}).toArray(function(error,logfile){
                // collectionLog.find({},{_id:0}).sort({ $natural: 1 }).toArray(function(error,logfile){
                     for(var i = 0; i <logfile.length;i++)
                     {
@@ -303,11 +302,13 @@ exports.websocketDataIn = function(dataSocket, Socket){
 
                         if(logfile[i].Dout)
                         {
-                            dataToSend = ".    Sent: " + logfileData + "\n" + dataToSend;
+                            //comlib.websocketsend(".    Sent: " + logfileData, Socket) ;
+                            dataToSend = dataToSend + ".    Sent: " +formatLogData(logfileData) + "\n" ;
                         }
                         else
                         {
-                            dataToSend = parseCue(logfileData) + "\n" + dataToSend;
+                            //comlib.websocketsend(parseCue(logfileData),Socket);
+                            dataToSend = dataToSend + parseCue(logfileData) + "\n" ;
                         }
                     }
                     comlib.websocketsend(dataToSend, Socket) ;
@@ -511,7 +512,7 @@ exports.websocketDataIn = function(dataSocket, Socket){
 // puts it in Log collection.
 //
 // Then checks to Cue file to see if there any matching cues.
-// If so, goes thrugh all outgoing cues.
+// If so, goes through all outgoing cues.
 // sets output timers to send data back to CS-4 IO via serial.
 
 
@@ -526,6 +527,7 @@ exports.usbSerialDataIn = function (data) {
     var showname;
     var outstring;
     var dir; // ****** needs to ba added to R4-4 Receiver Parsing ****** //
+    var serialDataTimeOrig; // needed for setting system clock of Pi
 
     // put the time string into proper form
     if(!usbInputEnabled){ // if we are not ready for data - just get out!!!
@@ -533,23 +535,8 @@ exports.usbSerialDataIn = function (data) {
     }
     serialData = JSON.parse(data);
     if(serialData.Time) {
-
-        if(os.type() != 'Windows_NT'){
-
-            var child = sudo([ 'date', '-s', serialData.Time ]);
-            child.stdout.on('data', function (data) {
-                console.log(data.toString());
-                console.log("SUDO DATE CHANGED");
-            });
-        }
-
-      //  serialData.Time = new time.Date(serialData.Time);
-
-
-
-
-      //  var rr = serialData.Time.getTimezone;
-      ///  console.log(rr);
+        serialDataTimeOrig = serialData.Time;
+        serialData.Time = new Date(serialData.Time);//convert to date function
     }
 
 
@@ -673,29 +660,59 @@ exports.usbSerialDataIn = function (data) {
 
       //  comlib.websocketsend(parseCue(serialData));
     }
-    else
-    {   //we have startup time from the CS4 I/O board
-        collectionStartup.insert(serialData, {w: 1}, function (err, result) {
-            console.log(result);
-            try{
-                var tt = serialData.Time.toString();
-               comlib.websocketsend("CS4 Current time is:" + serialData.Time.toString());
-            }
-            catch(err)
-            {//do nothing
-            }
-        });
+    else{
+        if(serialData.Time){
+          //we have startup time from the CS4 I/O board
+            collectionStartup.insert(serialData, {w: 1}, function (err, result) {
+                // If PI set the system clock to CS4 I/O board time
+                if(os.type() != 'Windows_NT'){  //This is for pi only
 
+                    var child = sudo([ 'date', '-s', serialDataTimeOrig ]);
+                    child.stdout.on('data', function (data) {
+                        console.log(data.toString());
+                        console.log("SUDO DATE CHANGED");
+
+                    });
+                }
+                comlib.websocketsend("CS4 Current time is: " + moment(serialData.Time).format(fmt));
+                console.log(result);
+
+            });
+        }
+        else
+        {
+            serialData.Tme1 = new Date(serialData.Tme1);
+            try {
+                comlib.websocketsend("CS4 Current time is: " + moment(serialData.Tme1).format(fmt));
+            }
+            catch (err) {//do nothing
+            }
+        }
     }
 };
 
-function parseCue(data)
-{
+function formatLogData(data){
+
+    var timeFormatted;
+    var Dout;
+    serialData = JSON.parse(data);
+
+    serialData.Time = new Date(serialData.Time);
+    timeFormatted = moment(serialData.Time).format(fmt);
+    indata = serialData.InData;
+    Dout = serialData.Dout;
+
+    return (timeFormatted + "   Dout: "  +  Dout);
+}
+
+function parseCue(data){
+
+    var timeFormatted;
     ledInfoOn(17);
     setTimeout(function(){ledInfoOff(17);}, 100);
     serialData = JSON.parse(data);
     serialData.Time = new Date(serialData.Time);
-
+    timeFormatted = moment(serialData.Time).format(fmt);
     indata = serialData.InData;
     source = serialData.Source;
     // if cue is MIDI then get light cue number from hex string
@@ -749,14 +766,15 @@ function parseCue(data)
             type = "Pitch Wheel Control";
         }
 
-        return (serialData.Time.toISOString() + "  " + source + "  " + type + ": " + indata);
-
+        //return (serialData.Time.toString() + "  " + source + "  " + type + ": " + indata);
+        return (timeFormatted + "  " + source + "  " + type + ": " + indata);
 
 
     }
     else // just send data
     {
-        return (serialData.Time.toISOString() + "  " + source + " " + indata);
+       // return (serialData.Time.toString() + "  " + source + " " + indata);
+        return (timeFormatted + "  " + source + " " + indata);
     }
 
 }
@@ -1463,17 +1481,14 @@ function checkForZigbee(auto){
             autoTest1 = setTimeout(function(){startSystemTest(1);}, 1000*60*60*24); // start again in 24 hours
         }
     });
-
 }
 
 function setAutoTest(){
     var offsetTime;
     //get latest time from startup data base and calculate how long to delay before starting test
-    collectionStartup.find({},{_id:0}).sort({"Tme1": -1}).limit(1).toArray(function(error,Startupfile) {
-        //   collectionLog.find({},{_id:0}).sort({ $natural: 1 }).limit(1000).toArray(function(error,logfile){
+    collectionStartup.find({},{_id:0}).sort({"Time": -1}).limit(1).toArray(function(error,Startupfile) {
 
-
-        startDate = new Date(Startupfile[0].Tme1);
+        startDate = new Date(Startupfile[0].Time);
         currentHours = startDate.getHours();
         currentMinutes = startDate.getMinutes();
         currentSeconds = startDate.getSeconds();
@@ -1483,22 +1498,13 @@ function setAutoTest(){
         if(offsetTime <= 0){
             offsetTime += 24;
         }
-
         //calculate milliseconds until start of test
         offsetTime = offsetTime*60*60*1000 - currentMinutes*60*1000 - currentSeconds*1000 - currentMilli;
         clearInterval(autoTest1); //erase any previous timeouts
         clearInterval(autoTest); //erase any previous timeouts
         autoTest =  setTimeout(function(){startSystemTest(1);}, offsetTime); // start again in 24 hours
-        autoTestTemp =  setTimeout(function(){sendConsole();}, 30000); // start again in 24 hours
     });
-
 }
-
-function sendConsole(){
-    console.log('Delays ', startDate, currentHours, wantedTime);
-}
-
-
 
 
 function sendMail(mailOptions){

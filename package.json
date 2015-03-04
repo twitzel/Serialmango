@@ -17,6 +17,7 @@
     "fastgpio": "*",
     "nodemailer": "*",
     "pmp": "*",
-    "sudo": "*"
+    "sudo": "*",
+    "moment": "*"
   }
 }
