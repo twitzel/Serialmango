@@ -108,8 +108,10 @@ sendOutput = function (dataToSend)
 sendOutput = function (dataToSend)
 {
     var addTime = "{\"Time\":";
+
     if (timedOut)
     {
+        timerStartTime = new Date();
         timedOut = false;
         comlib.write("         " + dataToSend + "\r"); // add spaces at beginning for R4 zigbee stuff and terminate\n\r
         ledInfoOn(27);
@@ -130,10 +132,9 @@ sendOutput = function (dataToSend)
     }
     else
     {
-       // var tme = new Date();
+        var tme = new Date();
        // var test2 = tme.getMilliseconds();
        // var test3 = timerStartTime.getMilliseconds();
-
       /// var test = timedOutInterval -(tme.getMilliseconds() - timerStartTime.getMilliseconds())+2;
         //since we are not ready for this to go out (or we wouldn't be here) -- reset a timer with actual time left.
         setTimeout(function(){sendOutput(dataToSend);}, (timedOutInterval -(tme.getMilliseconds() - timerStartTime.getMilliseconds())+2)); // pad with 2 extra ms
