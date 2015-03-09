@@ -1173,7 +1173,7 @@ exports.getSettings = function(){
                 console.log(result);
             })
         }
-
+        console.log("setting up email transport");
         //set up initial mail parameters here
         smtpTransport = nodemailer.createTransport("SMTP",{
             service: "Gmail",
