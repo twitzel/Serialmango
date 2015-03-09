@@ -683,7 +683,7 @@ exports.usbSerialDataIn = function (data) {
 
             if(os.type() != 'Windows_NT'){  //This is for pi only
                 console.log("Tme! " + serialData.Tme1.toString());
-                child = sudo([ 'date', '-s', serialData.tme1 ]);
+                child = sudo([ 'date', '-s', serialData.Tme1 ]);
                 child.stdout.on('data', function (data) {
                     console.log(data.toString());
                     console.log("SUDO DATE CHANGED");
