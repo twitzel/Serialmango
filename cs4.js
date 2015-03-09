@@ -1189,6 +1189,7 @@ exports.getSettings = function(){
         sendOutput(dataToSend) ;
         exports.ledOn();
       //  sendOutput('TIMEGET')
+        console.log("ready to start system test in 15 seconds");
         setTimeout(function(){startSystemTest();}, 15000); // check for results after delay
         setTimeout(function(){setAutoTest(0);}, 30000);
     });
@@ -1434,6 +1435,7 @@ function startSystemTest(auto) {
     for (var i = 0; i < 8; i++) {
         sendOutput('ZIG1' + ' ' + 'TEST ' + "GO slide1111.jpg NEXT slide2222.jpg");
     }
+    console.log("system test data sent check for returned date in 5 seconds");
     setTimeout(function () {checkForZigbee(auto);}, 5000); // check for results after delay
 
 
@@ -1505,7 +1507,8 @@ function setAutoTest(){
     //get latest time from startup data base and calculate how long to delay before starting test
     collectionStartup.find({},{_id:0}).sort({"Time": -1}).limit(1).toArray(function(error,Startupfile) {
 
-        startDate = new Date(Startupfile[0].Time);
+        //startDate = new Date(Startupfile[0].Time);
+        startDate = new Date(); // now that system time is correct
         currentHours = startDate.getHours();
         currentMinutes = startDate.getMinutes();
         currentSeconds = startDate.getSeconds();
