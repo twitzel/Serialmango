@@ -550,7 +550,7 @@ exports.usbSerialDataIn = function (data) {
 
     //added search fields: must match InData and Source
     if (serialData.InData !=null) {
-
+        var child;
         if (cs4Settings.ignoreSource == 'NO') { // match source
             collectionCue.find({$and: [{'InData': serialData.InData} ,{'Source': serialData.Source }]}).toArray(function (err, item) {
                 //collectionCue.find({'InData': serialData.InData }).toArray(function (err, item) {
@@ -668,7 +668,7 @@ exports.usbSerialDataIn = function (data) {
                 // If PI set the system clock to CS4 I/O board time
                 if(os.type() != 'Windows_NT'){  //This is for pi only
                     console.log("Time " + serialDataTimeOrig.toString());
-                    var child = sudo([ 'date', '-s', serialDataTimeOrig ]);
+                    child = sudo([ 'date', '-s', serialDataTimeOrig ]);
                     child.stdout.on('data', function (data) {
                         console.log(data.toString());
                         console.log("SUDO DATE CHANGED");
@@ -683,7 +683,7 @@ exports.usbSerialDataIn = function (data) {
 
             if(os.type() != 'Windows_NT'){  //This is for pi only
                 console.log("Tme! " + serialData.Tme1.toString());
-                var child = sudo([ 'date', '-s', serialData.tme1 ]);
+                child = sudo([ 'date', '-s', serialData.tme1 ]);
                 child.stdout.on('data', function (data) {
                     console.log(data.toString());
                     console.log("SUDO DATE CHANGED");
