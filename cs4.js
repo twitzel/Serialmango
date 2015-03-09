@@ -1347,20 +1347,14 @@ function startSystemTest(auto) {
     if(auto){
         autoTest1 = setTimeout(function(){startSystemTest(1);}, 1000*60*60*24); // start again in 24 hours
     }
+    console.log("AT startSystemTest");
 
     if (cs4Settings.enableZigbee2 == 'NO') { // make sure we can receive zigbee2.  If not enable it
         zigbee2State = 'NO';
         dataToSend = '          SLAVE ZIGEN ' + 'YES' + '\r'; //Enable the zigee2 channel
         comlib.write(dataToSend);
     }
-    /*
-     pmp.findGateway('',function(err,gateway){
-     // console.log(err,rslt);
-     if(!err){
-     externalIP = gateway.externalIP;
-     console.log("got external address",gateway.extervalIP);
-     //refresh portmapping for the router  lease expire in 4 days
-     */
+
     if ((os.type() != 'Windows_NT') && gateway) { // this is only for the pi
 
         pmp.portMap(gateway, 3000, 3000, 0, "CS4", function (err, rslt) {
@@ -1384,7 +1378,7 @@ function startSystemTest(auto) {
             });
         });
     }
-
+/*
     else{ // we don't have a successful port mapping so try this again
         pmp.findGateway('',function(err,gateway){
             // console.log(err,rslt);
@@ -1418,12 +1412,7 @@ function startSystemTest(auto) {
                         });
                      });
                  }
-         /*        else{//if windows map external port 1 higher
-                 pmp.portMap(rslt.gateway, 3000, 3001, 350000, function (err, rslt) {
-                 console.log(err, rslt);
-                 });
-                 }
-*/
+
 
             }
             else{
@@ -1432,6 +1421,8 @@ function startSystemTest(auto) {
             };
         });
     }
+
+    */
     for (var i = 0; i < 8; i++) {
         sendOutput('ZIG1' + ' ' + 'TEST ' + "GO slide1111.jpg NEXT slide2222.jpg");
     }
