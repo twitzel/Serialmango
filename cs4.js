@@ -56,55 +56,6 @@ var timerStartTime;
 //
 // adds time stamp to Outgoing data and puts it in Log collection
 
-
-/*  THis is the origional sendOutput
-sendOutput = function (dataToSend)
-{
-   var addTime = "{\"Time\":";
-   var timerStartTime;
-   var lastconverted;
-
-    if (timedOut)
-    {
-        timedOut = false;
-        comlib.write("         " + dataToSend + "\r"); // add spaces at beginning for R4 zigbee stuff and terminate\n\r
-        ledInfoOn(27);
-        setTimeout(function(){ledInfoOff(27);}, 100);
-        setTimeout(function(){timedOut = true;}, timedOutInterval);
-        timerStartTime = new Date().getTime() + lastCueReceivedTimeOffset;
-        console.log(dataToSend);
-        //
-
-
-    //change the time of data sent to correlate with CS-4 I/O clock
-    lastconverted   = new Date(lastCueReceivedInternalTime);
-    addTime = addTime + "\""+  (new Date( lastconverted.setMilliseconds(lastconverted.getMilliseconds() + (timerStartTime -lastCueReceivedInternalTime)))).toISOString() +"\", \"Dout\" : \"" + dataToSend + "\"}";
-    //send it out the socket
-    comlib.websocketsend(".  Sent: " + addTime) ;
-
-    //Log the data into the collection
-    addTime = JSON.parse(addTime);
-    addTime.Time = new Date(addTime.Time); //get to real time format.
-    collectionLog.insert(addTime, {w: 1}, function (err, result) {
-        console.log(result);
-    });
-       //log the time difference for testing
-    console.log("Time difference & New data stored  -->> "+ (timerStartTime -lastCueReceivedInternalTime)+ "---" + addTime);
-
-    }
-    else
-    {
-        //since we are not ready for this to go out (or we wouldn't be here) -- reset a timer with actual time left.
-        setTimeout(function(){sendOutput(dataToSend);}, ( timedOutInterval -(timerStartTime - Date())));
-      //  var delay =  setTimeout(function(){sendOutput(dataToSend);}, ( timedOutInterval -(timerStartTime - Date())));
-
-
-
-
-    }
-
-};
-*/
 sendOutput = function (dataToSend)
 {
     var addTime = "{\"Time\":";
@@ -309,7 +260,7 @@ exports.websocketDataIn = function(dataSocket, Socket){
                 datain = SetCS4Time(datain);
                 comlib.write(datain);
 
-                setTimeout(function(){sendOutput('GETTIME');}, 500);
+                setTimeout(function(){sendOutput('TIMEGET');}, 500);
                 setTimeout(function(){setAutoTest();}, 3000); //setup for auto test with new time being set
             }
 
@@ -721,7 +672,6 @@ exports.usbSerialDataIn = function (data) {
                     child.stdout.on('data', function (data) {
                         console.log(data.toString());
                         console.log("SUDO DATE CHANGED");
-
                     });
                 }
                 comlib.websocketsend("CS4 Current time is: " + moment(serialData.Time).format(fmt));
@@ -729,9 +679,18 @@ exports.usbSerialDataIn = function (data) {
 
             });
         }
-        else
-        {
-            serialData.Tme1 = new Date(serialData.Tme1);
+        else if(serialData.Tme1){
+
+            if(os.type() != 'Windows_NT'){  //This is for pi only
+
+                var child = sudo([ 'date', '-s', serialData.tme1 ]);
+                child.stdout.on('data', function (data) {
+                    console.log(data.toString());
+                    console.log("SUDO DATE CHANGED");
+                });
+            }
+
+            serialData.Tme1 = new Date(serialData.Tme1);//convert to real time data
             try {
                 comlib.websocketsend("CS4 Current time is: " + moment(serialData.Tme1).format(fmt));
             }
@@ -1229,7 +1188,7 @@ exports.getSettings = function(){
         dataToSend = '          SLAVE ZIGEN ' + cs4Settings.enableZigbee2 + ''; //update the DMX channels
         sendOutput(dataToSend) ;
         exports.ledOn();
-        sendOutput('TIMEGET')
+      //  sendOutput('TIMEGET')
         setTimeout(function(){startSystemTest();}, 15000); // check for results after delay
         setTimeout(function(){setAutoTest(0);}, 30000);
     });
@@ -1383,6 +1342,11 @@ function ledInfoBlink(GPIOnum){
 }
 
 function startSystemTest(auto) {
+
+    if(auto){
+        autoTest1 = setTimeout(function(){startSystemTest(1);}, 1000*60*60*24); // start again in 24 hours
+    }
+
     if (cs4Settings.enableZigbee2 == 'NO') { // make sure we can receive zigbee2.  If not enable it
         zigbee2State = 'NO';
         dataToSend = '          SLAVE ZIGEN ' + 'YES' + '\r'; //Enable the zigee2 channel
@@ -1471,12 +1435,14 @@ function startSystemTest(auto) {
         sendOutput('ZIG1' + ' ' + 'TEST ' + "GO slide1111.jpg NEXT slide2222.jpg");
     }
     setTimeout(function () {checkForZigbee(auto);}, 5000); // check for results after delay
-    setTimeout(function(){sendOutput('GETTIME');}, 500); // this will update ti pi time to CS4 i/o time
+
 
 }
 
 function checkForZigbee(auto){
     var success = 0;
+
+
 
     if(zigbee2State =='NO'){ // make sure to put zigbee2 channel back where it was before test
         dataToSend = '          SLAVE ZIGEN ' + 'NO' + '\r'; //Disable the zigee2 channel
@@ -1530,9 +1496,7 @@ function checkForZigbee(auto){
             sendMail(mailOptions);
         }
 
-        if(auto){
-            autoTest1 = setTimeout(function(){startSystemTest(1);}, 1000*60*60*24); // start again in 24 hours
-        }
+        setTimeout(function(){sendOutput('TIMEGET');}, 5000); // this will update ti pi time to CS4 i/o time
     });
 }
 
@@ -1556,6 +1520,7 @@ function setAutoTest(){
         clearInterval(autoTest1); //erase any previous timeouts
         clearInterval(autoTest); //erase any previous timeouts
         autoTest =  setTimeout(function(){startSystemTest(1);}, offsetTime); // start again in 24 hours
+        comlib.websocketsend("Auto Test will start in: " + offsetTime+ " milliseconds");
     });
 }
 
