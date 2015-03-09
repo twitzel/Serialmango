@@ -667,7 +667,7 @@ exports.usbSerialDataIn = function (data) {
             collectionStartup.insert(serialData, {w: 1}, function (err, result) {
                 // If PI set the system clock to CS4 I/O board time
                 if(os.type() != 'Windows_NT'){  //This is for pi only
-
+                    console.log("Time " + serialDataTimeOrig.toString());
                     var child = sudo([ 'date', '-s', serialDataTimeOrig ]);
                     child.stdout.on('data', function (data) {
                         console.log(data.toString());
@@ -682,7 +682,7 @@ exports.usbSerialDataIn = function (data) {
         else if(serialData.Tme1){
 
             if(os.type() != 'Windows_NT'){  //This is for pi only
-
+                console.log("Tme! " + serialData.Tme1.toString());
                 var child = sudo([ 'date', '-s', serialData.tme1 ]);
                 child.stdout.on('data', function (data) {
                     console.log(data.toString());
