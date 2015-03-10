@@ -1211,7 +1211,6 @@ exports.saveSettings = function(){
 
 exports.ledOn = function(){
 
-
     if(os.type() != 'Windows_NT') // this is only for the pi
     {
         var led = require('fastgpio');
@@ -1274,9 +1273,9 @@ exports.ledOn = function(){
 
         // send mail with defined transport object
         sendMail(mailOptions);
-        console.log("READY to start system test in 15 seconds");
-        setTimeout(function(){startSystemTest();}, 15000); // check for results after delay
-        setTimeout(function(){setAutoTest(0);}, 30000);
+        console.log("READY to start system test in 30 seconds");
+        setTimeout(function(){startSystemTest();}, 30000); // check for results after delay
+        setTimeout(function(){setAutoTest(0);}, 60000);
     });
 
 
