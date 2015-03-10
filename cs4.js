@@ -1190,9 +1190,9 @@ exports.getSettings = function(){
         dataToSend = '          SLAVE ZIGEN ' + cs4Settings.enableZigbee2 + ''; //update the DMX channels
         sendOutput(dataToSend) ;
         console.log("SLAVE ZIGEN");
-        console.log("READY to start system test in 15 seconds");
-        sysTEST = setTimeout(function(){startSystemTest();}, 15000); // check for results after delay
-        sTimeOUT = setTimeout(function(){setAutoTest(0);}, 30000);
+       // console.log("READY to start system test in 15 seconds");
+       // sysTEST = setTimeout(function(){startSystemTest();}, 15000); // check for results after delay
+       // sTimeOUT = setTimeout(function(){setAutoTest(0);}, 30000);
 
         exports.ledOn();
       //  sendOutput('TIMEGET')
@@ -1271,6 +1271,9 @@ exports.ledOn = function(){
 
 // send mail with defined transport object
         sendMail(mailOptions);
+        console.log("READY to start system test in 15 seconds");
+         sysTEST = setTimeout(function(){startSystemTest();}, 15000); // check for results after delay
+         sTimeOUT = setTimeout(function(){setAutoTest(0);}, 30000);
 
 
     });
