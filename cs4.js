@@ -261,7 +261,7 @@ exports.websocketDataIn = function(dataSocket, Socket){
                 comlib.write(datain);
 
                 setTimeout(function(){sendOutput('TIMEGET');}, 500);
-                setTimeout(function(){setAutoTest();}, 3000); //setup for auto test with new time being set
+                setTimeout(function(){setAutoTest();}, 5000); //setup for auto test with new time being set
             }
 
         }
@@ -1191,8 +1191,8 @@ exports.getSettings = function(){
         sendOutput(dataToSend) ;
         console.log("SLAVE ZIGEN");
         console.log("READY to start system test in 15 seconds");
-        var sysTEST = setTimeout(function(){startSystemTest();}, 15000); // check for results after delay
-        var TimeOUT = setTimeout(function(){setAutoTest(0);}, 30000);
+        sysTEST = setTimeout(function(){startSystemTest();}, 15000); // check for results after delay
+        sTimeOUT = setTimeout(function(){setAutoTest(0);}, 30000);
 
         exports.ledOn();
       //  sendOutput('TIMEGET')
