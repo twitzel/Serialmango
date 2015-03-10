@@ -1228,7 +1228,7 @@ exports.ledOn = function(){
             global.externalIP = gateway.externalIP;
             gateWay = gateway;
             console.log("got external address",gateway.extervalIP);
-            if ((os.type() == 'Windows_NT') && gateWay) { // this is only for the pi
+            if ((os.type() != 'Windows_NT') && gateWay) { // this is only for the pi
 
                 pmp.portMap(gateWay, 3000, 3000, 0, "CS4", function (err, rslt) {
                     if (!err) {
@@ -1262,7 +1262,7 @@ exports.ledOn = function(){
                     gateWay = gateway;
                     console.log("got external address", gateway.extervalIP);
                 }
-                if ((os.type() == 'Windows_NT') && gateWay) { // this is only for the pi
+                if ((os.type() != 'Windows_NT') && gateWay) { // this is only for the pi
 
                     pmp.portMap(gateWay, 3000, 3000, 0, "CS4", function (err, rslt) {
                         if (!err) {
