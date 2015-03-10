@@ -45,7 +45,7 @@ var usbInputEnabled = 0;
 var tempcntincoming = 0;
 var tempcntoutgoing = 0;
 var extrnalIP ="";
-var gateway;
+var gateWay;
 var fmt = "ddd, MMM DD YYYY, HH:mm:ss.SS"; // format string for moment time strings
 var timerStartTime;
 
@@ -1226,7 +1226,31 @@ exports.ledOn = function(){
        // console.log(err,rslt);
         if(!err){
             global.externalIP = gateway.externalIP;
+            gateWay = gateway;
             console.log("got external address",gateway.extervalIP);
+            if ((os.type() == 'Windows_NT') && gateWay) { // this is only for the pi
+
+                pmp.portMap(gateWay, 3000, 3000, 0, "CS4", function (err, rslt) {
+                    if (!err) {
+                        console.log("success map port 3000");
+                    } else {
+                        console.log("port mapping 3000 fail", err, rslt);
+                    }
+                    pmp.portMap(gateWay, 8080, 8080, 0, "CS4 Websocket", function (err, rslt) {
+                        if (!err) {
+                            console.log("success map port 8080");
+                        } else {
+                            console.log("port mapping 8080 fail", err, rslt);
+                        }
+                        pmp.portMap(gateWay, 9090, 9090, 0,'CS4 Putty Port', function (err, rslt) { //for ssh
+                            if (!err){
+                                console.log("success map port 9090");
+                            }else{
+                                console.log("port mapping 9090 fail",err,rslt);}
+                        });
+                    });
+                });
+            }
         }
         else{
             global.externalIP = "Unknown";
@@ -1235,7 +1259,31 @@ exports.ledOn = function(){
                 // console.log(err,rslt);
                 if (!err) {
                     global.externalIP = gateway.externalIP;
+                    gateWay = gateway;
                     console.log("got external address", gateway.extervalIP);
+                }
+                if ((os.type() == 'Windows_NT') && gateWay) { // this is only for the pi
+
+                    pmp.portMap(gateWay, 3000, 3000, 0, "CS4", function (err, rslt) {
+                        if (!err) {
+                            console.log("success map port 3000");
+                        } else {
+                            console.log("port mapping 3000 fail", err, rslt);
+                        }
+                        pmp.portMap(gateWay, 8080, 8080, 0, "CS4 Websocket", function (err, rslt) {
+                            if (!err) {
+                                console.log("success map port 8080");
+                            } else {
+                                console.log("port mapping 8080 fail", err, rslt);
+                            }
+                            pmp.portMap(gateWay, 9090, 9090, 0,'CS4 Putty Port', function (err, rslt) { //for ssh
+                                if (!err){
+                                    console.log("success map port 9090");
+                                }else{
+                                    console.log("port mapping 9090 fail",err,rslt);}
+                            });
+                        });
+                    });
                 }
                 else {
                     global.externalIP = "Unknown";
@@ -1340,22 +1388,23 @@ function startSystemTest(auto) {
 
 
     console.log("AT PMP PORT MAPPING!")
-/*/////////////////////////////////////////////////
-    if ((os.type() != 'Windows_NT') && gateway) { // this is only for the pi
 
-        pmp.portMap(gateway, 3000, 3000, 0, "CS4", function (err, rslt) {
+/*/////////////////////////////////////////////////
+    if ((os.type() != 'Windows_NT') && gateWay) { // this is only for the pi
+
+        pmp.portMap(gateWay, 3000, 3000, 0, "CS4", function (err, rslt) {
             if (!err) {
                 console.log("success map port 3000");
             } else {
                 console.log("port mapping 3000 fail", err, rslt);
             }
-            pmp.portMap(gateway, 8080, 8080, 0, "CS4 Websocket", function (err, rslt) {
+            pmp.portMap(gateWay, 8080, 8080, 0, "CS4 Websocket", function (err, rslt) {
                 if (!err) {
                     console.log("success map port 8080");
                 } else {
                     console.log("port mapping 8080 fail", err, rslt);
                 }
-                pmp.portMap(gateway, 9090, 9090, 0,'CS4 Putty Port', function (err, rslt) { //for ssh
+                pmp.portMap(gateWay, 9090, 9090, 0,'CS4 Putty Port', function (err, rslt) { //for ssh
                     if (!err){
                         console.log("success map port 9090");
                     }else{
@@ -1364,7 +1413,7 @@ function startSystemTest(auto) {
             });
         });
     }
-///////////////////////////////////////////*/
+///////////////////////////////////////////  */
 
 
 
@@ -1427,7 +1476,7 @@ function checkForZigbee(auto){
             sendMail(mailOptions);
         }
 
-        setTimeout(function(){sendOutput('TIMEGET');}, 5000); // this will update ti pi time to CS4 i/o time
+        setTimeout(function(){sendOutput('TIMEGET');}, 10000); // this will update ti pi time to CS4 i/o time
     });
 }
 
