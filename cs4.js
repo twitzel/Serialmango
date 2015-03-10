@@ -1260,6 +1260,7 @@ exports.ledOn = function(){
             });
 
         }
+        /*
         console.log('Ready to send START UP email message');
         var mailOptions = {
             from: "CS4 @ " + myuri + "✔ " + cs4Settings.emailAccount,
@@ -1276,6 +1277,7 @@ exports.ledOn = function(){
         console.log("READY to start system test in 30 seconds");
         setTimeout(function(){startSystemTest();}, 30000); // check for results after delay
         setTimeout(function(){setAutoTest(0);}, 60000);
+        */
     });
 
 
