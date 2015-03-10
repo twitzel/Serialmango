@@ -59,7 +59,7 @@ var timerStartTime;
 sendOutput = function (dataToSend)
 {
     var addTime = "{\"Time\":";
-
+    consloe.log("We are at sendOutput");
     if (timedOut)
     {
         timerStartTime = new Date();
