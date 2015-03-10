@@ -1336,7 +1336,7 @@ function startSystemTest(auto) {
 
 
     console.log("AT PMP PORT MAPPING!")
-/*//////////////////////////////////////////////////
+/*/////////////////////////////////////////////////
     if ((os.type() != 'Windows_NT') && gateway) { // this is only for the pi
 
         pmp.portMap(gateway, 3000, 3000, 0, "CS4", function (err, rslt) {
