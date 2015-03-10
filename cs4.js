@@ -1220,7 +1220,7 @@ exports.ledOn = function(){
         clearInterval(blink);
     }
 
-    /*
+
     //get ip address with pmp
     pmp.findGateway('',function(err,gateway){
        // console.log(err,rslt);
@@ -1279,7 +1279,7 @@ exports.ledOn = function(){
 
 
     });
-    */
+
 
 };
 
