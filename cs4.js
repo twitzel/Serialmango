@@ -1183,12 +1183,14 @@ exports.getSettings = function(){
             }
 
         });
+
         dataToSend = '          SLAVE DMX_CH ' + cs4Settings.dmx1 +  " " + cs4Settings.dmx2 + " " + cs4Settings.dmx3 + ''; //update the DMX channels
         sendOutput(dataToSend) ;
+        consloe.log("SLAVE DMX");
         dataToSend = '          SLAVE ZIGEN ' + cs4Settings.enableZigbee2 + ''; //update the DMX channels
         sendOutput(dataToSend) ;
-
-        console.log("ready to start system test in 15 seconds");
+        consloe.log("SLAVE ZIGEN");
+        console.log("READY to start system test in 15 seconds");
         setTimeout(function(){startSystemTest();}, 15000); // check for results after delay
         setTimeout(function(){setAutoTest(0);}, 30000);
 
