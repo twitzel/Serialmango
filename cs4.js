@@ -1191,8 +1191,8 @@ exports.getSettings = function(){
         sendOutput(dataToSend) ;
         console.log("SLAVE ZIGEN");
         console.log("READY to start system test in 15 seconds");
-        setTimeout(function(){startSystemTest();}, 15000); // check for results after delay
-        setTimeout(function(){setAutoTest(0);}, 30000);
+        var sysTEST = setTimeout(function(){startSystemTest();}, 15000); // check for results after delay
+        var TimeOUT = setTimeout(function(){setAutoTest(0);}, 30000);
 
         exports.ledOn();
       //  sendOutput('TIMEGET')
@@ -1422,6 +1422,7 @@ function checkForZigbee(auto){
 
 function setAutoTest(){
     var offsetTime;
+    console.log("STARTING AUTO TEST");
     //get latest time from startup data base and calculate how long to delay before starting test
     collectionStartup.find({},{_id:0}).sort({"Time": -1}).limit(1).toArray(function(error,Startupfile) {
 
