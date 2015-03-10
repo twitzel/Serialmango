@@ -15,7 +15,7 @@
     "time": "*",
     "fs.extra": "*",
     "fastgpio": "*",
-    "nodemailer": "*",
+    "nodemailer": "0.7",
     "pmp": "*",
     "sudo": "*",
     "moment": "*",
