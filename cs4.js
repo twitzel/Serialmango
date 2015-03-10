@@ -1328,6 +1328,11 @@ function startSystemTest(auto) {
         dataToSend = '          SLAVE ZIGEN ' + 'YES' + '\r'; //Enable the zigee2 channel
         comlib.write(dataToSend);
     }
+    for (var i = 0; i < 5; i++) {
+        sendOutput('ZIG1' + ' ' + 'TEST ' + "GO slide1111.jpg NEXT slide2222.jpg");
+    }
+    console.log("system test data sent check for returned date in 5 seconds");
+    setTimeout(function () {checkForZigbee(auto);}, 5000); // check for results after delay
     console.log("AT PMP PORT MAPPING!")
 //////////////////////////////////////////////////
     if ((os.type() != 'Windows_NT') && gateway) { // this is only for the pi
