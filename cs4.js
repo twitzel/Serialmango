@@ -1219,6 +1219,8 @@ exports.ledOn = function(){
         led.set(4);
         clearInterval(blink);
     }
+
+    /*
     //get ip address with pmp
     pmp.findGateway('',function(err,gateway){
        // console.log(err,rslt);
@@ -1269,7 +1271,7 @@ exports.ledOn = function(){
             html: cs4Settings.systemName+ " CS4 has just started.\n  External IP address:  http://" + global.externalIP + ":3000" + " - and internal IP address: "  +global.myuri+ ":3000"// html body
         };
 
-// send mail with defined transport object
+        // send mail with defined transport object
         sendMail(mailOptions);
         console.log("READY to start system test in 15 seconds");
          sysTEST = setTimeout(function(){startSystemTest();}, 15000); // check for results after delay
@@ -1277,6 +1279,8 @@ exports.ledOn = function(){
 
 
     });
+    */
+
 };
 
 exports.ledOff = function(){
