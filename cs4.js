@@ -1218,7 +1218,7 @@ exports.ledOn = function(){
         led.set(4);
         clearInterval(blink);
     }
-
+/*
     pmp.findGateway("",function(err,gateway){
         var error = 0;
         ///console.log(err,gateway.ip);
@@ -1260,7 +1260,7 @@ exports.ledOn = function(){
             });
 
         }
-        /*
+
         console.log('Ready to send START UP email message');
         var mailOptions = {
             from: "CS4 @ " + myuri + "✔ " + cs4Settings.emailAccount,
@@ -1272,13 +1272,13 @@ exports.ledOn = function(){
             html: cs4Settings.systemName+ " CS4 has just started.\n  External IP address:  http://" + global.externalIP + ":3000" + " - and internal IP address: "  +global.myuri+ ":3000"// html body
         };
 
-        // send mail with defined transport object
-        sendMail(mailOptions);
+   */     // send mail with defined transport object
+///////        sendMail(mailOptions);
         console.log("READY to start system test in 30 seconds");
         setTimeout(function(){startSystemTest();}, 30000); // check for results after delay
         setTimeout(function(){setAutoTest(0);}, 60000);
-        */
-    });
+
+   // });
 
 
 
@@ -1445,7 +1445,7 @@ function startSystemTest(auto) {
     for (var i = 0; i < 5; i++) {
         sendOutput('ZIG1' + ' ' + 'TEST ' + "GO slide1111.jpg NEXT slide2222.jpg");
     }
-    console.log("system test data sent check for returned date in 5 seconds");
+    console.log("system test data sent check for returned data in 5 seconds");
     setTimeout(function () {checkForZigbee(auto);}, 5000); // check for results after delay
 
 
