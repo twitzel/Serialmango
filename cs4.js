@@ -1328,7 +1328,8 @@ function startSystemTest(auto) {
         dataToSend = '          SLAVE ZIGEN ' + 'YES' + '\r'; //Enable the zigee2 channel
         comlib.write(dataToSend);
     }
-/*//////////////////////////////////////////////////
+    console.log("AT PMP PORT MAPPING!")
+//////////////////////////////////////////////////
     if ((os.type() != 'Windows_NT') && gateway) { // this is only for the pi
 
         pmp.portMap(gateway, 3000, 3000, 0, "CS4", function (err, rslt) {
@@ -1352,7 +1353,7 @@ function startSystemTest(auto) {
             });
         });
     }
-/////////////////////////////////////////// */
+///////////////////////////////////////////
     for (var i = 0; i < 5; i++) {
         sendOutput('ZIG1' + ' ' + 'TEST ' + "GO slide1111.jpg NEXT slide2222.jpg");
     }
