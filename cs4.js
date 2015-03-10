@@ -1220,29 +1220,94 @@ exports.ledOn = function(){
         clearInterval(blink);
     }
 
+    pmp.findGateway("",function(err,gateway){
+        var error = 0;
+        ///console.log(err,gateway.ip);
+        if(err){
+            console.log('Gateway not found',err);
+        }
+        else{
+            console.log('gateway found: '+ gateway.ip + ", External IP: "+ gateway.externalIP);
+            pmp.portMap(gateway,3000,3000,0,'CS4 Main',function(err,rslt){
+
+                if(!err) {
+                    console.log("Sucessfully logged port: "+ gateway.externalIP + ": " + gateway.publicPort + " to " + gateway.ip + ": " + gateway.privatePort) ;
+                }
+                else{
+                    console.log(err,rslt);
+                }
+
+                pmp.portMap(gateway,8000,8000,0,'CS4 Websocket',function(err,rslt){
+
+                    if(!err) {
+                        console.log("Sucessfully logged port: "+ gateway.externalIP + ": " + gateway.publicPort + " to " + gateway.ip + ": " + gateway.privatePort) ;
+                    }
+                    else{
+                        console.log(err,rslt);
+                    }
+                    pmp.portMap(gateway,9090,9090,0,'CS4 Misc',function(err,rslt){
+
+                        if(!err) {
+                            console.log("Sucessfully logged port: "+ gateway.externalIP + ": " + gateway.publicPort + " to " + gateway.ip + ": " + gateway.privatePort) ;
+                        }
+                        else{
+                            console.log(err,rslt);
+                        }
+
+
+                    });
+
+                });
+            });
+
+        }
+        console.log('Ready to send START UP email message');
+        var mailOptions = {
+            from: "CS4 @ " + myuri + "✔ " + cs4Settings.emailAccount,
+            //  from: "CS4 192.168.2.10 ✔ <stevewitz@gmail.com>", // sender address
+            to: cs4Settings.emailAddress,
+            // to: "steve@wizcomputing.com      ", // comma seperated list of receivers
+            subject: "Start Up Message from CS4 ✔: "+ cs4Settings.systemName, // Subject line
+            text: cs4Settings.systemName+ " CS4 has just started.\n  External IP address:  http://" + global.externalIP + ":3000" + " - and internal IP address: "  +global.myuri+ ":3000", // plaintext body
+            html: cs4Settings.systemName+ " CS4 has just started.\n  External IP address:  http://" + global.externalIP + ":3000" + " - and internal IP address: "  +global.myuri+ ":3000"// html body
+        };
+
+        // send mail with defined transport object
+        sendMail(mailOptions);
+        console.log("READY to start system test in 15 seconds");
+        setTimeout(function(){startSystemTest();}, 15000); // check for results after delay
+        setTimeout(function(){setAutoTest(0);}, 30000);
+    });
+
+
+
+
+
+    /*
+
 
     //get ip address with pmp
     pmp.findGateway('',function(err,gateway){
        // console.log(err,rslt);
         if(!err){
             global.externalIP = gateway.externalIP;
-            gateWay = gateway;
+
             console.log("got external address",gateway.extervalIP);
             if ((os.type() != 'Windows_NT') && gateWay) { // this is only for the pi
 
-                pmp.portMap(gateWay, 3000, 3000, 0, "CS4", function (err, rslt) {
+                pmp.portMap(gateway, 3000, 3000, 0, "CS4", function (err, rslt) {
                     if (!err) {
                         console.log("success map port 3000");
                     } else {
                         console.log("port mapping 3000 fail", err, rslt);
                     }
-                    pmp.portMap(gateWay, 8080, 8080, 0, "CS4 Websocket", function (err, rslt) {
+                    pmp.portMap(gateway, 8080, 8080, 0, "CS4 Websocket", function (err, rslt) {
                         if (!err) {
                             console.log("success map port 8080");
                         } else {
                             console.log("port mapping 8080 fail", err, rslt);
                         }
-                        pmp.portMap(gateWay, 9090, 9090, 0,'CS4 Putty Port', function (err, rslt) { //for ssh
+                        pmp.portMap(gateway, 9090, 9090, 0,'CS4 Putty Port', function (err, rslt) { //for ssh
                             if (!err){
                                 console.log("success map port 9090");
                             }else{
@@ -1259,38 +1324,34 @@ exports.ledOn = function(){
                 // console.log(err,rslt);
                 if (!err) {
                     global.externalIP = gateway.externalIP;
-                    gateWay = gateway;
-                    console.log("got external address", gateway.extervalIP);
+                    console.log("Got external address", gateway.externalIP);
                 }
                 if ((os.type() != 'Windows_NT') && gateWay) { // this is only for the pi
 
                     pmp.portMap(gateWay, 3000, 3000, 0, "CS4", function (err, rslt) {
                         if (!err) {
                             console.log("success map port 3000");
-                        } else {
-                            console.log("port mapping 3000 fail", err, rslt);
                         }
-                        pmp.portMap(gateWay, 8080, 8080, 0, "CS4 Websocket", function (err, rslt) {
+                        else {
+                            console.log("port mapping 3000 fail", err);
+                        }
+                        pmp.portMap(gateWay, 8080, 8080, 0, "CS4 Websocket", function (err) {
                             if (!err) {
                                 console.log("success map port 8080");
                             } else {
-                                console.log("port mapping 8080 fail", err, rslt);
+                                console.log("port mapping 8080 fail", err);
                             }
                             pmp.portMap(gateWay, 9090, 9090, 0,'CS4 Putty Port', function (err, rslt) { //for ssh
                                 if (!err){
                                     console.log("success map port 9090");
                                 }else{
-                                    console.log("port mapping 9090 fail",err,rslt);}
+                                    console.log("port mapping 9090 fail",err);}
                             });
                         });
                     });
                 }
                 else {
-                    global.externalIP = "Unknown";
-                    console.log('Gateway not found', err);
 
-
-                };
 
                 console.log('Ready to send START UP A email message');
                 var mailOptions = {
@@ -1327,7 +1388,7 @@ exports.ledOn = function(){
 
 
     });
-
+*/
 
 };
 
