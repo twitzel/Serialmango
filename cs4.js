@@ -1370,7 +1370,7 @@ function startSystemTest(auto){
     });
   */
         for(var i = 0; i < 5 ; i++){
-            sendOutput('ZIG1' + ' ' + 'TEST '  + "GO slide1111.jpg NEXT slide2222.jpg");
+          //  sendOutput('ZIG1' + ' ' + 'TEST '  + "GO slide1111.jpg NEXT slide2222.jpg");
             setTimeout(function(){sendOutput('ZIG1' + ' ' + 'TEST '  + "GO slide1111.jpg NEXT slide2222.jpg");}, 500*i);
         }
         // ledInfoOn(27); // light to output light
