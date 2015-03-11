@@ -278,7 +278,7 @@ exports.websocketDataIn = function(dataSocket, Socket){
                             if(logfile[i].Dout)
                             {
                                 //comlib.websocketsend(".    Sent: " + logfileData, Socket) ;
-                                dataToSend = dataToSend + ".    Sent: " + logfileData + "\n" ;
+                                dataToSend = dataToSend + ".    Sent: " +formatLogData(logfileData) + "\n" ;
                             }
                             else
                             {
@@ -300,7 +300,7 @@ exports.websocketDataIn = function(dataSocket, Socket){
 
                         if(logfile[i].Dout)
                         {
-                            dataToSend = ".    Sent: " + logfileData + "\n" + dataToSend;
+                            dataToSend = dataToSend + ".    Sent: " +formatLogData(logfileData) + "\n" ;
                         }
                         else
                         {
@@ -1195,7 +1195,6 @@ exports.saveSettings = function(){
 
 exports.ledOn = function(){
 
-
     if(os.type() != 'Windows_NT') // this is only for the pi
     {
         var led = require('fastgpio');
@@ -1204,50 +1203,47 @@ exports.ledOn = function(){
         clearInterval(blink);
     }
 
- /*
-    //get ip address with pmp
-    pmp.getExternalAddress('',function(err,rslt){
-        console.log(err,rslt);
-        if(!err){
-            global.externalIP = rslt.externalIP;
-            console.log("got external address",rslt.extervalIP);
-            //refresh portmapping for the router  lease expire in 4 days
-            if(os.type() != 'Windows_NT') { // this is only for the pi
-
-                pmp.portMap('', 3000, 3000, 350000, function (err, rslt) {
-                    if (!err){
-                        console.log("success map port 3000");
-                    }else{
-                        console.log("port mapping 3000 fail",err,rslt);}
-
-
-                    pmp.portMap('', 8080, 8080, 350000, function (err, rslt) {
-                        if (!err){
-                            console.log("success map port 8080");
-                        }else{
-                            console.log("port mapping 8080 fail",err,rslt);}
-
-                        pmp.portMap('', 9090, 9090, 350000, function (err, rslt) { //for ssh
-                            if (!err){
-                                console.log("success map port 9090");
-                            }else{
-                                console.log("port mapping 9090 fail",err,rslt);}
-                        });
-                    });
-                });
-            }
-            else{//if windows map external port 1 higher
-                pmp.portMap(rslt.gateway, 3000, 3001, 350000, function (err, rslt) {
-                    console.log(err, rslt);
-                });
-            }
-
+    pmp.findGateway("",function(err,gateway){
+        var error = 0;
+        ///console.log(err,gateway.ip);
+        if(err){
+            console.log('Gateway not found',err);
         }
         else{
-            externalIP = "None";
+            console.log('gateway found: '+ gateway.ip + ", External IP: "+ gateway.externalIP);
+            pmp.portMap(gateway,3000,3000,0,'CS4 Main',function(err,rslt){
+
+                if(!err) {
+                    console.log("Sucessfully logged port: "+ gateway.externalIP + ": " + gateway.publicPort + " to " + gateway.ip + ": " + gateway.privatePort) ;
+                }
+                else{
+                    console.log(err,rslt);
+                }
+
+                pmp.portMap(gateway,8000,8000,0,'CS4 Websocket',function(err,rslt){
+
+                    if(!err) {
+                        console.log("Sucessfully logged port: "+ gateway.externalIP + ": " + gateway.publicPort + " to " + gateway.ip + ": " + gateway.privatePort) ;
+                    }
+                    else{
+                        console.log(err,rslt);
+                    }
+                    pmp.portMap(gateway,9090,9090,0,'CS4 Misc',function(err,rslt){
+
+                        if(!err) {
+                            console.log("Sucessfully logged port: "+ gateway.externalIP + ": " + gateway.publicPort + " to " + gateway.ip + ": " + gateway.privatePort) ;
+                        }
+                        else{
+                            console.log(err,rslt);
+                        }
+
+
+                    });
+
+                });
+            });
+
         }
-
-
         console.log('Ready to send START UP email message');
         var mailOptions = {
             from: "CS4 @ " + myuri + "✔ " + cs4Settings.emailAccount,
@@ -1259,13 +1255,12 @@ exports.ledOn = function(){
             html: cs4Settings.systemName+ " CS4 has just started.\n  External IP address:  http://" + global.externalIP + ":3000" + " - and internal IP address: "  +global.myuri+ ":3000"// html body
         };
 
-// send mail with defined transport object
+        // send mail with defined transport object
         sendMail(mailOptions);
+        console.log("READY to start system test in 10 seconds");
+        setTimeout(function(){startSystemTest();}, 10000); // check for results after delay
+        setTimeout(function(){setAutoTest(0);}, 20000);
     });
-*/
-    console.log("READY to start system test in 15 seconds");
-    setTimeout(function(){startSystemTest();}, 15000); // check for results after delay
-    setTimeout(function(){setAutoTest(0);}, 30000);
 };
 
 exports.ledOff = function(){
