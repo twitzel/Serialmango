@@ -521,6 +521,7 @@ exports.usbSerialDataIn = function (data) {
     var showname;
     var outstring;
     var dir; // ****** needs to ba added to R4-4 Receiver Parsing ****** //
+    var serialDataTimeOrig; // needed for setting system clock of Pi
 
     // put the time string into proper form
     if(!usbInputEnabled){ // if we are not ready for data - just get out!!!
@@ -528,7 +529,8 @@ exports.usbSerialDataIn = function (data) {
     }
     serialData = JSON.parse(data);
     if(serialData.Time) {
-        serialData.Time = new Date(serialData.Time);
+        serialDataTimeOrig = serialData.Time;
+        serialData.Time = new Date(serialData.Time);//convert to date function
     }
 
 
