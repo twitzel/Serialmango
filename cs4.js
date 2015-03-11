@@ -700,7 +700,7 @@ function formatLogData(data){
     serialData = JSON.parse(data);
 
     serialData.Time = new Date(serialData.Time);
-    timeFormatted = moment(serialData.Time).format(fmt);
+    timeFormatted = momentTZ(serialData.Time).format(fmt);
     indata = serialData.InData;
     Dout = serialData.Dout;
 
