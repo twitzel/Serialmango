@@ -257,6 +257,8 @@ exports.websocketDataIn = function(dataSocket, Socket){
                 datain = dataSocket.Data;
                 datain = SetCS4Time(datain);
                 comlib.write(datain);
+                setTimeout(function(){sendOutput('TIMEGET');}, 500);
+                setTimeout(function(){setAutoTest();}, 5000); //setup for auto test with new time being set
             }
 
         }
@@ -1158,8 +1160,9 @@ exports.getSettings = function(){
             cs4Settings.dmx3 = 30;
             cs4Settings.testTime = "00:00:00";
             cs4Settings.systemName = "CS4 System";
-            cs4Settings.emailAccount = "stevewitz@gmail.com"
-            cs4Settings.emailAccountPassword = "panema2020!"
+            cs4Settings.emailAccount = "stevewitz@gmail.com";
+            cs4Settings.emailAccountPassword = "panema2020!";
+            cs4Settings.timezone = "US/Eastern";
             collectionSettings.insert(cs4Settings, {w: 1}, function (err, result) {
                 console.log(result);
             })
@@ -1179,9 +1182,7 @@ exports.getSettings = function(){
         dataToSend = '          SLAVE ZIGEN ' + cs4Settings.enableZigbee2 + ''; //update the DMX channels
         sendOutput(dataToSend) ;
         exports.ledOn();
-        sendOutput('TIMEGET')
-        setTimeout(function(){startSystemTest();}, 1500); // check for results after delay
-        setTimeout(function(){setAutoTest(0);}, 3000);
+
     });
 };
 
@@ -1204,6 +1205,8 @@ exports.ledOn = function(){
         led.set(4);
         clearInterval(blink);
     }
+
+ /*
     //get ip address with pmp
     pmp.getExternalAddress('',function(err,rslt){
         console.log(err,rslt);
@@ -1261,6 +1264,10 @@ exports.ledOn = function(){
 // send mail with defined transport object
         sendMail(mailOptions);
     });
+*/
+    console.log("READY to start system test in 15 seconds");
+    setTimeout(function(){startSystemTest();}, 15000); // check for results after delay
+    setTimeout(function(){setAutoTest(0);}, 30000);
 };
 
 exports.ledOff = function(){
@@ -1301,12 +1308,16 @@ function ledInfoBlink(GPIOnum){
 }
 
 function startSystemTest(auto){
+
+    if(auto){
+        autoTest1 = setTimeout(function(){startSystemTest(1);}, 1000*60*60*24); // start again in 24 hours
+    }
     if(cs4Settings.enableZigbee2 =='NO'){ // make sure we can receive zigbee2.  If not enable it
         zigbee2State = 'NO';
         dataToSend = '          SLAVE ZIGEN ' + 'YES' + '\r'; //Enable the zigee2 channel
         comlib.write(dataToSend) ;
     }
-
+/*
     pmp.getExternalAddress('',function(err,rslt){
         console.log(err,rslt);
         if(!err){
@@ -1340,14 +1351,17 @@ function startSystemTest(auto){
         else{
             externalIP = "None";
         }
-        for(var i = 0; i < 8 ; i++){
+    });
+  */
+        for(var i = 0; i < 5 ; i++){
             sendOutput('ZIG1' + ' ' + 'TEST '  + "GO slide1111.jpg NEXT slide2222.jpg");
         }
         // ledInfoOn(27); // light to output light
         // setTimeout(function(){ledInfoOff(27);}, 100); // turn it off
         setTimeout(function(){checkForZigbee(auto);}, 5000); // check for results after delay
 
-    });
+
+
 }
 
 function checkForZigbee(auto){
@@ -1357,8 +1371,8 @@ function checkForZigbee(auto){
         dataToSend = '          SLAVE ZIGEN ' + 'NO' + '\r'; //Disable the zigee2 channel
         comlib.write(dataToSend) ;
     }
-   // collectionLog.find({},{_id:0}).sort({"Time": -1}).limit(6).toArray(function(error,logfile) {
-    collectionLog.find({},{_id:0}).sort({ $natural: -1}).limit(6).toArray(function(error,logfile) {
+    collectionLog.find({},{_id:0}).sort({"Time": -1}).limit(6).toArray(function(error,logfile) {
+    //collectionLog.find({},{_id:0}).sort({ $natural: -1}).limit(6).toArray(function(error,logfile) {
 
         for( var i = 0; i < logfile.length; i++){
                     t = logfile[i].Source;
@@ -1404,22 +1418,20 @@ function checkForZigbee(auto){
             ledInfoBlink(4); // blink the light to indicate error
             sendMail(mailOptions);
         }
+        setTimeout(function(){sendOutput('TIMEGET');}, 10000); // this will update ti pi time to CS4 i/o time
 
-        if(auto){
-            autoTest1 = setTimeout(function(){startSystemTest(1);}, 1000*60*60*24); // start again in 24 hours
-        }
     });
 
 }
 
 function setAutoTest(){
     var offsetTime;
+    console.log("STARTING AUTO TEST");
     //get latest time from startup data base and calculate how long to delay before starting test
-    collectionStartup.find({},{_id:0}).sort({"Tme1": -1}).limit(1).toArray(function(error,Startupfile) {
-        //   collectionLog.find({},{_id:0}).sort({ $natural: 1 }).limit(1000).toArray(function(error,logfile){
+    collectionStartup.find({},{_id:0}).sort({"Time": -1}).limit(1).toArray(function(error,Startupfile) {
 
-
-        startDate = new Date(Startupfile[0].Tme1);
+        //startDate = new Date(Startupfile[0].Time);
+        startDate = new Date(); // now that system time is correct
         currentHours = startDate.getHours();
         currentMinutes = startDate.getMinutes();
         currentSeconds = startDate.getSeconds();
@@ -1429,16 +1441,15 @@ function setAutoTest(){
         if(offsetTime <= 0){
             offsetTime += 24;
         }
-
         //calculate milliseconds until start of test
         offsetTime = offsetTime*60*60*1000 - currentMinutes*60*1000 - currentSeconds*1000 - currentMilli;
         clearInterval(autoTest1); //erase any previous timeouts
         clearInterval(autoTest); //erase any previous timeouts
-        autoTest =  setTimeout(function(){startSystemTest(1);}, offsetTime); // start again in 24 hours
-        autoTestTemp =  setTimeout(function(){sendConsole();}, 30000); // start again in 24 hours
+        autoTest =  setTimeout(function(){startSystemTest(1);}, offsetTime);
+        comlib.websocketsend("Auto Test will start in: " + offsetTime+ " milliseconds");
     });
-
 }
+
 
 function sendConsole(){
     console.log('Delays ', startDate, currentHours, wantedTime);
