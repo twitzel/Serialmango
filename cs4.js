@@ -87,6 +87,7 @@ sendOutput = function (dataToSend)
         /// var test = timedOutInterval -(tme.getMilliseconds() - timerStartTime.getMilliseconds())+2;
         //since we are not ready for this to go out (or we wouldn't be here) -- reset a timer with actual time left.
         setTimeout(function(){sendOutput(dataToSend);}, (timedOutInterval +2-(tme.getMilliseconds() - timerStartTime.getMilliseconds()))); // pad with 2 extra ms
+        console.log("At sendoutput -- ELSE");
         //  var delay =  setTimeout(function(){sendOutput(dataToSend);}, ( timedOutInterval -(timerStartTime - Date())));
     }
 
