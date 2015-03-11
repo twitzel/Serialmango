@@ -21,7 +21,7 @@ var spawn = require('child_process').spawn;
 var nodemailer = require("nodemailer");
 var pmp = require('pmp');
 var sudo = require('sudo');
-var moment = require('moment-timezone');
+var momentTZ = require('moment-timezone');
 
 var lastCueReceived = {"Time" : "10/09/13 15:20:04.20", "Source" : "Midi1", "InData" : "F0 7F 05 02 01 01 31 2E 30 30 F7 "};
 var serialDataSocket;
@@ -45,10 +45,8 @@ var usbInputEnabled = 0;
 var tempcntincoming = 0;
 var tempcntoutgoing = 0;
 var extrnalIP ="";
-var gateWay;
-var fmt = "ddd, MMM DD YYYY, HH:mm:ss.SS"; // format string for moment time strings
+var fmt = "ddd, MMM DD YYYY, HH:mm:ss.SS"; // format string for momentTZ time strings
 var timerStartTime;
-
 
 
 //routine to ensure that serial data is not sent more than
@@ -71,7 +69,7 @@ sendOutput = function (dataToSend)
 
         console.log(dataToSend);
         //send it out the socket
-        comlib.websocketsend(".  Sent: " + moment(timerStartTime).format(fmt) + "   Dout: "  +  dataToSend) ;
+        comlib.websocketsend(".  Sent: " + momentTZ(timerStartTime).format(fmt) + "   Dout: "  +  dataToSend) ;
 
         addTime = addTime + "\""+  (timerStartTime).toISOString() +"\", \"Dout\" : \"" + dataToSend + "\"}";
         //Log the data into the collection
@@ -84,11 +82,11 @@ sendOutput = function (dataToSend)
     else
     {
         var tme = new Date();
-       // var test2 = tme.getMilliseconds();
-       // var test3 = timerStartTime.getMilliseconds();
-      /// var test = timedOutInterval -(tme.getMilliseconds() - timerStartTime.getMilliseconds())+2;
+        // var test2 = tme.getMilliseconds();
+        // var test3 = timerStartTime.getMilliseconds();
+        /// var test = timedOutInterval -(tme.getMilliseconds() - timerStartTime.getMilliseconds())+2;
         //since we are not ready for this to go out (or we wouldn't be here) -- reset a timer with actual time left.
-         setTimeout(function(){sendOutput(dataToSend);}, (timedOutInterval +2-(tme.getMilliseconds() - timerStartTime.getMilliseconds()))); // pad with 2 extra ms
+        setTimeout(function(){sendOutput(dataToSend);}, (timedOutInterval +2-(tme.getMilliseconds() - timerStartTime.getMilliseconds()))); // pad with 2 extra ms
         //  var delay =  setTimeout(function(){sendOutput(dataToSend);}, ( timedOutInterval -(timerStartTime - Date())));
     }
 
@@ -143,9 +141,9 @@ exports.setup = function()
             global.collectionSettings = db.collection('settings');
             collectionCue.ensureIndex({InData:1},function (err,res){});
 
-        // this is now is cs4Settiings.timezone
+
             //set timezone of pi
-/*           collectionStartup.findOne({'TimeZoneSet':{$exists:true}}, function(err,res){
+           collectionStartup.findOne({'TimeZoneSet':{$exists:true}}, function(err,res){
                 if(res){
                     var a = res.TimeZoneSet;
                     time.tzset(res.TimeZoneSet);
@@ -155,7 +153,7 @@ exports.setup = function()
                 }
 
                });
-*/
+
             // MOVED HERE = open serial port after mongo is running
 
             //now lets find out if we are on a windows system
@@ -259,9 +257,6 @@ exports.websocketDataIn = function(dataSocket, Socket){
                 datain = dataSocket.Data;
                 datain = SetCS4Time(datain);
                 comlib.write(datain);
-
-                setTimeout(function(){sendOutput('TIMEGET');}, 500);
-                setTimeout(function(){setAutoTest();}, 5000); //setup for auto test with new time being set
             }
 
         }
@@ -281,7 +276,7 @@ exports.websocketDataIn = function(dataSocket, Socket){
                             if(logfile[i].Dout)
                             {
                                 //comlib.websocketsend(".    Sent: " + logfileData, Socket) ;
-                                dataToSend = dataToSend + ".    Sent: " +formatLogData(logfileData) + "\n" ;
+                                dataToSend = dataToSend + ".    Sent: " + logfileData + "\n" ;
                             }
                             else
                             {
@@ -295,7 +290,7 @@ exports.websocketDataIn = function(dataSocket, Socket){
             else
             {
                 comlib.websocketsend("* Preparing Data For Display. \n* Please Wait. \n* (may take up to 1 minute) ", Socket) ;
-                collectionLog.find({},{_id:0}).sort({"Time": -1}).toArray(function(error,logfile){
+                collectionLog.find({},{_id:0}).sort({"Time": 1}).toArray(function(error,logfile){
                // collectionLog.find({},{_id:0}).sort({ $natural: 1 }).toArray(function(error,logfile){
                     for(var i = 0; i <logfile.length;i++)
                     {
@@ -303,13 +298,11 @@ exports.websocketDataIn = function(dataSocket, Socket){
 
                         if(logfile[i].Dout)
                         {
-                            //comlib.websocketsend(".    Sent: " + logfileData, Socket) ;
-                            dataToSend = dataToSend + ".    Sent: " +formatLogData(logfileData) + "\n" ;
+                            dataToSend = ".    Sent: " + logfileData + "\n" + dataToSend;
                         }
                         else
                         {
-                            //comlib.websocketsend(parseCue(logfileData),Socket);
-                            dataToSend = dataToSend + parseCue(logfileData) + "\n" ;
+                            dataToSend = parseCue(logfileData) + "\n" + dataToSend;
                         }
                     }
                     comlib.websocketsend(dataToSend, Socket) ;
@@ -513,7 +506,7 @@ exports.websocketDataIn = function(dataSocket, Socket){
 // puts it in Log collection.
 //
 // Then checks to Cue file to see if there any matching cues.
-// If so, goes through all outgoing cues.
+// If so, goes thrugh all outgoing cues.
 // sets output timers to send data back to CS-4 IO via serial.
 
 
@@ -528,7 +521,6 @@ exports.usbSerialDataIn = function (data) {
     var showname;
     var outstring;
     var dir; // ****** needs to ba added to R4-4 Receiver Parsing ****** //
-    var serialDataTimeOrig; // needed for setting system clock of Pi
 
     // put the time string into proper form
     if(!usbInputEnabled){ // if we are not ready for data - just get out!!!
@@ -536,8 +528,7 @@ exports.usbSerialDataIn = function (data) {
     }
     serialData = JSON.parse(data);
     if(serialData.Time) {
-        serialDataTimeOrig = serialData.Time;
-        serialData.Time = new Date(serialData.Time);//convert to date function
+        serialData.Time = new Date(serialData.Time);
     }
 
 
@@ -549,8 +540,8 @@ exports.usbSerialDataIn = function (data) {
     // and send output data to log file
 
     //added search fields: must match InData and Source
-    if (serialData.InData !=null) {
-        var child;
+    if (serialData.InData != null) {
+
         if (cs4Settings.ignoreSource == 'NO') { // match source
             collectionCue.find({$and: [{'InData': serialData.InData} ,{'Source': serialData.Source }]}).toArray(function (err, item) {
                 //collectionCue.find({'InData': serialData.InData }).toArray(function (err, item) {
@@ -663,7 +654,7 @@ exports.usbSerialDataIn = function (data) {
     }
     else{
         if(serialData.Time){
-          //we have startup time from the CS4 I/O board
+            //we have startup time from the CS4 I/O board
             collectionStartup.insert(serialData, {w: 1}, function (err, result) {
                 // If PI set the system clock to CS4 I/O board time
                 if(os.type() != 'Windows_NT'){  //This is for pi only
@@ -674,7 +665,7 @@ exports.usbSerialDataIn = function (data) {
                         console.log("SUDO DATE CHANGED");
                     });
                 }
-                comlib.websocketsend("CS4 Current time is: " + moment(serialData.Time).format(fmt));
+                comlib.websocketsend("CS4 Current time is: " + momentTZ(serialData.Time).format(fmt));
                 console.log(result);
 
             });
@@ -692,7 +683,7 @@ exports.usbSerialDataIn = function (data) {
 
             serialData.Tme1 = new Date(serialData.Tme1);//convert to real time data
             try {
-                comlib.websocketsend("CS4 Current time is: " + moment(serialData.Tme1).format(fmt));
+                comlib.websocketsend("CS4 Current time is: " + momentTZ(serialData.Tme1).format(fmt));
             }
             catch (err) {//do nothing
             }
@@ -714,14 +705,14 @@ function formatLogData(data){
     return (timeFormatted + "   Dout: "  +  Dout);
 }
 
-function parseCue(data){
-
+function parseCue(data)
+{
     var timeFormatted;
     ledInfoOn(17);
     setTimeout(function(){ledInfoOff(17);}, 100);
     serialData = JSON.parse(data);
     serialData.Time = new Date(serialData.Time);
-    timeFormatted = moment(serialData.Time).format(fmt);
+    timeFormatted = momentTZ(serialData.Time).format(fmt);
     indata = serialData.InData;
     source = serialData.Source;
     // if cue is MIDI then get light cue number from hex string
@@ -775,14 +766,13 @@ function parseCue(data){
             type = "Pitch Wheel Control";
         }
 
-        //return (serialData.Time.toString() + "  " + source + "  " + type + ": " + indata);
         return (timeFormatted + "  " + source + "  " + type + ": " + indata);
+
 
 
     }
     else // just send data
     {
-       // return (serialData.Time.toString() + "  " + source + " " + indata);
         return (timeFormatted + "  " + source + " " + indata);
     }
 
@@ -889,7 +879,7 @@ function SetCS4Time(curTime)
     var year = 0;
     var timeZoneOffset = 0;
     curTime = new Date(curTime);
-    curTime = moment.tz(curTime,cs4Settings.timezone); //convert to timezone
+    curTime = momentTZ.tz(curTime,cs4Settings.timezone); //convert to timezone
     curTime = curTime.format(fmt); //finish converting to timezone
     curTime = new Date(curTime); //restore to date format
 
@@ -1168,12 +1158,11 @@ exports.getSettings = function(){
             cs4Settings.systemName = "CS4 System";
             cs4Settings.emailAccount = "stevewitz@gmail.com"
             cs4Settings.emailAccountPassword = "panema2020!"
-            cs4Settings.timezone = "US/Eastern"
             collectionSettings.insert(cs4Settings, {w: 1}, function (err, result) {
                 console.log(result);
             })
         }
-        console.log("setting up email transport");
+
         //set up initial mail parameters here
         smtpTransport = nodemailer.createTransport("SMTP",{
             service: "Gmail",
@@ -1181,22 +1170,16 @@ exports.getSettings = function(){
                 user: cs4Settings.emailAccount,
                 pass: cs4Settings.emailAccountPassword
             }
-
         });
 
         dataToSend = '          SLAVE DMX_CH ' + cs4Settings.dmx1 +  " " + cs4Settings.dmx2 + " " + cs4Settings.dmx3 + ''; //update the DMX channels
         sendOutput(dataToSend) ;
-        console.log("SLAVE DMX");
         dataToSend = '          SLAVE ZIGEN ' + cs4Settings.enableZigbee2 + ''; //update the DMX channels
         sendOutput(dataToSend) ;
-        console.log("SLAVE ZIGEN");
-       // console.log("READY to start system test in 15 seconds");
-       // sysTEST = setTimeout(function(){startSystemTest();}, 15000); // check for results after delay
-       // sTimeOUT = setTimeout(function(){setAutoTest(0);}, 30000);
-
         exports.ledOn();
-      //  sendOutput('TIMEGET')
-
+        sendOutput('TIMEGET')
+        setTimeout(function(){startSystemTest();}, 1500); // check for results after delay
+        setTimeout(function(){setAutoTest(0);}, 3000);
     });
 };
 
@@ -1211,6 +1194,7 @@ exports.saveSettings = function(){
 
 exports.ledOn = function(){
 
+
     if(os.type() != 'Windows_NT') // this is only for the pi
     {
         var led = require('fastgpio');
@@ -1218,48 +1202,48 @@ exports.ledOn = function(){
         led.set(4);
         clearInterval(blink);
     }
-/*
-    pmp.findGateway("",function(err,gateway){
-        var error = 0;
-        ///console.log(err,gateway.ip);
-        if(err){
-            console.log('Gateway not found',err);
+    //get ip address with pmp
+    pmp.getExternalAddress('',function(err,rslt){
+        console.log(err,rslt);
+        if(!err){
+            global.externalIP = rslt.externalIP;
+            console.log("got external address",rslt.extervalIP);
+            //refresh portmapping for the router  lease expire in 4 days
+            if(os.type() != 'Windows_NT') { // this is only for the pi
+
+                pmp.portMap('', 3000, 3000, 350000, function (err, rslt) {
+                    if (!err){
+                        console.log("success map port 3000");
+                    }else{
+                        console.log("port mapping 3000 fail",err,rslt);}
+
+
+                    pmp.portMap('', 8080, 8080, 350000, function (err, rslt) {
+                        if (!err){
+                            console.log("success map port 8080");
+                        }else{
+                            console.log("port mapping 8080 fail",err,rslt);}
+
+                        pmp.portMap('', 9090, 9090, 350000, function (err, rslt) { //for ssh
+                            if (!err){
+                                console.log("success map port 9090");
+                            }else{
+                                console.log("port mapping 9090 fail",err,rslt);}
+                        });
+                    });
+                });
+            }
+            else{//if windows map external port 1 higher
+                pmp.portMap(rslt.gateway, 3000, 3001, 350000, function (err, rslt) {
+                    console.log(err, rslt);
+                });
+            }
+
         }
         else{
-            console.log('gateway found: '+ gateway.ip + ", External IP: "+ gateway.externalIP);
-            pmp.portMap(gateway,3000,3000,0,'CS4 Main',function(err,rslt){
-
-                if(!err) {
-                    console.log("Sucessfully logged port: "+ gateway.externalIP + ": " + gateway.publicPort + " to " + gateway.ip + ": " + gateway.privatePort) ;
-                }
-                else{
-                    console.log(err,rslt);
-                }
-
-                pmp.portMap(gateway,8000,8000,0,'CS4 Websocket',function(err,rslt){
-
-                    if(!err) {
-                        console.log("Sucessfully logged port: "+ gateway.externalIP + ": " + gateway.publicPort + " to " + gateway.ip + ": " + gateway.privatePort) ;
-                    }
-                    else{
-                        console.log(err,rslt);
-                    }
-                    pmp.portMap(gateway,9090,9090,0,'CS4 Misc',function(err,rslt){
-
-                        if(!err) {
-                            console.log("Sucessfully logged port: "+ gateway.externalIP + ": " + gateway.publicPort + " to " + gateway.ip + ": " + gateway.privatePort) ;
-                        }
-                        else{
-                            console.log(err,rslt);
-                        }
-
-
-                    });
-
-                });
-            });
-
+            externalIP = "None";
         }
+
 
         console.log('Ready to send START UP email message');
         var mailOptions = {
@@ -1272,125 +1256,9 @@ exports.ledOn = function(){
             html: cs4Settings.systemName+ " CS4 has just started.\n  External IP address:  http://" + global.externalIP + ":3000" + " - and internal IP address: "  +global.myuri+ ":3000"// html body
         };
 
-   */     // send mail with defined transport object
-///////        sendMail(mailOptions);
-        console.log("READY to start system test in 30 seconds");
-        setTimeout(function(){startSystemTest();}, 30000); // check for results after delay
-        setTimeout(function(){setAutoTest(0);}, 60000);
-
-   // });
-
-
-
-
-
-    /*
-
-
-    //get ip address with pmp
-    pmp.findGateway('',function(err,gateway){
-       // console.log(err,rslt);
-        if(!err){
-            global.externalIP = gateway.externalIP;
-
-            console.log("got external address",gateway.extervalIP);
-            if ((os.type() != 'Windows_NT') && gateWay) { // this is only for the pi
-
-                pmp.portMap(gateway, 3000, 3000, 0, "CS4", function (err, rslt) {
-                    if (!err) {
-                        console.log("success map port 3000");
-                    } else {
-                        console.log("port mapping 3000 fail", err, rslt);
-                    }
-                    pmp.portMap(gateway, 8080, 8080, 0, "CS4 Websocket", function (err, rslt) {
-                        if (!err) {
-                            console.log("success map port 8080");
-                        } else {
-                            console.log("port mapping 8080 fail", err, rslt);
-                        }
-                        pmp.portMap(gateway, 9090, 9090, 0,'CS4 Putty Port', function (err, rslt) { //for ssh
-                            if (!err){
-                                console.log("success map port 9090");
-                            }else{
-                                console.log("port mapping 9090 fail",err,rslt);}
-                        });
-                    });
-                });
-            }
-        }
-        else{
-            global.externalIP = "Unknown";
-            console.log('Gateway not found',err);
-            pmp.findGateway('',function(err,gateway) {
-                // console.log(err,rslt);
-                if (!err) {
-                    global.externalIP = gateway.externalIP;
-                    console.log("Got external address", gateway.externalIP);
-                }
-                if ((os.type() != 'Windows_NT') && gateWay) { // this is only for the pi
-
-                    pmp.portMap(gateWay, 3000, 3000, 0, "CS4", function (err, rslt) {
-                        if (!err) {
-                            console.log("success map port 3000");
-                        }
-                        else {
-                            console.log("port mapping 3000 fail", err);
-                        }
-                        pmp.portMap(gateWay, 8080, 8080, 0, "CS4 Websocket", function (err) {
-                            if (!err) {
-                                console.log("success map port 8080");
-                            } else {
-                                console.log("port mapping 8080 fail", err);
-                            }
-                            pmp.portMap(gateWay, 9090, 9090, 0,'CS4 Putty Port', function (err, rslt) { //for ssh
-                                if (!err){
-                                    console.log("success map port 9090");
-                                }else{
-                                    console.log("port mapping 9090 fail",err);}
-                            });
-                        });
-                    });
-                }
-                else {
-
-
-                console.log('Ready to send START UP A email message');
-                var mailOptions = {
-                    from: "CS4 @ " + myuri + "✔ " + cs4Settings.emailAccount,
-                    //  from: "CS4 192.168.2.10 ✔ <stevewitz@gmail.com>", // sender address
-                    to: cs4Settings.emailAddress,
-                    // to: "steve@wizcomputing.com      ", // comma seperated list of receivers
-                    subject: "Start Up Message from CS4 ✔: "+ cs4Settings.systemName, // Subject line
-                    text: cs4Settings.systemName+ " CS4 has just started.\n  External IP address:  http://" + global.externalIP + ":3000" + " - and internal IP address: "  +global.myuri+ ":3000", // plaintext body
-                    html: cs4Settings.systemName+ " CS4 has just started.\n  External IP address:  http://" + global.externalIP + ":3000" + " - and internal IP address: "  +global.myuri+ ":3000"// html body
-                };
-
-            });
-
-        };
-
-
-        console.log('Ready to send START UP B email message');
-        var mailOptions = {
-            from: "CS4 @ " + myuri + "✔ " + cs4Settings.emailAccount,
-            //  from: "CS4 192.168.2.10 ✔ <stevewitz@gmail.com>", // sender address
-            to: cs4Settings.emailAddress,
-            // to: "steve@wizcomputing.com      ", // comma seperated list of receivers
-            subject: "Start Up Message from CS4 ✔: "+ cs4Settings.systemName, // Subject line
-            text: cs4Settings.systemName+ " CS4 has just started.\n  External IP address:  http://" + global.externalIP + ":3000" + " - and internal IP address: "  +global.myuri+ ":3000", // plaintext body
-            html: cs4Settings.systemName+ " CS4 has just started.\n  External IP address:  http://" + global.externalIP + ":3000" + " - and internal IP address: "  +global.myuri+ ":3000"// html body
-        };
-
-        // send mail with defined transport object
+// send mail with defined transport object
         sendMail(mailOptions);
-        console.log("READY to start system test in 15 seconds");
-         sysTEST = setTimeout(function(){startSystemTest();}, 15000); // check for results after delay
-         sTimeOUT = setTimeout(function(){setAutoTest(0);}, 30000);
-
-
     });
-*/
-
 };
 
 exports.ledOff = function(){
@@ -1430,68 +1298,65 @@ function ledInfoBlink(GPIOnum){
 
 }
 
-function startSystemTest(auto) {
-
-    if(auto){
-        autoTest1 = setTimeout(function(){startSystemTest(1);}, 1000*60*60*24); // start again in 24 hours
-    }
-    console.log("AT startSystemTest");
-
-    if (cs4Settings.enableZigbee2 == 'NO') { // make sure we can receive zigbee2.  If not enable it
+function startSystemTest(auto){
+    if(cs4Settings.enableZigbee2 =='NO'){ // make sure we can receive zigbee2.  If not enable it
         zigbee2State = 'NO';
         dataToSend = '          SLAVE ZIGEN ' + 'YES' + '\r'; //Enable the zigee2 channel
-        comlib.write(dataToSend);
+        comlib.write(dataToSend) ;
     }
-    for (var i = 0; i < 5; i++) {
-        sendOutput('ZIG1' + ' ' + 'TEST ' + "GO slide1111.jpg NEXT slide2222.jpg");
-    }
-    console.log("system test data sent check for returned data in 5 seconds");
-    setTimeout(function () {checkForZigbee(auto);}, 5000); // check for results after delay
 
+    pmp.getExternalAddress('',function(err,rslt){
+        console.log(err,rslt);
+        if(!err){
+            externalIP = rslt.externalIP;
+            console.log("got external address",rslt.extervalIP);
+            //refresh portmapping for the router  lease expire in 4 days
+            if(os.type() != 'Windows_NT') { // this is only for the pi
 
-    console.log("AT PMP PORT MAPPING!")
-
-/*/////////////////////////////////////////////////
-    if ((os.type() != 'Windows_NT') && gateWay) { // this is only for the pi
-
-        pmp.portMap(gateWay, 3000, 3000, 0, "CS4", function (err, rslt) {
-            if (!err) {
-                console.log("success map port 3000");
-            } else {
-                console.log("port mapping 3000 fail", err, rslt);
-            }
-            pmp.portMap(gateWay, 8080, 8080, 0, "CS4 Websocket", function (err, rslt) {
-                if (!err) {
-                    console.log("success map port 8080");
-                } else {
-                    console.log("port mapping 8080 fail", err, rslt);
-                }
-                pmp.portMap(gateWay, 9090, 9090, 0,'CS4 Putty Port', function (err, rslt) { //for ssh
+                pmp.portMap('', 3000, 3000, 350000, function (err, rslt) {
                     if (!err){
-                        console.log("success map port 9090");
+                        console.log("success map port 3000");
                     }else{
-                        console.log("port mapping 9090 fail",err,rslt);}
+                        console.log("port mapping 3000 fail",err,rslt);}
+
+
+                    pmp.portMap('', 8080, 8080, 350000, function (err, rslt) {
+                        if (!err){
+                            console.log("success map port 8080");
+                        }else{
+                            console.log("port mapping 8080 fail",err,rslt);}
+                    });
                 });
-            });
-        });
-    }
-///////////////////////////////////////////  */
+            }
+            else{//if windows map external port 1 higher
+                pmp.portMap(rslt.gateway, 3000, 3001, 350000, function (err, rslt) {
+                    console.log(err, rslt);
+                });
+            }
 
+        }
+        else{
+            externalIP = "None";
+        }
+        for(var i = 0; i < 8 ; i++){
+            sendOutput('ZIG1' + ' ' + 'TEST '  + "GO slide1111.jpg NEXT slide2222.jpg");
+        }
+        // ledInfoOn(27); // light to output light
+        // setTimeout(function(){ledInfoOff(27);}, 100); // turn it off
+        setTimeout(function(){checkForZigbee(auto);}, 5000); // check for results after delay
 
-
+    });
 }
 
 function checkForZigbee(auto){
     var success = 0;
 
-
-
     if(zigbee2State =='NO'){ // make sure to put zigbee2 channel back where it was before test
         dataToSend = '          SLAVE ZIGEN ' + 'NO' + '\r'; //Disable the zigee2 channel
         comlib.write(dataToSend) ;
     }
-    collectionLog.find({},{_id:0}).sort({"Time": -1}).limit(5).toArray(function(error,logfile) {
-    //collectionLog.find({},{_id:0}).sort({ $natural: -1}).limit(5).toArray(function(error,logfile) {
+   // collectionLog.find({},{_id:0}).sort({"Time": -1}).limit(6).toArray(function(error,logfile) {
+    collectionLog.find({},{_id:0}).sort({ $natural: -1}).limit(6).toArray(function(error,logfile) {
 
         for( var i = 0; i < logfile.length; i++){
                     t = logfile[i].Source;
@@ -1538,18 +1403,21 @@ function checkForZigbee(auto){
             sendMail(mailOptions);
         }
 
-        setTimeout(function(){sendOutput('TIMEGET');}, 10000); // this will update ti pi time to CS4 i/o time
+        if(auto){
+            autoTest1 = setTimeout(function(){startSystemTest(1);}, 1000*60*60*24); // start again in 24 hours
+        }
     });
+
 }
 
 function setAutoTest(){
     var offsetTime;
-    console.log("STARTING AUTO TEST");
     //get latest time from startup data base and calculate how long to delay before starting test
-    collectionStartup.find({},{_id:0}).sort({"Time": -1}).limit(1).toArray(function(error,Startupfile) {
+    collectionStartup.find({},{_id:0}).sort({"Tme1": -1}).limit(1).toArray(function(error,Startupfile) {
+        //   collectionLog.find({},{_id:0}).sort({ $natural: 1 }).limit(1000).toArray(function(error,logfile){
 
-        //startDate = new Date(Startupfile[0].Time);
-        startDate = new Date(); // now that system time is correct
+
+        startDate = new Date(Startupfile[0].Tme1);
         currentHours = startDate.getHours();
         currentMinutes = startDate.getMinutes();
         currentSeconds = startDate.getSeconds();
@@ -1559,14 +1427,22 @@ function setAutoTest(){
         if(offsetTime <= 0){
             offsetTime += 24;
         }
+
         //calculate milliseconds until start of test
         offsetTime = offsetTime*60*60*1000 - currentMinutes*60*1000 - currentSeconds*1000 - currentMilli;
         clearInterval(autoTest1); //erase any previous timeouts
         clearInterval(autoTest); //erase any previous timeouts
-        autoTest =  setTimeout(function(){startSystemTest(1);}, offsetTime);
-        comlib.websocketsend("Auto Test will start in: " + offsetTime+ " milliseconds");
+        autoTest =  setTimeout(function(){startSystemTest(1);}, offsetTime); // start again in 24 hours
+        autoTestTemp =  setTimeout(function(){sendConsole();}, 30000); // start again in 24 hours
     });
+
 }
+
+function sendConsole(){
+    console.log('Delays ', startDate, currentHours, wantedTime);
+}
+
+
 
 
 function sendMail(mailOptions){
