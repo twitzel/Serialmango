@@ -671,7 +671,6 @@ exports.usbSerialDataIn = function (data) {
                 }
                 comlib.websocketsend("CS4 Current time is: " + momentTZ(serialData.Time).format(fmt));
                 console.log(result);
-
             });
         }
         else if(serialData.Tme1){
@@ -684,7 +683,6 @@ exports.usbSerialDataIn = function (data) {
                     console.log("SUDO DATE CHANGED");
                 });
             }
-
             serialData.Tme1 = new Date(serialData.Tme1);//convert to real time data
             try {
                 comlib.websocketsend("CS4 Current time is: " + momentTZ(serialData.Tme1).format(fmt));
@@ -1371,8 +1369,8 @@ function checkForZigbee(auto){
         dataToSend = '          SLAVE ZIGEN ' + 'NO' + '\r'; //Disable the zigee2 channel
         comlib.write(dataToSend) ;
     }
-    collectionLog.find({},{_id:0}).sort({"Time": -1}).limit(6).toArray(function(error,logfile) {
-    //collectionLog.find({},{_id:0}).sort({ $natural: -1}).limit(6).toArray(function(error,logfile) {
+    //collectionLog.find({},{_id:0}).sort({"Time": -1}).limit(6).toArray(function(error,logfile) {
+    collectionLog.find({},{_id:0}).sort({ $natural: -1}).limit(6).toArray(function(error,logfile) {
 
         for( var i = 0; i < logfile.length; i++){
                     t = logfile[i].Source;
