@@ -654,7 +654,7 @@ exports.usbSerialDataIn = function (data) {
             comlib.websocketsend(parseCue(data));
         }
 
-      //  comlib.websocketsend(parseCue(serialData));
+      // comlib.websocketsend(parseCue(serialData));
     }
     else{
         if(serialData.Time){
