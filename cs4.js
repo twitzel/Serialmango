@@ -88,10 +88,10 @@ sendOutput = function (dataToSend)
         //since we are not ready for this to go out (or we wouldn't be here) -- reset a timer with actual time left.
         waitTime=timedOutInterval +2-(tme.getMilliseconds() - timerStartTime.getMilliseconds());
         if(waitTime <= timedOutInterval/2){
-            waitTime = timedOutInterval;
+            waitTime = timedOutInterval +20;
         }
         setTimeout(function(){sendOutput(dataToSend);}, waitTime); // pad with 2 extra ms
-        console.log("At sendoutput -- ELSE - timer start time: " + timerStartTime.getMilliseconds()+ " tme:  " + tme.getMilliseconds());
+        console.log("At sendoutput -- ELSE - wait time: " + waitTime);
         //  var delay =  setTimeout(function(){sendOutput(dataToSend);}, ( timedOutInterval -(timerStartTime - Date())));
     }
 
