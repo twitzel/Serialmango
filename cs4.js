@@ -47,7 +47,7 @@ var tempcntoutgoing = 0;
 var extrnalIP ="";
 var fmt = "ddd, MMM DD YYYY, HH:mm:ss.SS"; // format string for momentTZ time strings
 var timerStartTime;
-
+var waitTime;
 
 //routine to ensure that serial data is not sent more than
 // every timedOutInterval
@@ -86,7 +86,11 @@ sendOutput = function (dataToSend)
         // var test3 = timerStartTime.getMilliseconds();
         /// var test = timedOutInterval -(tme.getMilliseconds() - timerStartTime.getMilliseconds())+2;
         //since we are not ready for this to go out (or we wouldn't be here) -- reset a timer with actual time left.
-        setTimeout(function(){sendOutput(dataToSend);}, (timedOutInterval +2-(tme.getMilliseconds() - timerStartTime.getMilliseconds()))); // pad with 2 extra ms
+        waitTime=timedOutInterval +2-(tme.getMilliseconds() - timerStartTime.getMilliseconds());
+        if(waitTime <= timedOutInterval/2){
+            waitTime = timedOutInterval;
+        }
+        setTimeout(function(){sendOutput(dataToSend);}, waitTime); // pad with 2 extra ms
         console.log("At sendoutput -- ELSE - timer start time: " + timerStartTime.getMilliseconds()+ " tme:  " + tme.getMilliseconds());
         //  var delay =  setTimeout(function(){sendOutput(dataToSend);}, ( timedOutInterval -(timerStartTime - Date())));
     }
@@ -143,17 +147,19 @@ exports.setup = function()
             collectionCue.ensureIndex({InData:1},function (err,res){});
 
 
+            // this is now is cs4Settiings.timezone
             //set timezone of pi
-           collectionStartup.findOne({'TimeZoneSet':{$exists:true}}, function(err,res){
-                if(res){
-                    var a = res.TimeZoneSet;
-                    time.tzset(res.TimeZoneSet);
-                }
-                else{
-                    time.tzset('US/Eastern'); // this is the default time zone if nothing is set
-                }
+            /*           collectionStartup.findOne({'TimeZoneSet':{$exists:true}}, function(err,res){
+             if(res){
+             var a = res.TimeZoneSet;
+             time.tzset(res.TimeZoneSet);
+             }
+             else{
+             time.tzset('US/Eastern'); // this is the default time zone if nothing is set
+             }
 
-               });
+             });
+             */
 
             // MOVED HERE = open serial port after mongo is running
 
