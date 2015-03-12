@@ -1186,7 +1186,7 @@ exports.getSettings = function(){
         sendOutput(dataToSend) ;
         dataToSend = '          SLAVE ZIGEN ' + cs4Settings.enableZigbee2 + ''; //update the DMX channels
         sendOutput(dataToSend) ;
-        exports.ledOn();
+      //  exports.ledOn();
 
     });
 };
