@@ -1369,8 +1369,8 @@ function checkForZigbee(auto){
         dataToSend = '          SLAVE ZIGEN ' + 'NO' + '\r'; //Disable the zigee2 channel
         comlib.write(dataToSend) ;
     }
-    collectionLog.find({},{_id:0}).sort({"Time": -1}).limit(6).toArray(function(error,logfile) {
-    //collectionLog.find({},{_id:0}).sort({ $natural: -1}).limit(6).toArray(function(error,logfile) {
+    //collectionLog.find({},{_id:0}).sort({"Time": -1}).limit(6).toArray(function(error,logfile) {
+    collectionLog.find({},{_id:0}).sort({ $natural: -1}).limit(6).toArray(function(error,logfile) {
 
         for( var i = 0; i < logfile.length; i++){
                     t = logfile[i].Source;
