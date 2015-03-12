@@ -57,7 +57,7 @@ var waitTime;
 sendOutput = function (dataToSend)
 {
     var addTime = "{\"Time\":";
-    console.log("We are at sendOutput");
+   // console.log("We are at sendOutput");
     if (timedOut)
     {
         timerStartTime = new Date();
@@ -67,7 +67,7 @@ sendOutput = function (dataToSend)
         setTimeout(function(){ledInfoOff(27);}, 100);
         setTimeout(function(){timedOut = true;}, timedOutInterval);
 
-        console.log(dataToSend);
+     //   console.log(dataToSend);
         //send it out the socket
         comlib.websocketsend(".  Sent: " + momentTZ(timerStartTime).format(fmt) + "   Dout: "  +  dataToSend) ;
 
@@ -76,7 +76,7 @@ sendOutput = function (dataToSend)
         addTime = JSON.parse(addTime);
         addTime.Time = new Date(addTime.Time); //get to real time format.
         collectionLog.insert(addTime, {w: 1}, function (err, result) {
-            console.log(result);
+           // console.log(result);
         });
     }
     else
@@ -91,7 +91,7 @@ sendOutput = function (dataToSend)
             waitTime = timedOutInterval;
         }
         setTimeout(function(){sendOutput(dataToSend);}, waitTime); // pad with 2 extra ms
-        console.log("At sendoutput -- ELSE - timer start time: " + timerStartTime.getMilliseconds()+ " tme:  " + tme.getMilliseconds());
+       // console.log("At sendoutput -- ELSE - timer start time: " + timerStartTime.getMilliseconds()+ " tme:  " + tme.getMilliseconds());
         //  var delay =  setTimeout(function(){sendOutput(dataToSend);}, ( timedOutInterval -(timerStartTime - Date())));
     }
 
@@ -125,7 +125,6 @@ exports.setup = function()
     {
         if (err)
         {
-
             console.log("Connection to mongo failed:"+err)  ;
         }
         else
@@ -145,21 +144,6 @@ exports.setup = function()
             global.collectionStartup = db.collection('startup');
             global.collectionSettings = db.collection('settings');
             collectionCue.ensureIndex({InData:1},function (err,res){});
-
-
-            // this is now is cs4Settiings.timezone
-            //set timezone of pi
-            /*           collectionStartup.findOne({'TimeZoneSet':{$exists:true}}, function(err,res){
-             if(res){
-             var a = res.TimeZoneSet;
-             time.tzset(res.TimeZoneSet);
-             }
-             else{
-             time.tzset('US/Eastern'); // this is the default time zone if nothing is set
-             }
-
-             });
-             */
 
             // MOVED HERE = open serial port after mongo is running
 
@@ -203,19 +187,6 @@ exports.setup = function()
  //   app.get('/cs4Help', routes.cs4Help);
     app.get('/cs4Settings', routes.cs4Settings);
     app.get('/cs4Edit', routes.cs4Edit);
-
-    //set timezone of pi
-   // time.tzset('US/Pacific');
-  //  time.tzset('US/Eastern');
-    //set up email
-/*    smtpTransport = nodemailer.createTransport("SMTP",{
-        service: "Gmail",
-        auth: {
-            user: "stevewitz@gmail.com",
-            pass: "panema2020!"
-        }
-    });
-*/
 };
 
 
@@ -588,7 +559,7 @@ exports.usbSerialDataIn = function (data) {
                         }
 
                         global.timeoutlist[i]=   setTimeout(sendOutput, delay, outstring);
-                        console.log(item[0].OutData[i].Dout + "  Delay " + item[0].OutData[i].Delay);
+                       // console.log(item[0].OutData[i].Dout + "  Delay " + item[0].OutData[i].Delay);
                     }
                 }
             });
@@ -648,7 +619,7 @@ exports.usbSerialDataIn = function (data) {
         //Log the data into the collection
 
         collectionLog.insert(serialData, {w: 1}, function (err, result) {
-            console.log(result);
+          //  console.log(result);
         });
 
         //parse the incoming cue data
@@ -1273,7 +1244,7 @@ exports.ledOn = function(){
 
         }
    /*     /////////////
-        console.log('Ready to send START UP email message');
+        //console.log('Ready to send START UP email message');
         var mailOptions = {
             from: "CS4 @ " + myuri + "✔ " + cs4Settings.emailAccount,
             //  from: "CS4 192.168.2.10 ✔ <stevewitz@gmail.com>", // sender address
@@ -1453,7 +1424,7 @@ function checkForZigbee(auto){
 
 function setAutoTest(){
     var offsetTime;
-    console.log("STARTING AUTO TEST");
+  //  console.log("STARTING AUTO TEST");
     //get latest time from startup data base and calculate how long to delay before starting test
     collectionStartup.find({},{_id:0}).sort({"Time": -1}).limit(1).toArray(function(error,Startupfile) {
 

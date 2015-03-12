@@ -23,33 +23,22 @@ exports.openSerialPort = function(portname, baud)
         console.log("Port open success:"+portname);
         //if CS4 branch then get time from io board
        if( branch == 'cs4'){
-         // serialPort.write("GETTIME\n\r"); //get time to log as starting up time
            //we are now up and working
             //turn status LED on
            setTimeout(function(){cs4.getSettings();}, 1500); // let things settle for a bit
-
-       //    cs4.ledOn();
-
        }
 
-
-    });  //it's console.log('open');
+    });
 
     serialPort.on('data', function(data) {
-
         if(branch == 'twi')
         {
-
             twi.serialDataIn(data);
-
         }
         else if(branch == 'cs4')
         {
             cs4.usbSerialDataIn(data);
-
-
         }
-
     });
 };
 
@@ -58,11 +47,8 @@ exports.write = function(data) {
 
     serialPort.write(data,function(err, results)
     {
-          console.log('err (undefined is none)' + err);
-        console.log('results (serial bytes sent maybe)' + results);
- //   serialPort.write("settime "+timestamp+"\n",function(err, results) {
-   //     console.log("set new time"+timestamp);
-
+        //  console.log('err (undefined is none)' + err);
+       // console.log('results (serial bytes sent maybe)' + results);
     });
 };
 
@@ -75,7 +61,6 @@ wss = new WebSocketServer({port: 8080}, function(err,res){
     }
     else
     {
-
         console.log("Websocket server Listening");
     }
 });
@@ -124,28 +109,23 @@ wss.on('connection', function(ws) {
 
 
 exports.websocketsend = function(data,id)
+{
+    if (websocket[id])
     {
-
-        if (websocket[id])
+        websocket[id].send(data);
+    } else
+    {
+        // console.log('keys'+ Object.keys(websocket));
+        // console.log('len'+websocket.length);
+        //Object.keys(websocket).length -
+        //someday fix this so it tracks the number of connections
+        for (var i=0; i < 10; i++)
         {
-            websocket[id].send(data);
-        } else
-        {
-//            console.log('keys'+ Object.keys(websocket));
-//            console.log('len'+websocket.length);
-            //Object.keys(websocket).length -
-            //someday fix this so it tracks the number of connections
-            for (var i=0; i < 10; i++)
+            if (websocket[i])
             {
-                if (websocket[i])
-                {
-                    websocket[i].send(data);
-                    console.info("websocket sending to client "+i);
-                }
-
-
+                websocket[i].send(data);
+                console.info("websocket sending to client "+i);
             }
-
         }
-
-    };
+    }
+};
