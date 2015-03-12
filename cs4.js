@@ -47,7 +47,7 @@ var tempcntoutgoing = 0;
 var extrnalIP ="";
 var fmt = "ddd, MMM DD YYYY, HH:mm:ss.SS"; // format string for momentTZ time strings
 var timerStartTime;
-
+var waitTime;
 
 //routine to ensure that serial data is not sent more than
 // every timedOutInterval
@@ -86,7 +86,12 @@ sendOutput = function (dataToSend)
         // var test3 = timerStartTime.getMilliseconds();
         /// var test = timedOutInterval -(tme.getMilliseconds() - timerStartTime.getMilliseconds())+2;
         //since we are not ready for this to go out (or we wouldn't be here) -- reset a timer with actual time left.
-        setTimeout(function(){sendOutput(dataToSend);}, (timedOutInterval +2-(tme.getMilliseconds() - timerStartTime.getMilliseconds()))); // pad with 2 extra ms
+        waitTime=timedOutInterval +2-(tme.getMilliseconds() - timerStartTime.getMilliseconds());
+        if(waitTime <= timedOutInterval/2){
+            waitTime = timedOutInterval;
+        }
+        setTimeout(function(){sendOutput(dataToSend);}, waitTime); // pad with 2 extra ms
+        console.log("At sendoutput -- ELSE - timer start time: " + timerStartTime.getMilliseconds()+ " tme:  " + tme.getMilliseconds());
         //  var delay =  setTimeout(function(){sendOutput(dataToSend);}, ( timedOutInterval -(timerStartTime - Date())));
     }
 
@@ -142,17 +147,19 @@ exports.setup = function()
             collectionCue.ensureIndex({InData:1},function (err,res){});
 
 
+            // this is now is cs4Settiings.timezone
             //set timezone of pi
-           collectionStartup.findOne({'TimeZoneSet':{$exists:true}}, function(err,res){
-                if(res){
-                    var a = res.TimeZoneSet;
-                    time.tzset(res.TimeZoneSet);
-                }
-                else{
-                    time.tzset('US/Eastern'); // this is the default time zone if nothing is set
-                }
+            /*           collectionStartup.findOne({'TimeZoneSet':{$exists:true}}, function(err,res){
+             if(res){
+             var a = res.TimeZoneSet;
+             time.tzset(res.TimeZoneSet);
+             }
+             else{
+             time.tzset('US/Eastern'); // this is the default time zone if nothing is set
+             }
 
-               });
+             });
+             */
 
             // MOVED HERE = open serial port after mongo is running
 
@@ -278,7 +285,7 @@ exports.websocketDataIn = function(dataSocket, Socket){
                             if(logfile[i].Dout)
                             {
                                 //comlib.websocketsend(".    Sent: " + logfileData, Socket) ;
-                                dataToSend = dataToSend + ".    Sent: " + logfileData + "\n" ;
+                                dataToSend = dataToSend + ".    Sent: " +formatLogData(logfileData) + "\n" ;
                             }
                             else
                             {
@@ -300,7 +307,7 @@ exports.websocketDataIn = function(dataSocket, Socket){
 
                         if(logfile[i].Dout)
                         {
-                            dataToSend = ".    Sent: " + logfileData + "\n" + dataToSend;
+                            dataToSend = dataToSend + ".    Sent: " +formatLogData(logfileData) + "\n" ;
                         }
                         else
                         {
@@ -700,7 +707,7 @@ function formatLogData(data){
     serialData = JSON.parse(data);
 
     serialData.Time = new Date(serialData.Time);
-    timeFormatted = moment(serialData.Time).format(fmt);
+    timeFormatted = momentTZ(serialData.Time).format(fmt);
     indata = serialData.InData;
     Dout = serialData.Dout;
 
@@ -1178,7 +1185,7 @@ exports.getSettings = function(){
         dataToSend = '          SLAVE DMX_CH ' + cs4Settings.dmx1 +  " " + cs4Settings.dmx2 + " " + cs4Settings.dmx3 + ''; //update the DMX channels
         sendOutput(dataToSend) ;
         dataToSend = '          SLAVE ZIGEN ' + cs4Settings.enableZigbee2 + ''; //update the DMX channels
-        sendOutput(dataToSend);
+        sendOutput(dataToSend) ;
         exports.ledOn();
 
     });
@@ -1195,7 +1202,6 @@ exports.saveSettings = function(){
 
 exports.ledOn = function(){
 
-
     if(os.type() != 'Windows_NT') // this is only for the pi
     {
         var led = require('fastgpio');
@@ -1204,50 +1210,69 @@ exports.ledOn = function(){
         clearInterval(blink);
     }
 
- /*
-    //get ip address with pmp
-    pmp.getExternalAddress('',function(err,rslt){
-        console.log(err,rslt);
-        if(!err){
-            global.externalIP = rslt.externalIP;
-            console.log("got external address",rslt.extervalIP);
-            //refresh portmapping for the router  lease expire in 4 days
-            if(os.type() != 'Windows_NT') { // this is only for the pi
-
-                pmp.portMap('', 3000, 3000, 350000, function (err, rslt) {
-                    if (!err){
-                        console.log("success map port 3000");
-                    }else{
-                        console.log("port mapping 3000 fail",err,rslt);}
-
-
-                    pmp.portMap('', 8080, 8080, 350000, function (err, rslt) {
-                        if (!err){
-                            console.log("success map port 8080");
-                        }else{
-                            console.log("port mapping 8080 fail",err,rslt);}
-
-                        pmp.portMap('', 9090, 9090, 350000, function (err, rslt) { //for ssh
-                            if (!err){
-                                console.log("success map port 9090");
-                            }else{
-                                console.log("port mapping 9090 fail",err,rslt);}
-                        });
-                    });
-                });
-            }
-            else{//if windows map external port 1 higher
-                pmp.portMap(rslt.gateway, 3000, 3001, 350000, function (err, rslt) {
-                    console.log(err, rslt);
-                });
-            }
-
+    pmp.findGateway("",function(err,gateway){
+        var error = 0;
+        ///console.log(err,gateway.ip);
+        if(err){
+            console.log('Gateway not found',err);
         }
         else{
-            externalIP = "None";
+            console.log('gateway found: '+ gateway.ip + ", External IP: "+ gateway.externalIP);
+            pmp.portMap(gateway,3000,3000,0,'CS4 Main',function(err,rslt){
+
+                if(!err) {
+                    console.log("Sucessfully logged port: "+ gateway.externalIP + ": " + gateway.publicPort + " to " + gateway.ip + ": " + gateway.privatePort) ;
+                }
+                else{
+                    console.log(err,rslt);
+                }
+
+                pmp.portMap(gateway,8000,8000,0,'CS4 Websocket',function(err,rslt){
+
+                    if(!err) {
+                        console.log("Sucessfully logged port: "+ gateway.externalIP + ": " + gateway.publicPort + " to " + gateway.ip + ": " + gateway.privatePort) ;
+                    }
+                    else{
+                        console.log(err,rslt);
+                    }
+                    pmp.portMap(gateway,9090,9090,0,'CS4 Misc',function(err,rslt){
+
+                        if(!err) {
+                            console.log("Sucessfully logged port: "+ gateway.externalIP + ": " + gateway.publicPort + " to " + gateway.ip + ": " + gateway.privatePort) ;
+                        }
+                        else{
+                            console.log(err,rslt);
+                        }
+
+                        /////////////
+                        console.log('Ready to send START UP email message');
+                        var mailOptions = {
+                            from: "CS4 @ " + myuri + "✔ " + cs4Settings.emailAccount,
+                            //  from: "CS4 192.168.2.10 ✔ <stevewitz@gmail.com>", // sender address
+                            to: cs4Settings.emailAddress,
+                            // to: "steve@wizcomputing.com      ", // comma seperated list of receivers
+                            subject: "Start Up Message from CS4 ✔: "+ cs4Settings.systemName, // Subject line
+                            text: cs4Settings.systemName+ " CS4 has just started.\n  External IP address:  http://" + global.externalIP + ":3000" + " - and internal IP address: "  +global.myuri+ ":3000", // plaintext body
+                            html: cs4Settings.systemName+ " CS4 has just started.\n  External IP address:  http://" + global.externalIP + ":3000" + " - and internal IP address: "  +global.myuri+ ":3000"// html body
+                        };
+
+                        // send mail with defined transport object
+                        sendMail(mailOptions);
+                        console.log("READY to start system test in 10 seconds");
+                        setTimeout(function(){startSystemTest();}, 10000); // check for results after delay
+                        setTimeout(function(){setAutoTest(0);}, 20000);
+                        /////////////////////
+
+
+
+
+                    });
+
+                });
+            });
+
         }
-
-
+   /*     /////////////
         console.log('Ready to send START UP email message');
         var mailOptions = {
             from: "CS4 @ " + myuri + "✔ " + cs4Settings.emailAccount,
@@ -1259,13 +1284,13 @@ exports.ledOn = function(){
             html: cs4Settings.systemName+ " CS4 has just started.\n  External IP address:  http://" + global.externalIP + ":3000" + " - and internal IP address: "  +global.myuri+ ":3000"// html body
         };
 
-// send mail with defined transport object
+        // send mail with defined transport object
         sendMail(mailOptions);
+        console.log("READY to start system test in 10 seconds");
+        setTimeout(function(){startSystemTest();}, 10000); // check for results after delay
+        setTimeout(function(){setAutoTest(0);}, 20000);
+        /////////////////////    */
     });
-*/
-    console.log("READY to start system test in 15 seconds");
-    setTimeout(function(){startSystemTest();}, 15000); // check for results after delay
-    setTimeout(function(){setAutoTest(0);}, 30000);
 };
 
 exports.ledOff = function(){
@@ -1310,12 +1335,13 @@ function startSystemTest(auto){
     if(auto){
         autoTest1 = setTimeout(function(){startSystemTest(1);}, 1000*60*60*24); // start again in 24 hours
     }
-
     dataToSend = '          SLAVE ZIGEN ' + 'YES' + '\r'; //Enable the zigee2 channel
-    comlib.write(dataToSend) ; //FOrce zigbee2 ON
+    comlib.write(dataToSend) ;
 
     if(cs4Settings.enableZigbee2 =='NO'){ // make sure we can receive zigbee2.  If not enable it
         zigbee2State = 'NO';
+        dataToSend = '          SLAVE ZIGEN ' + 'YES' + '\r'; //Enable the zigee2 channel
+        comlib.write(dataToSend) ;
     }
 /*
     pmp.getExternalAddress('',function(err,rslt){
@@ -1354,7 +1380,8 @@ function startSystemTest(auto){
     });
   */
         for(var i = 0; i < 5 ; i++){
-            sendOutput('ZIG1' + ' ' + 'TEST '  + "GO slide1111.jpg NEXT slide2222.jpg");
+          //  sendOutput('ZIG1' + ' ' + 'TEST '  + "GO slide1111.jpg NEXT slide2222.jpg");
+            setTimeout(function(){sendOutput('ZIG1' + ' ' + 'TEST '  + "GO slide1111.jpg NEXT slide2222.jpg");}, 500*i);
         }
         // ledInfoOn(27); // light to output light
         // setTimeout(function(){ledInfoOff(27);}, 100); // turn it off
