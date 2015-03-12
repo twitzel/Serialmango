@@ -48,7 +48,8 @@ var extrnalIP ="";
 var fmt = "ddd, MMM DD YYYY, HH:mm:ss.SS"; // format string for momentTZ time strings
 var timerStartTime;
 var waitTime;
-
+var countSendoutputLoops = 0;
+var countSendoutputTimers = [];
 //routine to ensure that serial data is not sent more than
 // every timedOutInterval
 //
@@ -60,6 +61,7 @@ sendOutput = function (dataToSend)
     console.log("We are at sendOutput");
     if (timedOut)
     {
+        countSendoutputLoops = 0;
         timerStartTime = new Date();
         timedOut = false;
         comlib.write("         " + dataToSend + "\r"); // add spaces at beginning for R4 zigbee stuff and terminate\n\r
@@ -82,6 +84,14 @@ sendOutput = function (dataToSend)
     else
     {
         var tme = new Date();
+        countSendoutputLoops++;
+        if(countSendoutputLoops > 20){
+            for(var i = 0; i< countSendoutputLoops; i++) {
+                clearTimeout(countSendoutputTimers[i]);
+            }
+            countSendoutputLoops = 0;
+            timedOut = true;
+        }
         // var test2 = tme.getMilliseconds();
         // var test3 = timerStartTime.getMilliseconds();
         /// var test = timedOutInterval -(tme.getMilliseconds() - timerStartTime.getMilliseconds())+2;
@@ -90,7 +100,8 @@ sendOutput = function (dataToSend)
         if(waitTime <= timedOutInterval/2){
             waitTime = timedOutInterval +20;
         }
-        setTimeout(function(){sendOutput(dataToSend);}, waitTime); // pad with 2 extra ms
+
+        countSendoutputTimers[countSendoutputLoops] = (function(){sendOutput(dataToSend);}, waitTime); // pad with 2 extra ms
         console.log("At sendoutput -- ELSE - wait time: " + waitTime);
         //  var delay =  setTimeout(function(){sendOutput(dataToSend);}, ( timedOutInterval -(timerStartTime - Date())));
     }
