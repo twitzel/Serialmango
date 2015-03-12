@@ -1310,10 +1310,12 @@ function startSystemTest(auto){
     if(auto){
         autoTest1 = setTimeout(function(){startSystemTest(1);}, 1000*60*60*24); // start again in 24 hours
     }
+
+    dataToSend = '          SLAVE ZIGEN ' + 'YES' + '\r'; //Enable the zigee2 channel
+    comlib.write(dataToSend) ; //FOrce zigbee2 ON
+
     if(cs4Settings.enableZigbee2 =='NO'){ // make sure we can receive zigbee2.  If not enable it
         zigbee2State = 'NO';
-        dataToSend = '          SLAVE ZIGEN ' + 'YES' + '\r'; //Enable the zigee2 channel
-        comlib.write(dataToSend) ;
     }
 /*
     pmp.getExternalAddress('',function(err,rslt){
