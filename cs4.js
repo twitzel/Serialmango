@@ -47,9 +47,8 @@ var tempcntoutgoing = 0;
 var extrnalIP ="";
 var fmt = "ddd, MMM DD YYYY, HH:mm:ss.SS"; // format string for momentTZ time strings
 var timerStartTime;
-var waitTime;
-var countSendoutputLoops = 0;
-var countSendoutputTimers = [];
+
+
 //routine to ensure that serial data is not sent more than
 // every timedOutInterval
 //
@@ -61,7 +60,6 @@ sendOutput = function (dataToSend)
     console.log("We are at sendOutput");
     if (timedOut)
     {
-        countSendoutputLoops = 0;
         timerStartTime = new Date();
         timedOut = false;
         comlib.write("         " + dataToSend + "\r"); // add spaces at beginning for R4 zigbee stuff and terminate\n\r
@@ -84,25 +82,11 @@ sendOutput = function (dataToSend)
     else
     {
         var tme = new Date();
-        countSendoutputLoops++;
-        if(countSendoutputLoops > 20){
-            for(var i = 0; i< countSendoutputLoops; i++) {
-                clearTimeout(countSendoutputTimers[i]);
-            }
-            countSendoutputLoops = 0;
-            timedOut = true;
-        }
         // var test2 = tme.getMilliseconds();
         // var test3 = timerStartTime.getMilliseconds();
         /// var test = timedOutInterval -(tme.getMilliseconds() - timerStartTime.getMilliseconds())+2;
         //since we are not ready for this to go out (or we wouldn't be here) -- reset a timer with actual time left.
-        waitTime=timedOutInterval +2-(tme.getMilliseconds() - timerStartTime.getMilliseconds());
-        if(waitTime <= timedOutInterval/2){
-            waitTime = timedOutInterval +20;
-        }
-
-        countSendoutputTimers[countSendoutputLoops] = (function(){sendOutput(dataToSend);}, waitTime); // pad with 2 extra ms
-        console.log("At sendoutput -- ELSE - wait time: " + waitTime);
+        setTimeout(function(){sendOutput(dataToSend);}, (timedOutInterval +2-(tme.getMilliseconds() - timerStartTime.getMilliseconds()))); // pad with 2 extra ms
         //  var delay =  setTimeout(function(){sendOutput(dataToSend);}, ( timedOutInterval -(timerStartTime - Date())));
     }
 
@@ -158,19 +142,17 @@ exports.setup = function()
             collectionCue.ensureIndex({InData:1},function (err,res){});
 
 
-            // this is now is cs4Settiings.timezone
             //set timezone of pi
-            /*           collectionStartup.findOne({'TimeZoneSet':{$exists:true}}, function(err,res){
-             if(res){
-             var a = res.TimeZoneSet;
-             time.tzset(res.TimeZoneSet);
-             }
-             else{
-             time.tzset('US/Eastern'); // this is the default time zone if nothing is set
-             }
+           collectionStartup.findOne({'TimeZoneSet':{$exists:true}}, function(err,res){
+                if(res){
+                    var a = res.TimeZoneSet;
+                    time.tzset(res.TimeZoneSet);
+                }
+                else{
+                    time.tzset('US/Eastern'); // this is the default time zone if nothing is set
+                }
 
-             });
-             */
+               });
 
             // MOVED HERE = open serial port after mongo is running
 
@@ -318,7 +300,7 @@ exports.websocketDataIn = function(dataSocket, Socket){
 
                         if(logfile[i].Dout)
                         {
-                            dataToSend = dataToSend + ".    Sent: " +formatLogData(logfileData) + "\n" ;
+                            dataToSend = ".    Sent: " + logfileData + "\n" + dataToSend;
                         }
                         else
                         {
@@ -718,7 +700,7 @@ function formatLogData(data){
     serialData = JSON.parse(data);
 
     serialData.Time = new Date(serialData.Time);
-    timeFormatted = momentTZ(serialData.Time).format(fmt);
+    timeFormatted = moment(serialData.Time).format(fmt);
     indata = serialData.InData;
     Dout = serialData.Dout;
 
@@ -1197,7 +1179,7 @@ exports.getSettings = function(){
         sendOutput(dataToSend) ;
         dataToSend = '          SLAVE ZIGEN ' + cs4Settings.enableZigbee2 + ''; //update the DMX channels
         sendOutput(dataToSend) ;
-      //  exports.ledOn();
+        exports.ledOn();
 
     });
 };
@@ -1255,27 +1237,6 @@ exports.ledOn = function(){
                             console.log(err,rslt);
                         }
 
-                        /////////////
-                        console.log('Ready to send START UP email message');
-                        var mailOptions = {
-                            from: "CS4 @ " + myuri + "✔ " + cs4Settings.emailAccount,
-                            //  from: "CS4 192.168.2.10 ✔ <stevewitz@gmail.com>", // sender address
-                            to: cs4Settings.emailAddress,
-                            // to: "steve@wizcomputing.com      ", // comma seperated list of receivers
-                            subject: "Start Up Message from CS4 ✔: "+ cs4Settings.systemName, // Subject line
-                            text: cs4Settings.systemName+ " CS4 has just started.\n  External IP address:  http://" + global.externalIP + ":3000" + " - and internal IP address: "  +global.myuri+ ":3000", // plaintext body
-                            html: cs4Settings.systemName+ " CS4 has just started.\n  External IP address:  http://" + global.externalIP + ":3000" + " - and internal IP address: "  +global.myuri+ ":3000"// html body
-                        };
-
-                        // send mail with defined transport object
-                        sendMail(mailOptions);
-                        console.log("READY to start system test in 10 seconds");
-                        setTimeout(function(){startSystemTest();}, 10000); // check for results after delay
-                        setTimeout(function(){setAutoTest(0);}, 20000);
-                        /////////////////////
-
-
-
 
                     });
 
@@ -1283,7 +1244,6 @@ exports.ledOn = function(){
             });
 
         }
-   /*     /////////////
         console.log('Ready to send START UP email message');
         var mailOptions = {
             from: "CS4 @ " + myuri + "✔ " + cs4Settings.emailAccount,
@@ -1300,7 +1260,6 @@ exports.ledOn = function(){
         console.log("READY to start system test in 10 seconds");
         setTimeout(function(){startSystemTest();}, 10000); // check for results after delay
         setTimeout(function(){setAutoTest(0);}, 20000);
-        /////////////////////    */
     });
 };
 
@@ -1388,10 +1347,7 @@ function startSystemTest(auto){
     });
   */
         for(var i = 0; i < 5 ; i++){
-          //  sendOutput('ZIG1' + ' ' + 'TEST '  + "GO slide1111.jpg NEXT slide2222.jpg");
-          //  setTimeout(function(){sendOutput('ZIG1' + ' ' + 'TEST '  + "GO slide1111.jpg NEXT slide2222.jpg");}, 500*i);
-            setTimeout(function(){comlib.write("         " +'ZIG1' + ' ' + 'TEST '  + "GO slide1111.jpg NEXT slide2222.jpg"+ '\r');}, 500*i);
-
+            sendOutput('ZIG1' + ' ' + 'TEST '  + "GO slide1111.jpg NEXT slide2222.jpg");
         }
         // ledInfoOn(27); // light to output light
         // setTimeout(function(){ledInfoOff(27);}, 100); // turn it off
