@@ -1227,7 +1227,7 @@ exports.ledOn = function(){
                     console.log(err,rslt);
                 }
 
-                pmp.portMap(gateway,8000,8000,0,'CS4 Websocket',function(err,rslt){
+                pmp.portMap(gateway,8080,8080,0,'CS4 Websocket',function(err,rslt){
 
                     if(!err) {
                         console.log("Sucessfully logged port: "+ gateway.externalIP + ": " + gateway.publicPort + " to " + gateway.ip + ": " + gateway.privatePort) ;

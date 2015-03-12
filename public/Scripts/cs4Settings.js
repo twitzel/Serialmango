@@ -92,6 +92,7 @@ function writeToScreen(message) {
 
 function buttonClear(){
     output.innerHTML = "";
+    dataToShow = "";
 }
 
 function buttonBackground(){
