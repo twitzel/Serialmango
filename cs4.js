@@ -57,7 +57,7 @@ var waitTime;
 sendOutput = function (dataToSend)
 {
     var addTime = "{\"Time\":";
-   // console.log("We are at sendOutput");
+    console.log("We are at sendOutput");
     if (timedOut)
     {
         timerStartTime = new Date();
