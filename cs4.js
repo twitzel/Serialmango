@@ -67,7 +67,7 @@ sendOutput = function (dataToSend)
         setTimeout(function(){ledInfoOff(27);}, 100);
         setTimeout(function(){timedOut = true;}, timedOutInterval);
 
-     //   console.log(dataToSend);
+        console.log("Sending to CS4: " +dataToSend);
         //send it out the socket
         comlib.websocketsend(".  Sent: " + momentTZ(timerStartTime).format(fmt) + "   Dout: "  +  dataToSend) ;
 
@@ -91,7 +91,7 @@ sendOutput = function (dataToSend)
             waitTime = timedOutInterval;
         }
         setTimeout(function(){sendOutput(dataToSend);}, waitTime); // pad with 2 extra ms
-       // console.log("At sendoutput -- ELSE - timer start time: " + timerStartTime.getMilliseconds()+ " tme:  " + tme.getMilliseconds());
+        console.log("At sendoutput -- ELSE - timer start time: " + timerStartTime.getMilliseconds()+ " tme:  " + tme.getMilliseconds());
         //  var delay =  setTimeout(function(){sendOutput(dataToSend);}, ( timedOutInterval -(timerStartTime - Date())));
     }
 
