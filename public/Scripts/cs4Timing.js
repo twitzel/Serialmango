@@ -113,7 +113,7 @@ function onClose(evt) {
 function onMessage(evt)    {
 
     writeToScreen(evt.data);
-    if(evt.data.substr(0,1) != '.'){
+    if((evt.data.substr(0,1) != '.')&& (evt.data.indexOf("ZIGBEE2")<0)){
         incue = 1;
     }
 
@@ -133,7 +133,8 @@ function doSend(message) {
 function writeToScreen(message) {
 
     // get time of incoming cue
-    if(message.substring(0,1) != ".") //make sure it's an incoming cue
+    var testinh = message.indexOf("ZIGBEE2");
+    if((message.substring(0,1) != ".") && (message.indexOf("ZIGBEE2")<0)) //make sure it's an incoming cue and not zigbee
     {
         lastCueTime = new Date().getTime();
     }

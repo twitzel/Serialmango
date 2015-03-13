@@ -609,7 +609,10 @@ exports.usbSerialDataIn = function (data) {
 
     if(data.length >= 35) // this is to let GETTIME come through and get logged GETTIME returns a string 34 characters
     {
-        lastCueReceived = (JSON.parse(JSON.stringify(serialData))); // store the data here in case of Cue file generation
+
+        if(serialData.Source != 'zigbee2:') { //only update if real cue NOT zigbee2
+            lastCueReceived = (JSON.parse(JSON.stringify(serialData))); // store the data here in case of Cue file generation
+        }
         //get the internal system time or this event so we and keep track of it
 
      /*   if(serialData.Source != 'zigbee2:'){ //only update if real cue NOT zigbee2
