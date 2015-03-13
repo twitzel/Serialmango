@@ -86,9 +86,9 @@ sendOutput = function (dataToSend)
         // var test3 = timerStartTime.getMilliseconds();
         /// var test = timedOutInterval -(tme.getMilliseconds() - timerStartTime.getMilliseconds())+2;
         //since we are not ready for this to go out (or we wouldn't be here) -- reset a timer with actual time left.
-        waitTime=timedOutInterval +2-(tme.getMilliseconds() - timerStartTime.getMilliseconds());
+        waitTime=timedOutInterval +2-(tme - timerStartTime);
         if(waitTime <= 0){
-            waitTime = timedOutInterval;
+            waitTime = 2;
             timedOut = true;
         }
         setTimeout(function(){sendOutput(dataToSend);}, waitTime); // pad with 2 extra ms
