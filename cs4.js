@@ -26,7 +26,7 @@ var momentTZ = require('moment-timezone');
 var lastCueReceived = {"Time" : "10/09/13 15:20:04.20", "Source" : "Midi1", "InData" : "F0 7F 05 02 01 01 31 2E 30 30 F7 "};
 var serialDataSocket;
 var lastCueReceivedInternalTime= new Date();
-var lastCueReceivedTimeOffset = 0;
+//var lastCueReceivedTimeOffset = 0;
 //var lastCueReceivedExternalTime = new Date();
 var usbstickPath;
 var path;
@@ -542,7 +542,7 @@ exports.usbSerialDataIn = function (data) {
 
                     global.timeoutlist=[];
                     lastCueReceivedInternalTime = new Date().getTime();
-                    lastCueReceivedTimeOffset=serialData.Time.getTime()-lastCueReceivedInternalTime;
+                   // lastCueReceivedTimeOffset=serialData.Time.getTime()-lastCueReceivedInternalTime;
 
                     for (var i = 0; i < item[0].OutData.length; i++) {
                         dir = item[0].OutData[i].Dir;    // ****** needs to be added to R4-4 Receiver Parsing ****** //
@@ -582,7 +582,7 @@ exports.usbSerialDataIn = function (data) {
                     global.timeoutlist=[];
                     lastCueReceivedInternalTime = new Date().getTime();
                     testvariaable = serialData.Time.getTime();
-                    lastCueReceivedTimeOffset=serialData.Time.getTime()-lastCueReceivedInternalTime;
+                 //   lastCueReceivedTimeOffset=serialData.Time.getTime()-lastCueReceivedInternalTime;
 
                     for (var i = 0; i < item[0].OutData.length; i++) {
                         dir = item[0].OutData[i].Dir;    // ****** needs to ba added to R4-4 Receiver Parsing ****** //
