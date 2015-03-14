@@ -1247,24 +1247,7 @@ exports.ledOn = function(){
             });
 
         }
-   /*     /////////////
-        //console.log('Ready to send START UP email message');
-        var mailOptions = {
-            from: "CS4 @ " + myuri + "✔ " + cs4Settings.emailAccount,
-            //  from: "CS4 192.168.2.10 ✔ <stevewitz@gmail.com>", // sender address
-            to: cs4Settings.emailAddress,
-            // to: "steve@wizcomputing.com      ", // comma seperated list of receivers
-            subject: "Start Up Message from CS4 ✔: "+ cs4Settings.systemName, // Subject line
-            text: cs4Settings.systemName+ " CS4 has just started.\n  External IP address:  http://" + global.externalIP + ":3000" + " - and internal IP address: "  +global.myuri+ ":3000", // plaintext body
-            html: cs4Settings.systemName+ " CS4 has just started.\n  External IP address:  http://" + global.externalIP + ":3000" + " - and internal IP address: "  +global.myuri+ ":3000"// html body
-        };
 
-        // send mail with defined transport object
-        sendMail(mailOptions);
-        console.log("READY to start system test in 10 seconds");
-        setTimeout(function(){startSystemTest();}, 10000); // check for results after delay
-        setTimeout(function(){setAutoTest(0);}, 20000);
-        /////////////////////    */
     });
 };
 
@@ -1308,6 +1291,8 @@ function ledInfoBlink(GPIOnum){
 function startSystemTest(auto){
 
     if(auto){
+        clearTimeout(autoTest1); //erase any previous timeouts
+        clearTimeout(autoTest); //erase any previous timeouts
         autoTest1 = setTimeout(function(){startSystemTest(1);}, 1000*60*60*24); // start again in 24 hours
     }
     dataToSend = '          SLAVE ZIGEN ' + 'YES' + '\r'; //Enable the zigee2 channel
@@ -1445,8 +1430,8 @@ function setAutoTest(){
         }
         //calculate milliseconds until start of test
         offsetTime = offsetTime*60*60*1000 - currentMinutes*60*1000 - currentSeconds*1000 - currentMilli;
-        clearInterval(autoTest1); //erase any previous timeouts
-        clearInterval(autoTest); //erase any previous timeouts
+        clearTimeout(autoTest1); //erase any previous timeouts
+        clearTimeout(autoTest); //erase any previous timeouts
         autoTest =  setTimeout(function(){startSystemTest(1);}, offsetTime);
         comlib.websocketsend("Auto Test will start in: " + offsetTime+ " milliseconds");
     });
