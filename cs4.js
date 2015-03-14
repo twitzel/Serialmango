@@ -1192,6 +1192,7 @@ exports.ledOn = function(){
             console.log('Gateway not found',err);
         }
         else{
+            global.externalIP = gateway.externalIP;
             console.log('gateway found: '+ gateway.ip + ", External IP: "+ gateway.externalIP);
             pmp.portMap(gateway,3000,3000,0,'CS4 Main',function(err,rslt){
 
