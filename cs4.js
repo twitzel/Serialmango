@@ -48,6 +48,7 @@ var extrnalIP ="";
 var fmt = "ddd, MMM DD YYYY, HH:mm:ss.SS"; // format string for momentTZ time strings
 var timerStartTime;
 var waitTime;
+var TimeToTest =1000*60*20; //1000*60*60*24;
 
 //routine to ensure that serial data is not sent more than
 // every timedOutInterval
@@ -1294,7 +1295,9 @@ function startSystemTest(auto){
     if(auto){
         clearTimeout(autoTest1); //erase any previous timeouts
         clearTimeout(autoTest); //erase any previous timeouts
-        autoTest1 = setTimeout(function(){startSystemTest(1);}, 1000*60*60*24); // start again in 24 hours
+        autoTest1 = setTimeout(function(){startSystemTest(1);}, TimeToTest); // start again in 24 hours
+        console.log("Starting next System Test");
+        comlib.websocketsend("Starting next System Test");
     }
     dataToSend = '          SLAVE ZIGEN ' + 'YES' + '\r'; //Enable the zigee2 channel
     comlib.write(dataToSend) ;
