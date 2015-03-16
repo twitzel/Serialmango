@@ -48,7 +48,7 @@ var extrnalIP ="";
 var fmt = "ddd, MMM DD YYYY, HH:mm:ss.SS"; // format string for momentTZ time strings
 var timerStartTime;
 var waitTime;
-var TimeToTest =1000*60*20; //1000*60*60*24;
+var TimeToTest =1000*60*10; //1000*60*60*24;
 
 //routine to ensure that serial data is not sent more than
 // every timedOutInterval
