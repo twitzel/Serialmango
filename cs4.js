@@ -48,7 +48,7 @@ var extrnalIP ="";
 var fmt = "ddd, MMM DD YYYY, HH:mm:ss.SS"; // format string for momentTZ time strings
 var timerStartTime;
 var waitTime;
-var TimeToTest =1000*60*10; //1000*60*60*24;
+var TimeToTest =1000*60*5; //1000*60*60*24;
 
 //routine to ensure that serial data is not sent more than
 // every timedOutInterval
@@ -1307,52 +1307,12 @@ function startSystemTest(auto){
         dataToSend = '          SLAVE ZIGEN ' + 'YES' + '\r'; //Enable the zigee2 channel
         comlib.write(dataToSend) ;
     }
-/*
-    pmp.getExternalAddress('',function(err,rslt){
-        console.log(err,rslt);
-        if(!err){
-            externalIP = rslt.externalIP;
-            console.log("got external address",rslt.extervalIP);
-            //refresh portmapping for the router  lease expire in 4 days
-            if(os.type() != 'Windows_NT') { // this is only for the pi
 
-                pmp.portMap('', 3000, 3000, 350000, function (err, rslt) {
-                    if (!err){
-                        console.log("success map port 3000");
-                    }else{
-                        console.log("port mapping 3000 fail",err,rslt);}
-
-
-                    pmp.portMap('', 8080, 8080, 350000, function (err, rslt) {
-                        if (!err){
-                            console.log("success map port 8080");
-                        }else{
-                            console.log("port mapping 8080 fail",err,rslt);}
-                    });
-                });
-            }
-            else{//if windows map external port 1 higher
-                pmp.portMap(rslt.gateway, 3000, 3001, 350000, function (err, rslt) {
-                    console.log(err, rslt);
-                });
-            }
-
-        }
-        else{
-            externalIP = "None";
-        }
-    });
-  */
         for(var i = 0; i < 5 ; i++){
           //  sendOutput('ZIG1' + ' ' + 'TEST '  + "GO slide1111.jpg NEXT slide2222.jpg");
             setTimeout(function(){sendOutput('ZIG1' + ' ' + 'TEST '  + "GO slide1111.jpg NEXT slide2222.jpg");}, 500*i);
         }
-        // ledInfoOn(27); // light to output light
-        // setTimeout(function(){ledInfoOff(27);}, 100); // turn it off
         setTimeout(function(){checkForZigbee(auto);}, 5000); // check for results after delay
-
-
-
 }
 
 function checkForZigbee(auto){
@@ -1436,7 +1396,8 @@ function setAutoTest(){
         offsetTime = offsetTime*60*60*1000 - currentMinutes*60*1000 - currentSeconds*1000 - currentMilli;
         clearTimeout(autoTest1); //erase any previous timeouts
         clearTimeout(autoTest); //erase any previous timeouts
-        autoTest =  setTimeout(function(){startSystemTest(1);}, offsetTime);
+       // autoTest =  setTimeout(function(){startSystemTest(1);}, offsetTime);
+        autoTest =  setTimeout(function(){startSystemTest(1);}, 10000);
         comlib.websocketsend("Auto Test will start in: " + offsetTime+ " milliseconds");
     });
 }
