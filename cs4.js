@@ -48,7 +48,7 @@ var extrnalIP ="";
 var fmt = "ddd, MMM DD YYYY, HH:mm:ss.SS"; // format string for momentTZ time strings
 var timerStartTime;
 var waitTime;
-var TimeToTest =1000*60*5; //1000*60*60*24;
+var TimeToTest = 1000*60*60*24;
 
 //routine to ensure that serial data is not sent more than
 // every timedOutInterval
@@ -1396,8 +1396,7 @@ function setAutoTest(){
         offsetTime = offsetTime*60*60*1000 - currentMinutes*60*1000 - currentSeconds*1000 - currentMilli;
         clearTimeout(autoTest1); //erase any previous timeouts
         clearTimeout(autoTest); //erase any previous timeouts
-       // autoTest =  setTimeout(function(){startSystemTest(1);}, offsetTime);
-        autoTest =  setTimeout(function(){startSystemTest(1);}, 10000);
+        autoTest =  setTimeout(function(){startSystemTest(1);}, offsetTime);
         comlib.websocketsend("Auto Test will start in: " + offsetTime+ " milliseconds");
     });
 }
