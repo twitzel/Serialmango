@@ -238,7 +238,7 @@ exports.websocketDataIn = function(dataSocket, Socket){
                 datain = SetCS4Time(datain);
                 comlib.write(datain);
                 setTimeout(function(){sendOutput('TIMEGET');}, 500);
-                setTimeout(function(){setAutoTest();}, 5000); //setup for auto test with new time being set
+               // setTimeout(function(){setAutoTest();}, 5000); //setup for auto test with new time being set
             }
 
         }
@@ -668,13 +668,10 @@ exports.usbSerialDataIn = function (data) {
                 });
             }
             serialData.Tme1 = new Date(serialData.Tme1);//convert to real time data
-            try {
-                comlib.websocketsend("CS4 Current time is: " + momentTZ(serialData.Tme1).format(fmt));
-            }
-            catch (err) {//do nothing
-            }
+            comlib.websocketsend("CS4 Current time is: " + momentTZ(serialData.Tme1).format(fmt));
+            setTimeout(function(){setAutoTest();}, 20000);//this will restart the system test each time it's run
         }
-        setTimeout(function(){setAutoTest();}, 10000);
+
     }
 };
 
@@ -1239,7 +1236,7 @@ exports.ledOn = function(){
                         sendMail(mailOptions);
                         console.log("READY to start system test in 10 seconds");
                         setTimeout(function(){startSystemTest();}, 10000); // check for results after delay
-                        setTimeout(function(){setAutoTest(0);}, 20000);
+                      //  setTimeout(function(){setAutoTest(0);}, 20000);
                         /////////////////////
 
 
@@ -1371,10 +1368,10 @@ function checkForZigbee(auto){
             ledInfoBlink(4); // blink the light to indicate error
             sendMail(mailOptions);
         }
-        setTimeout(function(){sendOutput('TIMEGET');}, 10000); // this will update ti pi time to CS4 i/o time
+
 
     });
-
+    setTimeout(function(){sendOutput('TIMEGET');}, 15000); // this will update ti pi time to CS4 i/o time
 }
 
 function setAutoTest(){
@@ -1396,12 +1393,12 @@ function setAutoTest(){
         }
         //calculate milliseconds until start of test
         offsetTime = offsetTime*60*60*1000 - currentMinutes*60*1000 - currentSeconds*1000 - currentMilli;
-        clearTimeout(autoTest1); //erase any previous timeouts
+     //   clearTimeout(autoTest1); //erase any previous timeouts
         clearTimeout(autoTest); //erase any previous timeouts
 
        // offsetTime=60000;
         autoTest =  setTimeout(function(){startSystemTest(1);}, offsetTime);
-        comlib.websocketsend("Auto Test will start in: " + offsetTime+ " milliseconds");
+        comlib.websocketsend("Auto Test will start in: " + offsetTime/1000 + " seconds");
     });
 }
 
