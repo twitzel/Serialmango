@@ -659,7 +659,7 @@ exports.usbSerialDataIn = function (data) {
 
         }
         else if(serialData.Tme1){
-
+            setAutoTest();
             if(os.type() != 'Windows_NT'){  //This is for pi only
                 console.log("Tme! " + serialData.Tme1.toString());
                 child = sudo([ 'date', '-s', serialData.Tme1 ]);
@@ -671,7 +671,7 @@ exports.usbSerialDataIn = function (data) {
             serialData.Tme1 = new Date(serialData.Tme1);//convert to real time data
           //  comlib.websocketsend("CS4 Current time is: " + momentTZ(serialData.Tme1).format(fmt));
             comlib.websocketsend("CS4 System time is: " + momentTZ(new Date()).format(fmt));
-            setTimeout(function(){setAutoTest();}, 5000);//this will restart the system test each time it's run
+           // setTimeout(function(){setAutoTest();}, 5000);//this will restart the system test each time it's run
         }
 
     }
