@@ -48,7 +48,7 @@ var extrnalIP ="";
 var fmt = "ddd, MMM DD YYYY, HH:mm:ss.SS"; // format string for momentTZ time strings
 var timerStartTime;
 var waitTime;
-var TimeToTest = 1000*60*60*24;
+var TimeToTest = 1000*60*5;//5 minutes  //1000*60*60*24;
 
 //routine to ensure that serial data is not sent more than
 // every timedOutInterval
@@ -655,6 +655,7 @@ exports.usbSerialDataIn = function (data) {
                 comlib.websocketsend("CS4 Current time is: " + momentTZ(serialData.Time).format(fmt));
                 console.log(result);
             });
+
         }
         else if(serialData.Tme1){
 
@@ -673,6 +674,7 @@ exports.usbSerialDataIn = function (data) {
             catch (err) {//do nothing
             }
         }
+        setTimeout(function(){setAutoTest();}, 10000);
     }
 };
 
@@ -1293,11 +1295,11 @@ function ledInfoBlink(GPIOnum){
 function startSystemTest(auto){
 
     if(auto){
-        clearTimeout(autoTest1); //erase any previous timeouts
-        clearTimeout(autoTest); //erase any previous timeouts
-        autoTest1 = setTimeout(function(){startSystemTest(1);}, TimeToTest); // start again in 24 hours
-        console.log("Starting next System Test");
-        comlib.websocketsend("Starting next System Test");
+      //  clearTimeout(autoTest1); //erase any previous timeouts
+      //  clearTimeout(autoTest); //erase any previous timeouts
+      //  autoTest1 = setTimeout(function(){startSystemTest(1);}, TimeToTest); // start again in 24 hours
+      //  console.log("Starting next System Test");
+      //  comlib.websocketsend("Starting next System Test");
     }
     dataToSend = '          SLAVE ZIGEN ' + 'YES' + '\r'; //Enable the zigee2 channel
     comlib.write(dataToSend) ;
@@ -1396,6 +1398,8 @@ function setAutoTest(){
         offsetTime = offsetTime*60*60*1000 - currentMinutes*60*1000 - currentSeconds*1000 - currentMilli;
         clearTimeout(autoTest1); //erase any previous timeouts
         clearTimeout(autoTest); //erase any previous timeouts
+
+       // offsetTime=60000;
         autoTest =  setTimeout(function(){startSystemTest(1);}, offsetTime);
         comlib.websocketsend("Auto Test will start in: " + offsetTime+ " milliseconds");
     });
