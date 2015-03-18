@@ -435,8 +435,9 @@ exports.websocketDataIn = function(dataSocket, Socket){
             sendOutput(dataToSend) ;
            // clearInterval(autoTest); // if any previous timers are set, delete them
            // clearInterval(autoTest1); // if any previous timers are set, delete them
-            sendOutput('TIMEGET');
-          //  setTimeout(function(){setAutoTest();}, 3000); //setup for auto test
+           // sendOutput('TIMEGET');
+            autoTest1 = setTimeout(function(){sendOutput('TIMEGET');}, 2000);
+            //  setTimeout(function(){setAutoTest();}, 3000); //setup for auto test
         }
 
         else if(dataSocket.Type == "SYSTEMTEST") {
