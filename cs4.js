@@ -433,10 +433,10 @@ exports.websocketDataIn = function(dataSocket, Socket){
             comlib.websocketsend("Successfully updated settings file");
             dataToSend = '          SLAVE ZIGEN ' + cs4Settings.enableZigbee2 ; //update the DMX channels
             sendOutput(dataToSend) ;
-            clearInterval(autoTest); // if any previous timers are set, delete them
-            clearInterval(autoTest1); // if any previous timers are set, delete them
+           // clearInterval(autoTest); // if any previous timers are set, delete them
+           // clearInterval(autoTest1); // if any previous timers are set, delete them
             sendOutput('TIMEGET');
-            setTimeout(function(){setAutoTest();}, 3000); //setup for auto test
+          //  setTimeout(function(){setAutoTest();}, 3000); //setup for auto test
         }
 
         else if(dataSocket.Type == "SYSTEMTEST") {
