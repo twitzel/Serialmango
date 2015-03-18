@@ -653,7 +653,7 @@ exports.usbSerialDataIn = function (data) {
                         console.log("SUDO DATE CHANGED");
                     });
                 }
-                comlib.websocketsend("CS4 Current time is: " + momentTZ(serialData.Time).format(fmt));
+                comlib.websocketsend("CS4 Current tme is: " + momentTZ(serialData.Time).format(fmt));
                 console.log(result);
             });
 
