@@ -664,13 +664,14 @@ exports.usbSerialDataIn = function (data) {
                 console.log("Tme! " + serialData.Tme1.toString());
                 child = sudo([ 'date', '-s', serialData.Tme1 ]);
                 child.stdout.on('data', function (data) {
-                    console.log(data.toString());
-                    console.log("SUDO DATE CHANGED");
+                  //  console.log(data.toString());
+                    comlib.websocketsend("SUDO DATE CHANGED");
                 });
             }
             serialData.Tme1 = new Date(serialData.Tme1);//convert to real time data
-            comlib.websocketsend("CS4 Current time is: " + momentTZ(serialData.Tme1).format(fmt));
-            setTimeout(function(){setAutoTest();}, 20000);//this will restart the system test each time it's run
+          //  comlib.websocketsend("CS4 Current time is: " + momentTZ(serialData.Tme1).format(fmt));
+            comlib.websocketsend("CS4 System time is: " + momentTZ(new Date()).format(fmt));
+            setTimeout(function(){setAutoTest();}, 5000);//this will restart the system test each time it's run
         }
 
     }
@@ -1372,7 +1373,7 @@ function checkForZigbee(auto){
 
 
     });
-    setTimeout(function(){sendOutput('TIMEGET');}, 15000); // this will update ti pi time to CS4 i/o time
+    setTimeout(function(){sendOutput('TIMEGET');}, 5000); // this will update ti pi time to CS4 i/o time
 }
 
 function setAutoTest(){
