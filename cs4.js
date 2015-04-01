@@ -1021,18 +1021,25 @@ function copyFromUSB()
                             console.error(err);
                         }
                         console.log('we are here dir removed');
-                        fse.copyRecursive(path +'/dump', destinationPath , function (err) {
-                            if (err) {
-                                console.log('error '+ err);
-                            }
-                            console.log('copied from usb');
-                            spawn(mongoDirectory + 'mongorestore', ['--db',collectionName , destinationPath + "/" + collectionName , '--drop', '-vvv']).on('exit',function(code){
-                                console.log('finished ' + code);
-                            });
+                        try {
+                            fse.copyRecursive(path + '/dump', destinationPath, function (err) {
+                                if (err) {
+                                    console.log('error ' + err);
+                                }
+                                console.log('copied from usb');
+                                spawn(mongoDirectory + 'mongorestore', ['--db', collectionName, destinationPath + "/" + collectionName, '--drop', '-vvv']).on('exit', function (code) {
+                                    console.log('finished ' + code);
+                                });
 
-                            comlib.websocketsend("Successfully Copied All Data from USB Stick");
-                            console.log("Successfully Copied " + usbstickPath + " to " + destinationPath);
-                        });
+                                comlib.websocketsend("Successfully Copied All Data from USB Stick");
+                                console.log("Successfully Copied " + usbstickPath + " to " + destinationPath);
+                            });
+                        }
+                        catch(e){
+                            comlib.websocketsend("Data not on this USB Stick");
+                            console.log("Data not on this USB Stick " + usbstickPath + " to " + destinationPath);
+
+                        }
                     });
                 });
             }
