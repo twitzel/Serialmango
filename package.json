@@ -16,6 +16,7 @@
     "fs.extra": "*",
     "fastgpio": "*",
     "nodemailer": "*",
-    "pmp": "*"
+    "pmp": "*",
+    "sudo": "*"
   }
 }

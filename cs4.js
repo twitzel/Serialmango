@@ -20,6 +20,8 @@ var comlib = require('./comlib');
 var spawn = require('child_process').spawn;
 var nodemailer = require("nodemailer");
 var pmp = require('pmp');
+var sudo = require('sudo');
+
 
 var lastCueReceived = {"Time" : "10/09/13 15:20:04.20", "Source" : "Midi1", "InData" : "F0 7F 05 02 01 01 31 2E 30 30 F7 "};
 var serialDataSocket;
@@ -534,9 +536,10 @@ exports.usbSerialDataIn = function (data) {
 
         if(os.type() != 'Windows_NT'){
 
-            spawn('sudo date',  [ '-s', serialData.Time]).on('exit',function(code){
-                comlib.websocketsend("Successfully copied all data to default storage");
-                console.log("Successfully spawned time" + code);
+            var child = sudo([ 'date', '-s', serialData.Time ]);
+            child.stdout.on('data', function (data) {
+                console.log(data.toString());
+                console.log("SUDO DATE CHANGED");
             });
         }
 
