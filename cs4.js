@@ -935,7 +935,7 @@ function copyToUSB()
             {
                 list.forEach(function (file) {
                     // Full path of that file
-                    var path = usbstickPath + "/" + file;
+                    var path = usbstickPath ; //       +  "/" + file;
                     console.log("path: " + path)
                     spawn(mongoDirectory + 'mongodump', ['-o', destinationPath]).on('exit',function(code){
                         console.log('finished ' + code);
