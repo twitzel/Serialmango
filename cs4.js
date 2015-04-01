@@ -1023,12 +1023,12 @@ function copyFromUSB()
 
                     fse.rmrf(destinationPath, function (err) {
                         if (err) {
-                            console.error(err);
+                            console.log("fse.rmrf - error: " + err);
                         }
                         console.log('we are here dir removed');
 
 
-                        if(1){ //if(fs.existsSync(path + '/dump')){
+                        if(fs.existsSync(path + '/dump')){
                             console.log("path exists: " + path + '/dump');
                             fse.copyRecursive(path + '/dump', destinationPath, function (err) {
                                 if (err) {
