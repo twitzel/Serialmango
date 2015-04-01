@@ -1,5 +1,5 @@
 {
-      "name": "Serialmango",
+  "name": "Serialmango",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -8,8 +8,8 @@
   "dependencies": {
     "express": "3.4.0",
     "jade": "*",
-    "ws" : "*" ,
-    "mongodb": "*" ,
+    "ws": "*",
+    "mongodb": "*",
     "serialport": "1.1.3",
     "ejs": "*",
     "time": "*",
@@ -18,7 +18,6 @@
     "nodemailer": "0.7",
     "pmp": "*",
     "sudo": "*",
-    "moment": "*",
     "moment-timezone": "*"
   }
 }

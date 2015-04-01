@@ -923,7 +923,7 @@ function copyToUSB()
     //this is for the pi
     else
     {
-        usbstickPath = "/media";
+        usbstickPath = "/media/usb0";
          path = usbstickPath ;
          sourcePath = "/data/db";
          destinationPath = "/home/pi/dump"; // this wass abritrauraly chosen but now fixed
@@ -1001,7 +1001,7 @@ function copyFromUSB()
     //this is for the pi
     else
     {
-        usbstickPath = "/media";
+        usbstickPath = "/media/usb0";
         path = usbstickPath ;
         sourcePath = "/data/db";
         destinationPath = "/home/pi/dump"; // this wass abritrauraly chosen but now fixed
