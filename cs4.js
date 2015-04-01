@@ -1013,7 +1013,7 @@ function copyFromUSB()
             {
                 list.forEach(function (file) {
                     // Full path of that file
-                    var path = usbstickPath + "/" + file;
+                    var path = usbstickPath ; //       + "/" + file;
                     console.log("path: " + path)
 
                     fse.rmrf(destinationPath, function (err) {
