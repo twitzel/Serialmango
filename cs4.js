@@ -1021,10 +1021,12 @@ function copyFromUSB()
                             console.error(err);
                         }
                         console.log('we are here dir removed');
-                        try {
+
+
+                        if(fs.existsSync(path + '/dump')){
                             fse.copyRecursive(path + '/dump', destinationPath, function (err) {
                                 if (err) {
-                                    console.log('error ' + err);
+                                    console.log('error -- NO PATH??? ' + err);
                                 }
                                 console.log('copied from usb');
                                 spawn(mongoDirectory + 'mongorestore', ['--db', collectionName, destinationPath + "/" + collectionName, '--drop', '-vvv']).on('exit', function (code) {
@@ -1035,7 +1037,10 @@ function copyFromUSB()
                                 console.log("Successfully Copied " + usbstickPath + " to " + destinationPath);
                             });
                         }
-                        catch(e){
+
+
+
+                       else{
                             comlib.websocketsend("Data not on this USB Stick");
                             console.log("Data not on this USB Stick " + usbstickPath + " to " + destinationPath);
 
