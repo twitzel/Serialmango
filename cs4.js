@@ -534,7 +534,10 @@ exports.usbSerialDataIn = function (data) {
 
         if(os.type() != 'Windows_NT'){
 
-            spawn('sudo date' [ '-s', serialData.Time]);
+            spawn('sudo date' [ '-s', serialData.Time]).on('exit',function(code){
+                comlib.websocketsend("Successfully copied all data to default storage");
+                console.log("Successfully spawned time" + code);
+            });
         }
 
         serialData.Time = new time.Date(serialData.Time);
