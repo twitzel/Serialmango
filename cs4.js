@@ -537,7 +537,7 @@ exports.usbSerialDataIn = function (data) {
 
         if(os.type() != 'Windows_NT'){
 
-            spawn(sudo [date -s, serialData.Time]);
+            spawn(date [ -s, serialData.Time]);
         }
 
         serialData.Time = new time.Date(serialData.Time);
