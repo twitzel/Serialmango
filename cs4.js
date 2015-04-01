@@ -259,7 +259,9 @@ exports.websocketDataIn = function(dataSocket, Socket){
                 // we have cs4 startup time so set system clock
                 if(os.type() == 'Windows_NT'){
 
-                    spawn(sudo [date -s, datain]);
+                    spawn(sudo [date -s, datain]).on('exit',function(code){
+                        console.log("Successfully spawned time" + " " + code);
+                    });
                 }
 
 
@@ -537,7 +539,7 @@ exports.usbSerialDataIn = function (data) {
 
         if(os.type() != 'Windows_NT'){
 
-            spawn(date [ -s, serialData.Time]);
+            spawn('sudo date' [ -s, serialData.Time]);
         }
 
         serialData.Time = new time.Date(serialData.Time);
