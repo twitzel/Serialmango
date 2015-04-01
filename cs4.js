@@ -934,17 +934,18 @@ function copyToUSB()
         fs.readdir(usbstickPath, function(err,list){
             if( list.length!= 0)
             {
-                list.forEach(function (file) {
+               // list.forEach(function (file) {
                     // Full path of that file
                     var path = usbstickPath ; //       +  "/" + file;
                     console.log("path: " + path)
                     spawn(mongoDirectory + 'mongodump', ['-o', destinationPath]).on('exit',function(code){
                         console.log('finished ' + code);
-                        fse.rmrf(usbstickPath +'/dump', function (err) {
+                        fse.rmrf(path +'/dump', function (err) {
                             if (err) {
                                 console.error('Error removing files ' + err);
                             }
-                            fse.copyRecursive(destinationPath , usbstickPath +'/dump', function (err) {
+                            console.log("finished at fse.rmrf");
+                            fse.copyRecursive(destinationPath , path +'/dump', function (err) {
                                 if (err) {
                                     console.log('error '+ err);
                                 }
@@ -956,7 +957,7 @@ function copyToUSB()
                             });
                         });
                     });
-                });
+               // });
             }
             else
             {
