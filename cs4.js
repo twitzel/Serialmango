@@ -1032,7 +1032,7 @@ function copyFromUSB()
                             console.log("path exists: " + path + '/dump');
                             fse.copyRecursive(path + '/dump', destinationPath, function (err) {
                                 if (err) {
-                                    console.log('error -- NO PATH??? ' + err);
+                                    console.log('error -- NO PATH??? '+ err);
                                 }
                                 console.log('copied from usb');
                                     spawn(mongoDirectory + 'mongorestore', ['--db', collectionName, destinationPath + "/" + collectionName, '--drop', '-vvv']).on('exit', function (code) {
