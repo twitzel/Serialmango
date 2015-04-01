@@ -540,13 +540,13 @@ exports.usbSerialDataIn = function (data) {
             });
         }
 
-        serialData.Time = new time.Date(serialData.Time);
+      //  serialData.Time = new time.Date(serialData.Time);
 
 
 
 
-        var rr = serialData.Time.getTimezone;
-        console.log(rr);
+      //  var rr = serialData.Time.getTimezone;
+      ///  console.log(rr);
     }
 
 
