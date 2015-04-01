@@ -1028,13 +1028,14 @@ function copyFromUSB()
                         console.log('we are here dir removed');
 
 
-                        if(fs.existsSync(path + '/dump')){
+                        if(1){ //if(fs.existsSync(path + '/dump')){
+                            console.log("path exists: " + path + '/dump');
                             fse.copyRecursive(path + '/dump', destinationPath, function (err) {
                                 if (err) {
                                     console.log('error -- NO PATH??? ' + err);
                                 }
                                 console.log('copied from usb');
-                                spawn(mongoDirectory + 'mongorestore', ['--db', collectionName, destinationPath + "/" + collectionName, '--drop', '-vvv']).on('exit', function (code) {
+                                    spawn(mongoDirectory + 'mongorestore', ['--db', collectionName, destinationPath + "/" + collectionName, '--drop', '-vvv']).on('exit', function (code) {
                                     console.log('finished ' + code);
                                 });
                                 if(display == true) {
