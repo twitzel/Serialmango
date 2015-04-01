@@ -923,6 +923,7 @@ function copyToUSB()
     //this is for the pi
     else
     {
+        var display = true;
         usbstickPath = "/media/usb0";
          path = usbstickPath ;
          sourcePath = "/data/db";
@@ -943,8 +944,11 @@ function copyToUSB()
                             if (err) {
                                 console.log('error '+ err);
                             }
-                            comlib.websocketsend("Successfully Copied All Data to USB Stick");
-                            console.log("Successfully Copied " + destinationPath + " to " + usbstickPath);
+                            if(display == true) {
+                                comlib.websocketsend("Successfully Copied All Data to USB Stick");
+                                console.log("Successfully Copied " + destinationPath + " to " + usbstickPath);
+                                display = false;
+                            }
                         });
                     });
                 });
@@ -1001,6 +1005,7 @@ function copyFromUSB()
     //this is for the pi
     else
     {
+        var display = true;
         usbstickPath = "/media/usb0";
         path = usbstickPath ;
         sourcePath = "/data/db";
@@ -1032,9 +1037,11 @@ function copyFromUSB()
                                 spawn(mongoDirectory + 'mongorestore', ['--db', collectionName, destinationPath + "/" + collectionName, '--drop', '-vvv']).on('exit', function (code) {
                                     console.log('finished ' + code);
                                 });
-
-                                comlib.websocketsend("Successfully Copied All Data from USB Stick");
-                                console.log("Successfully Copied " + usbstickPath + " to " + destinationPath);
+                                if(display == true) {
+                                    comlib.websocketsend("Successfully Copied All Data from USB Stick");
+                                    console.log("Successfully Copied " + usbstickPath + " to " + destinationPath);
+                                    display = false;
+                                }
                             });
                         }
 
