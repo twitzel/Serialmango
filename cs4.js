@@ -940,11 +940,11 @@ function copyToUSB()
                     console.log("path: " + path)
                     spawn(mongoDirectory + 'mongodump', ['-o', destinationPath]).on('exit',function(code){
                         console.log('finished ' + code);
-                        fse.rmrf(usbstickPath +'dump', function (err) {
+                        fse.rmrf(usbstickPath +'/dump', function (err) {
                             if (err) {
                                 console.error('Error removing files ' + err);
                             }
-                            fse.copyRecursive(destinationPath , usbstickPath +'dump', function (err) {
+                            fse.copyRecursive(destinationPath , usbstickPath +'/dump', function (err) {
                                 if (err) {
                                     console.log('error '+ err);
                                 }
