@@ -945,10 +945,12 @@ function copyToUSB()
                                 console.error('Error removing files ' + err);
                             }
                             console.log("finished at fse.rmrf");
+                            comlib.websocketsend("Please Wait ... Preparing Data .......");
                             fse.copyRecursive(destinationPath , path +'/dump', function (err) {
                                 if (err) {
                                     console.log('error '+ err);
                                 }
+                                console.log("Finished copying files");
                                 if(display == true) {
                                     comlib.websocketsend("Successfully Copied All Data to USB Stick");
                                     console.log("Successfully Copied " + destinationPath + " to " + usbstickPath);
@@ -1086,9 +1088,6 @@ function copyFromUSB()
                                 }
                             });
                         }
-
-
-
                        else{
                             comlib.websocketsend("Data not on this USB Stick");
                             console.log("Data not on this USB Stick " + usbstickPath + " to " + destinationPath);

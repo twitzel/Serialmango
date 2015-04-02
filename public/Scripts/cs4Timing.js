@@ -62,7 +62,7 @@ function init()
         for (var i = 0; i < Desc.length; i++) {
            // cueStats[i] = Desc[i][0] + TAB + TAB + TAB + Desc[i][1] + TAB +TAB + Desc[i][2] + TAB + TAB + Desc[i][3];
           //  cueHistory.innerHTML = cueStats[i] + "<BR>" + cueHistory.innerHTML;
-            dropdown[dropdown.length] = new Option(Desc[i][0], Desc[i][0]);
+            dropdown[dropdown.length] = new Option(Desc[i][1], Desc[i][1]);
         }
         var table = document.getElementById("cuetable");
 
@@ -71,7 +71,7 @@ function init()
 
         for(var i = 0; i<Desc.length; i++){
             row = table.insertRow(1+i);
-            for(var j =0; j< 4; j++){
+            for(var j =0; j< 5; j++){
                 row.insertCell(j).innerHTML = Desc[i][j];
             }
 
@@ -261,6 +261,14 @@ function buttonDelete(){
         websocket.send(JSON.stringify(dataPacket));
     }
     dataPacket.Type = ''; // reset the packet type
+}
+
+function buttonSave(){
+    var inputConfirm =confirm("Are you sure you are finished with this Timing?");
+    if (inputConfirm==true)
+    {
+        window.location.href = "/cs4Home";
+    }
 }
 
 function buttonRetime() {
