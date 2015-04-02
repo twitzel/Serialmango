@@ -941,6 +941,7 @@ function copyToUSB()
                     console.log("path: " + path)
                     spawn(mongoDirectory + 'mongodump', ['-o', destinationPath]).on('exit',function(code){
                         console.log('finished ' + code);
+                        comlib.websocketsend("Please Wait ... Preparing Data .......");
                         fse.rmrf(path +'/dump', function (err) {
                             if (err) {
                                 console.error('Error removing files ' + err);
