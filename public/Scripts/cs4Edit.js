@@ -252,12 +252,14 @@ function pixelLoad(item){
     else {
         for(var i = 0; i< item.length; i++){
             if(item[i].OutData){//make sure record is valid
+                if((oneCueFile == 1) && (item[i].OutData[j].Desc == oneCueFileName ) ){
 
-
-                pixelArray[count] =  item[i]; // stick the object into the array
-                count++;
-                //iterate over all of the OutData
-
+                }
+                else {
+                    pixelArray[count] = item[i]; // stick the object into the array
+                    count++;
+                    //iterate over all of the OutData
+                }
                 for(var j = 0; j < item[i].OutData.length; j++){
                     var packet = {};
                     if(oneCueFile ==1){ // we only want one descrtption to be edited
