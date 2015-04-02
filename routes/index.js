@@ -272,13 +272,17 @@ exports.cs4Edit = function(req, res){
             itemsWaiting++;
             collectionCue.aggregate({ $unwind : "$OutData" },{ $match : {"OutData.Desc": item[i]._id}},{$limit:1}, function(err1, itemInfo){
                 itemsWaiting--;
-                for(j=0; item.length; j++){ //connect the sum with the proper description
-                    if(item[j]._id == itemInfo[0].OutData.Desc){
-                        count = item[j].sum;
-                        break;
+                for(j=0; j< item.length; j++){ //connect the sum with the proper description
+                    if (itemInfo[0].OutData) {
+                        if (item[j]._id == itemInfo[0].OutData.Desc) {
+                            count = item[j].sum;
+                            break;
+                        }
                     }
                 }
-                itemInfoFinal.push([itemInfo[0].OutData.Desc, count, itemInfo[0].OutData.Showname, itemInfo[0].OutData.Dout]);
+                if (itemInfo[0].OutData) {
+                    itemInfoFinal.push([itemInfo[0].OutData.Desc, count, itemInfo[0].OutData.Showname, itemInfo[0].OutData.Dout]);
+                }
                 if(itemsWaiting == 0){
                     allDoneEdit(req, res);
                 }

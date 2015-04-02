@@ -252,6 +252,8 @@ function pixelLoad(item){
     else {
         for(var i = 0; i< item.length; i++){
             if(item[i].OutData){//make sure record is valid
+
+
                 pixelArray[count] =  item[i]; // stick the object into the array
                 count++;
                 //iterate over all of the OutData
