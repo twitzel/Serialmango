@@ -251,7 +251,7 @@ function pixelLoad(item){
     }
     else {
         for(var i = 0; i< item.length; i++){
-            if(item[i].OutData){//make sure record is valid
+            if(item[i].OutData.len > 0){//make sure record is valid
                 if((oneCueFile == 1) && (item[i].OutData[j].Desc != oneCueFileName ) ){
 
                 }
