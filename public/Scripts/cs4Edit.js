@@ -252,12 +252,28 @@ function pixelLoad(item){
     else {
         for(var i = 0; i< item.length; i++){
             if(item[i].OutData){//make sure record is valid
-                if((oneCueFile == 1) && (item[i].OutData.length >0 ) ){
+                if((oneCueFile == 1) && (item[i].OutData.length ==0 ) ){ // get rid of unattached cues
 
                 }
-                else {
-                    pixelArray[count] = item[i]; // stick the object into the array
-                    count++;
+                else{
+
+                    if(oneCueFile == 1) {
+                        for(var k = 0; k < item[i].OutData.length; k++){
+                            if(item[i].OutData[k].Desc == oneCueFileName ){
+                                pixelArray[count] = item[i]; // stick the object into the array
+                                count++;
+                                break;
+                            }
+                        }
+                    }
+                    else{
+                        if(oneCueFile == 0){
+                            pixelArray[count] = item[i]; // stick the object into the array
+                            count++;
+
+                        }
+
+                    }
                     //iterate over all of the OutData
                 }
                 for(var j = 0; j < item[i].OutData.length; j++){
