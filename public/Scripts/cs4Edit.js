@@ -252,7 +252,7 @@ function pixelLoad(item){
     else {
         for(var i = 0; i< item.length; i++){
             if(item[i].OutData){//make sure record is valid
-                if((oneCueFile == 1) && (item[i].OutData.length ==0 ) ){ // get rid of unattached cues
+                if(item[i].OutData.length ==0 ) { // get rid of unattached cues
 
                 }
                 else{
