@@ -8,7 +8,7 @@
 
  var Test =    "<%=Test%>" ;
  var Desc =    "<%=JSON.stringify(Desc)%>";
-
+ var Settings =    "<%=JSON.stringify(Settings)%>";
 
 </script>
 <html>
@@ -43,8 +43,9 @@
         <div id = "title" >
             <button id = "buttonBackground"  onmousedown = "buttonBackground()"> BkGnd </button>
             <button id = "buttonClear"  onmousedown = "buttonClear()">Clear</button>
-            <button id = "buttonRetime Cue File"  onmousedown = "buttonRetime()">Delete OR Retime One Cue Type</button>
-            <button id = "buttonDelete Current Cue File"  onmousedown = "buttonDelete()">Delete ALL Current Cue File/s</button>
+            <button id = "buttonShowname Cue File"  onmousedown = "buttonShowname()">Show Name</button>
+            <button id = "buttonRetime Cue File"  onmousedown = "buttonRetime()">Delete/Retime 1 Cue Type</button>
+            <button id = "buttonDelete Current Cue File"  onmousedown = "buttonDelete()">Delete ALL Cue File/s</button>
             <button id = "buttsave"  onmousedown = "buttonSave()">Save Timing and Exit</button>
             <h2>Event Log</h2>
         </div>
@@ -67,6 +68,24 @@
             <button id =="buttonRetimeContinue" class = "retimebutton" onmousedown="buttonRetimeContinue()">DELETE Timing</button>
 
         </div>
+
+        <div id="shownamearray" style="border:3px solid black; background-color: #e6e6e6; padding:10px; font-size:100%; text-align:center; display:none;">
+            <div id="shownametext">
+                <legend>Select 'Show Name' to  DELETE:
+                    <select id = "shownameDesc">
+                    </select>
+                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp       Showname to add: <input id=shownameAdd name=shownameAdd type=text value="" style = "width: 8em" required>
+                </legend>
+            </div>
+            <div id="shownamebuttons">
+                <button id =="buttonShownameDelete" class = "shownamebutton" onmousedown="buttonShownameDelete()">DELETE Showname</button>
+                <button id =="buttonShownameAdd" class = "shownamebutton" onmousedown="buttonShownameAdd()">Add Showname</button>
+                <button id ="buttonShownnameCancel" class = "shownamebutton" onmousedown="buttonShownameCancel()">Finished</button>
+            </div>
+        </div>
+
+
+
         <div id = "cuetitle">
             <h2>Current Cue File Information</h2>
         </div>
@@ -96,8 +115,13 @@
             <div id = timing1 class = timing >
                 <fieldset id = "fieldset1">
                     <legend><b>Timing 1</b></legend>
+                    <legend>Show Name:
+                        <select id = showname1>
 
-                            Show Name: <input id=showname1 name=showname1 type=text value="ShowName" required style = "width: 8em" autofocus>
+                        </select>
+
+                    </legend>
+
                     <div>
                         Description: <input id=description1 name=description1 type=text value="-" style = "width: 8em" required>
                     </div>
@@ -130,8 +154,13 @@
             <div id = timing2 class = timing>
                 <fieldset>
                     <legend id = "legend1"><b>Timing 2</b></legend>
+                    <legend>Show Name:
+                        <select id = showname2>
 
-                    Show Name: <input id=showname2 name=showname2 type=text value="ShowName" required style = "width: 8em"  >
+                        </select>
+
+                    </legend>
+
                     <div>
                         Description: <input id=description2 name=description2 type=text value="-" style = "width: 8em" required>
                     </div>
@@ -162,8 +191,13 @@
                 <div id = timing3 class = timing>
                     <fieldset>
                         <legend><b>Timing 3</b></legend>
+                        <legend>Show Name:
+                            <select id = showname3>
 
-                        Show Name: <input id=showname3 name=showname3 type=text value="ShowName" required style = "width: 8em"  >
+                            </select>
+
+                        </legend>
+
                         <div>
                             Description: <input id=description3 name=description3 type=text value="-" style = "width: 8em" required>
                         </div>

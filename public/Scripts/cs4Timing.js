@@ -74,16 +74,50 @@ function init()
             for(var j =0; j< 5; j++){
                 row.insertCell(j).innerHTML = Desc[i][j];
             }
-
         }
-
-
-
-
+    }
+    if(Settings){
+        Settings = JSON.parse(Settings.replace(/&quot;/g, '"'));
+        showname = Settings.showname;
+        showname = showname.sort();
+        populateShowName();
     }
 }
 
+function populateShowName(){
 
+
+    showname = showname.sort();
+    var showselect = document.getElementById("showname1");
+    showselect.innerHTML='';
+    for (var i = 0; i < showname.length; i++) {
+        showselect[showselect.length] = new Option(showname[i], showname[i]);
+    }
+    showselect = document.getElementById("showname2");
+    showselect.innerHTML='';
+    for (var i = 0; i < showname.length; i++) {
+        showselect[showselect.length] = new Option(showname[i], showname[i]);
+    }
+    showselect = document.getElementById("showname3");
+    showselect.innerHTML='';
+    for (var i = 0; i < showname.length; i++) {
+        showselect[showselect.length] = new Option(showname[i], showname[i]);
+    }
+    showselect = document.getElementById("shownameDesc");
+    showselect.innerHTML='';
+    for (var i = 0; i < showname.length; i++) {
+        showselect[showselect.length] = new Option(showname[i], showname[i]);
+    }
+
+}
+
+function saveParameters(showname){
+
+    Settings.showname = showname;
+    dataPacket.Type ='SETTINGS';
+    dataPacket.Data = Settings;
+    websocket.send(JSON.stringify(dataPacket));
+}
 
 
 function testWebSocket()
@@ -116,7 +150,6 @@ function onMessage(evt)    {
     if((evt.data.substr(0,1) != '.')&& (evt.data.indexOf("ZIGBEE2")<0)){
         incue = 1;
     }
-
 }
 
 function onError(evt) {
@@ -145,6 +178,42 @@ function writeToScreen(message) {
     //output.value = message+"<BR>"+output.value;
 }
 
+function buttonShowname(){
+    document.getElementById('shownamearray').style.display = "block";
+}
+
+function buttonShownameCancel(){
+    document.getElementById('shownamearray').style.display = "none";
+}
+function buttonShownameDelete(){
+    var index = showname.indexOf(document.getElementById("shownameDesc").value);
+    if (index > -1) {
+        showname.splice(index, 1); //removes item from index
+    }
+    showname = showname.sort();
+    Settings.showname = showname;
+    dataPacket.Type ='SETTINGS';
+    dataPacket.Data = Settings;
+    websocket.send(JSON.stringify(dataPacket));
+    populateShowName(); // update list
+}
+
+function buttonShownameAdd(){
+    var item = document.getElementById("shownameAdd").value;
+    if(item == ""){
+        alert("Show Name Can not be empty!");
+        return;
+    }
+
+    showname.push(item)
+    showname = showname.sort();
+    Settings.showname = showname;
+    dataPacket.Type ='SETTINGS';
+    dataPacket.Data = Settings;
+    websocket.send(JSON.stringify(dataPacket));
+    populateShowName(); // update list
+    document.getElementById("shownameAdd").value = '';//clear text box
+}
 
 function cueclick1(message){
     if(incue ==0){

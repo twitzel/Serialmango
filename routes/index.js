@@ -152,6 +152,15 @@ exports.cs4Home = function(req, res){
 exports.cs4Timing = function(req, res){
     itemInfoFinal = [];
     itemInfoFinal.length = 0; // clear the array
+    var cs4Settings;
+    collectionSettings.findOne({},function(error,result){
+        if(result){
+            cs4Settings = result;
+        }
+        else{
+            cs4Settings = {};
+        }
+    });
     collectionCue.find().toArray(function(error,countCue) {
         var counter = 0;
         for (var i = 0; i < countCue.length; i++) {
@@ -213,7 +222,7 @@ exports.cs4Timing = function(req, res){
 function allDoneTiming(req, res) {
     console.log(itemInfoFinal);
 
-    res.render('cs4Timing.ejs', { title: 'CS-4 Timing', Test: req.params.Test , Desc: itemInfoFinal});
+    res.render('cs4Timing.ejs', { title: 'CS-4 Timing', Test: req.params.Test , Desc: itemInfoFinal, Settings: cs4Settings});
 }
 function allDoneEdit(req, res) {
     console.log(itemInfoFinal);

@@ -41,6 +41,33 @@
 #retime{
     height: 50px;
 }
+
+#retime button{
+    margin-left: 3%;
+    float:left;
+    border-radius:5px;
+    font-weight: bold;
+}
+
+#shownamearray{
+    height: 50px;
+}
+#shownametext{
+    margin-left: 6%;
+    margin-right: 5%;
+}
+
+#shownamearray button{
+    margin-left: 10%;
+    float:left;
+    border-radius:5px;
+    font-weight: bold;
+}
+
+#shownamebuttons{
+    margin-left: 15%;
+
+}
 .retimebutton{
     margin-right: 5.2%;
     float:left;
