@@ -14,6 +14,7 @@ var incue = 0;
 var dataPacket = {};
 var testing = 0;
 var cueStats = [];
+var showname =[];
 
 //window.onload = init;
 window.addEventListener("load", init, true);
