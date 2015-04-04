@@ -472,7 +472,7 @@ function cueAuto(type){ //now it's mis named only sends once.
         dataOut =  "GO slide" + counter +".jpg NEXT slide"+(counter +1) +".jpg";
     }
     else if(dataFormat == 'r4audiocue'){
-        dataOut = "GO audio" + counter + ".mp3";
+        dataOut = "GO audA" + counter + ".mp3";
     }
     cue.value = counter +1; //update the cue count
    // delay = (new Date()-lastCueTime);
