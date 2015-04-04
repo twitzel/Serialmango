@@ -78,10 +78,13 @@ function init()
     }
     if(Settings){
         Settings = JSON.parse(Settings.replace(/&quot;/g, '"'));
-        showname = Settings.showname;
-        showname = showname.sort();
-        populateShowName();
+        if(Settings.showname) {
+            showname = Settings.showname;
+            showname = showname.sort();
+            populateShowName();
+        }
     }
+
 }
 
 function populateShowName(){
@@ -204,9 +207,13 @@ function buttonShownameAdd(){
         alert("Show Name Can not be empty!");
         return;
     }
-
-    showname.push(item)
-    showname = showname.sort();
+    if(showname) {
+        showname.push(item)
+        showname = showname.sort();
+    }
+    else{
+        showname = item;
+    }
     Settings.showname = showname;
     dataPacket.Type ='SETTINGS';
     dataPacket.Data = Settings;
