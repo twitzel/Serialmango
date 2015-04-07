@@ -1331,18 +1331,32 @@ exports.ledOff = function(){
 function ledInfoOn(GPIOnum){
     if(os.type() != 'Windows_NT') // this is only for the pi
     {
-        var led = require('fastgpio');
+       /* var led = require('fastgpio');
         led.prepareGPIO(GPIOnum);
         led.set(GPIOnum);
+        */
+        var gpio = require("pi-gpio");
+        gpio.open(GPIOnum, "output", function(err) {     // Open pin 1for output
+            gpio.write(GPIOnum, 1, function() {          // Set pin  high (1)
+                gpio.close(GPIOnum);                     // Close pin
+            });
+        });
     }
 }
 
 function ledInfoOff(GPIOnum){
     if(os.type() != 'Windows_NT') // this is only for the pi
     {
-        var led = require('fastgpio');
+       /* var led = require('fastgpio');
         led.prepareGPIO(GPIOnum);
         led.unset(GPIOnum);
+        */
+        var gpio = require("pi-gpio");
+        gpio.open(GPIOnum, "output", function(err) {     // Open pin 1for output
+            gpio.write(GPIOnum, 0, function() {          // Set pin  low (1)
+                gpio.close(GPIOnum);                     // Close pin
+            });
+        });
     }
 }
 

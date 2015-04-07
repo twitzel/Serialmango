@@ -14,7 +14,7 @@
     "ejs": "*",
     "time": "*",
     "fs.extra": "*",
-    "fastgpio": "*",
+    "pi-gpio": "*",
     "nodemailer": "0.7",
     "pmp": "*",
     "sudo": "*",
