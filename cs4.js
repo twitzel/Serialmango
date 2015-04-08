@@ -1335,27 +1335,10 @@ function ledInfoOn(GPIOnum){
         led.prepareGPIO(GPIOnum);
         led.set(GPIOnum);
         */
-
-        //translate from pi header to pi gpio pin #
-        switch(GPIOnum){
-            case 4:
-                GPIOnum = 7;
-                break;
-            case 17:
-                GPIOnum = 11;
-                break;
-            case 27:
-                GPIOnum = 13;
-                break;
-            default:
-                return;
-        }
-        var gpio = require("pi-gpio");
-        gpio.open(GPIOnum, "output", function(err) {     // Open pin 1for output
-            gpio.write(GPIOnum, 1, function() {          // Set pin  high (1)
-                gpio.close(GPIOnum);                     // Close pin
-            });
-        });
+        var rpio = require('rpio');
+        rpio.setMode('physical');
+        rpio.setOutput(GPIOnum);
+        rpio.write(GPIOnum, rpio.HIGH);
     }
 }
 
@@ -1366,27 +1349,11 @@ function ledInfoOff(GPIOnum){
         led.prepareGPIO(GPIOnum);
         led.unset(GPIOnum);
         */
+        var rpio = require('rpio');
+        rpio.setMode('physical');
+        rpio.setOutput(GPIOnum);
+        rpio.write(GPIOnum, rpio.LOW);
 
-        //translate from pi header to pi gpio pin #
-        switch(GPIOnum){
-            case 4:
-                GPIOnum = 7;
-                break;
-            case 17:
-                GPIOnum = 11;
-                break;
-            case 27:
-                GPIOnum = 13;
-                break;
-            default:
-                return;
-        }
-        var gpio = require("pi-gpio");
-        gpio.open(GPIOnum, "output", function(err) {     // Open pin 1for output
-            gpio.write(GPIOnum, 0, function() {          // Set pin  low (1)
-                gpio.close(GPIOnum);                     // Close pin
-            });
-        });
     }
 }
 
