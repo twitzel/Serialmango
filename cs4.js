@@ -1336,7 +1336,7 @@ function ledInfoOn(GPIOnum){
         led.set(GPIOnum);
         */
         var rpio = require('rpio');
-        rpio.setMode('physical');
+        rpio.setMode('gpio');
         rpio.setOutput(GPIOnum);
         rpio.write(GPIOnum, rpio.HIGH);
     }
@@ -1350,7 +1350,7 @@ function ledInfoOff(GPIOnum){
         led.unset(GPIOnum);
         */
         var rpio = require('rpio');
-        rpio.setMode('physical');
+        rpio.setMode('gpio');
         rpio.setOutput(GPIOnum);
         rpio.write(GPIOnum, rpio.LOW);
 
