@@ -1327,8 +1327,8 @@ exports.ledOff = function(){
 
         var rpio = require('rpio');
         rpio.setMode('gpio');
-        rpio.setOutput(GPIOnum);
-        rpio.write(GPIOnum, rpio.LOW);
+        rpio.setOutput(4);
+        rpio.write(4, rpio.LOW);
         clearInterval(blink);
     }
 };
