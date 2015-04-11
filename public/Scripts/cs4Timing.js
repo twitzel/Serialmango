@@ -200,6 +200,8 @@ function buttonShownameDelete(){
     dataPacket.Data = Settings;
     websocket.send(JSON.stringify(dataPacket));
     populateShowName(); // update list
+    dataPacket.Type="";
+
 }
 
 function buttonShownameAdd(){
