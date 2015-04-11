@@ -221,6 +221,8 @@ function buttonShownameAdd(){
     websocket.send(JSON.stringify(dataPacket));
     populateShowName(); // update list
     document.getElementById("shownameAdd").value = '';//clear text box
+    dataPacket.Type="";
+
 }
 
 function cueclick1(message){
