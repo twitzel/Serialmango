@@ -456,6 +456,13 @@ exports.websocketDataIn = function(dataSocket, Socket){
         // serialDataSocket is the array data from the websocket
 
         //
+        //update to keep editing data in proper order
+        if (serialDataSocket.OutData) {
+            serialDataSocket.OutData.InCue = lastCueReceived;
+        }
+
+
+
         collectionCue.update({'InData':lastCueReceived.InData}, {$set: lastCueReceived},{upsert:true, w:1},function(err,res){
 
             console.log('InData to collection Cue'+res);
@@ -610,7 +617,7 @@ exports.usbSerialDataIn = function (data) {
         }
     }
 
-    if(data.length >= 35) // this is to let GETTIME come through and get logged GETTIME returns a string 34 characters
+    if(data.length >= 35) // this is REAL timing data,
     {
 
         if(serialData.Source != 'zigbee2:') { //only update if real cue NOT zigbee2
@@ -641,7 +648,7 @@ exports.usbSerialDataIn = function (data) {
 
       // comlib.websocketsend(parseCue(serialData));
     }
-    else{
+    else{ // this is for time data only.  to let GETTIME come through and get logged GETTIME returns a string 34 characters
         if(serialData.Time){
             //we have startup time from the CS4 I/O board
             collectionStartup.insert(serialData, {w: 1}, function (err, result) {

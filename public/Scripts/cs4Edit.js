@@ -65,8 +65,14 @@ function init(){
         var item = [];
         var TAB = "\t";
         var dropdown = document.getElementById("retimeDesc");
+        var tempSort = [];
         for (var i = 0; i < Desc.length; i++) {
-            dropdown[dropdown.length] = new Option(Desc[i][0], Desc[i][0]);
+            tempSort[i] = Desc[i][0];
+        }
+        tempSort.sort(); // put them in alphabetical order
+
+        for (var i = 0; i < Desc.length; i++) {
+            dropdown[dropdown.length] = new Option(tempSort[i]);         //(Desc[i][0], Desc[i][0]);
         }
     }
 }
@@ -260,7 +266,11 @@ function pixelLoad(item){
                     if(oneCueFile == 1) {
                         for(var k = 0; k < item[i].OutData.length; k++){
                             if(item[i].OutData[k].Desc == oneCueFileName ){
+                                if(item[i].OutData[k].InCue) {
+                                    item[i].Time = item[i].OutData[k].InCue.Time; // get the time of the cue that fired time cue
+                                }
                                 pixelArray[count] = item[i]; // stick the object into the array
+
                                 count++;
                                 break;
                             }
@@ -281,7 +291,13 @@ function pixelLoad(item){
                     if(oneCueFile ==1){ // we only want one descrtption to be edited
                         if (item[i].OutData[j].Desc == oneCueFileName ) {
                             //  packet.Time = new Date(new Date(item[i].Time) + item[i].OutData[j].Delay).toISOString();
-                            packet.Time = new Date(item[i].Time);
+                            if(item[i].OutData[j].InCue) {
+                                packet.Time = new Date(item[i].OutData[j].InCue.Time);  //get the time of the catual that fired this one.
+                            }
+                            else{
+                                packet.Time = new Date(item[i].Time);
+                            }
+
                             packet.Time = new Date(packet.Time.setMilliseconds(packet.Time.getMilliseconds() + item[i].OutData[j].Delay)).toISOString();
                             packet.Data = item[i].OutData[j];
                             dir = item[i].OutData[j].Dir;

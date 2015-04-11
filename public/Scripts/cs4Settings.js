@@ -392,7 +392,7 @@ function midi2button(){
 }
 
 function sendMidiAuto(){
-    if(document.getElementById('sendMidiAuto').innerHTML == "Send Midi Auto"){
+    if((document.getElementById('sendMidiAuto').innerHTML == "Send Midi Auto") ||(document.getElementById('sendMidiAuto').innerHTML == "Send Midi 1 Auto") ){
         document.getElementById('sendMidiAuto').innerHTML = "Stop Midi Auto"  ;
         document.getElementById("sendMidiAuto").style.background='#FF0000';
         midiAuto(); //start settimeout and repeats forever -- unless stopped

@@ -26,23 +26,23 @@ function init()
     cuevalue2 = document.getElementById("cue2");
     cuevalue3 = document.getElementById("cue3");
 
-    var password =prompt("This is a system level protected area.  ANY changes entered here will affect CS4 System operation.  \n\nPlease enter password to continue." ,"");
+    if(Test != 'valid') { // allows us to get back into page in valid
+        var password = prompt("This is a system level protected area.  ANY changes entered here will affect CS4 System operation.  \n\nPlease enter password to continue.", "");
 
-    if(password != "" && password !== null) //check for cancel button
-    {
-        if (password == "qwerty")
+        if (password != "" && password !== null) //check for cancel button
         {
-            document.getElementById("blackout").style.visibility="visible"; //if correct password make visible
+            if (password == "qwerty") {
+                document.getElementById("blackout").style.visibility = "visible"; //if correct password make visible
+            }
+            else {
+                init(); //if wrong password start again
+            }
         }
-        else
-        {
-            init(); //if wrong password start again
+        else {
+            window.location.href = "/cs4Home";
         }
     }
-    else
-    {
-        window.location.href = "/cs4Home";
-    }
+    else{document.getElementById("blackout").style.visibility = "visible";}
 
     //remove this line
     document.getElementById("blackout").style.visibility="visible"; //if correct password make visible
@@ -336,6 +336,7 @@ function buttonDelete(){
     {
         dataPacket.Type = 'DELETECUE';
         websocket.send(JSON.stringify(dataPacket));
+        setTimeout(function(){window.location.href = "/cs4Timing/valid";}, 2000);// wait for data to be updated then restart the page with updated info
     }
     dataPacket.Type = ''; // reset the packet type
 }
@@ -359,6 +360,9 @@ function buttonRetimeContinue(){
         dataPacket.Type = 'DELETEONECUE';
         dataPacket.data = document.getElementById("retimeDesc").value;
         websocket.send(JSON.stringify(dataPacket));
+        setTimeout(function(){window.location.href = "/cs4Timing/valid";}, 2000);// wait for data to be updated then restart the page with updated info
+
+
         //now update cue info
         var TAB = "\t";
         var cueHistory =document.getElementById("cueinfo");
