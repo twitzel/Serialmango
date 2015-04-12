@@ -257,6 +257,7 @@ exports.cs4Settings = function(req, res){
         else{
             cs4Settings = {};
         }
+        console.log("This is cs4 SETTINGS: ", cs4Settings)
         res.render('cs4Settings.ejs',{ title: 'CS-4 Scroll', myuri:"ws://localhost:8080", cs4Settings:cs4Settings });
     });
 };
