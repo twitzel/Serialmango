@@ -3,7 +3,7 @@
  * GET home page.
  */
 var itemInfoFinal = [];
-
+var cs4Settings;
 exports.index = function(req, res){
     res.render('index.jade', { title: 'Express - Serial Port Sending data' });
 //sending serial data  and a non function to call back with the results
@@ -152,7 +152,7 @@ exports.cs4Home = function(req, res){
 exports.cs4Timing = function(req, res){
     itemInfoFinal = [];
     itemInfoFinal.length = 0; // clear the array
-    var cs4Settings;
+   // var cs4Settings; // made global
     collectionSettings.findOne({},function(error,result){
         if(result){
             cs4Settings = result;
