@@ -54,27 +54,32 @@ function init()
         document.getElementById('test').style.display = "none";
     }
     if(Desc) {
+        try {
 
-        Desc = JSON.parse(Desc.replace(/&quot;/g, '"'));
-        var item = [];
-        var TAB = "\t";
-        var cueHistory =document.getElementById("cueinfo");
-        var dropdown = document.getElementById("retimeDesc");
-        for (var i = 0; i < Desc.length; i++) {
-           // cueStats[i] = Desc[i][0] + TAB + TAB + TAB + Desc[i][1] + TAB +TAB + Desc[i][2] + TAB + TAB + Desc[i][3];
-          //  cueHistory.innerHTML = cueStats[i] + "<BR>" + cueHistory.innerHTML;
-            dropdown[dropdown.length] = new Option(Desc[i][1], Desc[i][1]);
-        }
-        var table = document.getElementById("cuetable");
-
-        var row;
-        var cell = [];
-
-        for(var i = 0; i<Desc.length; i++){
-            row = table.insertRow(1+i);
-            for(var j =0; j< 5; j++){
-                row.insertCell(j).innerHTML = Desc[i][j];
+            Desc = JSON.parse(Desc.replace(/&quot;/g, '"'));
+            var item = [];
+            var TAB = "\t";
+            var cueHistory = document.getElementById("cueinfo");
+            var dropdown = document.getElementById("retimeDesc");
+            for (var i = 0; i < Desc.length; i++) {
+                // cueStats[i] = Desc[i][0] + TAB + TAB + TAB + Desc[i][1] + TAB +TAB + Desc[i][2] + TAB + TAB + Desc[i][3];
+                //  cueHistory.innerHTML = cueStats[i] + "<BR>" + cueHistory.innerHTML;
+                dropdown[dropdown.length] = new Option(Desc[i][1], Desc[i][1]);
             }
+            var table = document.getElementById("cuetable");
+
+            var row;
+            var cell = [];
+
+            for (var i = 0; i < Desc.length; i++) {
+                row = table.insertRow(1 + i);
+                for (var j = 0; j < 5; j++) {
+                    row.insertCell(j).innerHTML = Desc[i][j];
+                }
+            }
+        }
+        catch(e){
+
         }
     }
     if(Settings){
