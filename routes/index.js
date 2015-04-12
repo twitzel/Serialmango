@@ -220,9 +220,20 @@ exports.cs4Timing = function(req, res){
 };
 
 function allDoneTiming(req, res) {
-    console.log(itemInfoFinal);
+    collectionSettings.findOne({},function(error,result){
+        if(result){
+            cs4Settings = result;
+        }
+        else{
+            cs4Settings = {};
+        }
 
-    res.render('cs4Timing.ejs', { title: 'CS-4 Timing', Test: req.params.Test , Desc: itemInfoFinal, Settings: cs4Settings});
+        console.log(itemInfoFinal);
+        res.render('cs4Timing.ejs', { title: 'CS-4 Timing', Test: req.params.Test , Desc: itemInfoFinal, Settings: cs4Settings});
+    });
+
+
+
 }
 function allDoneEdit(req, res) {
     console.log(itemInfoFinal);
@@ -246,9 +257,8 @@ exports.cs4Settings = function(req, res){
         else{
             cs4Settings = {};
         }
+        res.render('cs4Settings.ejs',{ title: 'CS-4 Scroll', myuri:"ws://localhost:8080", cs4Settings:cs4Settings });
     });
-
-    res.render('cs4Settings.ejs',{ title: 'CS-4 Scroll', myuri:"ws://localhost:8080" });
 };
 
 exports.cs4Edit = function(req, res){

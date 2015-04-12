@@ -13,35 +13,37 @@ function init(){
     wsUri = "ws://" + window.location.hostname + ":8080";
     output = document.getElementById("websocketlog");
     //    context.canvas.width  = window.innerWidth;
+    if(cs4Settings) {
+        cs4Settings = JSON.parse(cs4Settings.replace(/&quot;/g, '"'));
+        // load the sysetm parameters into the fieldset
 
-    // load the sysetm parameters into the fieldset
-    if(cs4Settings.enableZigbee2 == "YES"){
-        document.getElementById("zigbeemonitoryes").checked = true;
-    }
-    else if(cs4Settings.enableZigbee2 == "NO"){
-        document.getElementById("zigbeemonitorno").checked = true;
-    }
+        if(cs4Settings.enableZigbee2 == "YES"){
+            document.getElementById("zigbeemonitoryes").checked = true;
+        }
+        else if(cs4Settings.enableZigbee2 == "NO"){
+            document.getElementById("zigbeemonitorno").checked = true;
+        }
 
-    if(cs4Settings.ignoreSource == "YES"){
-        document.getElementById("inputsourceyes").checked = true;
-    }
-    else if(cs4Settings.ignoreSource == "NO"){
-        document.getElementById("inputsourceno").checked = true;
-    }
-    document.getElementById("email").value = cs4Settings.emailAddress;
-    document.getElementById("startupdmx1").value = cs4Settings.dmx1;
-    document.getElementById("dmx1").value = cs4Settings.dmx1;
-    document.getElementById("startupdmx2").value = cs4Settings.dmx2;
-    document.getElementById("dmx2").value = cs4Settings.dmx2;
-    document.getElementById("startupdmx3").value = cs4Settings.dmx3;
-    document.getElementById("dmx3").value = cs4Settings.dmx3;
-    document.getElementById("testtimeselect").value = cs4Settings.testTime;
-    document.getElementById("systemname").value = cs4Settings.systemName;
-    document.getElementById("emailAccount").value = cs4Settings.emailAccount;
-    document.getElementById("emailAccountPassword").value = cs4Settings.emailAccountPassword;
+        if(cs4Settings.ignoreSource == "YES"){
+            document.getElementById("inputsourceyes").checked = true;
+        }
+        else if(cs4Settings.ignoreSource == "NO"){
+            document.getElementById("inputsourceno").checked = true;
+        }
+        document.getElementById("email").value = cs4Settings.emailAddress;
+        document.getElementById("startupdmx1").value = cs4Settings.dmx1;
+        document.getElementById("dmx1").value = cs4Settings.dmx1;
+        document.getElementById("startupdmx2").value = cs4Settings.dmx2;
+        document.getElementById("dmx2").value = cs4Settings.dmx2;
+        document.getElementById("startupdmx3").value = cs4Settings.dmx3;
+        document.getElementById("dmx3").value = cs4Settings.dmx3;
+        document.getElementById("testtimeselect").value = cs4Settings.testTime;
+        document.getElementById("systemname").value = cs4Settings.systemName;
+        document.getElementById("emailAccount").value = cs4Settings.emailAccount;
+        document.getElementById("emailAccountPassword").value = cs4Settings.emailAccountPassword;
 
-    document.getElementById("timeZoneCombo").value = cs4Settings.timezone;
-
+        document.getElementById("timeZoneCombo").value = cs4Settings.timezone;
+    }
     testWebSocket();
 }
 

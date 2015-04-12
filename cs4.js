@@ -49,7 +49,7 @@ var fmt = "ddd, MMM DD YYYY, HH:mm:ss.SS"; // format string for momentTZ time st
 var timerStartTime;
 var waitTime;
 var TimeToTest = 1000*60*5;//5 minutes  //1000*60*60*24;
-var cs4Settings;
+//var cs4Settings;
 
 //routine to ensure that serial data is not sent more than
 // every timedOutInterval
