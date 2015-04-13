@@ -14,7 +14,7 @@ function init(){
     output = document.getElementById("websocketlog");
     //    context.canvas.width  = window.innerWidth;
     if(cs4Settings) {
-        cs4Settings = JSON.parse(cs4Settings.replace(/&quot;/g, '"'));
+        cs4Settings = JSON.parse(cs4Settings.replace(/&quot;/g, '"').replace(/&#34;/g, '"'));
         // load the sysetm parameters into the fieldset
 
         if(cs4Settings.enableZigbee2 == "YES"){
