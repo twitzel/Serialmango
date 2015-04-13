@@ -56,7 +56,7 @@ function init()
     if(Desc) {
         try {
 
-            Desc = JSON.parse(Desc.replace(/&quot;/g, '"'));
+            Desc = JSON.parse(Desc.replace(/&quot;/g, '"').replace(/&#34;/g, '"'));
             var item = [];
             var TAB = "\t";
             var cueHistory = document.getElementById("cueinfo");
@@ -83,7 +83,7 @@ function init()
         }
     }
     if(Settings){
-        Settings = JSON.parse(Settings.replace(/&quot;/g, '"'));
+        Settings = JSON.parse(Settings.replace(/&quot;/g, '"').replace(/&#34;/g, '"'));
         if(Settings.showname) {
             showname = Settings.showname;
             showname = showname.sort();
