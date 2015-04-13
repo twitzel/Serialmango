@@ -61,7 +61,7 @@ function init(){
     testWebSocket();
     if(Desc) {
 
-        Desc = JSON.parse(Desc.replace(/&quot;/g, '"'));
+        Desc = JSON.parse(Desc.replace(/&quot;/g, '"').replace(/&#34;/g, '"'));
         var item = [];
         var TAB = "\t";
         var dropdown = document.getElementById("retimeDesc");
