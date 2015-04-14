@@ -124,8 +124,8 @@ exports.setup = function()
     //MongoClient.connect("mongodb://localhost:27017/WizDb", function(err, db)
    // MongoClient.connect("mongodb://192.168.2.10:27017/WizDb", function(err, db)
 
-     MongoClient.connect("mongodb://" + global.myuri + ":27017/" + collectionName, function(err, db)
-    //MongoClient.connect("mongodb://" + "192.168.2.67" + ":27017/" + collectionName, function(err, db)
+   // MongoClient.connect("mongodb://" + global.myuri + ":27017/" + collectionName, function(err, db)
+    MongoClient.connect("mongodb://" + "192.168.2.67" + ":27017/" + collectionName, function(err, db)
     {
         if (err)
         {
@@ -253,22 +253,24 @@ exports.websocketDataIn = function(dataSocket, Socket){
                     comlib.websocketsend("* Preparing Data For Display. \n* Please Wait. \n* (may take several seconds) ", Socket) ;
                         collectionLog.find({},{_id:0}).sort({"Time": -1}).limit(1000).toArray(function(error,logfile){
                       //collectionLog.find({},{_id:0}).sort({ $natural: -1 }).limit(1000).toArray(function(error,logfile){
-                        for(var i = 0; i <logfile.length;i++)
-                        {
-                            logfileData = JSON.stringify(logfile[i]);
-
-                            if(logfile[i].Dout)
-                            {
-                                //comlib.websocketsend(".    Sent: " + logfileData, Socket) ;
-                                dataToSend = dataToSend + ".    Sent: " +formatLogData(logfileData) + "\n" ;
-                            }
-                            else
-                            {
-                                //comlib.websocketsend(parseCue(logfileData),Socket);
-                                dataToSend = dataToSend + parseCue(logfileData) + "\n" ;
-                            }
+                        if(error){
+                            console.log(error);
                         }
-                        comlib.websocketsend(dataToSend, Socket) ;
+                        else {
+                            for (var i = 0; i < logfile.length; i++) {
+                                logfileData = JSON.stringify(logfile[i]);
+
+                                if (logfile[i].Dout) {
+                                    //comlib.websocketsend(".    Sent: " + logfileData, Socket) ;
+                                    dataToSend = dataToSend + ".    Sent: " + formatLogData(logfileData) + "\n";
+                                }
+                                else {
+                                    //comlib.websocketsend(parseCue(logfileData),Socket);
+                                    dataToSend = dataToSend + parseCue(logfileData) + "\n";
+                                }
+                            }
+                            comlib.websocketsend(dataToSend, Socket);
+                        }
                     });
             }
             else
@@ -634,6 +636,12 @@ exports.usbSerialDataIn = function (data) {
         //Log the data into the collection
 
         collectionLog.insert(serialData, {w: 1}, function (err, result) {
+            if(err){
+                console.log(err);
+            }
+            else{
+                console.log(result);
+            }
           //  console.log(result);
         });
 
