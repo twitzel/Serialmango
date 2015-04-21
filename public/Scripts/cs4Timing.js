@@ -245,6 +245,11 @@ function cueclick1(message){
     var dataOut;
     var desc;
 
+    document.getElementById('description1').disabled = true;
+    document.getElementById('showname1').disabled = true;
+    document.getElementById('directory1').disabled = true;
+
+
     desc = document.getElementById('description1').value;
     dataFormat = document.getElementById('type1').value;
 
@@ -278,6 +283,10 @@ function cueclick2(message){
     var dataOut;
     var desc;
 
+    document.getElementById('description2').disabled = true;
+    document.getElementById('showname2').disabled = true;
+    document.getElementById('directory2').disabled = true;
+
     desc = document.getElementById('description2').value;
     dataFormat = document.getElementById('type2').value;
 
@@ -306,6 +315,10 @@ function cueclick3(message){
     var dataFormat;
     var dataOut;
     var desc;
+
+    document.getElementById('description3').disabled = true;
+    document.getElementById('showname3').disabled = true;
+    document.getElementById('directory3').disabled = true;
 
     desc = document.getElementById('description3').value;
     dataFormat = document.getElementById('type3').value;
