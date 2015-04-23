@@ -999,7 +999,8 @@ function zoomcanvasMousemove(event){
                     }
                 }
                 if(selected >=0 || selected <=pixelArray.length){
-                    drawSingleEvent(selected,'red', 'red');
+                    drawSingleEvent(selected,'red', 'yellow');
+                    document.body.style.cursor  = 'col-resize';
                 }
 
             }
