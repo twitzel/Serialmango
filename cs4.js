@@ -1280,6 +1280,27 @@ exports.ledOn = function(){
         else{
             global.externalIP = gateway.externalIP;
             console.log('gateway found: '+ gateway.ip + ", External IP: "+ gateway.externalIP);
+
+
+            /////////////
+            console.log('Ready to send START UP email message');
+            var mailOptions = {
+                from: "CS4 @ " + myuri + "✔ " + cs4Settings.emailAccount,
+                //  from: "CS4 192.168.2.10 ✔ <stevewitz@gmail.com>", // sender address
+                to: cs4Settings.emailAddress,
+                // to: "steve@wizcomputing.com      ", // comma seperated list of receivers
+                subject: "Start Up Message from CS4 ✔: "+ cs4Settings.systemName, // Subject line
+                text: cs4Settings.systemName+ " CS4 has just started.\n  External IP address:  http://" + global.externalIP + ":3000" + " - and internal IP address: "  +global.myuri+ ":3000", // plaintext body
+                html: cs4Settings.systemName+ " CS4 has just started.\n  External IP address:  http://" + global.externalIP + ":3000" + " - and internal IP address: "  +global.myuri+ ":3000"// html body
+            };
+
+            // send mail with defined transport object
+            sendMail(mailOptions);
+            console.log("READY to start system test in 10 seconds");
+            setTimeout(function(){startSystemTest();}, 10000); // check for results after delay
+            //  setTimeout(function(){setAutoTest(0);}, 20000);
+            /////////////////////
+
             pmp.portMap(gateway,3000,3000,0,'CS4 Main',function(err,rslt){
 
                 if(!err) {
@@ -1306,24 +1327,6 @@ exports.ledOn = function(){
                             console.log(err,rslt);
                         }
 
-                        /////////////
-                        console.log('Ready to send START UP email message');
-                        var mailOptions = {
-                            from: "CS4 @ " + myuri + "✔ " + cs4Settings.emailAccount,
-                            //  from: "CS4 192.168.2.10 ✔ <stevewitz@gmail.com>", // sender address
-                            to: cs4Settings.emailAddress,
-                            // to: "steve@wizcomputing.com      ", // comma seperated list of receivers
-                            subject: "Start Up Message from CS4 ✔: "+ cs4Settings.systemName, // Subject line
-                            text: cs4Settings.systemName+ " CS4 has just started.\n  External IP address:  http://" + global.externalIP + ":3000" + " - and internal IP address: "  +global.myuri+ ":3000", // plaintext body
-                            html: cs4Settings.systemName+ " CS4 has just started.\n  External IP address:  http://" + global.externalIP + ":3000" + " - and internal IP address: "  +global.myuri+ ":3000"// html body
-                        };
-
-                        // send mail with defined transport object
-                        sendMail(mailOptions);
-                        console.log("READY to start system test in 10 seconds");
-                        setTimeout(function(){startSystemTest();}, 10000); // check for results after delay
-                        //  setTimeout(function(){setAutoTest(0);}, 20000);
-                        /////////////////////
 
 
 
@@ -1336,6 +1339,24 @@ exports.ledOn = function(){
 
         }
 
+        /////////////
+        console.log('Ready to send START UP email message');
+        var mailOptions = {
+            from: "CS4 @ " + myuri + "✔ " + cs4Settings.emailAccount,
+            //  from: "CS4 192.168.2.10 ✔ <stevewitz@gmail.com>", // sender address
+            to: cs4Settings.emailAddress,
+            // to: "steve@wizcomputing.com      ", // comma seperated list of receivers
+            subject: "Start Up Message from CS4 ✔: "+ cs4Settings.systemName, // Subject line
+            text: cs4Settings.systemName+ " CS4 has just started.\n  External IP address:  http://" + global.externalIP + ":3000" + " - and internal IP address: "  +global.myuri+ ":3000", // plaintext body
+            html: cs4Settings.systemName+ " CS4 has just started.\n  External IP address:  http://" + global.externalIP + ":3000" + " - and internal IP address: "  +global.myuri+ ":3000"// html body
+        };
+
+        // send mail with defined transport object
+        sendMail(mailOptions);
+        console.log("READY to start system test in 10 seconds");
+        setTimeout(function(){startSystemTest();}, 10000); // check for results after delay
+        //  setTimeout(function(){setAutoTest(0);}, 20000);
+        /////////////////////
 
     });
 };
