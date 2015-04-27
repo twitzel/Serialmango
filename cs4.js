@@ -667,7 +667,7 @@ exports.usbSerialDataIn = function (data) {
                     child = sudo([ 'date', '-s', serialDataTimeOrig ]);
                     child.stdout.on('data', function (data) {
                         console.log(data.toString());
-                       // console.log("SUDO DATE CHANGED");
+                       console.log("SUDO DATE CHANGED");
                     });
                 }
                 comlib.websocketsend("CS4 Current tme is: " + momentTZ(serialData.Time).format(fmt));
