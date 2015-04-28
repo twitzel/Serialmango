@@ -950,10 +950,10 @@ function copyToUSB()
 
         //have to find out the 'name' of the usb stick - it will be the only device in media
         fs.readdir(usbstickPath, function(err,list){
-            if( list.length!= 0)
+            if( !list)
             { console.log("file name:" ,list);
                              // Full path of that file
-                var path = usbstickPath ; //       +  "/" + file;
+                var path = usbstickPath   +  "/" + list; //go to subdirectory which is usb stick
                 console.log("path: " + path)
                 spawn(mongoDirectory + 'mongodump', ['-o', destinationPath]).on('exit',function(code){
                     console.log('finished ' + code);
