@@ -940,7 +940,47 @@ function copyToUSB()
     //this is for the pi
     else
     {
+
         var display = true;
+        usbstickPath = "/media/";
+        path = usbstickPath ;
+        sourcePath = "/data/db";
+        destinationPath = "/home/pi/dump"; // this wass abritrauraly chosen but now fixed
+        mongoDirectory = '/opt/mongo/bin/';
+
+        //have to find out the 'name' of the usb stick - it will be the only device in media
+        fs.readdir(usbstickPath, function(err,list){
+            if( list.length!= 0)
+            { console.log("file name:" ,list);
+                             // Full path of that file
+                var path = usbstickPath ; //       +  "/" + file;
+                console.log("path: " + path)
+                spawn(mongoDirectory + 'mongodump', ['-o', destinationPath]).on('exit',function(code){
+                    console.log('finished ' + code);
+                    comlib.websocketsend("Please Wait ... Preparing Data .......");
+                    fse.rmrf(path +'/dump', function (err) {
+                        if (err) {
+                            console.error('Error removing files ' + err);
+                        }
+                        console.log("finished at fse.rmrf");
+                        comlib.websocketsend("Please Wait ... Preparing Data .......");
+                        fse.copyRecursive(destinationPath , path +'/dump', function (err) {
+                            if (err) {
+                                console.log('error '+ err);
+                            }
+                            console.log("Finished copying files");
+                            if(display == true) {
+                                comlib.websocketsend("Successfully Copied All Data to USB Stick");
+                                console.log("Successfully Copied " + destinationPath + " to " + usbstickPath);
+                                display = false;
+                            }
+                        });
+                    });
+                });
+                // });
+            }
+
+     /*   var display = true;
         usbstickPath = "/media/usb0";
          path = usbstickPath ;
          sourcePath = "/data/db";
@@ -979,6 +1019,7 @@ function copyToUSB()
                     });
                // });
             }
+        */
             else
             {
                 comlib.websocketsend("USB stick is not detected.  Please insert USB stick and try again ");
