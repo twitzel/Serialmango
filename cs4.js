@@ -1122,7 +1122,78 @@ function copyFromUSB()
     else
     {
         var display = true;
-        usbstickPath = "/media/usb0";
+        usbstickPath = "/media/";
+        path = usbstickPath ;
+        sourcePath = "/data/db";
+        destinationPath = "/home/pi/dump"; // this wass abritrauraly chosen but now fixed
+        mongoDirectory = '/opt/mongo/bin/';
+
+        //have to find out the 'name' of the usb stick - it will be the only device in media
+
+        fs.readdir(usbstickPath, function(err,list){
+            if(list){
+                if(list.length !=0) {
+                    if (list[0] != "dump") {
+
+                        console.log("file name:", list);
+                        // Full path of that file
+                        var path = usbstickPath + "/" + list[0]; //go to subdirectory which is usb stick
+                        console.log("path: " + path)
+
+                        fse.rmrf(destinationPath, function (err) {
+                            if (err) {
+                                console.log("fse.rmrf - error: " + err);
+                            }
+                            console.log('we are here dir removed');
+
+
+                            if (fs.existsSync(path + '/dump')) {
+                                console.log("path exists: " + path + '/dump');
+                                fse.copyRecursive(path + '/dump', destinationPath, function (err) {
+                                    if (err) {
+                                        console.log('error -- NO PATH??? ' + err);
+                                    }
+                                    console.log('copied from usb');
+                                    spawn(mongoDirectory + 'mongorestore', ['--db', collectionName, destinationPath + "/" + collectionName, '--drop', '-vvv']).on('exit', function (code) {
+                                        console.log('finished ' + code);
+                                    });
+                                    if (display == true) {
+                                        comlib.websocketsend("Successfully Copied All Data from USB Stick");
+                                        console.log("Successfully Copied " + usbstickPath + " to " + destinationPath);
+                                        display = false;
+                                    }
+                                });
+                            }
+                            else {
+                                comlib.websocketsend("Data not on this USB Stick");
+                                console.log("Data not on this USB Stick " + usbstickPath + " to " + destinationPath);
+
+                            }
+                        });
+                    }
+                    else
+                    {
+                        comlib.websocketsend("USB stick is not detected.  Please insert USB stick and try again ");
+                        console.log("USB stick is not detected.  Please insert USB stick and try again ");
+                    }
+                }
+                else
+                {
+                    comlib.websocketsend("USB stick is not detected.  Please insert USB stick and try again ");
+                    console.log("USB stick is not detected.  Please insert USB stick and try again ");
+                }
+            }
+            else
+            {
+                comlib.websocketsend("USB stick is not detected.  Please insert USB stick and try again ");
+                console.log("USB stick is not detected.  Please insert USB stick and try again ");
+            }
+        });
+    }
+    /*
+    {
+        var display = true;
+        usbstickPath = "/media/";
         path = usbstickPath ;
         sourcePath = "/data/db";
         destinationPath = "/home/pi/dump"; // this wass abritrauraly chosen but now fixed
@@ -1176,6 +1247,7 @@ function copyFromUSB()
             }
         });
     }
+    */
 }
 
 function copyToInternal(location)
