@@ -981,6 +981,16 @@ function copyToUSB()
                             });
                         });
                     }
+                    else
+                    {
+                        comlib.websocketsend("USB stick is not detected.  Please insert USB stick and try again ");
+                        console.log("USB stick is not detected.  Please insert USB stick and try again ");
+                    }
+                }
+                else
+                {
+                    comlib.websocketsend("USB stick is not detected.  Please insert USB stick and try again ");
+                    console.log("USB stick is not detected.  Please insert USB stick and try again ");
                 }
             }
 
