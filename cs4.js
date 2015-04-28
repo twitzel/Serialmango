@@ -950,34 +950,38 @@ function copyToUSB()
 
         //have to find out the 'name' of the usb stick - it will be the only device in media
         fs.readdir(usbstickPath, function(err,list){
-            if(list)
-            { console.log("file name:" ,list);
-                             // Full path of that file
-                var path = usbstickPath   +  "/" + list; //go to subdirectory which is usb stick
-                console.log("path: " + path)
-                spawn(mongoDirectory + 'mongodump', ['-o', destinationPath]).on('exit',function(code){
-                    console.log('finished ' + code);
-                    comlib.websocketsend("Please Wait ... Preparing Data .......");
-                    fse.rmrf(path +'/dump', function (err) {
-                        if (err) {
-                            console.error('Error removing files ' + err);
-                        }
-                        console.log("finished at fse.rmrf");
-                        comlib.websocketsend("Please Wait ... Preparing Data .......");
-                        fse.copyRecursive(destinationPath , path +'/dump', function (err) {
-                            if (err) {
-                                console.log('error '+ err);
-                            }
-                            console.log("Finished copying files");
-                            if(display == true) {
-                                comlib.websocketsend("Successfully Copied All Data to USB Stick");
-                                console.log("Successfully Copied " + destinationPath + " to " + usbstickPath);
-                                display = false;
-                            }
+            if(list){
+                if(list.length !=0) {
+                    if (list[0] != "dump") {
+
+                        console.log("file name:", list);
+                        // Full path of that file
+                        var path = usbstickPath + "/" + list[0]; //go to subdirectory which is usb stick
+                        console.log("path: " + path)
+                        spawn(mongoDirectory + 'mongodump', ['-o', destinationPath]).on('exit', function (code) {
+                            console.log('finished ' + code);
+                            comlib.websocketsend("Please Wait ... Preparing Data .......");
+                            fse.rmrf(path + '/dump', function (err) {
+                                if (err) {
+                                    console.error('Error removing files ' + err);
+                                }
+                                console.log("finished at fse.rmrf");
+                                comlib.websocketsend("Please Wait ... Preparing Data .......");
+                                fse.copyRecursive(destinationPath, path + '/dump', function (err) {
+                                    if (err) {
+                                        console.log('error ' + err);
+                                    }
+                                    console.log("Finished copying files");
+                                    if (display == true) {
+                                        comlib.websocketsend("Successfully Copied All Data to USB Stick");
+                                        console.log("Successfully Copied " + destinationPath + " to " + usbstickPath);
+                                        display = false;
+                                    }
+                                });
+                            });
                         });
-                    });
-                });
-                // });
+                    }
+                }
             }
 
      /*   var display = true;
