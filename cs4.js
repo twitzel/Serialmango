@@ -950,7 +950,7 @@ function copyToUSB()
 
         //have to find out the 'name' of the usb stick - it will be the only device in media
         fs.readdir(usbstickPath, function(err,list){
-            if( !list)
+            if(list)
             { console.log("file name:" ,list);
                              // Full path of that file
                 var path = usbstickPath   +  "/" + list; //go to subdirectory which is usb stick
