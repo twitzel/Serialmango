@@ -48,6 +48,7 @@ var extrnalIP ="";
 var fmt = "ddd, MMM DD YYYY, HH:mm:ss.SS"; // format string for momentTZ time strings
 var timerStartTime;
 var waitTime;
+var systemStarted = false;
 var TimeToTest = 1000*60*5;//5 minutes  //1000*60*60*24;
 //var cs4Settings;
 
@@ -536,7 +537,7 @@ exports.usbSerialDataIn = function (data) {
     // and send output data to log file
 
     //added search fields: must match InData and Source
-    if ((serialData.InData != null) && (serialData.Source != 'zigbee2:')) {// DON't use zigbee2 as source for timing
+    if ((serialData.InData != null) && (serialData.Source != 'zigbee2:') && (systemStarted == true)) {// DON't use zigbee2 as source for timing
 
         if (cs4Settings.ignoreSource == 'NO') { // match source
             collectionCue.find({$and: [{'InData': serialData.InData} ,{'Source': serialData.Source }]}).toArray(function (err, item) {
@@ -620,7 +621,7 @@ exports.usbSerialDataIn = function (data) {
         }
     }
 
-    if(data.length >= 35) // this is REAL timing data,
+    if((data.length >= 35) && (systemStarted == true)) // this is REAL timing data,
     {
 
         if(serialData.Source != 'zigbee2:') { //only update if real cue NOT zigbee2
@@ -1605,6 +1606,7 @@ function checkForZigbee(auto){
             };
             ledInfoOn(4); // turn on the light
             sendMail(mailOptions);
+            systemStarted = true;
 
         }
         else{
@@ -1623,6 +1625,7 @@ function checkForZigbee(auto){
             };
             ledInfoBlink(4); // blink the light to indicate error
             sendMail(mailOptions);
+            systemStarted = true;
         }
 
 
