@@ -32,7 +32,65 @@
     font-size: 1.1em;
 }
 #setup{
+    border: 3px solid;
+    display:block;
+}
+
+
+#sysex1{
     display: none;
+}
+#sysex2{
+    display: none;
+}
+#sysex3{
+    display: none;
+}
+#sysex4{
+    display: none;
+}
+#other1{
+    display: none;
+}
+#other2{
+    display: none;
+}
+#other3{
+    display: none;
+}
+#other4{
+    display: none;
+}
+
+#nodisplay{
+    visibility: hidden;
+}
+#midi1{
+
+    border:2px solid #b32e25;
+}
+#midi2{
+    border:2px solid #b32e25;
+}
+#midi3{
+    border:2px solid #b32e25;
+}
+#midi4{
+    border:2px solid #b32e25;
+}
+
+
+
+
+#setup{
+    display: none;
+}
+
+#saveparameters{
+    background-color: #ffa2ae;
+}
+#closepparameters{
+    background-color: #ffa2ae;
 }
 #dmxsetup{
     width:50%;
@@ -40,6 +98,7 @@
 legend{
     font-weight: bold;
 }
+
 
 .hide{
     display: none;

@@ -174,6 +174,8 @@ exports.cs4Timing = function(req, res){
     });
     collectionCue.find().toArray(function(error,countCue) {
         var counter = 0;
+        var notcounted = 0;
+        var notindex = 0;
         for (var i = 0; i < countCue.length; i++) {
             if (countCue[i].OutData) {
                 counter += countCue[i].OutData.length
@@ -274,6 +276,8 @@ exports.cs4Settings = function(req, res){
 };
 
 exports.cs4Edit = function(req, res){
+    var notcounted = 0;
+    var notindex = 0;
     itemInfoFinal = [];
     itemInfoFinal.length=0; // clear the array
     collectionCue.find().toArray(function(error,countCue) {

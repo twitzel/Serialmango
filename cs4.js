@@ -438,7 +438,16 @@ exports.websocketDataIn = function(dataSocket, Socket){
             comlib.websocketsend("Successfully updated settings file");
             dataToSend = '          SLAVE ZIGEN ' + cs4Settings.enableZigbee2 ; //update the DMX channels
             sendOutput(dataToSend) ;
-           // clearInterval(autoTest); // if any previous timers are set, delete them
+            dataToSend = '          MIDIFIL1 ' + cs4Settings.midisex1 + " " + cs4Settings.nonsysex1 + " "+ (parseInt(+cs4Settings.deviceIDLow1)*1 + parseInt(+cs4Settings.deviceIDHigh1)*16).toString() + " " + cs4Settings.type1 + " " + cs4Settings.commandformat1 + " " +   cs4Settings.command1 + " " + cs4Settings.nonsysextype1 + " " + cs4Settings.nonsysexchannel1 + " ";
+            sendOutput(dataToSend);
+            dataToSend = '          MIDIFIL2 ' + cs4Settings.midisex2 + " " + cs4Settings.nonsysex2 + " "+ (parseInt(+cs4Settings.deviceIDLow2)*1 + parseInt(+cs4Settings.deviceIDHigh2)*16).toString() + " " + cs4Settings.type2 + " " + cs4Settings.commandformat2 + " " +   cs4Settings.command2 + " " + cs4Settings.nonsysextype2 + " " + cs4Settings.nonsysexchannel2 + " ";
+            sendOutput(dataToSend);
+            dataToSend = '          MIDIFIL3 ' + cs4Settings.midisex3 + " " + cs4Settings.nonsysex3 + " "+ (parseInt(+cs4Settings.deviceIDLow3)*1 + parseInt(+cs4Settings.deviceIDHigh3)*16).toString() + " " + cs4Settings.type3 + " " + cs4Settings.commandformat3 + " " +   cs4Settings.command3 + " " + cs4Settings.nonsysextype3 + " " + cs4Settings.nonsysexchannel3 + " ";
+            sendOutput(dataToSend);
+            dataToSend = '          MIDIFIL4 ' + cs4Settings.midisex4 + " " + cs4Settings.nonsysex4 + " "+ (parseInt(+cs4Settings.deviceIDLow4)*1 + parseInt(+cs4Settings.deviceIDHigh4)*16).toString() + " " + cs4Settings.type4 + " " + cs4Settings.commandformat4 + " " +   cs4Settings.command4 + " " + cs4Settings.nonsysextype4 + " " + cs4Settings.nonsysexchannel4 + " ";
+            sendOutput(dataToSend);
+
+            // clearInterval(autoTest); // if any previous timers are set, delete them
            // clearInterval(autoTest1); // if any previous timers are set, delete them
            // sendOutput('TIMEGET');
             autoTest1 = setTimeout(function(){sendOutput('TIMEGET');}, 2000);
@@ -787,43 +796,49 @@ function makeCueFile(dataSocket, fileName){
     tempcntoutgoing = 0;
     if(fileName !=""){  //this is a one Desc file edit!  just remove one Desc
         collectionCue.update({}, {$pull: {OutData: {Desc: fileName}}}, {multi: true}, function(err, item){
-            console.log("inside remove call back" + item);
-            for(i = 0; i< dataSocket.Data.length; i++){
-                serialDataSocketEdit = {};
-                if(dataSocket.Data[i].OutData){ // this is an incoming cue, so put data in proper form
-                    lastCueReceivedEdit = {};
-                    lastCueTime = dataSocket.Data[i].Time;
-                    lastCueReceivedEdit.InData = dataSocket.Data[i].InData;
-                    lastCueReceivedEdit.Source = dataSocket.Data[i].Source;
-                    lastCueReceivedEdit.Time = dataSocket.Data[i].Time;
-                    tempcntincoming ++;
-                }
-                else{ //This is cue data.  Adjust delay and put data in proper form
-                    tempcntoutgoing ++;
-                    serialDataSocketEdit.OutData = dataSocket.Data[i].Data;
-                    serialDataSocketEdit.OutData.Delay = new Date(dataSocket.Data[i].Time) - new Date(lastCueTime);
-
-                    collectionCue.update({'InData':lastCueReceivedEdit.InData}, {$set: lastCueReceivedEdit},{upsert:true, w:1},function(err,res){
-
-                        if(err){
-                            console.log('InData to collection Cue -- error: ' + err);
+            collectionCue.remove( {OutData:{$size:0}}, function(error, items){ // eliminate all unused cues
+                console.log("inside remove call back" + item);
+                for(i = 0; i< dataSocket.Data.length; i++){
+                    serialDataSocketEdit = {};
+                    if(dataSocket.Data[i].OutData){ // this is an incoming cue, so put data in proper form
+                        lastCueReceivedEdit = {};
+                        lastCueTime = dataSocket.Data[i].Time;
+                        lastCueReceivedEdit.InData = dataSocket.Data[i].InData;
+                        lastCueReceivedEdit.Source = dataSocket.Data[i].Source;
+                        lastCueReceivedEdit.Time = dataSocket.Data[i].Time;
+                        tempcntincoming ++;
+                    }
+                    else{ //This is cue data.  Adjust delay and put data in proper form
+                        tempcntoutgoing ++;
+                        serialDataSocketEdit.OutData = dataSocket.Data[i].Data;
+                        serialDataSocketEdit.OutData.InCue = lastCueReceivedEdit; // FIX FOR EDITING IN RIGHT ORDER
+                        if(serialDataSocketEdit.OutData.Dout.indexOf("455")>2){
+                            console.log("we are at 455");
                         }
+                        serialDataSocketEdit.OutData.Delay = new Date(dataSocket.Data[i].Time) - new Date(lastCueTime);
 
-                    });
+                        collectionCue.update({'InData':lastCueReceivedEdit.InData}, {$set: lastCueReceivedEdit},{upsert:true, w:1},function(err,res){
 
-                    collectionCue.update({'InData': lastCueReceivedEdit.InData}, {$push:serialDataSocketEdit},function(err,res){
-                        if(err){
-                            console.log('added Dout to collection Cue -- error: ' + err);
-                        }
+                            if(err){
+                                console.log('InData to collection Cue -- error: ' + err);
+                            }
 
-                    });
+                        });
+
+                        collectionCue.update({'InData': lastCueReceivedEdit.InData}, {$push:serialDataSocketEdit},function(err,res){
+                            if(err){
+                                console.log('added Dout to collection Cue -- error: ' + err);
+                            }
+
+                        });
+                    }
                 }
-            }
-            message = {};
-            message.packetType = "message";
-            message.data = "Successfully Updated Cue File";
-            comlib.websocketsend(JSON.stringify(message));
-            console.log("Successfully Updated Cue File")
+                message = {};
+                message.packetType = "message";
+                message.data = "Successfully Updated Cue File";
+                comlib.websocketsend(JSON.stringify(message));
+                console.log("Successfully Updated Cue File")
+            });
         });
     }
     else{
@@ -905,7 +920,7 @@ function copyToUSB()
     if(os.type() == 'Windows_NT')
     {
 
-         usbstickPath = "G:/"; // this is based on particular usbsticl
+         usbstickPath = "E:/"; // this is based on particular usbsticl
          path = usbstickPath ;
          sourcePath = "d://data/db"; // this is based on system install of mongo
          destinationPath = "d:/bac/dump"; //this is particular to the system mongo is running on
@@ -1087,7 +1102,7 @@ function copyFromUSB()
     if(os.type() == 'Windows_NT')
     {
 
-        usbstickPath = "G:/"; // this is based on particular usb stick
+        usbstickPath = "E:/"; // this is based on particular usb stick
         path = usbstickPath ;
         sourcePath = "d://data/db"; // this is based on system install of mongo
         destinationPath = "d:/bac/dump"; //this is particular to the system mongo is running on
@@ -1351,6 +1366,16 @@ exports.getSettings = function(){
             cs4Settings.emailAccount = "stevewitz@gmail.com";
             cs4Settings.emailAccountPassword = "panema2020!";
             cs4Settings.timezone = "US/Eastern";
+            cs4Settings.midisex1 = 0;
+            cs4Settings.nonsysex1 = 0;
+            cs4Settings.midisex2 = 0;
+            cs4Settings.nonsysex2 = 0;
+            cs4Settings.midisex3 = 0;
+            cs4Settings.nonsysex3 = 0;
+            cs4Settings.midisex4 = 0;
+            cs4Settings.nonsysex4 = 0;
+
+
             collectionSettings.insert(cs4Settings, {w: 1}, function (err, result) {
                 console.log(result);
             })
@@ -1369,6 +1394,22 @@ exports.getSettings = function(){
         sendOutput(dataToSend) ;
         dataToSend = '          SLAVE ZIGEN ' + cs4Settings.enableZigbee2 + ''; //update the DMX channels
         sendOutput(dataToSend) ;
+        dataToSend = '          MIDIFIL1 ' + cs4Settings.midisex1 + " " + cs4Settings.nonsysex1 + " "+ (parseInt(+cs4Settings.deviceIDLow1)*1 + parseInt(+cs4Settings.deviceIDHigh1)*16).toString() + " " + cs4Settings.type1 + " " + cs4Settings.commandformat1 + " " +   cs4Settings.command1 + " " + cs4Settings.nonsysextype1 + " " + cs4Settings.nonsysexchannel1 + " ";
+        sendOutput(dataToSend);
+        dataToSend = '          MIDIFIL2 ' + cs4Settings.midisex2 + " " + cs4Settings.nonsysex2 + " "+ (parseInt(+cs4Settings.deviceIDLow2)*1 + parseInt(+cs4Settings.deviceIDHigh2)*16).toString() + " " + cs4Settings.type2 + " " + cs4Settings.commandformat2 + " " +   cs4Settings.command2 + " " + cs4Settings.nonsysextype2 + " " + cs4Settings.nonsysexchannel2 + " ";
+        sendOutput(dataToSend);
+        dataToSend = '          MIDIFIL3 ' + cs4Settings.midisex3 + " " + cs4Settings.nonsysex3 + " "+ (parseInt(+cs4Settings.deviceIDLow3)*1 + parseInt(+cs4Settings.deviceIDHigh3)*16).toString() + " " + cs4Settings.type3 + " " + cs4Settings.commandformat3 + " " +   cs4Settings.command3 + " " + cs4Settings.nonsysextype3 + " " + cs4Settings.nonsysexchannel3 + " ";
+        sendOutput(dataToSend);
+        dataToSend = '          MIDIFIL4 ' + cs4Settings.midisex4 + " " + cs4Settings.nonsysex4 + " "+ (parseInt(+cs4Settings.deviceIDLow4)*1 + parseInt(+cs4Settings.deviceIDHigh4)*16).toString() + " " + cs4Settings.type4 + " " + cs4Settings.commandformat4 + " " +   cs4Settings.command4 + " " + cs4Settings.nonsysextype4 + " " + cs4Settings.nonsysexchannel4 + " ";
+        sendOutput(dataToSend);
+
+
+
+
+
+
+
+
         exports.ledOn();
 
     });

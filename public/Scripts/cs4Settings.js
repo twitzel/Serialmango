@@ -43,6 +43,55 @@ function init(){
         document.getElementById("emailAccountPassword").value = cs4Settings.emailAccountPassword;
 
         document.getElementById("timeZoneCombo").value = cs4Settings.timezone;
+
+        document.getElementById("midisysex1").value = cs4Settings.midisex1;
+        document.getElementById("deviceIDLow1").value = cs4Settings.deviceIDLow1;
+        document.getElementById("deviceIDHigh1").value = cs4Settings.deviceIDHigh1;
+        document.getElementById("type1").value = cs4Settings.type1;
+        document.getElementById("commandformat1").value = cs4Settings.commandformat1;
+        document.getElementById("command1").value = cs4Settings.command1;
+        document.getElementById("nonsysex1").value = cs4Settings.nonsysex1;
+        document.getElementById("nonsysextype1").value = cs4Settings.nonsysextype1;
+        document.getElementById("nonsysexchannel1").value = cs4Settings.nonsysexchannel1;
+
+        document.getElementById("midisysex2").value = cs4Settings.midisex2;
+        document.getElementById("deviceIDLow2").value = cs4Settings.deviceIDLow2;
+        document.getElementById("deviceIDHigh2").value = cs4Settings.deviceIDHigh2;
+        document.getElementById("type2").value = cs4Settings.type2;
+        document.getElementById("commandformat2").value = cs4Settings.commandformat2;
+        document.getElementById("command2").value = cs4Settings.command2;
+        document.getElementById("nonsysex2").value = cs4Settings.nonsysex2;
+        document.getElementById("nonsysextype2").value = cs4Settings.nonsysextype2;
+        document.getElementById("nonsysexchannel2").value = cs4Settings.nonsysexchannel2;
+
+        document.getElementById("midisysex3").value = cs4Settings.midisex3;
+        document.getElementById("deviceIDLow3").value = cs4Settings.deviceIDLow3;
+        document.getElementById("deviceIDHigh3").value = cs4Settings.deviceIDHigh3;
+        document.getElementById("type3").value = cs4Settings.type3;
+        document.getElementById("commandformat3").value = cs4Settings.commandformat3;
+        document.getElementById("command3").value = cs4Settings.command3;
+        document.getElementById("nonsysex3").value = cs4Settings.nonsysex3;
+        document.getElementById("nonsysextype3").value = cs4Settings.nonsysextype3;
+        document.getElementById("nonsysexchannel3").value = cs4Settings.nonsysexchannel3;
+
+        document.getElementById("midisysex4").value = cs4Settings.midisex4;
+        document.getElementById("deviceIDLow4").value = cs4Settings.deviceIDLow4;
+        document.getElementById("deviceIDHigh4").value = cs4Settings.deviceIDHigh4;
+        document.getElementById("type4").value = cs4Settings.type4;
+        document.getElementById("commandformat4").value = cs4Settings.commandformat4;
+        document.getElementById("command4").value = cs4Settings.command4;
+        document.getElementById("nonsysex4").value = cs4Settings.nonsysex4;
+        document.getElementById("nonsysextype4").value = cs4Settings.nonsysextype4;
+        document.getElementById("nonsysexchannel4").value = cs4Settings.nonsysexchannel4;
+        midisysexchange1();
+        nonsysexchange1();
+        midisysexchange2();
+        nonsysexchange2();
+        midisysexchange3();
+        nonsysexchange3();
+        midisysexchange4();
+        nonsysexchange4();
+
     }
     testWebSocket();
 }
@@ -137,6 +186,47 @@ function saveParameters(){
     cs4Settings.emailAccount = document.getElementById("emailAccount").value;
     cs4Settings.emailAccountPassword = document.getElementById("emailAccountPassword").value;
     cs4Settings.timezone = document.getElementById("timeZoneCombo").value;
+    
+    cs4Settings.midisex1 = document.getElementById("midisysex1").value;
+    cs4Settings.deviceIDLow1 = document.getElementById("deviceIDLow1").value;
+    cs4Settings.deviceIDHigh1 = document.getElementById("deviceIDHigh1").value;
+    cs4Settings.type1 = document.getElementById("type1").value;
+    cs4Settings.commandformat1 = document.getElementById("commandformat1").value;
+    cs4Settings.command1 = document.getElementById("command1").value;
+    cs4Settings.nonsysex1 = document.getElementById("nonsysex1").value;
+    cs4Settings.nonsysextype1 = document.getElementById("nonsysextype1").value;
+    cs4Settings.nonsysexchannel1 = document.getElementById("nonsysexchannel1").value;
+
+    cs4Settings.midisex2 = document.getElementById("midisysex2").value;
+    cs4Settings.deviceIDLow2 = document.getElementById("deviceIDLow2").value;
+    cs4Settings.deviceIDHigh2 = document.getElementById("deviceIDHigh2").value;
+    cs4Settings.type2 = document.getElementById("type2").value;
+    cs4Settings.commandformat2 = document.getElementById("commandformat2").value;
+    cs4Settings.command2 = document.getElementById("command2").value;
+    cs4Settings.nonsysex2 = document.getElementById("nonsysex2").value;
+    cs4Settings.nonsysextype2 = document.getElementById("nonsysextype2").value;
+    cs4Settings.nonsysexchannel2 = document.getElementById("nonsysexchannel2").value;
+    
+    cs4Settings.midisex3 = document.getElementById("midisysex3").value;
+    cs4Settings.deviceIDLow3 = document.getElementById("deviceIDLow3").value;
+    cs4Settings.deviceIDHigh3 = document.getElementById("deviceIDHigh3").value;
+    cs4Settings.type3 = document.getElementById("type3").value;
+    cs4Settings.commandformat3 = document.getElementById("commandformat3").value;
+    cs4Settings.command3 = document.getElementById("command3").value;
+    cs4Settings.nonsysex3 = document.getElementById("nonsysex3").value;
+    cs4Settings.nonsysextype3 = document.getElementById("nonsysextype3").value;
+    cs4Settings.nonsysexchannel3 = document.getElementById("nonsysexchannel3").value;
+
+    cs4Settings.midisex4 = document.getElementById("midisysex4").value;
+    cs4Settings.deviceIDLow4 = document.getElementById("deviceIDLow4").value;
+    cs4Settings.deviceIDHigh4 = document.getElementById("deviceIDHigh4").value;
+    cs4Settings.type4 = document.getElementById("type4").value;
+    cs4Settings.commandformat4 = document.getElementById("commandformat4").value;
+    cs4Settings.command4 = document.getElementById("command4").value;
+    cs4Settings.nonsysex4 = document.getElementById("nonsysex4").value;
+    cs4Settings.nonsysextype4 = document.getElementById("nonsysextype4").value;
+    cs4Settings.nonsysexchannel4 = document.getElementById("nonsysexchannel4").value;
+
     dataPacket.Type ='SETTINGS';
     dataPacket.Data = cs4Settings;
     websocket.send(JSON.stringify(dataPacket));
@@ -565,4 +655,147 @@ function timeZoneChange(){
 function systemtestbutton(){
     dataPacket.Type ="SYSTEMTEST";
     websocket.send(JSON.stringify(dataPacket));
+}
+//************************************  FILTERS  ******************************
+
+
+function midisysexchange1(){
+    switch (document.getElementById("midisysex1").value){
+        case '0':
+            document.getElementById("sysex1").style.display = "none";
+            break;
+
+        case '1':
+            document.getElementById("sysex1").style.display = "block";
+            break;
+
+        case '2':
+            document.getElementById("sysex1").style.display = "block";
+            break;
+        default:
+            document.getElementById("sysex1").style.display = "none";
+    }
+}
+function midisysexchange2(){
+    switch (document.getElementById("midisysex2").value){
+        case '0':
+            document.getElementById("sysex2").style.display = "none";
+            break;
+
+        case '1':
+            document.getElementById("sysex2").style.display = "block";
+            break;
+
+        case '2':
+            document.getElementById("sysex2").style.display = "block";
+            break;
+        default:
+            document.getElementById("sysex2").style.display = "none";
+    }
+}
+function midisysexchange3(){
+    switch (document.getElementById("midisysex3").value){
+        case '0':
+            document.getElementById("sysex3").style.display = "none";
+            break;
+
+        case '1':
+            document.getElementById("sysex3").style.display = "block";
+            break;
+
+        case '2':
+            document.getElementById("sysex3").style.display = "block";
+            break;
+        default:
+            document.getElementById("sysex3").style.display = "none";
+    }
+}
+function midisysexchange4(){
+    switch (document.getElementById("midisysex4").value){
+        case '0':
+            document.getElementById("sysex4").style.display = "none";
+            break;
+
+        case '1':
+            document.getElementById("sysex4").style.display = "block";
+            break;
+
+        case '2':
+            document.getElementById("sysex4").style.display = "block";
+            break;
+        default:
+            document.getElementById("sysex4").style.display = "none";
+    }
+}
+
+function nonsysexchange1(){
+    switch (document.getElementById("nonsysex1").value){
+        case '0':
+            document.getElementById("other1").style.display = "none";
+            break;
+
+        case '1':
+            document.getElementById("other1").style.display = "block";
+            break;
+
+        case '2':
+            document.getElementById("other1").style.display = "block";
+            break;
+        default:
+            document.getElementById("other1").style.display = "none";
+    }
+}
+
+function nonsysexchange2(){
+    switch (document.getElementById("nonsysex2").value){
+        case '0':
+            document.getElementById("other2").style.display = "none";
+            break;
+
+        case '1':
+            document.getElementById("other2").style.display = "block";
+            break;
+
+        case '2':
+            document.getElementById("other2").style.display = "block";
+            break;
+        default:
+            document.getElementById("other2").style.display = "none";
+    }
+}
+
+function nonsysexchange3(){
+    switch (document.getElementById("nonsysex3").value){
+        case '0':
+            document.getElementById("other3").style.display = "none";
+            break;
+
+        case '1':
+            document.getElementById("other3").style.display = "block";
+            break;
+
+        case '2':
+            document.getElementById("other3").style.display = "block";
+            break;
+        default:
+            document.getElementById("other3").style.display = "none";
+    }
+}
+
+function nonsysexchange4(){
+    switch (document.getElementById("nonsysex4").value){
+        case '0':
+            document.getElementById("other4").style.display = "none";
+            break;
+
+        case '1':
+            document.getElementById("other4").style.display = "block";
+            break;
+
+        case '2':
+            document.getElementById("other4").style.display = "block";
+            break;
+        default:
+            document.getElementById("other4").style.display = "none";
+    }
 }

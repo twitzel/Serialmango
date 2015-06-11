@@ -258,11 +258,11 @@ function pixelLoad(item){
     else {
         for(var i = 0; i< item.length; i++){
             if(item[i].OutData){//make sure record is valid
-                if(item[i].OutData.length ==0 ) { // get rid of unattached cues
+              //  if(item[i].OutData.length ==0 ) { // get rid of unattached cues
 
-                }
-                else{
-
+              //  }
+              //  else{
+                { // remove this one
                     if(oneCueFile == 1) {
                         for(var k = 0; k < item[i].OutData.length; k++){
                             if(item[i].OutData[k].Desc == oneCueFileName ){
