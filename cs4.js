@@ -160,7 +160,7 @@ exports.setup = function()
             if(os.type() == 'Windows_NT')
             {
                // comlib.openSerialPort('com19', baud); //windows
-                comlib.openSerialPort('com19', baud); //windows
+                comlib.openSerialPort('com3', baud); //windows
             }
             else
             {
@@ -793,6 +793,7 @@ function parseCue(data)
 
 function makeCueFile(dataSocket, fileName){
     tempcntincoming=0;
+    var lastDataOut ="";
     tempcntoutgoing = 0;
     if(fileName !=""){  //this is a one Desc file edit!  just remove one Desc
         collectionCue.update({}, {$pull: {OutData: {Desc: fileName}}}, {multi: true}, function(err, item){
@@ -809,28 +810,37 @@ function makeCueFile(dataSocket, fileName){
                         tempcntincoming ++;
                     }
                     else{ //This is cue data.  Adjust delay and put data in proper form
-                        tempcntoutgoing ++;
-                        serialDataSocketEdit.OutData = dataSocket.Data[i].Data;
-                        serialDataSocketEdit.OutData.InCue = lastCueReceivedEdit; // FIX FOR EDITING IN RIGHT ORDER
-                        if(serialDataSocketEdit.OutData.Dout.indexOf("455")>2){
-                            console.log("we are at 455");
-                        }
-                        serialDataSocketEdit.OutData.Delay = new Date(dataSocket.Data[i].Time) - new Date(lastCueTime);
+                       if(lastDataOut != dataSocket.Data[i].Data.Dout   ) { //remove duplicate entries
+                           tempcntoutgoing++;
+                           serialDataSocketEdit.OutData = dataSocket.Data[i].Data;
+                           lastDataOut = serialDataSocketEdit.OutData.Dout;
+                           serialDataSocketEdit.OutData.InCue = lastCueReceivedEdit; // FIX FOR EDITING IN RIGHT ORDER
+                           if (serialDataSocketEdit.OutData.Dout.indexOf("827") > 2) {
+                               console.log("we are at 455");
+                           }
+                           serialDataSocketEdit.OutData.Delay = new Date(dataSocket.Data[i].Time) - new Date(lastCueTime);
 
-                        collectionCue.update({'InData':lastCueReceivedEdit.InData}, {$set: lastCueReceivedEdit},{upsert:true, w:1},function(err,res){
+                           collectionCue.update({'InData': lastCueReceivedEdit.InData}, {$set: lastCueReceivedEdit}, {
+                               upsert: true,
+                               w: 1
+                           }, function (err, res) {
 
-                            if(err){
-                                console.log('InData to collection Cue -- error: ' + err);
-                            }
+                               if (err) {
+                                   console.log('InData to collection Cue -- error: ' + err);
+                               }
 
-                        });
+                           });
 
-                        collectionCue.update({'InData': lastCueReceivedEdit.InData}, {$push:serialDataSocketEdit},function(err,res){
-                            if(err){
-                                console.log('added Dout to collection Cue -- error: ' + err);
-                            }
+                           collectionCue.update({'InData': lastCueReceivedEdit.InData}, {$push: serialDataSocketEdit}, function (err, res) {
+                               if (err) {
+                                   console.log('added Dout to collection Cue -- error: ' + err);
+                               }
 
-                        });
+                           });
+                       }
+                       else{
+                           console.log("Duplicate");
+                       }
                     }
                 }
                 message = {};
@@ -855,24 +865,38 @@ function makeCueFile(dataSocket, fileName){
                     tempcntincoming ++;
                 }
                 else{ //This is cue data.  Adjust delay and put data in proper form
-                    tempcntoutgoing ++;
-                    serialDataSocketEdit.OutData = dataSocket.Data[i].Data;
-                    serialDataSocketEdit.OutData.Delay = new Date(dataSocket.Data[i].Time) - new Date(lastCueTime);
-
-                    collectionCue.update({'InData':lastCueReceivedEdit.InData}, {$set: lastCueReceivedEdit},{upsert:true, w:1},function(err,res){
-
-                       if(err){
-                           console.log('InData to collection Cue -- error: ' + err);
-                       }
-
-                    });
-
-                    collectionCue.update({'InData': lastCueReceivedEdit.InData}, {$push:serialDataSocketEdit},function(err,res){
-                        if(err){
-                            console.log('added Dout to collection Cue -- error: ' + err);
+                    if(lastDataOut != dataSocket.Data[i].Data.Dout) { //remove duplicate entries
+                        tempcntoutgoing++;
+                        serialDataSocketEdit.OutData = dataSocket.Data[i].Data;
+                        lastDataOut = serialDataSocketEdit.OutData.Dout;
+                        serialDataSocketEdit.OutData.InCue = lastCueReceivedEdit; // FIX FOR EDITING IN RIGHT ORDER
+                        if (serialDataSocketEdit.OutData.Dout.indexOf("827") > 2) {
+                            console.log("we are at 455");
                         }
+                        serialDataSocketEdit.OutData.Delay = new Date(dataSocket.Data[i].Time) - new Date(lastCueTime);
 
-                    });
+                        collectionCue.update({'InData': lastCueReceivedEdit.InData}, {$set: lastCueReceivedEdit}, {
+                            upsert: true,
+                            w: 1
+                        }, function (err, res) {
+
+                            if (err) {
+                                console.log('InData to collection Cue -- error: ' + err);
+                            }
+
+                        });
+
+                        collectionCue.update({'InData': lastCueReceivedEdit.InData}, {$push: serialDataSocketEdit}, function (err, res) {
+                            if (err) {
+                                console.log('added Dout to collection Cue -- error: ' + err);
+                            }
+
+                        });
+                    }
+                    else{
+                        console.log("Duplicate");
+                    }
+
                 }
             }
             message = {};
