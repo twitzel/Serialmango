@@ -431,6 +431,7 @@ exports.websocketDataIn = function(dataSocket, Socket){
         }
 
         else if(dataSocket.Type == "SETTINGS") {
+            timedOutInterval = 1000;
             cs4Settings = dataSocket.Data; // get the data
             exports.saveSettings(); // save it
             dataToSend = '          SLAVE DMX_CH ' + cs4Settings.dmx1 +  " " + cs4Settings.dmx2 + " " + cs4Settings.dmx3 + ''; //update the DMX channels
@@ -452,6 +453,7 @@ exports.websocketDataIn = function(dataSocket, Socket){
            // sendOutput('TIMEGET');
             autoTest1 = setTimeout(function(){sendOutput('TIMEGET');}, 2000);
             //  setTimeout(function(){setAutoTest();}, 3000); //setup for auto test
+            timedOutInterval = 250;
         }
 
         else if(dataSocket.Type == "SYSTEMTEST") {
@@ -1413,7 +1415,7 @@ exports.getSettings = function(){
                 pass: cs4Settings.emailAccountPassword
             }
         });
-
+        timedOutInterval = 1000;
         dataToSend = '          SLAVE DMX_CH ' + cs4Settings.dmx1 +  " " + cs4Settings.dmx2 + " " + cs4Settings.dmx3 + ''; //update the DMX channels
         sendOutput(dataToSend) ;
         dataToSend = '          SLAVE ZIGEN ' + cs4Settings.enableZigbee2 + ''; //update the DMX channels
@@ -1427,7 +1429,7 @@ exports.getSettings = function(){
         dataToSend = '          MIDIFIL4 ' + cs4Settings.midisex4 + " " + cs4Settings.nonsysex4 + " "+ (parseInt(+cs4Settings.deviceIDLow4)*1 + parseInt(+cs4Settings.deviceIDHigh4)*16).toString() + " " + cs4Settings.type4 + " " + cs4Settings.commandformat4 + " " +   cs4Settings.command4 + " " + cs4Settings.nonsysextype4 + " " + cs4Settings.nonsysexchannel4 + " ";
         sendOutput(dataToSend);
 
-
+        timedOutInterval = 250;
 
 
 
