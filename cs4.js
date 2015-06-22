@@ -435,20 +435,18 @@ exports.websocketDataIn = function(dataSocket, Socket){
             exports.saveSettings(); // save it
             dataToSend = '          SLAVE DMX_CH ' + cs4Settings.dmx1 +  " " + cs4Settings.dmx2 + " " + cs4Settings.dmx3 + ''; //update the DMX channels
             sendOutput(dataToSend) ;
-            global.timeoutlist = [];
+            timeoutlist = [];
             comlib.websocketsend("Successfully updated settings file");
-            dataToSend = '          SLAVE ZIGEN ' + cs4Settings.enableZigbee2 ; //update the DMX channels
-            sendOutput(dataToSend) ;//  setTimeout(sendOutput, 1000, dataToSend); //setTimeout(function(){sendOutput(dataToSend);}, 3000);
-            comlib.websocketsend("Sent SALVE ZIGEN");
+           dataToSend = '          SLAVE ZIGEN ' + cs4Settings.enableZigbee2 ; //update the DMX channels
+            timeoutlist[1] = setTimeout(sendOutput, 1000, dataToSend); //setTimeout(function(){sendOutput(dataToSend);}, 3000);
             dataToSend = '          MIDIFIL1 ' + cs4Settings.midisex1 + " " + cs4Settings.nonsysex1 + " "+ (parseInt(+cs4Settings.deviceIDLow1)*1 + parseInt(+cs4Settings.deviceIDHigh1)*16).toString() + " " + cs4Settings.type1 + " " + cs4Settings.commandformat1 + " " +   cs4Settings.command1 + " " + cs4Settings.nonsysextype1 + " " + cs4Settings.nonsysexchannel1 + " ";
-            sendOutput(dataToSend) ;//var a = setTimeout(sendOutput, 2000, dataToSend); //setTimeout(function(){sendOutput(dataToSend);}, 6000);  // sendOutput(dataToSend);
-            comlib.websocketsend("Sent MIDIFIL1");
+            timeoutlist[2] = setTimeout(sendOutput, 2000, dataToSend); //setTimeout(function(){sendOutput(dataToSend);}, 6000);  // sendOutput(dataToSend);
             dataToSend = '          MIDIFIL2 ' + cs4Settings.midisex2 + " " + cs4Settings.nonsysex2 + " "+ (parseInt(+cs4Settings.deviceIDLow2)*1 + parseInt(+cs4Settings.deviceIDHigh2)*16).toString() + " " + cs4Settings.type2 + " " + cs4Settings.commandformat2 + " " +   cs4Settings.command2 + " " + cs4Settings.nonsysextype2 + " " + cs4Settings.nonsysexchannel2 + " ";
-            setTimeout(sendOutput, 3000, dataToSend); //setTimeout(function(){sendOutput(dataToSend);}, 9000);  //sendOutput(dataToSend);
+            timeoutlist[3] = setTimeout(sendOutput, 3000, dataToSend); //setTimeout(function(){sendOutput(dataToSend);}, 9000);  //sendOutput(dataToSend);
             dataToSend = '          MIDIFIL3 ' + cs4Settings.midisex3 + " " + cs4Settings.nonsysex3 + " "+ (parseInt(+cs4Settings.deviceIDLow3)*1 + parseInt(+cs4Settings.deviceIDHigh3)*16).toString() + " " + cs4Settings.type3 + " " + cs4Settings.commandformat3 + " " +   cs4Settings.command3 + " " + cs4Settings.nonsysextype3 + " " + cs4Settings.nonsysexchannel3 + " ";
-            setTimeout(sendOutput, 4000, dataToSend);//sendOutput(dataToSend);
+            timeoutlist[4] = setTimeout(sendOutput, 4000, dataToSend);//sendOutput(dataToSend);
             dataToSend = '          MIDIFIL4 ' + cs4Settings.midisex4 + " " + cs4Settings.nonsysex4 + " "+ (parseInt(+cs4Settings.deviceIDLow4)*1 + parseInt(+cs4Settings.deviceIDHigh4)*16).toString() + " " + cs4Settings.type4 + " " + cs4Settings.commandformat4 + " " +   cs4Settings.command4 + " " + cs4Settings.nonsysextype4 + " " + cs4Settings.nonsysexchannel4 + " ";
-            setTimeout(sendOutput, 5000, dataToSend);//sendOutput(dataToSend);
+            timeoutlist[5] = setTimeout(sendOutput, 5000, dataToSend);//sendOutput(dataToSend);
 
             // clearInterval(autoTest); // if any previous timers are set, delete them
            // clearInterval(autoTest1); // if any previous timers are set, delete them
@@ -1421,11 +1419,11 @@ exports.getSettings = function(){
         global.timeoutlist = [];
         comlib.websocketsend("Successfully updated settings file");
         dataToSend = '          SLAVE ZIGEN ' + cs4Settings.enableZigbee2 ; //update the DMX channels
-        setTimeout(function(){sendOutput(dataToSend);}, 3000);
+        global.timeoutlist[1] = setTimeout(sendOutput, 1000, dataToSend); //setTimeout(function(){sendOutput(dataToSend);}, 3000);
         dataToSend = '          MIDIFIL1 ' + cs4Settings.midisex1 + " " + cs4Settings.nonsysex1 + " "+ (parseInt(+cs4Settings.deviceIDLow1)*1 + parseInt(+cs4Settings.deviceIDHigh1)*16).toString() + " " + cs4Settings.type1 + " " + cs4Settings.commandformat1 + " " +   cs4Settings.command1 + " " + cs4Settings.nonsysextype1 + " " + cs4Settings.nonsysexchannel1 + " ";
-        setTimeout(sendOutput, 2000, dataToSend); //setTimeout(function(){sendOutput(dataToSend);}, 6000);  // sendOutput(dataToSend);
+        global.timeoutlist[2] = setTimeout(sendOutput, 2000, dataToSend); //setTimeout(function(){sendOutput(dataToSend);}, 6000);  // sendOutput(dataToSend);
         dataToSend = '          MIDIFIL2 ' + cs4Settings.midisex2 + " " + cs4Settings.nonsysex2 + " "+ (parseInt(+cs4Settings.deviceIDLow2)*1 + parseInt(+cs4Settings.deviceIDHigh2)*16).toString() + " " + cs4Settings.type2 + " " + cs4Settings.commandformat2 + " " +   cs4Settings.command2 + " " + cs4Settings.nonsysextype2 + " " + cs4Settings.nonsysexchannel2 + " ";
-        setTimeout(sendOutput, 3000, dataToSend); //setTimeout(function(){sendOutput(dataToSend);}, 9000);  //sendOutput(dataToSend);
+        global.timeoutlist[3] = setTimeout(sendOutput, 3000, dataToSend); //setTimeout(function(){sendOutput(dataToSend);}, 9000);  //sendOutput(dataToSend);
         dataToSend = '          MIDIFIL3 ' + cs4Settings.midisex3 + " " + cs4Settings.nonsysex3 + " "+ (parseInt(+cs4Settings.deviceIDLow3)*1 + parseInt(+cs4Settings.deviceIDHigh3)*16).toString() + " " + cs4Settings.type3 + " " + cs4Settings.commandformat3 + " " +   cs4Settings.command3 + " " + cs4Settings.nonsysextype3 + " " + cs4Settings.nonsysexchannel3 + " ";
         global.timeoutlist[4] = setTimeout(sendOutput, 4000, dataToSend);//sendOutput(dataToSend);
         dataToSend = '          MIDIFIL4 ' + cs4Settings.midisex4 + " " + cs4Settings.nonsysex4 + " "+ (parseInt(+cs4Settings.deviceIDLow4)*1 + parseInt(+cs4Settings.deviceIDHigh4)*16).toString() + " " + cs4Settings.type4 + " " + cs4Settings.commandformat4 + " " +   cs4Settings.command4 + " " + cs4Settings.nonsysextype4 + " " + cs4Settings.nonsysexchannel4 + " ";
