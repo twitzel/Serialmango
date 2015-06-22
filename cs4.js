@@ -438,7 +438,7 @@ exports.websocketDataIn = function(dataSocket, Socket){
             global.timeoutlist = [];
             comlib.websocketsend("Successfully updated settings file");
            dataToSend = '          SLAVE ZIGEN ' + cs4Settings.enableZigbee2 ; //update the DMX channels
-            global.timeoutlist[1] = setTimeout(sendOutput, 1000, dataToSend); //setTimeout(function(){sendOutput(dataToSend);}, 3000);
+            setTimeout(sendOutput, 1000, dataToSend); //setTimeout(function(){sendOutput(dataToSend);}, 3000);
             dataToSend = '          MIDIFIL1 ' + cs4Settings.midisex1 + " " + cs4Settings.nonsysex1 + " "+ (parseInt(+cs4Settings.deviceIDLow1)*1 + parseInt(+cs4Settings.deviceIDHigh1)*16).toString() + " " + cs4Settings.type1 + " " + cs4Settings.commandformat1 + " " +   cs4Settings.command1 + " " + cs4Settings.nonsysextype1 + " " + cs4Settings.nonsysexchannel1 + " ";
             global.timeoutlist[2] = setTimeout(sendOutput, 2000, dataToSend); //setTimeout(function(){sendOutput(dataToSend);}, 6000);  // sendOutput(dataToSend);
             dataToSend = '          MIDIFIL2 ' + cs4Settings.midisex2 + " " + cs4Settings.nonsysex2 + " "+ (parseInt(+cs4Settings.deviceIDLow2)*1 + parseInt(+cs4Settings.deviceIDHigh2)*16).toString() + " " + cs4Settings.type2 + " " + cs4Settings.commandformat2 + " " +   cs4Settings.command2 + " " + cs4Settings.nonsysextype2 + " " + cs4Settings.nonsysexchannel2 + " ";
@@ -1419,7 +1419,7 @@ exports.getSettings = function(){
         global.timeoutlist = [];
         comlib.websocketsend("Successfully updated settings file");
         dataToSend = '          SLAVE ZIGEN ' + cs4Settings.enableZigbee2 ; //update the DMX channels
-         setTimeout(sendOutput, 1000, dataToSend); //setTimeout(function(){sendOutput(dataToSend);}, 3000);
+        setTimeout(function(){sendOutput(dataToSend);}, 3000);
         dataToSend = '          MIDIFIL1 ' + cs4Settings.midisex1 + " " + cs4Settings.nonsysex1 + " "+ (parseInt(+cs4Settings.deviceIDLow1)*1 + parseInt(+cs4Settings.deviceIDHigh1)*16).toString() + " " + cs4Settings.type1 + " " + cs4Settings.commandformat1 + " " +   cs4Settings.command1 + " " + cs4Settings.nonsysextype1 + " " + cs4Settings.nonsysexchannel1 + " ";
         global.timeoutlist[2] = setTimeout(sendOutput, 2000, dataToSend); //setTimeout(function(){sendOutput(dataToSend);}, 6000);  // sendOutput(dataToSend);
         dataToSend = '          MIDIFIL2 ' + cs4Settings.midisex2 + " " + cs4Settings.nonsysex2 + " "+ (parseInt(+cs4Settings.deviceIDLow2)*1 + parseInt(+cs4Settings.deviceIDHigh2)*16).toString() + " " + cs4Settings.type2 + " " + cs4Settings.commandformat2 + " " +   cs4Settings.command2 + " " + cs4Settings.nonsysextype2 + " " + cs4Settings.nonsysexchannel2 + " ";
