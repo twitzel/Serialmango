@@ -433,6 +433,8 @@ exports.websocketDataIn = function(dataSocket, Socket){
         else if(dataSocket.Type == "SETTINGS") {
             cs4Settings = dataSocket.Data; // get the data
             exports.saveSettings(); // save it
+
+            timedOutInterval = 3000;
             dataToSend = '          SLAVE DMX_CH ' + cs4Settings.dmx1 +  " " + cs4Settings.dmx2 + " " + cs4Settings.dmx3 + ''; //update the DMX channels
             sendOutput(dataToSend) ;
          //   timeoutlist = [];
@@ -461,6 +463,9 @@ exports.websocketDataIn = function(dataSocket, Socket){
             dataToSend = '          MIDIFIL4 ' + cs4Settings.midisex4 + " " + cs4Settings.nonsysex4 + " "+ (parseInt(+cs4Settings.deviceIDLow4)*1 + parseInt(+cs4Settings.deviceIDHigh4)*16).toString() + " " + cs4Settings.type4 + " " + cs4Settings.commandformat4 + " " +   cs4Settings.command4 + " " + cs4Settings.nonsysextype4 + " " + cs4Settings.nonsysexchannel4 + " ";
             timeoutlist[5] = setTimeout(sendOutput, 5000, dataToSend);//sendOutput(dataToSend);
            */
+
+            timedOutInterval = 250;
+
             comlib.websocketsend("Successfully updated new settings file");
             // clearInterval(autoTest); // if any previous timers are set, delete them
            // clearInterval(autoTest1); // if any previous timers are set, delete them
