@@ -451,7 +451,6 @@ exports.websocketDataIn = function(dataSocket, Socket){
             d = setTimeout(function(){sendOutput('          MIDIFIL3 ' + cs4Settings.midisex3 + " " + cs4Settings.nonsysex3 + " "+ (parseInt(+cs4Settings.deviceIDLow3)*1 + parseInt(+cs4Settings.deviceIDHigh3)*16).toString() + " " + cs4Settings.type3 + " " + cs4Settings.commandformat3 + " " +   cs4Settings.command3 + " " + cs4Settings.nonsysextype3 + " " + cs4Settings.nonsysexchannel3 + " ");}, 4000);
             e = setTimeout(function(){sendOutput('          MIDIFIL4 ' + cs4Settings.midisex4 + " " + cs4Settings.nonsysex4 + " "+ (parseInt(+cs4Settings.deviceIDLow4)*1 + parseInt(+cs4Settings.deviceIDHigh4)*16).toString() + " " + cs4Settings.type4 + " " + cs4Settings.commandformat4 + " " +   cs4Settings.command4 + " " + cs4Settings.nonsysextype4 + " " + cs4Settings.nonsysexchannel4 + " ");}, 5000);
 
-
             autoTest1 = setTimeout(function(){sendOutput('TIMEGET');}, 10000);
         }
 
