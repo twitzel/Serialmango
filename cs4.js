@@ -433,45 +433,16 @@ exports.websocketDataIn = function(dataSocket, Socket){
         else if(dataSocket.Type == "SETTINGS") {
             cs4Settings = dataSocket.Data; // get the data
             exports.saveSettings(); // save it
+            comlib.websocketsend("Successfully updated settings file");
             dataToSend = '          SLAVE DMX_CH ' + cs4Settings.dmx1 +  " " + cs4Settings.dmx2 + " " + cs4Settings.dmx3 + ''; //update the DMX channels
             sendOutput(dataToSend) ;
-         //   timeoutlist = [];
+            setTimeout(function(){sendOutput('          SLAVE ZIGEN ' + cs4Settings.enableZigbee2);}, 1000);
+            setTimeout(function(){sendOutput('          MIDIFIL1 ' + cs4Settings.midisex1 + " " + cs4Settings.nonsysex1 + " "+ (parseInt(+cs4Settings.deviceIDLow1)*1 + parseInt(+cs4Settings.deviceIDHigh1)*16).toString() + " " + cs4Settings.type1 + " " + cs4Settings.commandformat1 + " " +   cs4Settings.command1 + " " + cs4Settings.nonsysextype1 + " " + cs4Settings.nonsysexchannel1 + " ");}, 2000);
+            setTimeout(function(){sendOutput('          MIDIFIL2 ' + cs4Settings.midisex2 + " " + cs4Settings.nonsysex2 + " "+ (parseInt(+cs4Settings.deviceIDLow2)*1 + parseInt(+cs4Settings.deviceIDHigh2)*16).toString() + " " + cs4Settings.type2 + " " + cs4Settings.commandformat2 + " " +   cs4Settings.command2 + " " + cs4Settings.nonsysextype2 + " " + cs4Settings.nonsysexchannel2 + " ");}, 3000);
+            setTimeout(function(){sendOutput('          MIDIFIL3 ' + cs4Settings.midisex3 + " " + cs4Settings.nonsysex3 + " "+ (parseInt(+cs4Settings.deviceIDLow3)*1 + parseInt(+cs4Settings.deviceIDHigh3)*16).toString() + " " + cs4Settings.type3 + " " + cs4Settings.commandformat3 + " " +   cs4Settings.command3 + " " + cs4Settings.nonsysextype3 + " " + cs4Settings.nonsysexchannel3 + " ");}, 4000);
+            setTimeout(function(){sendOutput('          MIDIFIL4 ' + cs4Settings.midisex4 + " " + cs4Settings.nonsysex4 + " "+ (parseInt(+cs4Settings.deviceIDLow4)*1 + parseInt(+cs4Settings.deviceIDHigh4)*16).toString() + " " + cs4Settings.type4 + " " + cs4Settings.commandformat4 + " " +   cs4Settings.command4 + " " + cs4Settings.nonsysextype4 + " " + cs4Settings.nonsysexchannel4 + " ");}, 5000);
 
-         //  dataToSend = '          SLAVE ZIGEN ' + cs4Settings.enableZigbee2 ; //update the DMX channels
-        //    sendOutput('          SLAVE ZIGEN ' + cs4Settings.enableZigbee2);
-        //    sendOutput('          MIDIFIL1 ' + cs4Settings.midisex1 + " " + cs4Settings.nonsysex1 + " "+ (parseInt(+cs4Settings.deviceIDLow1)*1 + parseInt(+cs4Settings.deviceIDHigh1)*16).toString() + " " + cs4Settings.type1 + " " + cs4Settings.commandformat1 + " " +   cs4Settings.command1 + " " + cs4Settings.nonsysextype1 + " " + cs4Settings.nonsysexchannel1 + " ");
-/*
-            sendOutput('          SLAVE ZIGEN ' + cs4Settings.enableZigbee2);
-            sendOutput('          MIDIFIL1 ' + cs4Settings.midisex1 + " " + cs4Settings.nonsysex1 + " "+ (parseInt(+cs4Settings.deviceIDLow1)*1 + parseInt(+cs4Settings.deviceIDHigh1)*16).toString() + " " + cs4Settings.type1 + " " + cs4Settings.commandformat1 + " " +   cs4Settings.command1 + " " + cs4Settings.nonsysextype1 + " " + cs4Settings.nonsysexchannel1 + " ");
-           sendOutput('          MIDIFIL2 ' + cs4Settings.midisex2 + " " + cs4Settings.nonsysex2 + " "+ (parseInt(+cs4Settings.deviceIDLow2)*1 + parseInt(+cs4Settings.deviceIDHigh2)*16).toString() + " " + cs4Settings.type2 + " " + cs4Settings.commandformat2 + " " +   cs4Settings.command2 + " " + cs4Settings.nonsysextype2 + " " + cs4Settings.nonsysexchannel2 + " ");
-            sendOutput('          MIDIFIL3 ' + cs4Settings.midisex3 + " " + cs4Settings.nonsysex3 + " "+ (parseInt(+cs4Settings.deviceIDLow3)*1 + parseInt(+cs4Settings.deviceIDHigh3)*16).toString() + " " + cs4Settings.type3 + " " + cs4Settings.commandformat3 + " " +   cs4Settings.command3 + " " + cs4Settings.nonsysextype3 + " " + cs4Settings.nonsysexchannel3 + " ");
-            sendOutput('          MIDIFIL4 ' + cs4Settings.midisex4 + " " + cs4Settings.nonsysex4 + " "+ (parseInt(+cs4Settings.deviceIDLow4)*1 + parseInt(+cs4Settings.deviceIDHigh4)*16).toString() + " " + cs4Settings.type4 + " " + cs4Settings.commandformat4 + " " +   cs4Settings.command4 + " " + cs4Settings.nonsysextype4 + " " + cs4Settings.nonsysexchannel4 + " ");
-*/
-
-          setTimeout(function(){sendOutput('          SLAVE ZIGEN ' + cs4Settings.enableZigbee2);}, 1000);
-          setTimeout(function(){sendOutput('          MIDIFIL1 ' + cs4Settings.midisex1 + " " + cs4Settings.nonsysex1 + " "+ (parseInt(+cs4Settings.deviceIDLow1)*1 + parseInt(+cs4Settings.deviceIDHigh1)*16).toString() + " " + cs4Settings.type1 + " " + cs4Settings.commandformat1 + " " +   cs4Settings.command1 + " " + cs4Settings.nonsysextype1 + " " + cs4Settings.nonsysexchannel1 + " ");}, 2000);
-          setTimeout(function(){sendOutput('          MIDIFIL2 ' + cs4Settings.midisex2 + " " + cs4Settings.nonsysex2 + " "+ (parseInt(+cs4Settings.deviceIDLow2)*1 + parseInt(+cs4Settings.deviceIDHigh2)*16).toString() + " " + cs4Settings.type2 + " " + cs4Settings.commandformat2 + " " +   cs4Settings.command2 + " " + cs4Settings.nonsysextype2 + " " + cs4Settings.nonsysexchannel2 + " ");}, 3000);
-          setTimeout(function(){sendOutput('          MIDIFIL3 ' + cs4Settings.midisex3 + " " + cs4Settings.nonsysex3 + " "+ (parseInt(+cs4Settings.deviceIDLow3)*1 + parseInt(+cs4Settings.deviceIDHigh3)*16).toString() + " " + cs4Settings.type3 + " " + cs4Settings.commandformat3 + " " +   cs4Settings.command3 + " " + cs4Settings.nonsysextype3 + " " + cs4Settings.nonsysexchannel3 + " ");}, 4000);
-          setTimeout(function(){sendOutput('          MIDIFIL4 ' + cs4Settings.midisex4 + " " + cs4Settings.nonsysex4 + " "+ (parseInt(+cs4Settings.deviceIDLow4)*1 + parseInt(+cs4Settings.deviceIDHigh4)*16).toString() + " " + cs4Settings.type4 + " " + cs4Settings.commandformat4 + " " +   cs4Settings.command4 + " " + cs4Settings.nonsysextype4 + " " + cs4Settings.nonsysexchannel4 + " ");}, 5000);
-             /*
-            timeoutlist[1] = setTimeout(sendOutput, 1000, dataToSend); //setTimeout(function(){sendOutput(dataToSend);}, 3000);
-            dataToSend = '          MIDIFIL1 ' + cs4Settings.midisex1 + " " + cs4Settings.nonsysex1 + " "+ (parseInt(+cs4Settings.deviceIDLow1)*1 + parseInt(+cs4Settings.deviceIDHigh1)*16).toString() + " " + cs4Settings.type1 + " " + cs4Settings.commandformat1 + " " +   cs4Settings.command1 + " " + cs4Settings.nonsysextype1 + " " + cs4Settings.nonsysexchannel1 + " ";
-            timeoutlist[2] = setTimeout(sendOutput, 2000, dataToSend); //setTimeout(function(){sendOutput(dataToSend);}, 6000);  // sendOutput(dataToSend);
-            dataToSend = '          MIDIFIL2 ' + cs4Settings.midisex2 + " " + cs4Settings.nonsysex2 + " "+ (parseInt(+cs4Settings.deviceIDLow2)*1 + parseInt(+cs4Settings.deviceIDHigh2)*16).toString() + " " + cs4Settings.type2 + " " + cs4Settings.commandformat2 + " " +   cs4Settings.command2 + " " + cs4Settings.nonsysextype2 + " " + cs4Settings.nonsysexchannel2 + " ";
-            timeoutlist[3] = setTimeout(sendOutput, 3000, dataToSend); //setTimeout(function(){sendOutput(dataToSend);}, 9000);  //sendOutput(dataToSend);
-            dataToSend = '          MIDIFIL3 ' + cs4Settings.midisex3 + " " + cs4Settings.nonsysex3 + " "+ (parseInt(+cs4Settings.deviceIDLow3)*1 + parseInt(+cs4Settings.deviceIDHigh3)*16).toString() + " " + cs4Settings.type3 + " " + cs4Settings.commandformat3 + " " +   cs4Settings.command3 + " " + cs4Settings.nonsysextype3 + " " + cs4Settings.nonsysexchannel3 + " ";
-            timeoutlist[4] = setTimeout(sendOutput, 4000, dataToSend);//sendOutput(dataToSend);
-            dataToSend = '          MIDIFIL4 ' + cs4Settings.midisex4 + " " + cs4Settings.nonsysex4 + " "+ (parseInt(+cs4Settings.deviceIDLow4)*1 + parseInt(+cs4Settings.deviceIDHigh4)*16).toString() + " " + cs4Settings.type4 + " " + cs4Settings.commandformat4 + " " +   cs4Settings.command4 + " " + cs4Settings.nonsysextype4 + " " + cs4Settings.nonsysexchannel4 + " ";
-            timeoutlist[5] = setTimeout(sendOutput, 5000, dataToSend);//sendOutput(dataToSend);
-           */
-
-
-            comlib.websocketsend("Successfully updated new settings file");
-            // clearInterval(autoTest); // if any previous timers are set, delete them
-           // clearInterval(autoTest1); // if any previous timers are set, delete them
-           // sendOutput('TIMEGET');
             autoTest1 = setTimeout(function(){sendOutput('TIMEGET');}, 6000);
-            //  setTimeout(function(){setAutoTest();}, 3000); //setup for auto test
         }
 
         else if(dataSocket.Type == "SYSTEMTEST") {
@@ -1433,40 +1404,14 @@ exports.getSettings = function(){
                 pass: cs4Settings.emailAccountPassword
             }
         });
+
         dataToSend = '          SLAVE DMX_CH ' + cs4Settings.dmx1 +  " " + cs4Settings.dmx2 + " " + cs4Settings.dmx3 + ''; //update the DMX channels
         sendOutput(dataToSend) ;
-        global.timeoutlist = [];
-        comlib.websocketsend("Successfully updated settings file");
-        dataToSend = '          SLAVE ZIGEN ' + cs4Settings.enableZigbee2 ; //update the DMX channels
-        /*
-        global.timeoutlist[1] = setTimeout(sendOutput, 1000, dataToSend); //setTimeout(function(){sendOutput(dataToSend);}, 3000);
-        dataToSend = '          MIDIFIL1 ' + cs4Settings.midisex1 + " " + cs4Settings.nonsysex1 + " "+ (parseInt(+cs4Settings.deviceIDLow1)*1 + parseInt(+cs4Settings.deviceIDHigh1)*16).toString() + " " + cs4Settings.type1 + " " + cs4Settings.commandformat1 + " " +   cs4Settings.command1 + " " + cs4Settings.nonsysextype1 + " " + cs4Settings.nonsysexchannel1 + " ";
-        global.timeoutlist[2] = setTimeout(sendOutput, 2000, dataToSend); //setTimeout(function(){sendOutput(dataToSend);}, 6000);  // sendOutput(dataToSend);
-        dataToSend = '          MIDIFIL2 ' + cs4Settings.midisex2 + " " + cs4Settings.nonsysex2 + " "+ (parseInt(+cs4Settings.deviceIDLow2)*1 + parseInt(+cs4Settings.deviceIDHigh2)*16).toString() + " " + cs4Settings.type2 + " " + cs4Settings.commandformat2 + " " +   cs4Settings.command2 + " " + cs4Settings.nonsysextype2 + " " + cs4Settings.nonsysexchannel2 + " ";
-        global.timeoutlist[3] = setTimeout(sendOutput, 3000, dataToSend); //setTimeout(function(){sendOutput(dataToSend);}, 9000);  //sendOutput(dataToSend);
-        dataToSend = '          MIDIFIL3 ' + cs4Settings.midisex3 + " " + cs4Settings.nonsysex3 + " "+ (parseInt(+cs4Settings.deviceIDLow3)*1 + parseInt(+cs4Settings.deviceIDHigh3)*16).toString() + " " + cs4Settings.type3 + " " + cs4Settings.commandformat3 + " " +   cs4Settings.command3 + " " + cs4Settings.nonsysextype3 + " " + cs4Settings.nonsysexchannel3 + " ";
-        global.timeoutlist[4] = setTimeout(sendOutput, 4000, dataToSend);//sendOutput(dataToSend);
-        dataToSend = '          MIDIFIL4 ' + cs4Settings.midisex4 + " " + cs4Settings.nonsysex4 + " "+ (parseInt(+cs4Settings.deviceIDLow4)*1 + parseInt(+cs4Settings.deviceIDHigh4)*16).toString() + " " + cs4Settings.type4 + " " + cs4Settings.commandformat4 + " " +   cs4Settings.command4 + " " + cs4Settings.nonsysextype4 + " " + cs4Settings.nonsysexchannel4 + " ";
-        global.timeoutlist[5] = setTimeout(sendOutput, 5000, dataToSend);//sendOutput(dataToSend);
-           dataToSend = '          SLAVE DMX_CH ' + cs4Settings.dmx1 +  " " + cs4Settings.dmx2 + " " + cs4Settings.dmx3 + ''; //update the DMX channels
-        sendOutput(dataToSend) ;
-        dataToSend = '          SLAVE ZIGEN ' + cs4Settings.enableZigbee2 + ''; //update the DMX channels
-        sendOutput(dataToSend) ;
-       dataToSend = '          MIDIFIL1 ' + cs4Settings.midisex1 + " " + cs4Settings.nonsysex1 + " "+ (parseInt(+cs4Settings.deviceIDLow1)*1 + parseInt(+cs4Settings.deviceIDHigh1)*16).toString() + " " + cs4Settings.type1 + " " + cs4Settings.commandformat1 + " " +   cs4Settings.command1 + " " + cs4Settings.nonsysextype1 + " " + cs4Settings.nonsysexchannel1 + " ";
-        sendOutput(dataToSend);
-        dataToSend = '          MIDIFIL2 ' + cs4Settings.midisex2 + " " + cs4Settings.nonsysex2 + " "+ (parseInt(+cs4Settings.deviceIDLow2)*1 + parseInt(+cs4Settings.deviceIDHigh2)*16).toString() + " " + cs4Settings.type2 + " " + cs4Settings.commandformat2 + " " +   cs4Settings.command2 + " " + cs4Settings.nonsysextype2 + " " + cs4Settings.nonsysexchannel2 + " ";
-        sendOutput(dataToSend);
-        dataToSend = '          MIDIFIL3 ' + cs4Settings.midisex3 + " " + cs4Settings.nonsysex3 + " "+ (parseInt(+cs4Settings.deviceIDLow3)*1 + parseInt(+cs4Settings.deviceIDHigh3)*16).toString() + " " + cs4Settings.type3 + " " + cs4Settings.commandformat3 + " " +   cs4Settings.command3 + " " + cs4Settings.nonsysextype3 + " " + cs4Settings.nonsysexchannel3 + " ";
-        sendOutput(dataToSend);
-        dataToSend = '          MIDIFIL4 ' + cs4Settings.midisex4 + " " + cs4Settings.nonsysex4 + " "+ (parseInt(+cs4Settings.deviceIDLow4)*1 + parseInt(+cs4Settings.deviceIDHigh4)*16).toString() + " " + cs4Settings.type4 + " " + cs4Settings.commandformat4 + " " +   cs4Settings.command4 + " " + cs4Settings.nonsysextype4 + " " + cs4Settings.nonsysexchannel4 + " ";
-        sendOutput(dataToSend);
-*/
-
-
-
-
-
-
+        setTimeout(function(){sendOutput('          SLAVE ZIGEN ' + cs4Settings.enableZigbee2);}, 1000);
+        setTimeout(function(){sendOutput('          MIDIFIL1 ' + cs4Settings.midisex1 + " " + cs4Settings.nonsysex1 + " "+ (parseInt(+cs4Settings.deviceIDLow1)*1 + parseInt(+cs4Settings.deviceIDHigh1)*16).toString() + " " + cs4Settings.type1 + " " + cs4Settings.commandformat1 + " " +   cs4Settings.command1 + " " + cs4Settings.nonsysextype1 + " " + cs4Settings.nonsysexchannel1 + " ");}, 2000);
+        setTimeout(function(){sendOutput('          MIDIFIL2 ' + cs4Settings.midisex2 + " " + cs4Settings.nonsysex2 + " "+ (parseInt(+cs4Settings.deviceIDLow2)*1 + parseInt(+cs4Settings.deviceIDHigh2)*16).toString() + " " + cs4Settings.type2 + " " + cs4Settings.commandformat2 + " " +   cs4Settings.command2 + " " + cs4Settings.nonsysextype2 + " " + cs4Settings.nonsysexchannel2 + " ");}, 3000);
+        setTimeout(function(){sendOutput('          MIDIFIL3 ' + cs4Settings.midisex3 + " " + cs4Settings.nonsysex3 + " "+ (parseInt(+cs4Settings.deviceIDLow3)*1 + parseInt(+cs4Settings.deviceIDHigh3)*16).toString() + " " + cs4Settings.type3 + " " + cs4Settings.commandformat3 + " " +   cs4Settings.command3 + " " + cs4Settings.nonsysextype3 + " " + cs4Settings.nonsysexchannel3 + " ");}, 4000);
+        setTimeout(function(){sendOutput('          MIDIFIL4 ' + cs4Settings.midisex4 + " " + cs4Settings.nonsysex4 + " "+ (parseInt(+cs4Settings.deviceIDLow4)*1 + parseInt(+cs4Settings.deviceIDHigh4)*16).toString() + " " + cs4Settings.type4 + " " + cs4Settings.commandformat4 + " " +   cs4Settings.command4 + " " + cs4Settings.nonsysextype4 + " " + cs4Settings.nonsysexchannel4 + " ");}, 5000);
 
         exports.ledOn();
 
