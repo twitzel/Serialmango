@@ -1438,6 +1438,7 @@ exports.getSettings = function(){
         global.timeoutlist = [];
         comlib.websocketsend("Successfully updated settings file");
         dataToSend = '          SLAVE ZIGEN ' + cs4Settings.enableZigbee2 ; //update the DMX channels
+        /*
         global.timeoutlist[1] = setTimeout(sendOutput, 1000, dataToSend); //setTimeout(function(){sendOutput(dataToSend);}, 3000);
         dataToSend = '          MIDIFIL1 ' + cs4Settings.midisex1 + " " + cs4Settings.nonsysex1 + " "+ (parseInt(+cs4Settings.deviceIDLow1)*1 + parseInt(+cs4Settings.deviceIDHigh1)*16).toString() + " " + cs4Settings.type1 + " " + cs4Settings.commandformat1 + " " +   cs4Settings.command1 + " " + cs4Settings.nonsysextype1 + " " + cs4Settings.nonsysexchannel1 + " ";
         global.timeoutlist[2] = setTimeout(sendOutput, 2000, dataToSend); //setTimeout(function(){sendOutput(dataToSend);}, 6000);  // sendOutput(dataToSend);
@@ -1447,7 +1448,7 @@ exports.getSettings = function(){
         global.timeoutlist[4] = setTimeout(sendOutput, 4000, dataToSend);//sendOutput(dataToSend);
         dataToSend = '          MIDIFIL4 ' + cs4Settings.midisex4 + " " + cs4Settings.nonsysex4 + " "+ (parseInt(+cs4Settings.deviceIDLow4)*1 + parseInt(+cs4Settings.deviceIDHigh4)*16).toString() + " " + cs4Settings.type4 + " " + cs4Settings.commandformat4 + " " +   cs4Settings.command4 + " " + cs4Settings.nonsysextype4 + " " + cs4Settings.nonsysexchannel4 + " ";
         global.timeoutlist[5] = setTimeout(sendOutput, 5000, dataToSend);//sendOutput(dataToSend);
-        /*    dataToSend = '          SLAVE DMX_CH ' + cs4Settings.dmx1 +  " " + cs4Settings.dmx2 + " " + cs4Settings.dmx3 + ''; //update the DMX channels
+           dataToSend = '          SLAVE DMX_CH ' + cs4Settings.dmx1 +  " " + cs4Settings.dmx2 + " " + cs4Settings.dmx3 + ''; //update the DMX channels
         sendOutput(dataToSend) ;
         dataToSend = '          SLAVE ZIGEN ' + cs4Settings.enableZigbee2 + ''; //update the DMX channels
         sendOutput(dataToSend) ;
