@@ -1411,7 +1411,7 @@ exports.getSettings = function(){
             }
         });
 
-  /*
+
         exports.ledOn();
 
 
