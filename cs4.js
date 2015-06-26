@@ -1361,8 +1361,7 @@ function copyToPublic(){
 
 exports.getSettings = function(){
     usbInputEnabled = 1; //let the usb data through
-
-    setTimeout(function(){'GETTIME');}, 7000);
+    setTimeout(function(){sendOutput('GETTIME');}, 7000);
    // sendOutput('GETTIME'); // get the system time as the startup time
     setTimeout(function(){sendOutput('          SLAVE DMX_CH ' + cs4Settings.dmx1 +  " " + cs4Settings.dmx2 + " " + cs4Settings.dmx3 + '');}, 500);
     setTimeout(function(){sendOutput('          SLAVE ZIGEN ' + cs4Settings.enableZigbee2);}, 1000);
