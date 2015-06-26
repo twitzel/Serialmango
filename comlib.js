@@ -25,7 +25,7 @@ exports.openSerialPort = function(portname, baud)
        if( branch == 'cs4'){
            //we are now up and working
             //turn status LED on
-           setTimeout(function(){cs4.getSettings();}, 1500); // let things settle for a bit
+           setTimeout(function(){cs4.getSettings();}, 10000); // let things settle for a bit
        }
 
     });
