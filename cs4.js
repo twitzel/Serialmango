@@ -65,13 +65,10 @@ sendOutput = function (dataToSend)
     {
         timerStartTime = new Date();
         timedOut = false;
-        comlib.write("         " + dataToSend + "\r"); // add spaces at beginning for R4 zigbee stuff and terminate\n\r
         ledInfoOn(27);
         setTimeout(function(){ledInfoOff(27);}, 100);
-
-        setTimeout(function(){testtimer(dataToSend);}, timedOutInterval);
-      //  setTimeout(function(){timedOut = true;}, timedOutInterval);
-
+        setTimeout(function(){timedOut = true;}, timedOutInterval);
+        comlib.write("         " + dataToSend + "\r"); // add spaces at beginning for R4 zigbee stuff and terminate\n\r
         console.log("Sending to CS4: " +dataToSend);
         //send it out the socket
         comlib.websocketsend(".  Sent: " + momentTZ(timerStartTime).format(fmt) + "   Dout: "  +  dataToSend) ;
@@ -436,12 +433,13 @@ exports.websocketDataIn = function(dataSocket, Socket){
             cs4Settings = dataSocket.Data; // get the data
             exports.saveSettings(); // save it
             autoTest1 = setTimeout(function(){sendOutput('TIMEGET');}, 7000);
-            setTimeout(function(){sendOutput('          SLAVE DMX_CH ' + cs4Settings.dmx1 +  " " + cs4Settings.dmx2 + " " + cs4Settings.dmx3 + '');}, 500);
-            setTimeout(function(){sendOutput('          SLAVE ZIGEN ' + cs4Settings.enableZigbee2);}, 1000);
-            setTimeout(function(){sendOutput('          MIDIFIL1 ' + cs4Settings.midisex1 + " " + cs4Settings.nonsysex1 + " "+ (parseInt(+cs4Settings.deviceIDLow1)*1 + parseInt(+cs4Settings.deviceIDHigh1)*16).toString() + " " + cs4Settings.type1 + " " + cs4Settings.commandformat1 + " " +   cs4Settings.command1 + " " + cs4Settings.nonsysextype1 + " " + cs4Settings.nonsysexchannel1 + " ");}, 2000);
-            setTimeout(function(){sendOutput('          MIDIFIL2 ' + cs4Settings.midisex2 + " " + cs4Settings.nonsysex2 + " "+ (parseInt(+cs4Settings.deviceIDLow2)*1 + parseInt(+cs4Settings.deviceIDHigh2)*16).toString() + " " + cs4Settings.type2 + " " + cs4Settings.commandformat2 + " " +   cs4Settings.command2 + " " + cs4Settings.nonsysextype2 + " " + cs4Settings.nonsysexchannel2 + " ");}, 3000);
-            setTimeout(function(){sendOutput('          MIDIFIL3 ' + cs4Settings.midisex3 + " " + cs4Settings.nonsysex3 + " "+ (parseInt(+cs4Settings.deviceIDLow3)*1 + parseInt(+cs4Settings.deviceIDHigh3)*16).toString() + " " + cs4Settings.type3 + " " + cs4Settings.commandformat3 + " " +   cs4Settings.command3 + " " + cs4Settings.nonsysextype3 + " " + cs4Settings.nonsysexchannel3 + " ");}, 4000);
-            setTimeout(function(){sendOutput('          MIDIFIL4 ' + cs4Settings.midisex4 + " " + cs4Settings.nonsysex4 + " "+ (parseInt(+cs4Settings.deviceIDLow4)*1 + parseInt(+cs4Settings.deviceIDHigh4)*16).toString() + " " + cs4Settings.type4 + " " + cs4Settings.commandformat4 + " " +   cs4Settings.command4 + " " + cs4Settings.nonsysextype4 + " " + cs4Settings.nonsysexchannel4 + " ");}, 5000);
+            var a, b, c, d,,e,f;
+            a=setTimeout(function(){sendOutput('          SLAVE DMX_CH ' + cs4Settings.dmx1 +  " " + cs4Settings.dmx2 + " " + cs4Settings.dmx3 + '');}, 500);
+            b=setTimeout(function(){sendOutput('          SLAVE ZIGEN ' + cs4Settings.enableZigbee2);}, 1000);
+            c=setTimeout(function(){sendOutput('          MIDIFIL1 ' + cs4Settings.midisex1 + " " + cs4Settings.nonsysex1 + " "+ (parseInt(+cs4Settings.deviceIDLow1)*1 + parseInt(+cs4Settings.deviceIDHigh1)*16).toString() + " " + cs4Settings.type1 + " " + cs4Settings.commandformat1 + " " +   cs4Settings.command1 + " " + cs4Settings.nonsysextype1 + " " + cs4Settings.nonsysexchannel1 + " ");}, 2000);
+            d=setTimeout(function(){sendOutput('          MIDIFIL2 ' + cs4Settings.midisex2 + " " + cs4Settings.nonsysex2 + " "+ (parseInt(+cs4Settings.deviceIDLow2)*1 + parseInt(+cs4Settings.deviceIDHigh2)*16).toString() + " " + cs4Settings.type2 + " " + cs4Settings.commandformat2 + " " +   cs4Settings.command2 + " " + cs4Settings.nonsysextype2 + " " + cs4Settings.nonsysexchannel2 + " ");}, 3000);
+            e=setTimeout(function(){sendOutput('          MIDIFIL3 ' + cs4Settings.midisex3 + " " + cs4Settings.nonsysex3 + " "+ (parseInt(+cs4Settings.deviceIDLow3)*1 + parseInt(+cs4Settings.deviceIDHigh3)*16).toString() + " " + cs4Settings.type3 + " " + cs4Settings.commandformat3 + " " +   cs4Settings.command3 + " " + cs4Settings.nonsysextype3 + " " + cs4Settings.nonsysexchannel3 + " ");}, 4000);
+            f=setTimeout(function(){sendOutput('          MIDIFIL4 ' + cs4Settings.midisex4 + " " + cs4Settings.nonsysex4 + " "+ (parseInt(+cs4Settings.deviceIDLow4)*1 + parseInt(+cs4Settings.deviceIDHigh4)*16).toString() + " " + cs4Settings.type4 + " " + cs4Settings.commandformat4 + " " +   cs4Settings.command4 + " " + cs4Settings.nonsysextype4 + " " + cs4Settings.nonsysexchannel4 + " ");}, 5000);
 
             comlib.websocketsend("Successfully updated settings file");
         }
