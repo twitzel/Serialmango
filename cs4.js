@@ -1577,7 +1577,7 @@ function ledInfoOn(GPIOnum){
 
 
         console.log("at PI ledInfoON.  GPOI NUM: " + GPIOnum);
-        setTimeout(function(){ledInfoOff(GPIOnum);}, 100); // turn it off
+    //    setTimeout(function(){ledInfoOff(GPIOnum);}, 100); // turn it off
        // setTimeout(ledInfoOff(GPIOnum), 100); // turn it off
      /*   var rpio = require('rpio');
 
