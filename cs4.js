@@ -1571,35 +1571,36 @@ exports.ledOff = function(){
 function ledInfoOn(GPIOnum){
     if(os.type() != 'Windows_NT') // this is only for the pi
     {
-       /* var led = require('fastgpio');
+       var led = require('fastgpio');
         led.prepareGPIO(GPIOnum);
         led.set(GPIOnum);
-        */
+
 
         console.log("at PI ledInfoON.  GPOI NUM: " + GPIOnum);
-     //   setTimeout(function(){ledInfoOff(GPIOnum);}, 100); // turn it off
-        setTimeout(ledInfoOff(GPIOnum), 100); // turn it off
-        var rpio = require('rpio');
+        setTimeout(function(){ledInfoOff(GPIOnum);}, 100); // turn it off
+       // setTimeout(ledInfoOff(GPIOnum), 100); // turn it off
+     /*   var rpio = require('rpio');
 
         rpio.setMode('gpio');
         rpio.setOutput(GPIOnum);
         rpio.write(GPIOnum, rpio.HIGH);
+        */
     }
 }
 
 function ledInfoOff(GPIOnum){
     if(os.type() != 'Windows_NT') // this is only for the pi
     {
-       /* var led = require('fastgpio');
+       var led = require('fastgpio');
         led.prepareGPIO(GPIOnum);
         led.unset(GPIOnum);
-        */
+
         console.log("at PI ledInfoOff.  GPOI NUM: " + GPIOnum);
-        var rpio = require('rpio');
+      /*  var rpio = require('rpio');
         rpio.setMode('gpio');
         rpio.setOutput(GPIOnum);
         rpio.write(GPIOnum, rpio.LOW);
-
+*/
     }
 }
 
