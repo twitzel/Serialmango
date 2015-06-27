@@ -1368,7 +1368,7 @@ function copyToPublic(){
 
 exports.getSettings = function(){
     usbInputEnabled = 1; //let the usb data through
-
+    timedOut=true;
     collectionSettings.findOne({},function(error,result){
         if(result){
             cs4Settings = result;
