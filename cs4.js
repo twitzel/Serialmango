@@ -445,6 +445,7 @@ exports.websocketDataIn = function(dataSocket, Socket){
         }
 
         else if(dataSocket.Type == "SYSTEMTEST") {
+            timedOut = true;
           startSystemTest();
         }
 
