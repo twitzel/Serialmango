@@ -699,6 +699,8 @@ exports.usbSerialDataIn = function (data) {
             comlib.websocketsend("CS4 System time is: " + momentTZ(new Date()).format(fmt));
            // setTimeout(function(){setAutoTest();}, 5000);//this will restart the system test each time it's run
         }
+        ledInfoOff(27);
+        ledInfoOff(17);
 
     }
 };
