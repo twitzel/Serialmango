@@ -97,8 +97,8 @@ sendOutput = function (dataToSend)
         console.log("At sendoutput -- ELSE - timer start time: " + timerStartTime.getMilliseconds()+ " tme:  " + tme.getMilliseconds());
 
         //turn off led here as test
-     //   ledInfoOff(27);
-       // ledInfoOff(17);
+        ledInfoOff(27);
+       ledInfoOff(17);
         //  var delay =  setTimeout(function(){sendOutput(dataToSend);}, ( timedOutInterval -(timerStartTime - Date())));
     }
 
@@ -699,8 +699,8 @@ exports.usbSerialDataIn = function (data) {
             comlib.websocketsend("CS4 System time is: " + momentTZ(new Date()).format(fmt));
            // setTimeout(function(){setAutoTest();}, 5000);//this will restart the system test each time it's run
         }
-      //  ledInfoOff(27);
-     //   ledInfoOff(17);
+       ledInfoOff(27);
+       ledInfoOff(17);
 
     }
 };
@@ -1702,8 +1702,8 @@ function checkForZigbee(auto){
 
     });
     timedOut = true;
-  //  ledInfoOff(27);
-  //  ledInfoOff(17);
+    ledInfoOff(27);
+   ledInfoOff(17);
     setTimeout(function(){sendOutput('TIMEGET');}, 5000); // this will update ti pi time to CS4 i/o time
 }
 
