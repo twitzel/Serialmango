@@ -433,7 +433,7 @@ exports.websocketDataIn = function(dataSocket, Socket){
             cs4Settings = dataSocket.Data; // get the data
             exports.saveSettings(); // save it
             autoTest1 = setTimeout(function(){sendOutput('TIMEGET');}, 7000);
-            var a, b, c, d,,e,f;
+            var a, b, c, d,e,f;
             a=setTimeout(function(){sendOutput('          SLAVE DMX_CH ' + cs4Settings.dmx1 +  " " + cs4Settings.dmx2 + " " + cs4Settings.dmx3 + '');}, 500);
             b=setTimeout(function(){sendOutput('          SLAVE ZIGEN ' + cs4Settings.enableZigbee2);}, 1000);
             c=setTimeout(function(){sendOutput('          MIDIFIL1 ' + cs4Settings.midisex1 + " " + cs4Settings.nonsysex1 + " "+ (parseInt(+cs4Settings.deviceIDLow1)*1 + parseInt(+cs4Settings.deviceIDHigh1)*16).toString() + " " + cs4Settings.type1 + " " + cs4Settings.commandformat1 + " " +   cs4Settings.command1 + " " + cs4Settings.nonsysextype1 + " " + cs4Settings.nonsysexchannel1 + " ");}, 2000);
