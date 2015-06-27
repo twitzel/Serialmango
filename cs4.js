@@ -1616,7 +1616,7 @@ function ledInfoBlink(GPIOnum){
 }
 
 function startSystemTest(auto){
-    clearInterval(blink);//clear previous results - if any
+    clearTimeout(blink);//clear previous results - if any
 
     if(auto){
       //  clearTimeout(autoTest1); //erase any previous timeouts
