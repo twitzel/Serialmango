@@ -95,6 +95,10 @@ sendOutput = function (dataToSend)
         }
         setTimeout(function(){sendOutput(dataToSend);}, waitTime); // pad with 2 extra ms
         console.log("At sendoutput -- ELSE - timer start time: " + timerStartTime.getMilliseconds()+ " tme:  " + tme.getMilliseconds());
+
+        //turn off led here as test
+        ledInfoOff(27);
+        ledInfoOff(17);
         //  var delay =  setTimeout(function(){sendOutput(dataToSend);}, ( timedOutInterval -(timerStartTime - Date())));
     }
 
@@ -239,6 +243,7 @@ exports.websocketDataIn = function(dataSocket, Socket){
                 datain = dataSocket.Data;
                 datain = SetCS4Time(datain);
                 comlib.write(datain);
+                timedOut = true;
                 setTimeout(function(){sendOutput('TIMEGET');}, 500);
                // setTimeout(function(){setAutoTest();}, 5000); //setup for auto test with new time being set
             }
@@ -432,6 +437,7 @@ exports.websocketDataIn = function(dataSocket, Socket){
         else if(dataSocket.Type == "SETTINGS") {
             cs4Settings = dataSocket.Data; // get the data
             exports.saveSettings(); // save it
+            timedOut = true;
             autoTest1 = setTimeout(function(){sendOutput('TIMEGET');}, 7000);
             var a, b, c, d,e,f;
             a=setTimeout(function(){sendOutput('          SLAVE DMX_CH ' + cs4Settings.dmx1 +  " " + cs4Settings.dmx2 + " " + cs4Settings.dmx3 + '');}, 500);
@@ -491,7 +497,7 @@ exports.websocketDataIn = function(dataSocket, Socket){
         {
            var outstring = port + " " + showname + " " + dir + " " + dataToSend;
         }
-
+        timedOut = true;
         sendOutput(outstring);
     }
 };
@@ -694,12 +700,6 @@ exports.usbSerialDataIn = function (data) {
 
     }
 };
-
-function testtimer(dataToSend){
-    timedOut = true;
-    var b = 10;
-
-}
 
 function formatLogData(data){
 
@@ -1400,7 +1400,7 @@ exports.getSettings = function(){
                 console.log(result);
             })
         }
-
+        timedOut = true;
         setTimeout(function(){sendOutput('GETTIME');}, 7000);
         // sendOutput('GETTIME'); // get the system time as the startup time
         var a, b, c, d, e,f
@@ -1619,6 +1619,7 @@ function startSystemTest(auto){
     }
 
         for(var i = 0; i < 5 ; i++){
+            timedOut = true;
           //  sendOutput('ZIG1' + ' ' + 'TEST '  + "GO slide1111.jpg NEXT slide2222.jpg");
             setTimeout(function(){sendOutput('ZIG1' + ' ' + 'TEST '  + "GO slide1111.jpg NEXT slide2222.jpg");}, 500*i);
         }
@@ -1684,6 +1685,9 @@ function checkForZigbee(auto){
 
 
     });
+    timedOut = true;
+    ledInfoOff(27);
+    ledInfoOff(17);
     setTimeout(function(){sendOutput('TIMEGET');}, 5000); // this will update ti pi time to CS4 i/o time
 }
 
