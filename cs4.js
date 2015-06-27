@@ -1571,7 +1571,11 @@ exports.ledOff = function(){
 
 
 function ledInfoOn(GPIOnum){
-    setTimeout(function(){ledInfoOff(GPIOnum);}, 100); // turn it off
+    if(GPIOnum != 4) { // don't turn off system status light
+        setTimeout(function () {
+            ledInfoOff(GPIOnum);
+        }, 100); // turn it off
+    }
     if(os.type() != 'Windows_NT') // this is only for the pi
     {
 
