@@ -723,7 +723,9 @@ function parseCue(data)
 {
     var timeFormatted;
     ledInfoOn(17);
+    console.log("led 17 on at line 725");
     setTimeout(function(){ledInfoOff(17);}, 100);
+    console.log("led 17 off set time out at line 727");
     serialData = JSON.parse(data);
     serialData.Time = new Date(serialData.Time);
     timeFormatted = momentTZ(serialData.Time).format(fmt);
