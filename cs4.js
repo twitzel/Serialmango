@@ -1571,10 +1571,11 @@ exports.ledOff = function(){
 
 
 function ledInfoOn(GPIOnum){
+    setTimeout(function(){ledInfoOff(GPIOnum);}, 100); // turn it off
     if(os.type() != 'Windows_NT') // this is only for the pi
     {
-        setTimeout(function(){ledInfoOff(GPIOnum);}, 100);
-        // turn it offvar led = require('fastgpio');
+
+       var led = require('fastgpio');
         led.prepareGPIO(GPIOnum);
         led.set(GPIOnum);
 
