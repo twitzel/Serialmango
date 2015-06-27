@@ -97,8 +97,8 @@ sendOutput = function (dataToSend)
         console.log("At sendoutput -- ELSE - timer start time: " + timerStartTime.getMilliseconds()+ " tme:  " + tme.getMilliseconds());
 
         //turn off led here as test
-        ledInfoOff(27);
-        ledInfoOff(17);
+     //   ledInfoOff(27);
+       // ledInfoOff(17);
         //  var delay =  setTimeout(function(){sendOutput(dataToSend);}, ( timedOutInterval -(timerStartTime - Date())));
     }
 
@@ -699,8 +699,8 @@ exports.usbSerialDataIn = function (data) {
             comlib.websocketsend("CS4 System time is: " + momentTZ(new Date()).format(fmt));
            // setTimeout(function(){setAutoTest();}, 5000);//this will restart the system test each time it's run
         }
-        ledInfoOff(27);
-        ledInfoOff(17);
+      //  ledInfoOff(27);
+     //   ledInfoOff(17);
 
     }
 };
@@ -1579,36 +1579,32 @@ function ledInfoOn(GPIOnum){
     if(os.type() != 'Windows_NT') // this is only for the pi
     {
 
-       var led = require('fastgpio');
+     /*  var led = require('fastgpio');
         led.prepareGPIO(GPIOnum);
         led.set(GPIOnum);
-
-
-        console.log("at PI ledInfoON.  GPOI NUM: " + GPIOnum);
-
+*/
        // setTimeout(ledInfoOff(GPIOnum), 100); // turn it off
-     /*   var rpio = require('rpio');
+       var rpio = require('rpio');
 
         rpio.setMode('gpio');
         rpio.setOutput(GPIOnum);
         rpio.write(GPIOnum, rpio.HIGH);
-        */
+        console.log("at PI ledInfoON.  GPOI NUM: " + GPIOnum);
     }
 }
 
 function ledInfoOff(GPIOnum){
     if(os.type() != 'Windows_NT') // this is only for the pi
     {
-       var led = require('fastgpio');
+     /*  var led = require('fastgpio');
         led.prepareGPIO(GPIOnum);
         led.unset(GPIOnum);
-
-        console.log("at PI ledInfoOff.  GPOI NUM: " + GPIOnum);
-      /*  var rpio = require('rpio');
+*/
+       var rpio = require('rpio');
         rpio.setMode('gpio');
         rpio.setOutput(GPIOnum);
         rpio.write(GPIOnum, rpio.LOW);
-*/
+        console.log("at PI ledInfoOff.  GPOI NUM: " + GPIOnum);
     }
 }
 
@@ -1620,6 +1616,7 @@ function ledInfoBlink(GPIOnum){
 }
 
 function startSystemTest(auto){
+    clearInterval(blink);//clear previous results - if any
 
     if(auto){
       //  clearTimeout(autoTest1); //erase any previous timeouts
@@ -1705,8 +1702,8 @@ function checkForZigbee(auto){
 
     });
     timedOut = true;
-    ledInfoOff(27);
-    ledInfoOff(17);
+  //  ledInfoOff(27);
+  //  ledInfoOff(17);
     setTimeout(function(){sendOutput('TIMEGET');}, 5000); // this will update ti pi time to CS4 i/o time
 }
 
