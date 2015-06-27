@@ -305,6 +305,8 @@ exports.websocketDataIn = function(dataSocket, Socket){
             comlib.write("         " +dataSocket.Data+ '\r'); // send it out the serial port
             ledInfoOn(27); // light to output light
             setTimeout(function(){ledInfoOff(27);}, 100); // turn it off
+            setTimeout(function(){ledInfoOff(17);}, 100); // turn it off
+
             setTimeout(function(){timedOut = true;}, timedOutInterval);
         }
         else if(dataSocket.Type == "COPYTOUSB")
@@ -1571,7 +1573,9 @@ function ledInfoOn(GPIOnum){
         led.prepareGPIO(GPIOnum);
         led.set(GPIOnum);
         */
+        setTimeout(function(){ledInfoOff(GPIOnum);}, 100); // turn it off
         var rpio = require('rpio');
+
         rpio.setMode('gpio');
         rpio.setOutput(GPIOnum);
         rpio.write(GPIOnum, rpio.HIGH);
