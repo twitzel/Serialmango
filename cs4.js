@@ -65,10 +65,11 @@ sendOutput = function (dataToSend)
     {
         timerStartTime = new Date();
         timedOut = false;
+        comlib.write("         " + dataToSend + "\r"); // add spaces at beginning for R4 zigbee stuff and terminate\n\r
         ledInfoOn(27);
         setTimeout(function(){ledInfoOff(27);}, 100);
         setTimeout(function(){timedOut = true;}, timedOutInterval);
-        comlib.write("         " + dataToSend + "\r"); // add spaces at beginning for R4 zigbee stuff and terminate\n\r
+
         console.log("Sending to CS4: " +dataToSend);
         //send it out the socket
         comlib.websocketsend(".  Sent: " + momentTZ(timerStartTime).format(fmt) + "   Dout: "  +  dataToSend) ;
@@ -95,10 +96,6 @@ sendOutput = function (dataToSend)
         }
         setTimeout(function(){sendOutput(dataToSend);}, waitTime); // pad with 2 extra ms
         console.log("At sendoutput -- ELSE - timer start time: " + timerStartTime.getMilliseconds()+ " tme:  " + tme.getMilliseconds());
-
-        //turn off led here as test
-        ledInfoOff(27);
-        ledInfoOff(17);
         //  var delay =  setTimeout(function(){sendOutput(dataToSend);}, ( timedOutInterval -(timerStartTime - Date())));
     }
 
@@ -163,7 +160,7 @@ exports.setup = function()
             if(os.type() == 'Windows_NT')
             {
                // comlib.openSerialPort('com19', baud); //windows
-                comlib.openSerialPort('com3', baud); //windows
+                comlib.openSerialPort('com19', baud); //windows
             }
             else
             {
@@ -243,7 +240,6 @@ exports.websocketDataIn = function(dataSocket, Socket){
                 datain = dataSocket.Data;
                 datain = SetCS4Time(datain);
                 comlib.write(datain);
-                timedOut = true;
                 setTimeout(function(){sendOutput('TIMEGET');}, 500);
                // setTimeout(function(){setAutoTest();}, 5000); //setup for auto test with new time being set
             }
@@ -305,8 +301,6 @@ exports.websocketDataIn = function(dataSocket, Socket){
             comlib.write("         " +dataSocket.Data+ '\r'); // send it out the serial port
             ledInfoOn(27); // light to output light
             setTimeout(function(){ledInfoOff(27);}, 100); // turn it off
-            setTimeout(function(){ledInfoOff(17);}, 100); // turn it off
-
             setTimeout(function(){timedOut = true;}, timedOutInterval);
         }
         else if(dataSocket.Type == "COPYTOUSB")
@@ -439,21 +433,19 @@ exports.websocketDataIn = function(dataSocket, Socket){
         else if(dataSocket.Type == "SETTINGS") {
             cs4Settings = dataSocket.Data; // get the data
             exports.saveSettings(); // save it
-            timedOut = true;
-            autoTest1 = setTimeout(function(){sendOutput('TIMEGET');}, 7000);
-            var a, b, c, d,e,f;
-            a=setTimeout(function(){sendOutput('          SLAVE DMX_CH ' + cs4Settings.dmx1 +  " " + cs4Settings.dmx2 + " " + cs4Settings.dmx3 + '');}, 500);
-            b=setTimeout(function(){sendOutput('          SLAVE ZIGEN ' + cs4Settings.enableZigbee2);}, 1000);
-            c=setTimeout(function(){sendOutput('          MIDIFIL1 ' + cs4Settings.midisex1 + " " + cs4Settings.nonsysex1 + " "+ (parseInt(+cs4Settings.deviceIDLow1)*1 + parseInt(+cs4Settings.deviceIDHigh1)*16).toString() + " " + cs4Settings.type1 + " " + cs4Settings.commandformat1 + " " +   cs4Settings.command1 + " " + cs4Settings.nonsysextype1 + " " + cs4Settings.nonsysexchannel1 + " ");}, 2000);
-            d=setTimeout(function(){sendOutput('          MIDIFIL2 ' + cs4Settings.midisex2 + " " + cs4Settings.nonsysex2 + " "+ (parseInt(+cs4Settings.deviceIDLow2)*1 + parseInt(+cs4Settings.deviceIDHigh2)*16).toString() + " " + cs4Settings.type2 + " " + cs4Settings.commandformat2 + " " +   cs4Settings.command2 + " " + cs4Settings.nonsysextype2 + " " + cs4Settings.nonsysexchannel2 + " ");}, 3000);
-            e=setTimeout(function(){sendOutput('          MIDIFIL3 ' + cs4Settings.midisex3 + " " + cs4Settings.nonsysex3 + " "+ (parseInt(+cs4Settings.deviceIDLow3)*1 + parseInt(+cs4Settings.deviceIDHigh3)*16).toString() + " " + cs4Settings.type3 + " " + cs4Settings.commandformat3 + " " +   cs4Settings.command3 + " " + cs4Settings.nonsysextype3 + " " + cs4Settings.nonsysexchannel3 + " ");}, 4000);
-            f=setTimeout(function(){sendOutput('          MIDIFIL4 ' + cs4Settings.midisex4 + " " + cs4Settings.nonsysex4 + " "+ (parseInt(+cs4Settings.deviceIDLow4)*1 + parseInt(+cs4Settings.deviceIDHigh4)*16).toString() + " " + cs4Settings.type4 + " " + cs4Settings.commandformat4 + " " +   cs4Settings.command4 + " " + cs4Settings.nonsysextype4 + " " + cs4Settings.nonsysexchannel4 + " ");}, 5000);
-
+            dataToSend = '          SLAVE DMX_CH ' + cs4Settings.dmx1 +  " " + cs4Settings.dmx2 + " " + cs4Settings.dmx3 + ''; //update the DMX channels
+            sendOutput(dataToSend) ;
             comlib.websocketsend("Successfully updated settings file");
+            dataToSend = '          SLAVE ZIGEN ' + cs4Settings.enableZigbee2 ; //update the DMX channels
+            sendOutput(dataToSend) ;
+           // clearInterval(autoTest); // if any previous timers are set, delete them
+           // clearInterval(autoTest1); // if any previous timers are set, delete them
+           // sendOutput('TIMEGET');
+            autoTest1 = setTimeout(function(){sendOutput('TIMEGET');}, 2000);
+            //  setTimeout(function(){setAutoTest();}, 3000); //setup for auto test
         }
 
         else if(dataSocket.Type == "SYSTEMTEST") {
-            timedOut = true;
           startSystemTest();
         }
 
@@ -499,7 +491,7 @@ exports.websocketDataIn = function(dataSocket, Socket){
         {
            var outstring = port + " " + showname + " " + dir + " " + dataToSend;
         }
-        timedOut = true;
+
         sendOutput(outstring);
     }
 };
@@ -699,8 +691,6 @@ exports.usbSerialDataIn = function (data) {
             comlib.websocketsend("CS4 System time is: " + momentTZ(new Date()).format(fmt));
            // setTimeout(function(){setAutoTest();}, 5000);//this will restart the system test each time it's run
         }
-        ledInfoOff(27);
-        ledInfoOff(17);
 
     }
 };
@@ -723,9 +713,7 @@ function parseCue(data)
 {
     var timeFormatted;
     ledInfoOn(17);
-    console.log("led 17 on at line 725");
     setTimeout(function(){ledInfoOff(17);}, 100);
-    console.log("led 17 off set time out at line 727");
     serialData = JSON.parse(data);
     serialData.Time = new Date(serialData.Time);
     timeFormatted = momentTZ(serialData.Time).format(fmt);
@@ -796,62 +784,46 @@ function parseCue(data)
 
 function makeCueFile(dataSocket, fileName){
     tempcntincoming=0;
-    var lastDataOut ="";
     tempcntoutgoing = 0;
     if(fileName !=""){  //this is a one Desc file edit!  just remove one Desc
         collectionCue.update({}, {$pull: {OutData: {Desc: fileName}}}, {multi: true}, function(err, item){
-            collectionCue.remove( {OutData:{$size:0}}, function(error, items){ // eliminate all unused cues
-                console.log("inside remove call back" + item);
-                for(i = 0; i< dataSocket.Data.length; i++){
-                    serialDataSocketEdit = {};
-                    if(dataSocket.Data[i].OutData){ // this is an incoming cue, so put data in proper form
-                        lastCueReceivedEdit = {};
-                        lastCueTime = dataSocket.Data[i].Time;
-                        lastCueReceivedEdit.InData = dataSocket.Data[i].InData;
-                        lastCueReceivedEdit.Source = dataSocket.Data[i].Source;
-                        lastCueReceivedEdit.Time = dataSocket.Data[i].Time;
-                        tempcntincoming ++;
-                    }
-                    else{ //This is cue data.  Adjust delay and put data in proper form
-                       if(lastDataOut != dataSocket.Data[i].Data.Dout   ) { //remove duplicate entries
-                           tempcntoutgoing++;
-                           serialDataSocketEdit.OutData = dataSocket.Data[i].Data;
-                           lastDataOut = serialDataSocketEdit.OutData.Dout;
-                           serialDataSocketEdit.OutData.InCue = lastCueReceivedEdit; // FIX FOR EDITING IN RIGHT ORDER
-                           if (serialDataSocketEdit.OutData.Dout.indexOf("827") > 2) {
-                               console.log("we are at 455");
-                           }
-                           serialDataSocketEdit.OutData.Delay = new Date(dataSocket.Data[i].Time) - new Date(lastCueTime);
-
-                           collectionCue.update({'InData': lastCueReceivedEdit.InData}, {$set: lastCueReceivedEdit}, {
-                               upsert: true,
-                               w: 1
-                           }, function (err, res) {
-
-                               if (err) {
-                                   console.log('InData to collection Cue -- error: ' + err);
-                               }
-
-                           });
-
-                           collectionCue.update({'InData': lastCueReceivedEdit.InData}, {$push: serialDataSocketEdit}, function (err, res) {
-                               if (err) {
-                                   console.log('added Dout to collection Cue -- error: ' + err);
-                               }
-
-                           });
-                       }
-                       else{
-                           console.log("Duplicate");
-                       }
-                    }
+            console.log("inside remove call back" + item);
+            for(i = 0; i< dataSocket.Data.length; i++){
+                serialDataSocketEdit = {};
+                if(dataSocket.Data[i].OutData){ // this is an incoming cue, so put data in proper form
+                    lastCueReceivedEdit = {};
+                    lastCueTime = dataSocket.Data[i].Time;
+                    lastCueReceivedEdit.InData = dataSocket.Data[i].InData;
+                    lastCueReceivedEdit.Source = dataSocket.Data[i].Source;
+                    lastCueReceivedEdit.Time = dataSocket.Data[i].Time;
+                    tempcntincoming ++;
                 }
-                message = {};
-                message.packetType = "message";
-                message.data = "Successfully Updated Cue File";
-                comlib.websocketsend(JSON.stringify(message));
-                console.log("Successfully Updated Cue File")
-            });
+                else{ //This is cue data.  Adjust delay and put data in proper form
+                    tempcntoutgoing ++;
+                    serialDataSocketEdit.OutData = dataSocket.Data[i].Data;
+                    serialDataSocketEdit.OutData.Delay = new Date(dataSocket.Data[i].Time) - new Date(lastCueTime);
+
+                    collectionCue.update({'InData':lastCueReceivedEdit.InData}, {$set: lastCueReceivedEdit},{upsert:true, w:1},function(err,res){
+
+                        if(err){
+                            console.log('InData to collection Cue -- error: ' + err);
+                        }
+
+                    });
+
+                    collectionCue.update({'InData': lastCueReceivedEdit.InData}, {$push:serialDataSocketEdit},function(err,res){
+                        if(err){
+                            console.log('added Dout to collection Cue -- error: ' + err);
+                        }
+
+                    });
+                }
+            }
+            message = {};
+            message.packetType = "message";
+            message.data = "Successfully Updated Cue File";
+            comlib.websocketsend(JSON.stringify(message));
+            console.log("Successfully Updated Cue File")
         });
     }
     else{
@@ -868,38 +840,24 @@ function makeCueFile(dataSocket, fileName){
                     tempcntincoming ++;
                 }
                 else{ //This is cue data.  Adjust delay and put data in proper form
-                    if(lastDataOut != dataSocket.Data[i].Data.Dout) { //remove duplicate entries
-                        tempcntoutgoing++;
-                        serialDataSocketEdit.OutData = dataSocket.Data[i].Data;
-                        lastDataOut = serialDataSocketEdit.OutData.Dout;
-                        serialDataSocketEdit.OutData.InCue = lastCueReceivedEdit; // FIX FOR EDITING IN RIGHT ORDER
-                        if (serialDataSocketEdit.OutData.Dout.indexOf("827") > 2) {
-                            console.log("we are at 455");
+                    tempcntoutgoing ++;
+                    serialDataSocketEdit.OutData = dataSocket.Data[i].Data;
+                    serialDataSocketEdit.OutData.Delay = new Date(dataSocket.Data[i].Time) - new Date(lastCueTime);
+
+                    collectionCue.update({'InData':lastCueReceivedEdit.InData}, {$set: lastCueReceivedEdit},{upsert:true, w:1},function(err,res){
+
+                       if(err){
+                           console.log('InData to collection Cue -- error: ' + err);
+                       }
+
+                    });
+
+                    collectionCue.update({'InData': lastCueReceivedEdit.InData}, {$push:serialDataSocketEdit},function(err,res){
+                        if(err){
+                            console.log('added Dout to collection Cue -- error: ' + err);
                         }
-                        serialDataSocketEdit.OutData.Delay = new Date(dataSocket.Data[i].Time) - new Date(lastCueTime);
 
-                        collectionCue.update({'InData': lastCueReceivedEdit.InData}, {$set: lastCueReceivedEdit}, {
-                            upsert: true,
-                            w: 1
-                        }, function (err, res) {
-
-                            if (err) {
-                                console.log('InData to collection Cue -- error: ' + err);
-                            }
-
-                        });
-
-                        collectionCue.update({'InData': lastCueReceivedEdit.InData}, {$push: serialDataSocketEdit}, function (err, res) {
-                            if (err) {
-                                console.log('added Dout to collection Cue -- error: ' + err);
-                            }
-
-                        });
-                    }
-                    else{
-                        console.log("Duplicate");
-                    }
-
+                    });
                 }
             }
             message = {};
@@ -947,7 +905,7 @@ function copyToUSB()
     if(os.type() == 'Windows_NT')
     {
 
-         usbstickPath = "E:/"; // this is based on particular usbsticl
+         usbstickPath = "G:/"; // this is based on particular usbsticl
          path = usbstickPath ;
          sourcePath = "d://data/db"; // this is based on system install of mongo
          destinationPath = "d:/bac/dump"; //this is particular to the system mongo is running on
@@ -1129,7 +1087,7 @@ function copyFromUSB()
     if(os.type() == 'Windows_NT')
     {
 
-        usbstickPath = "E:/"; // this is based on particular usb stick
+        usbstickPath = "G:/"; // this is based on particular usb stick
         path = usbstickPath ;
         sourcePath = "d://data/db"; // this is based on system install of mongo
         destinationPath = "d:/bac/dump"; //this is particular to the system mongo is running on
@@ -1374,7 +1332,8 @@ function copyToPublic(){
 
 exports.getSettings = function(){
     usbInputEnabled = 1; //let the usb data through
-    timedOut=true;
+    sendOutput('GETTIME'); // get the system time as the startup time
+
     collectionSettings.findOne({},function(error,result){
         if(result){
             cs4Settings = result;
@@ -1392,31 +1351,10 @@ exports.getSettings = function(){
             cs4Settings.emailAccount = "stevewitz@gmail.com";
             cs4Settings.emailAccountPassword = "panema2020!";
             cs4Settings.timezone = "US/Eastern";
-            cs4Settings.midisex1 = 0;
-            cs4Settings.nonsysex1 = 0;
-            cs4Settings.midisex2 = 0;
-            cs4Settings.nonsysex2 = 0;
-            cs4Settings.midisex3 = 0;
-            cs4Settings.nonsysex3 = 0;
-            cs4Settings.midisex4 = 0;
-            cs4Settings.nonsysex4 = 0;
-
-
             collectionSettings.insert(cs4Settings, {w: 1}, function (err, result) {
                 console.log(result);
             })
         }
-        timedOut = true;
-        setTimeout(function(){sendOutput('GETTIME');}, 7000);
-        // sendOutput('GETTIME'); // get the system time as the startup time
-        var a, b, c, d, e,f
-        a=setTimeout(function(){sendOutput('          SLAVE DMX_CH ' + cs4Settings.dmx1 +  " " + cs4Settings.dmx2 + " " + cs4Settings.dmx3 + '');}, 500);
-        b=setTimeout(function(){sendOutput('          SLAVE ZIGEN ' + cs4Settings.enableZigbee2);}, 1000);
-       c= setTimeout(function(){sendOutput('          MIDIFIL1 ' + cs4Settings.midisex1 + " " + cs4Settings.nonsysex1 + " "+ (parseInt(+cs4Settings.deviceIDLow1)*1 + parseInt(+cs4Settings.deviceIDHigh1)*16).toString() + " " + cs4Settings.type1 + " " + cs4Settings.commandformat1 + " " +   cs4Settings.command1 + " " + cs4Settings.nonsysextype1 + " " + cs4Settings.nonsysexchannel1 + " ");}, 2000);
-        d=setTimeout(function(){sendOutput('          MIDIFIL2 ' + cs4Settings.midisex2 + " " + cs4Settings.nonsysex2 + " "+ (parseInt(+cs4Settings.deviceIDLow2)*1 + parseInt(+cs4Settings.deviceIDHigh2)*16).toString() + " " + cs4Settings.type2 + " " + cs4Settings.commandformat2 + " " +   cs4Settings.command2 + " " + cs4Settings.nonsysextype2 + " " + cs4Settings.nonsysexchannel2 + " ");}, 3000);
-        e=setTimeout(function(){sendOutput('          MIDIFIL3 ' + cs4Settings.midisex3 + " " + cs4Settings.nonsysex3 + " "+ (parseInt(+cs4Settings.deviceIDLow3)*1 + parseInt(+cs4Settings.deviceIDHigh3)*16).toString() + " " + cs4Settings.type3 + " " + cs4Settings.commandformat3 + " " +   cs4Settings.command3 + " " + cs4Settings.nonsysextype3 + " " + cs4Settings.nonsysexchannel3 + " ");}, 4000);
-        f=setTimeout(function(){sendOutput('          MIDIFIL4 ' + cs4Settings.midisex4 + " " + cs4Settings.nonsysex4 + " "+ (parseInt(+cs4Settings.deviceIDLow4)*1 + parseInt(+cs4Settings.deviceIDHigh4)*16).toString() + " " + cs4Settings.type4 + " " + cs4Settings.commandformat4 + " " +   cs4Settings.command4 + " " + cs4Settings.nonsysextype4 + " " + cs4Settings.nonsysexchannel4 + " ");}, 5000);
-
 
         //set up initial mail parameters here
         smtpTransport = nodemailer.createTransport("SMTP",{
@@ -1427,9 +1365,11 @@ exports.getSettings = function(){
             }
         });
 
-
+        dataToSend = '          SLAVE DMX_CH ' + cs4Settings.dmx1 +  " " + cs4Settings.dmx2 + " " + cs4Settings.dmx3 + ''; //update the DMX channels
+        sendOutput(dataToSend) ;
+        dataToSend = '          SLAVE ZIGEN ' + cs4Settings.enableZigbee2 + ''; //update the DMX channels
+        sendOutput(dataToSend) ;
         exports.ledOn();
-
 
     });
 };
@@ -1571,39 +1511,26 @@ exports.ledOff = function(){
 
 
 function ledInfoOn(GPIOnum){
-    if(GPIOnum != 4) { // don't turn off system status light
-        setTimeout(function () {
-            ledInfoOff(GPIOnum);
-        }, 100); // turn it off
-    }
     if(os.type() != 'Windows_NT') // this is only for the pi
     {
-
-      /* var led = require('fastgpio');
+       /* var led = require('fastgpio');
         led.prepareGPIO(GPIOnum);
         led.set(GPIOnum);
-*/
-
-        console.log("at PI ledInfoON.  GPOI NUM: " + GPIOnum);
-
-       // setTimeout(ledInfoOff(GPIOnum), 100); // turn it off
+        */
         var rpio = require('rpio');
-
         rpio.setMode('gpio');
         rpio.setOutput(GPIOnum);
         rpio.write(GPIOnum, rpio.HIGH);
-
     }
 }
 
 function ledInfoOff(GPIOnum){
     if(os.type() != 'Windows_NT') // this is only for the pi
     {
-    /*   var led = require('fastgpio');
+       /* var led = require('fastgpio');
         led.prepareGPIO(GPIOnum);
         led.unset(GPIOnum);
-*/
-        console.log("at PI ledInfoOff.  GPOI NUM: " + GPIOnum);
+        */
         var rpio = require('rpio');
         rpio.setMode('gpio');
         rpio.setOutput(GPIOnum);
@@ -1633,12 +1560,11 @@ function startSystemTest(auto){
 
     if(cs4Settings.enableZigbee2 =='NO'){ // make sure we can receive zigbee2.  If not enable it
         zigbee2State = 'NO';
-    //    dataToSend = '          SLAVE ZIGEN ' + 'YES' + '\r'; //Enable the zigee2 channel
-     //   comlib.write(dataToSend) ;
+        dataToSend = '          SLAVE ZIGEN ' + 'YES' + '\r'; //Enable the zigee2 channel
+        comlib.write(dataToSend) ;
     }
 
         for(var i = 0; i < 5 ; i++){
-            timedOut = true;
           //  sendOutput('ZIG1' + ' ' + 'TEST '  + "GO slide1111.jpg NEXT slide2222.jpg");
             setTimeout(function(){sendOutput('ZIG1' + ' ' + 'TEST '  + "GO slide1111.jpg NEXT slide2222.jpg");}, 500*i);
         }
@@ -1704,9 +1630,6 @@ function checkForZigbee(auto){
 
 
     });
-    timedOut = true;
-    ledInfoOff(27);
-    ledInfoOff(17);
     setTimeout(function(){sendOutput('TIMEGET');}, 5000); // this will update ti pi time to CS4 i/o time
 }
 
