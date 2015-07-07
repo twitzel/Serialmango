@@ -1354,7 +1354,7 @@ exports.getSettings = function(){
                 console.log(result);
             })
         }
-        setTimeout(function(){sendOutput('GETTIME');}, 7000);
+      //  setTimeout(function(){sendOutput('GETTIME');}, 7000);
         var a, b, c, d, e,f
         a = setTimeout(function(){sendOutput('          SLAVE DMX_CH ' + cs4Settings.dmx1 +  " " + cs4Settings.dmx2 + " " + cs4Settings.dmx3 + '');}, 500);
         b = setTimeout(function(){sendOutput('          SLAVE ZIGEN ' + cs4Settings.enableZigbee2);}, 1000);
