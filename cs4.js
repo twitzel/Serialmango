@@ -1323,7 +1323,7 @@ function copyToPublic(){
 
 exports.getSettings = function(){
     usbInputEnabled = 1; //let the usb data through
-    //sendOutput('GETTIME'); // get the system time as the startup time
+    sendOutput('GETTIME'); // get the system time as the startup time
 
     collectionSettings.findOne({},function(error,result){
         if(result){
@@ -1375,7 +1375,10 @@ exports.getSettings = function(){
             }
         });
 
-
+        dataToSend = '          SLAVE DMX_CH ' + cs4Settings.dmx1 +  " " + cs4Settings.dmx2 + " " + cs4Settings.dmx3 + ''; //update the DMX channels
+        sendOutput(dataToSend) ;
+        dataToSend = '          SLAVE ZIGEN ' + cs4Settings.enableZigbee2 + ''; //update the DMX channels
+        sendOutput(dataToSend) ;
         exports.ledOn();
 
     });
