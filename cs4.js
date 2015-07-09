@@ -806,6 +806,7 @@ function makeCueFile(dataSocket, fileName){
                 else{ //This is cue data.  Adjust delay and put data in proper form
                     tempcntoutgoing ++;
                     serialDataSocketEdit.OutData = dataSocket.Data[i].Data;
+                    serialDataSocketEdit.OutData.InCue = lastCueReceivedEdit; // FIX FOR EDITING IN RIGHT ORDER
                     serialDataSocketEdit.OutData.Delay = new Date(dataSocket.Data[i].Time) - new Date(lastCueTime);
 
                     collectionCue.update({'InData':lastCueReceivedEdit.InData}, {$set: lastCueReceivedEdit},{upsert:true, w:1},function(err,res){
@@ -847,6 +848,7 @@ function makeCueFile(dataSocket, fileName){
                 else{ //This is cue data.  Adjust delay and put data in proper form
                     tempcntoutgoing ++;
                     serialDataSocketEdit.OutData = dataSocket.Data[i].Data;
+                    serialDataSocketEdit.OutData.InCue = lastCueReceivedEdit; // FIX FOR EDITING IN RIGHT ORDER
                     serialDataSocketEdit.OutData.Delay = new Date(dataSocket.Data[i].Time) - new Date(lastCueTime);
 
                     collectionCue.update({'InData':lastCueReceivedEdit.InData}, {$set: lastCueReceivedEdit},{upsert:true, w:1},function(err,res){
@@ -1090,7 +1092,7 @@ function copyFromUSB()
     if(os.type() == 'Windows_NT')
     {
 
-        usbstickPath = "G:/"; // this is based on particular usb stick
+        usbstickPath = "E:/"; // this is based on particular usb stick
         path = usbstickPath ;
         sourcePath = "d://data/db"; // this is based on system install of mongo
         destinationPath = "d:/bac/dump"; //this is particular to the system mongo is running on
