@@ -947,7 +947,7 @@ function zoomcanvasMousemove(event){
                     zoomcontext.clearRect(2,2,355,20);
                     zoomcontext.rect(2,2,350,17);
                     zoomcontext.stroke();
-                    zoomcontext.fillText("Changed " +parseInt((event.offsetX  - selectedPreviousZoomPoint.Point)* msPerPixelZoom )/zoomcanvas.width + "  Seconds"  ,5,14,330);
+                    zoomcontext.fillText("Changed " +parseInt((event.offsetX  - selectedPreviousZoomPoint.Point)* msPerPixelZoom )/zoomcanvas.width +  "  Seconds"  ,5,14,330);
                 }
                 else{
                     document.body.style.cursor  = 'not-allowed';
