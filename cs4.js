@@ -101,7 +101,7 @@ sendOutput = function (dataToSend)
 
 };
 
-exports.setup = function()
+exports.setup = function(callback)
 {
     //iterate through all of the system IPv4 addresses
     // we should connect to address[0] with the webserver
