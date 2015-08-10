@@ -52,12 +52,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 // Set up the server
-function startwebserver(){
- // http.createServer(app).listen(app.get('port'), function(){
-//    console.log('Express server listening on port ' + app.get('port'));
-//  });
-  
-}
+
 
 /*
     Set up for the desired branch
@@ -79,9 +74,14 @@ else if(branch == 'cs4')
 {
     var cs4 = require('./cs4');
     cs4.ledOff(); // turn off the ready led
-    cs4.setup(startwebserver());
+    cs4.setup();
 }
 
-
+function startwebserver(){
+  http.createServer(app).listen(app.get('port'), function(){
+    console.log('Express server listening on port ' + app.get('port'));
+  });
+  
+}
 
 
