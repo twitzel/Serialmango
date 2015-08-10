@@ -161,10 +161,14 @@ exports.setup = function(callback)
             {
                 // comlib.openSerialPort('com19', baud); //windows
                 comlib.openSerialPort('com3', baud); //windows
+            callback();
+                
             }
             else
             {
                 comlib.openSerialPort("/dev/ttyUSB0", baud); //not windows - Raspberry PI
+                callback();
+                
             }
         }
     });
