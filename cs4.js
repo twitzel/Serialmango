@@ -160,13 +160,12 @@ exports.setup = function(callback)
             if(os.type() == 'Windows_NT')
             {
                 // comlib.openSerialPort('com19', baud); //windows
-                comlib.openSerialPort('com3', baud); //windows
-            callback();
-                
+                comlib.openSerialPort('com3', baud,cs4.getSettings); //windows
+                callback();
             }
             else
             {
-                comlib.openSerialPort("/dev/ttyUSB0", baud); //not windows - Raspberry PI
+                comlib.openSerialPort("/dev/ttyUSB0", baud,cs4.getSettings); //not windows - Raspberry PI
                 callback();
                 
             }
