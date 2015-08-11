@@ -183,6 +183,7 @@ exports.setup = function(callback)
     //   app.get('/data', routes.data);
     //   app.get('/data2', routes.data2);
     //   app.get('/data3', routes.data3);
+    /*
     app.get('/', routes.cs4Home);
     //   app.get('/cs4Start', routes.cs4Start);
     app.get('/cs4Home', routes.cs4Home);
@@ -196,6 +197,7 @@ exports.setup = function(callback)
     //   app.get('/cs4Help', routes.cs4Help);
     app.get('/cs4Settings', routes.cs4Settings);
     app.get('/cs4Edit', routes.cs4Edit);
+    */
 };
 
 
