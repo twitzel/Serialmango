@@ -685,7 +685,7 @@ exports.usbSerialDataIn = function (data) {
                         console.log(data.toString());
                         console.log("SUDO DATE CHANGED");
                         console.log("calling getsettings");
-                        cs4.getSettings();
+                        exports.getSettings();
 
                     });
                 }
