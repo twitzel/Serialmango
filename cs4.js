@@ -1341,7 +1341,7 @@ console.log("at line 1340");
     usbInputEnabled = 1; //let the usb data through
     // moved to comlib - happens when comport opens
 
-    //sendOutput('GETTIME'); // get the system time as the startup time
+    sendOutput('GETTIME'); // get the system time as the startup time
 
     collectionSettings.findOne({},function(error,result){
         if(result){
