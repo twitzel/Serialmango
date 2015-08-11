@@ -684,11 +684,11 @@ exports.usbSerialDataIn = function (data) {
                     child.stdout.on('data', function (data) {
                         console.log(data.toString());
                         console.log("SUDO DATE CHANGED");
+                        console.log("calling getsettings");
+                        cs4.getSettings();
 
                     });
                 }
-                console.log("calling getsettings");
-                cs4.getSettings();
 
                 //comlib.websocketsend("CS4 Current tme is: " + momentTZ(serialData.Time).format(fmt));
                 console.log(result);
