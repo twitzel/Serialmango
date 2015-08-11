@@ -166,7 +166,7 @@ exports.setup = function()
             }
             else
             {
-                comlib.openSerialPort("/dev/ttyUSB0", baud,getSettings); //not windows - Raspberry PI
+                comlib.openSerialPort("/dev/ttyUSB0", baud); //not windows - Raspberry PI
 
             }
         }
