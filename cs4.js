@@ -72,7 +72,7 @@ sendOutput = function (dataToSend)
 
         console.log("Sending to CS4: " +dataToSend);
         //send it out the socket
-    //    comlib.websocketsend(".  Sent: " + momentTZ(timerStartTime).format(fmt) + "   Dout: "  +  dataToSend) ;
+        comlib.websocketsend(".  Sent: " + momentTZ(timerStartTime).format(fmt) + "   Dout: "  +  dataToSend) ;
 
         addTime = addTime + "\""+  (timerStartTime).toISOString() +"\", \"Dout\" : \"" + dataToSend + "\"}";
         //Log the data into the collection
@@ -679,6 +679,7 @@ exports.usbSerialDataIn = function (data) {
                     child.stdout.on('data', function (data) {
                         console.log(data.toString());
                         console.log("SUDO DATE CHANGED");
+                        return;
                     });
                 }
                 comlib.websocketsend("CS4 Current tme is: " + momentTZ(serialData.Time).format(fmt));
