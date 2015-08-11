@@ -72,7 +72,7 @@ sendOutput = function (dataToSend)
 
         console.log("Sending to CS4: " +dataToSend);
         //send it out the socket
-        comlib.websocketsend(".  Sent: " + momentTZ(timerStartTime).format(fmt) + "   Dout: "  +  dataToSend) ;
+    //    comlib.websocketsend(".  Sent: " + momentTZ(timerStartTime).format(fmt) + "   Dout: "  +  dataToSend) ;
 
         addTime = addTime + "\""+  (timerStartTime).toISOString() +"\", \"Dout\" : \"" + dataToSend + "\"}";
         //Log the data into the collection
@@ -1342,7 +1342,7 @@ console.log("(getsettings)");
     // moved to comlib - happens when comport opens
 
     sendOutput('GETTIME'); // get the system time as the startup time
-
+    console.log("Line after gettime in getsettings");
     collectionSettings.findOne({},function(error,result){
         if(result){
             cs4Settings = result;
@@ -1484,7 +1484,7 @@ exports.ledOn = function(){
 
                         // send mail with defined transport object
                         sendMail(mailOptions);
-                      
+
                         console.log("READY to start system test in 10 seconds");
                         setTimeout(function(){startSystemTest();}, 10000); // check for results after delay
                         //  setTimeout(function(){setAutoTest(0);}, 20000);
