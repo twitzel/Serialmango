@@ -67,7 +67,7 @@ exports.write = function(data) {
 };
 
 //Set up the web socket here.. Default port is 8080
-function startwebsocketserver(){
+exports.startwebsocketserver = function(){
     console.log("start webserver socket");
 wss = new WebSocketServer({port: 8080}, function(err,res){
 

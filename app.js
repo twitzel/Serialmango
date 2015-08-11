@@ -94,8 +94,8 @@ else if(branch == 'cs4')
 function startwebserver(){
   http.createServer(app).listen(app.get('port'), function(){
     console.log('Express server listening on port ' + app.get('port'));
-    comlib.startwebsocketserver();
 
+      startwebsocketserver();
 
   });
   
