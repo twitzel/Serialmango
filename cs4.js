@@ -690,7 +690,7 @@ exports.usbSerialDataIn = function (data) {
                     });
                 }
 
-                //comlib.websocketsend("CS4 Current tme is: " + momentTZ(serialData.Time).format(fmt));
+                comlib.websocketsend("CS4 Current tme is: " + momentTZ(serialData.Time).format(fmt));
                 console.log(result);
             });
 

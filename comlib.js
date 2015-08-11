@@ -140,7 +140,13 @@ exports.websocketsend = function(data,id)
         {
             if (websocket[i])
             {
-                websocket[i].send(data);
+                try {
+                    websocket[i].send(data);
+                }
+                catch(e){
+                    console.log("Caught Error at Websocket Send");
+                }
+
                 console.info("websocket sending to client "+i);
             }
         }
