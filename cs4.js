@@ -1484,8 +1484,7 @@ exports.ledOn = function(){
 
                         // send mail with defined transport object
                         sendMail(mailOptions);
-                        console.log("starting web server and socket");
-                        startwebserver();
+                      
                         console.log("READY to start system test in 10 seconds");
                         setTimeout(function(){startSystemTest();}, 10000); // check for results after delay
                         //  setTimeout(function(){setAutoTest(0);}, 20000);
