@@ -78,9 +78,7 @@ wss = new WebSocketServer({port: 8080}, function(err,res){
     else
     {
         console.log("Websocket server Listening");
-        console.log("called led off");
 
-        cs4.ledOff(); // turn off the ready led
     }
 });
 
