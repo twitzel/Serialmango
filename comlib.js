@@ -2,7 +2,7 @@ var com = require('serialport');
 var cs4 = require('./cs4');
 var twi = require('./twi');
 var WebSocketServer = require('ws').Server;
-exports.openSerialPort = function(portname, baud,callback)
+exports.openSerialPort = function(portname, baud, callback)
 {
     console.log("Attempting to open serial port "+portname);
    // serialport declared with the var to make it module global

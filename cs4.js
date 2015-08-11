@@ -160,12 +160,12 @@ exports.setup = function(callback)
             if(os.type() == 'Windows_NT')
             {
                 // comlib.openSerialPort('com19', baud); //windows
-                comlib.openSerialPort('com3', baud,cs4.getSettings); //windows
+                comlib.openSerialPort('com3', baud,getSettings); //windows
                 callback();
             }
             else
             {
-                comlib.openSerialPort("/dev/ttyUSB0", baud,cs4.getSettings); //not windows - Raspberry PI
+                comlib.openSerialPort("/dev/ttyUSB0", baud,getSettings); //not windows - Raspberry PI
                 callback();
                 
             }
@@ -1337,7 +1337,7 @@ function copyToPublic(){
 
 //exports.getSettings = function(){
 function getSettings(){
-
+console.log("at line 1340");
     usbInputEnabled = 1; //let the usb data through
     // moved to comlib - happens when comport opens
 
