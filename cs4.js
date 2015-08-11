@@ -56,7 +56,11 @@ var TimeToTest = 1000*60*5;//5 minutes  //1000*60*60*24;
 // every timedOutInterval
 //
 // adds time stamp to Outgoing data and puts it in Log collection
+exports.sendgettime = function(){
+    sendOutput('GETTIME'); // get the system time as the startup time
 
+
+}
 sendOutput = function (dataToSend)
 {
     var addTime = "{\"Time\":";
@@ -679,10 +683,13 @@ exports.usbSerialDataIn = function (data) {
                     child.stdout.on('data', function (data) {
                         console.log(data.toString());
                         console.log("SUDO DATE CHANGED");
-                        return;
+
                     });
                 }
-                comlib.websocketsend("CS4 Current tme is: " + momentTZ(serialData.Time).format(fmt));
+                console.log("calling getsettings");
+                cs4.getSettings();
+
+                //comlib.websocketsend("CS4 Current tme is: " + momentTZ(serialData.Time).format(fmt));
                 console.log(result);
             });
 
@@ -1340,9 +1347,8 @@ exports.getSettings = function(){
 //function getSettings(){
 console.log("(getsettings)");
     usbInputEnabled = 1; //let the usb data through
-    // moved to comlib - happens when comport opens
 
-    sendOutput('GETTIME'); // get the system time as the startup time
+    //sendOutput('GETTIME'); // get the system time as the startup time
     console.log("Line after gettime in getsettings");
     collectionSettings.findOne({},function(error,result){
         if(result){
