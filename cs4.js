@@ -101,7 +101,7 @@ sendOutput = function (dataToSend)
 
 };
 
-exports.setup = function(callback)
+exports.setup = function()
 {
     //iterate through all of the system IPv4 addresses
     // we should connect to address[0] with the webserver
@@ -161,13 +161,11 @@ exports.setup = function(callback)
             {
                 // comlib.openSerialPort('com19', baud); //windows
                 comlib.openSerialPort('com3', baud,getSettings); //windows
-                callback();
             }
             else
             {
                 comlib.openSerialPort("/dev/ttyUSB0", baud,getSettings); //not windows - Raspberry PI
-                callback();
-                
+
             }
         }
     });
@@ -1335,9 +1333,9 @@ function copyToPublic(){
 
 }
 
-//exports.getSettings = function(){
-function getSettings(){
-console.log("at line 1340");
+exports.getSettings = function(){
+//function getSettings(){
+console.log("(getsettings)");
     usbInputEnabled = 1; //let the usb data through
     // moved to comlib - happens when comport opens
 

@@ -2,7 +2,7 @@ var com = require('serialport');
 var cs4 = require('./cs4');
 var twi = require('./twi');
 var WebSocketServer = require('ws').Server;
-exports.openSerialPort = function(portname, baud, callback)
+exports.openSerialPort = function(portname, baud)
 {
     console.log("Attempting to open serial port "+portname);
    // serialport declared with the var to make it module global
@@ -28,7 +28,7 @@ exports.openSerialPort = function(portname, baud, callback)
            // serial port open now call callback
           if (!err){
            //   cs4.sendOutput('GETTIME'); // get the system time as the startup time
-              callback();
+              cs4.getSettings();
 
 
           } else{
