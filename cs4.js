@@ -125,6 +125,15 @@ exports.setup = function()
     global.myuri = addresses[0];
     console.log('My IP Address is: ' + addresses[0]);
 
+    //added to enable mounting of usbstick
+    if(os.type() != 'Windows_NT') {  //This is for pi only
+        child = sudo(['mkdir', '/media/usbstick ']);
+        child.stdout.on('data', function (data) {
+            console.log(data.toString());
+            console.log("usbstick directory created");
+
+        });
+    }
 
 
     //MongoClient.connect("mongodb://localhost:27017/WizDb", function(err, db)
@@ -1015,86 +1024,12 @@ function copyToUSB()
                     console.log("USB stick is not detected.  Please insert USB stick and try again ");
                 }
             }
-
-            /*   var display = true;
-             usbstickPath = "/media/usb0";
-             path = usbstickPath ;
-             sourcePath = "/data/db";
-             destinationPath = "/home/pi/dump"; // this wass abritrauraly chosen but now fixed
-             mongoDirectory = '/opt/mongo/bin/';
-             //have to find out the 'name' of the usb stick - it will be the only device in media
-             fs.readdir(usbstickPath, function(err,list){
-             if( list.length!= 0)
-             {
-             // list.forEach(function (file) {
-             // Full path of that file
-             var path = usbstickPath ; //       +  "/" + file;
-             console.log("path: " + path)
-             spawn(mongoDirectory + 'mongodump', ['-o', destinationPath]).on('exit',function(code){
-             console.log('finished ' + code);
-             comlib.websocketsend("Please Wait ... Preparing Data .......");
-             fse.rmrf(path +'/dump', function (err) {
-             if (err) {
-             console.error('Error removing files ' + err);
-             }
-             console.log("finished at fse.rmrf");
-             comlib.websocketsend("Please Wait ... Preparing Data .......");
-             fse.copyRecursive(destinationPath , path +'/dump', function (err) {
-             if (err) {
-             console.log('error '+ err);
-             }
-             console.log("Finished copying files");
-             if(display == true) {
-             comlib.websocketsend("Successfully Copied All Data to USB Stick");
-             console.log("Successfully Copied " + destinationPath + " to " + usbstickPath);
-             display = false;
-             }
-             });
-             });
-             });
-             // });
-             }
-             */
             else
             {
                 comlib.websocketsend("USB stick is not detected.  Please insert USB stick and try again ");
                 console.log("USB stick is not detected.  Please insert USB stick and try again ");
             }
         });
-
-
-
-        /*
-         //have to find out the 'name' of the usb stick - it will be the only device in media
-         fs.readdir(usbstickPath, function(err,list){
-         if( list.length!= 0)
-         {
-         list.forEach(function (file) {
-         // Full path of that file
-         var path = usbstickPath ; //       +  "/" + file;
-         console.log("path: " + path)
-         spawn(mongoDirectory + 'mongodump', ['-o', destinationPath]).on('exit',function(code){
-         console.log('finished ' + code);
-         fse.copyRecursive(destinationPath , path + '/dump', function (err) {
-         if (err) {
-         console.log('error '+ err);
-         }
-         if(display == true) {
-         comlib.websocketsend("Successfully Copied All Data to USB Stick");
-         console.log("Successfully Copied " + destinationPath + " to " + usbstickPath);
-         display = false;
-         }
-         });
-         });
-         });
-         }
-         else
-         {
-         comlib.websocketsend("USB stick is not detected.  Please insert USB stick and try again ");
-         console.log("USB stick is not detected.  Please insert USB stick and try again ");
-         }
-         });
-         */
     }
 }
 
@@ -1210,59 +1145,6 @@ function copyFromUSB()
             }
         });
     }
-    /*
-     {
-     var display = true;
-     usbstickPath = "/media/";
-     path = usbstickPath ;
-     sourcePath = "/data/db";
-     destinationPath = "/home/pi/dump"; // this wass abritrauraly chosen but now fixed
-     mongoDirectory = '/opt/mongo/bin/';
-     //have to find out the 'name' of the usb stick - it will be the only device in media
-     fs.readdir(usbstickPath, function(err,list){
-     if( list.length!= 0)
-     {
-     list.forEach(function (file) {
-     // Full path of that file
-     var path = usbstickPath ; //       + "/" + file;
-     console.log("path: " + path)
-     fse.rmrf(destinationPath, function (err) {
-     if (err) {
-     console.log("fse.rmrf - error: " + err);
-     }
-     console.log('we are here dir removed');
-     if(fs.existsSync(path + '/dump')){
-     console.log("path exists: " + path + '/dump');
-     fse.copyRecursive(path + '/dump', destinationPath, function (err) {
-     if (err) {
-     console.log('error -- NO PATH??? '+ err);
-     }
-     console.log('copied from usb');
-     spawn(mongoDirectory + 'mongorestore', ['--db', collectionName, destinationPath + "/" + collectionName, '--drop', '-vvv']).on('exit', function (code) {
-     console.log('finished ' + code);
-     });
-     if(display == true) {
-     comlib.websocketsend("Successfully Copied All Data from USB Stick");
-     console.log("Successfully Copied " + usbstickPath + " to " + destinationPath);
-     display = false;
-     }
-     });
-     }
-     else{
-     comlib.websocketsend("Data not on this USB Stick");
-     console.log("Data not on this USB Stick " + usbstickPath + " to " + destinationPath);
-     }
-     });
-     });
-     }
-     else
-     {
-     comlib.websocketsend("USB stick is not detected.  Please insert USB stick and try again ");
-     console.log("USB stick is not detected.  Please insert USB stick and try again ");
-     }
-     });
-     }
-     */
 }
 
 function copyToInternal(location)
