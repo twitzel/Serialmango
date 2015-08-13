@@ -1146,7 +1146,16 @@ function copyFromUSB()
         });
     }
 }
+function unmount(){
+    child = sudo(['mkdir', '/media/usbstick ']);
+    child.stdout.on('data', function (data) {
+        console.log(data.toString());
+        console.log("usbstick directory created");
 
+    });
+
+
+}
 function copyToInternal(location)
 {
     // copies database to destinationPath.
