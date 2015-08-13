@@ -126,7 +126,7 @@ exports.setup = function()
     console.log('My IP Address is: ' + addresses[0]);
 
     //added to enable mounting of usbstick
-/*    if(os.type() != 'Windows_NT') {  //This is for pi only
+    if(os.type() != 'Windows_NT') {  //This is for pi only
         child = sudo(['mkdir', '/media/usbstick ']);
         child.stdout.on('data', function (data) {
             console.log(data.toString());
@@ -134,7 +134,7 @@ exports.setup = function()
 
         });
     }
-*/
+
 
     //MongoClient.connect("mongodb://localhost:27017/WizDb", function(err, db)
     // MongoClient.connect("mongodb://192.168.2.10:27017/WizDb", function(err, db)
