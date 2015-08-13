@@ -1085,7 +1085,9 @@ function copyFromUSB()
 
         //mount the drive first
         child = sudo(['mount', '-t', 'vfat', '-o', 'uid=pi,gid=pi', '/dev/sda1', '/media/usbstick/']);
+        console.log("Mount COPYFROMUSB line 1088");
         child.stdout.on('data', function (data) {
+            console.log("Mount COPYFROMUSB line 1090");
             console.log(data.toString());
             console.log("usbstick mounted");
             //have to find out the 'name' of the usb stick - it will be the only device in media
@@ -1147,7 +1149,9 @@ function copyFromUSB()
                 }
             });
         });
+        console.log("Mount COPYFROMUSB line 1152");
     }
+    console.log("Mount COPYFROMUSB line 1154");
 }
 function unmount(){
     child = sudo(['umount', '/media/usbstick']);
