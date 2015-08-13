@@ -127,7 +127,7 @@ exports.setup = function()
 
     //added to enable mounting of usbstick
     if(os.type() != 'Windows_NT') {  //This is for pi only
-        child = sudo(['mkdir', '/media/usbstick ']);
+        child = sudo(['mkdir', '/media/usbstick']);
         child.stdout.on('data', function (data) {
             console.log(data.toString());
             console.log("usbstick directory created");
@@ -1087,7 +1087,7 @@ function copyFromUSB()
         child = sudo(['mount', '-t', 'vfat', '-o', 'uid=pi,gid=pi', '/dev/sda1', '/media/usbstick/']);
         child.stdout.on('data', function (data) {
             console.log(data.toString());
-            console.log("usbstick directory created");
+            console.log("usbstick mounted");
             //have to find out the 'name' of the usb stick - it will be the only device in media
 
             fs.readdir(usbstickPath, function (err, list) {
