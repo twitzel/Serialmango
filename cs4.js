@@ -18,6 +18,8 @@ var timedOutInterval = 250; //time to wait between serial transmitts
 var timedOut = true; // set to false will delay transmission;
 var comlib = require('./comlib');
 var spawn = require('child_process').spawn;
+//var sys = require('sys'),
+//    exec = require('child_process').exec;
 var nodemailer = require("nodemailer");
 var pmp = require('pmp');
 var sudo = require('sudo');
@@ -175,7 +177,8 @@ exports.setup = function()
             {
                 // comlib.openSerialPort('com19', baud); //windows
                 // open serial port calls getsettings when done
-                comlib.openSerialPort('com3', baud,getSettings); //windows
+               // comlib.openSerialPort('com3', baud, exports.getSettings); //windows
+                comlib.openSerialPort('com3', baud); //windows
 
             }
             else
@@ -698,6 +701,11 @@ exports.usbSerialDataIn = function (data) {
 
                     });
                 }
+                else{
+                    console.log("Received time bask from CS4 I/0");
+                    console.log("calling getsettings");
+                    exports.getSettings();
+                }
 
                 comlib.websocketsend("CS4 Current tme is: " + momentTZ(serialData.Time).format(fmt));
                 console.log(result);
@@ -1086,6 +1094,7 @@ function copyFromUSB()
         //mount the drive first
         child = sudo(['mount', '-t', 'vfat', '-o', 'uid=pi,gid=pi', '/dev/sda1', '/media/usbstick/']);
         console.log("Mount COPYFROMUSB line 1088");
+        child.stdout.on
         child.stdout.on('data', function (data) {
             console.log("Mount COPYFROMUSB line 1090");
             console.log(data.toString());
