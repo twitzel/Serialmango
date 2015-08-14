@@ -986,6 +986,59 @@ function copyToUSB()
         destinationPath = "/home/pi/dump"; // this wass abritrauraly chosen but now fixed
         mongoDirectory = '/opt/mongo/bin/';
 
+        child = exec('sudo mount -t vfat -o uid=pi,gid=pi /dev/sda1 /media/usbstick/',function (error, stdout, stderr) {
+                if (!error)
+                {
+                    console.log('stdout: ' + stdout);
+                    console.log('stderr: ' + stderr);
+                    console.log("file name:", list);
+                    // Full path of that file
+                    var path = usbstickPath + "/" + list[0]; //go to subdirectory which is usb stick
+                    console.log("path: " + path)
+                    spawn(mongoDirectory + 'mongodump', ['-o', destinationPath]).on('exit', function (code) {
+                        console.log('finished ' + code);
+                        comlib.websocketsend("Please Wait ... Preparing Data .......");
+                        fse.rmrf(path + '/dump', function (err) {
+                            if (err) {
+                                console.error('Error removing files ' + err);
+                            }
+                            console.log("finished at fse.rmrf");
+                            comlib.websocketsend("Please Wait ... Preparing Data 2 .......");
+                            fse.copyRecursive(destinationPath, path + '/dump', function (err) {
+                                if (err) {
+                                    console.log('error ' + err);
+                                }
+                                console.log("Finished copying files");
+                                if (display == true) {
+                                    comlib.websocketsend("Successfully Copied All Data to USB Stick");
+                                    console.log("Successfully Copied " + destinationPath + " to " + usbstickPath);
+                                    display = false;
+                                }
+                            });
+                        });
+                    });
+
+                }
+                else
+                {
+                    console.log('exec error: ' + error);
+                    comlib.websocketsend("USB stick is not detected.  Please insert USB stick and try again ");
+                    console.log("USB stick is not detected.  Please insert USB stick and try again ");
+                }
+                //have to find out the 'name' of the usb stick - it will be the only device in media
+
+        });
+    }
+    /*
+    {
+
+        var display = true;
+        usbstickPath = "/media/";
+        path = usbstickPath ;
+        sourcePath = "/data/db";
+        destinationPath = "/home/pi/dump"; // this wass abritrauraly chosen but now fixed
+        mongoDirectory = '/opt/mongo/bin/';
+
         child = exec('sudo mount -t vfat -o uid=pi,gid=pi /dev/sda1 /media/usbstick/',
             function (error, stdout, stderr) {
                 console.log('stdout: ' + stdout);
@@ -1043,6 +1096,7 @@ function copyToUSB()
                 });
             });
     }
+    */
 }
 
 function copyFromUSB()
