@@ -18,8 +18,7 @@ var timedOutInterval = 250; //time to wait between serial transmitts
 var timedOut = true; // set to false will delay transmission;
 var comlib = require('./comlib');
 var spawn = require('child_process').spawn;
-//var sys = require('sys'),
-//    exec = require('child_process').exec;
+var exec = require('child_process').exec, child;
 var nodemailer = require("nodemailer");
 var pmp = require('pmp');
 var sudo = require('sudo');
@@ -1092,13 +1091,23 @@ function copyFromUSB()
         mongoDirectory = '/opt/mongo/bin/';
 
         //mount the drive first
-        child = sudo(['mount', '-t', 'vfat', '-o', 'uid=pi,gid=pi', '/dev/sda1', '/media/usbstick/']);
-        console.log("Mount COPYFROMUSB line 1088");
-        child.stdout.on
-        child.stdout.on('data', function (data) {
-            console.log("Mount COPYFROMUSB line 1090");
-            console.log(data.toString());
-            console.log("usbstick mounted");
+
+        child = exec('sudo mount -t vfat -o uid=pi,gid=pi /dev/sda1 /media/usbstick/',
+            function (error, stdout, stderr) {
+                console.log('stdout: ' + stdout);
+                console.log('stderr: ' + stderr);
+                if (error !== null) {
+                    console.log('exec error: ' + error);
+                }
+
+                /*       child = sudo(['mount', '-t', 'vfat', '-o', 'uid=pi,gid=pi', '/dev/sda1', '/media/usbstick/']);
+                       console.log("Mount COPYFROMUSB line 1088");
+                       child.stdout.on
+                       child.stdout.on('data', function (data) {
+                           console.log("Mount COPYFROMUSB line 1090");
+                           console.log(data.toString());
+                           console.log("usbstick mounted");
+                */
             //have to find out the 'name' of the usb stick - it will be the only device in media
 
             fs.readdir(usbstickPath, function (err, list) {
