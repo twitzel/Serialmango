@@ -129,10 +129,13 @@ exports.setup = function()
     //added to enable mounting of usbstick
     if(os.type() != 'Windows_NT') {  //This is for pi only
         child = sudo(['mkdir', '/media/usbstick']);
-        child.stdout.on('data', function (data) {
-            console.log(data.toString());
-            console.log("usbstick directory created");
-
+        child = exec('sudo mkdir /media.usbstick', function (error, stdout, stderr) {
+            console.log('stdout: ' + stdout);
+            console.log('stderr: ' + stderr);
+            if (error !== null) {
+                console.log('exec error: ' + error);
+            }
+            unmount(); // unmount a drive if it is connected
         });
     }
 
@@ -991,7 +994,6 @@ function copyToUSB()
             {
                 console.log('stdout: ' + stdout);
                 console.log('stderr: ' + stderr);
-                console.log("file name:", list);
                 // Full path of that file
                 var path = usbstickPath; //go to subdirectory which is usb stick
                 console.log("path: " + path)
