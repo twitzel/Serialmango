@@ -844,7 +844,7 @@ function zoomcanvasTouchmove(event){
             }
 
            // zoomLocation  +=(event.changedTouches[0].clientX - touchStartX )*2/canvas.width;
-            zoomLocation -= (event.changedTouches[0].clientX - touchStartX)*8/((zoomFactor*2)+1);
+            zoomLocation += (event.changedTouches[0].clientX - touchStartX)*8/((zoomFactor*2)+1);
            // zoomLocation += direction/2;
             if(zoomLocation < 0){
                 zoomLocation = 0;
@@ -981,7 +981,7 @@ function zoomcanvasMousemove(event){
             zoomCanvasXatTouch = event.offsetX;
 
 
-            zoomLocation -= amount/10;
+            zoomLocation += amount/10;
 
             if(zoomLocation < 0){
                 zoomLocation = 0;
