@@ -983,7 +983,7 @@ function zoomcanvasMousemove(event){
 
             zoomLocation += amount/10;
 
-            if(zoomLocation < 0){
+            if(zoomLocation < 0){ // put the limits on it
                 zoomLocation = 0;
             }
             if(zoomLocation > 100){
