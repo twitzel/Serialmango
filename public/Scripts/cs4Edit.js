@@ -188,7 +188,11 @@ function buttonOneContinue(){
         if(answer == true){
             saveclick();
         }
-        if(answer == false){
+        if(answer == false){ // don't want to savve so get rid of highlight button colors
+            property = document.getElementById('undoButton');
+            property.style.backgroundColor = '';
+            property = document.getElementById('saveButton');
+            property.style.backgroundColor = '';
         }
     }
     oneCueFile = 1; // all cue files
