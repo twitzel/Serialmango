@@ -24,6 +24,10 @@ var insertReady=0;
 var dataToSend = {};
 var oneCueFile = 0;
 var oneCueFileName;
+var totalCues = 0;
+var unsaved = 0;
+var zoomCanvasXatTouch = 0;
+var mousedownScroll=0;
 
     window.onload = init;
 function init(){
@@ -75,6 +79,13 @@ function init(){
             dropdown[dropdown.length] = new Option(tempSort[i]);         //(Desc[i][0], Desc[i][0]);
         }
     }
+  //  document.getElementById('retime').style.display = "block";
+    oneCueFile = 1; // all cue files
+    oneCueFileName =  document.getElementById("retimeDesc").value;
+  //  document.getElementById(buttonRetimeCancel).style.display = none;
+  //  document.getElementById(buttonRetimeContinue).style.display = none;
+  //  document.getElementById(loadButton).style.display = none;
+  //  document.getElementById(loadOneButton).style.display = none;
 }
 
 function testWebSocket()
@@ -108,10 +119,13 @@ function onMessage(evt)    {
             inMessage = message.data;
             pixelLoad(inMessage);
             canvasPlot();
-            zoomFactor = 85; // now setup initial zoom location and factor
+           // zoomFactor = 85; // now setup initial zoom location and factor
+            zoomFactor = 100- 2000/totalCues; //set zoom to display 20 items in zoom window
             zoomSlider.value = zoomFactor;
-            zoomLocation = 1 *100/canvas.width;
-            locationSlider.value = 1*100/canvas.width;
+           // zoomLocation = 1 *100/canvas.width;
+            zoomLocation = 0;
+           // locationSlider.value = 1*100/canvas.width;
+            locationSlider.value = zoomLocation;
             updateCanvas();
         }
         else if (message.packetType =='message'){
@@ -156,7 +170,7 @@ function loadclick(){
     dataPacket.Type = 'EDIT';
     websocket.send(JSON.stringify(dataPacket));
     context.clearRect(0,0,canvas.width,canvas.height);
-    document.getElementById('retime').style.display = "none";
+   // document.getElementById('retime').style.display = "none";
     document.getElementById("out").innerText = "Zoom Cue Data";
     document.getElementById("in").innerText = "All Cue Data";
 }
@@ -166,19 +180,30 @@ function loadOneclick(){
 }
 
 function buttonOneContinue(){
+    if(unsaved){
+        property = document.getElementById('undoButton');
+        property.style.backgroundColor = '';
+        unsaved = 0;
+        var answer = confirm("Cue File has been changed.\nDo you want to save it?")
+        if(answer == true){
+            saveclick();
+        }
+        if(answer == false){
+        }
+    }
     oneCueFile = 1; // all cue files
     oneCueFileName =  document.getElementById("retimeDesc").value;
     dataPacket.Type = 'EDIT';
     websocket.send(JSON.stringify(dataPacket));
     context.clearRect(0,0,canvas.width,canvas.height);
-    document.getElementById('retime').style.display = "none";
+  //  document.getElementById('retime').style.display = "none";
     document.getElementById("out").innerText = "Zoom Cue Data " + oneCueFileName;
     document.getElementById("in").innerText = oneCueFileName + " Data";
 }
 
 function buttonOneCancel(){
     oneCueFile = 0;// all cue files
-    document.getElementById('retime').style.display = "none";
+  //  document.getElementById('retime').style.display = "none";
 }
 
 function undoclick(){
@@ -208,6 +233,9 @@ function undoclick(){
 
 function saveclick(){
 
+    property = document.getElementById('saveButton');
+    property.style.backgroundColor = '';
+    unsaved = 0;
     var warning=confirm("This will backup the Cue File to \nan internal location and create \na new file with this modified data.");
     if (warning ==true)
     {
@@ -345,6 +373,7 @@ function pixelLoad(item){
             }
         }
     }
+    totalCues = count;
     //sort array by time in case there are some re-done cues
     pixelArray.sort(function(a,b){
         return new Date(a.Time) - new Date(b.Time);
@@ -854,12 +883,17 @@ function zoomcanvasMousewheel(event){
 function zoomcanvasMouseout(event){
     document.body.style.cursor  = 'default';
     mouseDown = 0;
+    mousedownScroll = 0;
     selected = -1;
     updateCanvas();
 }
 function zoomcanvasMousedown(event){
     event.preventDefault();
     if(event.which == 1){ //left mouse button
+        zoomCanvasXatTouch = event.offsetX;
+        if(event.offsetY > zoomcanvas.height/2){
+            mousedownScroll = 1;
+        }
         if((insertReady == 0) && (event.offsetY < zoomcanvas.height/2)){
             if(selected >=0 || selected <=pixelArray.length){
                 selectedPreviousZoomPoint={};
@@ -871,6 +905,9 @@ function zoomcanvasMousedown(event){
                 if(arrayPrevious.length >0){
                     property = document.getElementById('undoButton');
                     property.style.backgroundColor = '#eeee00';
+                    property = document.getElementById('saveButton');
+                    property.style.backgroundColor = '#CC0000';
+                    unsaved = 1;
                 }
             }
         }
@@ -901,6 +938,7 @@ function zoomcanvasMousedown(event){
             });
             updateCanvas();
         }
+
     }
     else if (event.which == 3){ //we have right button pressed
        mouseDown = 3;
@@ -926,6 +964,7 @@ function zoomcanvasMousedown(event){
 }
 function zoomcanvasMouseup(event){
     mouseDown = 0;
+    mousedownScroll = 0;
     //sort array by time in case there are some re-done cues
     pixelArray.sort(function(a,b){
         return new Date(a.Time) - new Date(b.Time);
@@ -933,6 +972,28 @@ function zoomcanvasMouseup(event){
 }
 function zoomcanvasMousemove(event){
     if(insertReady == 0){
+        if(mousedownScroll == 1){//now we can scroll the data (change position)
+            var amount = zoomCanvasXatTouch - event.offsetX;
+            zoomCanvasXatTouch = event.offsetX;
+
+
+            zoomLocation -= amount/10;
+
+            if(zoomLocation < 0){
+                zoomLocation = 0;
+            }
+            if(zoomLocation > 100){
+                zoomLocation = 100;
+            }
+
+
+
+            locationSlider.value = zoomLocation;
+            updateCanvas();
+        }
+
+
+
         if(mouseDown == 1){
             if(selected >=0 && selected <=pixelArray.length){
                 //check if before first cue
@@ -958,6 +1019,7 @@ function zoomcanvasMousemove(event){
                     zoomcontext.fillText("Can NOT be before first CUE"  ,5,14,330);
                 }
             }
+
         }
         else{
             zoomcontext.globalAlpha = 1;
@@ -1005,6 +1067,7 @@ function zoomcanvasMousemove(event){
 
             }
             else{ //look at incoming events for a match
+                document.body.style.cursor = 'pointer';
                 for(var i = 0; i < pixelArray.length; i++){
                     if(!pixelArray[i].output && (x < pixelArray[i].zoomPoint)){
                         distance = x-pixelArray[i].zoomPoint; //get the parameters of where we are

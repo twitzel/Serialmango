@@ -3,9 +3,18 @@
     background-color: #cccccc;
 }
 
+#inputdiv{
+    float:right;
+    margin: auto;
+}
+.button{
+    margin-left: 15px;
+}
 #canvasDiv{
     width:100%;
     color: #666;
+
+
 }
 #mainCanvas{
      margin-top: 0px;
@@ -18,13 +27,13 @@
 .slider{
     width: 33%;
     font-weight: bold;
-    margin-left: .5%;
-    margin-right: .5%;
+    margin-left: 1.5%;
+    margin-right: 1.5%;
     border-radius:10px;
 }
 
 #retime{
-    height: 50px;
+    height: 25px;
     margin-top: 25px;
 }
 .retimebutton{
