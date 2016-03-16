@@ -9,16 +9,16 @@
 /*                                                                       */
 
 
-                global.branch = process.argv[2];
+global.branch = process.argv[2];
 //          ** put cs4 ot twi in the edit configuration app parameters
 //                global.branch = 'cs4';
-            console.info ("Branch set to "+global.branch);
+console.info ("Branch set to "+global.branch);
 /*                                                                       */
 /*                                                                       */
 /*                                                                       */
 /*                                                                       */
 
-
+/*todd was here*/
 
 
 var express = require('express');
@@ -69,20 +69,20 @@ app.get('/cs4Edit', routes.cs4Edit);
 
 
 /*
-    Set up for the desired branch
-    All code for each branch is contained
-    in TWI.js OR CS4.js
+ Set up for the desired branch
+ All code for each branch is contained
+ in TWI.js OR CS4.js
 
-    This should keep a common set of
-    stuff so we are on the same page
+ This should keep a common set of
+ stuff so we are on the same page
 
  */
 
 if(branch == 'twi')
 {
 // Connect to the db
-   var twi = require('./twi');
-  twi.setup();
+    var twi = require('./twi');
+    twi.setup();
 }
 else if(branch == 'cs4')
 {
@@ -95,8 +95,10 @@ else if(branch == 'cs4')
 function startwebserver(){
     http.createServer(app).listen(app.get('port'), function(){
         console.log('Express server listening on port ' + app.get('port'));
+
+        comlib.startwebsocketserver();
+
     });
 
 }
-
 
