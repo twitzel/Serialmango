@@ -1516,7 +1516,7 @@ exports.ledOn = function(){
                 startSystemTest();
             }, 10000); // check for results after delay
             //  setTimeout(function(){setAutoTest(0);}, 20000);
-            /////////////////////
+            //////////////////////
         }
 
     });
