@@ -18,7 +18,6 @@ var timedOutInterval = 250; //time to wait between serial transmitts
 var timedOut = true; // set to false will delay transmission;
 var comlib = require('./comlib');
 var spawn = require('child_process').spawn;
-var exec = require('child_process').exec, child;
 var nodemailer = require("nodemailer");
 var pmp = require('pmp');
 var sudo = require('sudo');
@@ -57,12 +56,7 @@ var TimeToTest = 1000*60*5;//5 minutes  //1000*60*60*24;
 // every timedOutInterval
 //
 // adds time stamp to Outgoing data and puts it in Log collection
-exports.sendgettime = function(){
-    usbInputEnabled = 1; //let the usb data through
-    sendOutput('GETTIME'); // get the system time as the startup time
 
-
-}
 sendOutput = function (dataToSend)
 {
     var addTime = "{\"Time\":";
@@ -90,7 +84,7 @@ sendOutput = function (dataToSend)
     }
     else
     {
-        var tme =  new Date();
+        var tme = new Date();
         // var test2 = tme.getMilliseconds();
         // var test3 = timerStartTime.getMilliseconds();
         /// var test = timedOutInterval -(tme.getMilliseconds() - timerStartTime.getMilliseconds())+2;
@@ -126,24 +120,12 @@ exports.setup = function()
     global.myuri = addresses[0];
     console.log('My IP Address is: ' + addresses[0]);
 
-    //added to enable mounting of usbstick
-    if(os.type() != 'Windows_NT') {  //This is for pi only
-        child = sudo(['mkdir', '/media/usbstick']);
-        child = exec('sudo mkdir /media.usbstick', function (error, stdout, stderr) {
-            console.log('stdout: ' + stdout);
-            console.log('stderr: ' + stderr);
-            if (error !== null) {
-                console.log('exec error: ' + error);
-            }
-            unmount(); // unmount a drive if it is connected
-        });
-    }
 
 
     //MongoClient.connect("mongodb://localhost:27017/WizDb", function(err, db)
     // MongoClient.connect("mongodb://192.168.2.10:27017/WizDb", function(err, db)
     MongoClient.connect("mongodb://localhost:27017/" + collectionName, function(err, db)
-  //  MongoClient.connect("mongodb://" + global.myuri + ":27017/" + collectionName, function(err, db) // changed to above line 08102015
+        //  MongoClient.connect("mongodb://" + global.myuri + ":27017/" + collectionName, function(err, db) // changed to above line 08102015
         //MongoClient.connect("mongodb://" + "192.168.2.67" + ":27017/" + collectionName, function(err, db)
     {
         if (err)
@@ -178,15 +160,11 @@ exports.setup = function()
             if(os.type() == 'Windows_NT')
             {
                 // comlib.openSerialPort('com19', baud); //windows
-                // open serial port calls getsettings when done
-               // comlib.openSerialPort('com3', baud, exports.getSettings); //windows
                 comlib.openSerialPort('com3', baud); //windows
-
             }
             else
             {
                 comlib.openSerialPort("/dev/ttyUSB0", baud); //not windows - Raspberry PI
-
             }
         }
     });
@@ -201,7 +179,6 @@ exports.setup = function()
     //   app.get('/data', routes.data);
     //   app.get('/data2', routes.data2);
     //   app.get('/data3', routes.data3);
-    /*
     app.get('/', routes.cs4Home);
     //   app.get('/cs4Start', routes.cs4Start);
     app.get('/cs4Home', routes.cs4Home);
@@ -215,7 +192,6 @@ exports.setup = function()
     //   app.get('/cs4Help', routes.cs4Help);
     app.get('/cs4Settings', routes.cs4Settings);
     app.get('/cs4Edit', routes.cs4Edit);
-    */
 };
 
 
@@ -455,23 +431,25 @@ exports.websocketDataIn = function(dataSocket, Socket){
         else if(dataSocket.Type == "SETTINGS") {
             cs4Settings = dataSocket.Data; // get the data
             exports.saveSettings(); // save it
-         /*   dataToSend = '          SLAVE DMX_CH ' + cs4Settings.dmx1 +  " " + cs4Settings.dmx2 + " " + cs4Settings.dmx3 + ''; //update the DMX channels
-            sendOutput(dataToSend) ;
-            comlib.websocketsend("Successfully updated settings file");
-            dataToSend = '          SLAVE ZIGEN ' + cs4Settings.enableZigbee2 ; //update the DMX channels
-            sendOutput(dataToSend) ;
-        */
+            /*   dataToSend = '          SLAVE DMX_CH ' + cs4Settings.dmx1 +  " " + cs4Settings.dmx2 + " " + cs4Settings.dmx3 + ''; //update the DMX channels
+             sendOutput(dataToSend) ;
+             comlib.websocketsend("Successfully updated settings file");
+             dataToSend = '          SLAVE ZIGEN ' + cs4Settings.enableZigbee2 ; //update the DMX channels
+             sendOutput(dataToSend) ;
+             */
 
-            autoTest1 = setTimeout(function(){sendOutput('TIMEGET');}, 7000);
-            var a, b, c, d, e, f;
+            autoTest1 = setTimeout(function(){sendOutput('TIMEGET');}, 10000);
+            var a, b, c, d, e, f, g, h, j, k;
             a = setTimeout(function(){sendOutput('          SLAVE DMX_CH ' + cs4Settings.dmx1 +  " " + cs4Settings.dmx2 + " " + cs4Settings.dmx3 + '');}, 500);
             b = setTimeout(function(){sendOutput('          SLAVE ZIGEN ' + cs4Settings.enableZigbee2);}, 1000);
             c = setTimeout(function(){sendOutput('          MIDIFIL1 ' + cs4Settings.midisex1 + " " + cs4Settings.nonsysex1 + " "+ (parseInt(+cs4Settings.deviceIDLow1)*1 + parseInt(+cs4Settings.deviceIDHigh1)*16).toString() + " " + cs4Settings.type1 + " " + cs4Settings.commandformat1 + " " +   cs4Settings.command1 + " " + cs4Settings.nonsysextype1 + " " + cs4Settings.nonsysexchannel1 + " ");}, 2000);
             d = setTimeout(function(){sendOutput('          MIDIFIL2 ' + cs4Settings.midisex2 + " " + cs4Settings.nonsysex2 + " "+ (parseInt(+cs4Settings.deviceIDLow2)*1 + parseInt(+cs4Settings.deviceIDHigh2)*16).toString() + " " + cs4Settings.type2 + " " + cs4Settings.commandformat2 + " " +   cs4Settings.command2 + " " + cs4Settings.nonsysextype2 + " " + cs4Settings.nonsysexchannel2 + " ");}, 3000);
             e = setTimeout(function(){sendOutput('          MIDIFIL3 ' + cs4Settings.midisex3 + " " + cs4Settings.nonsysex3 + " "+ (parseInt(+cs4Settings.deviceIDLow3)*1 + parseInt(+cs4Settings.deviceIDHigh3)*16).toString() + " " + cs4Settings.type3 + " " + cs4Settings.commandformat3 + " " +   cs4Settings.command3 + " " + cs4Settings.nonsysextype3 + " " + cs4Settings.nonsysexchannel3 + " ");}, 4000);
             f = setTimeout(function(){sendOutput('          MIDIFIL4 ' + cs4Settings.midisex4 + " " + cs4Settings.nonsysex4 + " "+ (parseInt(+cs4Settings.deviceIDLow4)*1 + parseInt(+cs4Settings.deviceIDHigh4)*16).toString() + " " + cs4Settings.type4 + " " + cs4Settings.commandformat4 + " " +   cs4Settings.command4 + " " + cs4Settings.nonsysextype4 + " " + cs4Settings.nonsysexchannel4 + " ");}, 5000);
-
-
+            g = setTimeout(function(){sendOutput('          CLISTFL1 ' + cs4Settings.sysexcuelist1 + " " + cs4Settings.cuelistnumber1a + " " + cs4Settings.cuelistnumber1b + " " + cs4Settings.cuelistnumber1c + " ");}, 6000);
+            h = setTimeout(function(){sendOutput('          CLISTFL2 ' + cs4Settings.sysexcuelist2 + " " + cs4Settings.cuelistnumber2a + " " + cs4Settings.cuelistnumber2b + " " + cs4Settings.cuelistnumber2c + " ");}, 7000);
+            j = setTimeout(function(){sendOutput('          CLISTFL3 ' + cs4Settings.sysexcuelist3 + " " + cs4Settings.cuelistnumber3a + " " + cs4Settings.cuelistnumber3b + " " + cs4Settings.cuelistnumber3c + " ");}, 8000);
+            k = setTimeout(function(){sendOutput('          CLISTFL4 ' + cs4Settings.sysexcuelist4 + " " + cs4Settings.cuelistnumber4a + " " + cs4Settings.cuelistnumber4b + " " + cs4Settings.cuelistnumber4c + " ");}, 9000);
         }
 
         else if(dataSocket.Type == "SYSTEMTEST") {
@@ -698,17 +676,8 @@ exports.usbSerialDataIn = function (data) {
                     child.stdout.on('data', function (data) {
                         console.log(data.toString());
                         console.log("SUDO DATE CHANGED");
-                        console.log("calling getsettings");
-                        exports.getSettings();
-
                     });
                 }
-                else{
-                    console.log("Received time bask from CS4 I/0");
-                    console.log("calling getsettings");
-                    exports.getSettings();
-                }
-
                 comlib.websocketsend("CS4 Current tme is: " + momentTZ(serialData.Time).format(fmt));
                 console.log(result);
             });
@@ -983,54 +952,137 @@ function copyToUSB()
     {
 
         var display = true;
-        usbstickPath = "/media/usbstick";
+        usbstickPath = "/media/";
         path = usbstickPath ;
         sourcePath = "/data/db";
         destinationPath = "/home/pi/dump"; // this wass abritrauraly chosen but now fixed
         mongoDirectory = '/opt/mongo/bin/';
 
-        child = exec('sudo mount -t vfat -o uid=pi,gid=pi /dev/sda1 /media/usbstick/',function (error, stdout, stderr) {
-            if (!error)
-            {
-                console.log('stdout mounted: ' + stdout);
-                console.log('stderr mounted: ' + stderr);
-                // Full path of that file
-                var path = usbstickPath; //go to subdirectory which is usb stick
-                console.log("path: " + path)
-                spawn(mongoDirectory + 'mongodump', ['-o', destinationPath]).on('exit', function (code) {
-                    console.log('finished ' + code);
-                    comlib.websocketsend("Please Wait ... Preparing Data .......");
-                    fse.rmrf(path + '/dump', function (err) {
-                        if (err) {
-                            console.error('Error removing files ' + err);
-                        }
-                        console.log("finished at fse.rmrf");
-                        comlib.websocketsend("Please Wait ... Preparing Data 2 .......");
-                        fse.copyRecursive(destinationPath, path + '/dump', function (err) {
-                            if (err) {
-                                console.log('error during copy ' + err);
-                            }
-                            console.log("Finished copying files");
-                            if (display == true) {
-                                comlib.websocketsend("Successfully Copied All Data to USB Stick");
-                                console.log("Successfully Copied " + destinationPath + " to " + usbstickPath);
-                                display = false;
-                            }
-                            unmount(); // unmount the drive
-                        });
-                    });
-                });
+        //have to find out the 'name' of the usb stick - it will be the only device in media
+        fs.readdir(usbstickPath, function(err,list){
+            if(list){
+                if(list.length !=0) {
+                    if (list[0] != "dump") {
 
+                        console.log("file name:", list);
+                        // Full path of that file
+                        var path = usbstickPath + "/" + list[0]; //go to subdirectory which is usb stick
+                        console.log("path: " + path)
+                        spawn(mongoDirectory + 'mongodump', ['-o', destinationPath]).on('exit', function (code) {
+                            console.log('finished ' + code);
+                            comlib.websocketsend("Please Wait ... Preparing Data .......");
+                            fse.rmrf(path + '/dump', function (err) {
+                                if (err) {
+                                    console.error('Error removing files ' + err);
+                                }
+                                console.log("finished at fse.rmrf");
+                                comlib.websocketsend("Please Wait ... Preparing Data .......");
+                                fse.copyRecursive(destinationPath, path + '/dump', function (err) {
+                                    if (err) {
+                                        console.log('error ' + err);
+                                    }
+                                    console.log("Finished copying files");
+                                    if (display == true) {
+                                        comlib.websocketsend("Successfully Copied All Data to USB Stick");
+                                        console.log("Successfully Copied " + destinationPath + " to " + usbstickPath);
+                                        display = false;
+                                    }
+                                });
+                            });
+                        });
+                    }
+                    else
+                    {
+                        comlib.websocketsend("USB stick is not detected.  Please insert USB stick and try again ");
+                        console.log("USB stick is not detected.  Please insert USB stick and try again ");
+                    }
+                }
+                else
+                {
+                    comlib.websocketsend("USB stick is not detected.  Please insert USB stick and try again ");
+                    console.log("USB stick is not detected.  Please insert USB stick and try again ");
+                }
             }
+
+            /*   var display = true;
+             usbstickPath = "/media/usb0";
+             path = usbstickPath ;
+             sourcePath = "/data/db";
+             destinationPath = "/home/pi/dump"; // this wass abritrauraly chosen but now fixed
+             mongoDirectory = '/opt/mongo/bin/';
+             //have to find out the 'name' of the usb stick - it will be the only device in media
+             fs.readdir(usbstickPath, function(err,list){
+             if( list.length!= 0)
+             {
+             // list.forEach(function (file) {
+             // Full path of that file
+             var path = usbstickPath ; //       +  "/" + file;
+             console.log("path: " + path)
+             spawn(mongoDirectory + 'mongodump', ['-o', destinationPath]).on('exit',function(code){
+             console.log('finished ' + code);
+             comlib.websocketsend("Please Wait ... Preparing Data .......");
+             fse.rmrf(path +'/dump', function (err) {
+             if (err) {
+             console.error('Error removing files ' + err);
+             }
+             console.log("finished at fse.rmrf");
+             comlib.websocketsend("Please Wait ... Preparing Data .......");
+             fse.copyRecursive(destinationPath , path +'/dump', function (err) {
+             if (err) {
+             console.log('error '+ err);
+             }
+             console.log("Finished copying files");
+             if(display == true) {
+             comlib.websocketsend("Successfully Copied All Data to USB Stick");
+             console.log("Successfully Copied " + destinationPath + " to " + usbstickPath);
+             display = false;
+             }
+             });
+             });
+             });
+             // });
+             }
+             */
             else
             {
-                console.log('exec error: ' + error);
                 comlib.websocketsend("USB stick is not detected.  Please insert USB stick and try again ");
                 console.log("USB stick is not detected.  Please insert USB stick and try again ");
             }
-            //have to find out the 'name' of the usb stick - it will be the only device in media
-
         });
+
+
+
+        /*
+         //have to find out the 'name' of the usb stick - it will be the only device in media
+         fs.readdir(usbstickPath, function(err,list){
+         if( list.length!= 0)
+         {
+         list.forEach(function (file) {
+         // Full path of that file
+         var path = usbstickPath ; //       +  "/" + file;
+         console.log("path: " + path)
+         spawn(mongoDirectory + 'mongodump', ['-o', destinationPath]).on('exit',function(code){
+         console.log('finished ' + code);
+         fse.copyRecursive(destinationPath , path + '/dump', function (err) {
+         if (err) {
+         console.log('error '+ err);
+         }
+         if(display == true) {
+         comlib.websocketsend("Successfully Copied All Data to USB Stick");
+         console.log("Successfully Copied " + destinationPath + " to " + usbstickPath);
+         display = false;
+         }
+         });
+         });
+         });
+         }
+         else
+         {
+         comlib.websocketsend("USB stick is not detected.  Please insert USB stick and try again ");
+         console.log("USB stick is not detected.  Please insert USB stick and try again ");
+         }
+         });
+         */
     }
 }
 
@@ -1076,73 +1128,129 @@ function copyFromUSB()
     }
     //this is for the pi
     else
-     {
-       var display = true;
-        usbstickPath = "/media/usbstick";
+    {
+        var display = true;
+        usbstickPath = "/media/";
         path = usbstickPath ;
         sourcePath = "/data/db";
-        destinationPath = "/home/pi/dump"; // this was abritrauraly chosen but now fixed
+        destinationPath = "/home/pi/dump"; // this wass abritrauraly chosen but now fixed
         mongoDirectory = '/opt/mongo/bin/';
 
-        //mount the drive first
+        //have to find out the 'name' of the usb stick - it will be the only device in media
 
-        child = exec('sudo mount -t vfat -o uid=pi,gid=pi /dev/sda1 /media/usbstick/', function (error, stdout, stderr) {
-                console.log('stdout: ' + stdout);
-                console.log('stderr: ' + stderr);
-                if (!error) {
-                    console.log('exec error: ' + error);
-                    var path = usbstickPath ; //go to subdirectory which is usb stick
-                    console.log("path: " + path)
+        fs.readdir(usbstickPath, function(err,list){
+            if(list){
+                if(list.length !=0) {
+                    if (list[0] != "dump") {
 
-                    fse.rmrf(destinationPath, function (err) {
-                        if (err) {
-                            console.log("fse.rmrf - error: " + err);
-                        }
-                        console.log('we are here dir removed');
+                        console.log("file name:", list);
+                        // Full path of that file
+                        var path = usbstickPath + "/" + list[0]; //go to subdirectory which is usb stick
+                        console.log("path: " + path)
+
+                        fse.rmrf(destinationPath, function (err) {
+                            if (err) {
+                                console.log("fse.rmrf - error: " + err);
+                            }
+                            console.log('we are here dir removed');
 
 
-                        if (fs.existsSync(path + '/dump')) {
-                            console.log("path exists: " + path + '/dump');
-                            fse.copyRecursive(path + '/dump', destinationPath, function (err) {
-                                if (err) {
-                                    console.log('error -- NO PATH??? ' + err);
-                                }
-                                console.log('copied from usb');
-                                spawn(mongoDirectory + 'mongorestore', ['--db', collectionName, destinationPath + "/" + collectionName, '--drop', '-vvv']).on('exit', function (code) {
-                                    console.log('finished ' + code);
+                            if (fs.existsSync(path + '/dump')) {
+                                console.log("path exists: " + path + '/dump');
+                                fse.copyRecursive(path + '/dump', destinationPath, function (err) {
+                                    if (err) {
+                                        console.log('error -- NO PATH??? ' + err);
+                                    }
+                                    console.log('copied from usb');
+                                    spawn(mongoDirectory + 'mongorestore', ['--db', collectionName, destinationPath + "/" + collectionName, '--drop', '-vvv']).on('exit', function (code) {
+                                        console.log('finished ' + code);
+                                    });
+                                    if (display == true) {
+                                        comlib.websocketsend("Successfully Copied All Data from USB Stick");
+                                        console.log("Successfully Copied " + usbstickPath + " to " + destinationPath);
+                                        display = false;
+                                    }
                                 });
-                                if (display == true) {
-                                    comlib.websocketsend("Successfully Copied All Data from USB Stick");
-                                    console.log("Successfully Copied " + usbstickPath + " to " + destinationPath);
-                                    display = false;
-                                }
-                                unmount();
-                            });
-                        }
-                        else {
-                            comlib.websocketsend("Data not on this USB Stick");
-                            console.log("Data not on this USB Stick " + usbstickPath + " to " + destinationPath);
-                            unmount();
-                        }
-                    });
+                            }
+                            else {
+                                comlib.websocketsend("Data not on this USB Stick");
+                                console.log("Data not on this USB Stick " + usbstickPath + " to " + destinationPath);
+
+                            }
+                        });
+                    }
+                    else
+                    {
+                        comlib.websocketsend("USB stick is not detected.  Please insert USB stick and try again ");
+                        console.log("USB stick is not detected.  Please insert USB stick and try again ");
+                    }
                 }
                 else
                 {
                     comlib.websocketsend("USB stick is not detected.  Please insert USB stick and try again ");
                     console.log("USB stick is not detected.  Please insert USB stick and try again ");
                 }
+            }
+            else
+            {
+                comlib.websocketsend("USB stick is not detected.  Please insert USB stick and try again ");
+                console.log("USB stick is not detected.  Please insert USB stick and try again ");
+            }
         });
+    }
+    /*
+     {
+     var display = true;
+     usbstickPath = "/media/";
+     path = usbstickPath ;
+     sourcePath = "/data/db";
+     destinationPath = "/home/pi/dump"; // this wass abritrauraly chosen but now fixed
+     mongoDirectory = '/opt/mongo/bin/';
+     //have to find out the 'name' of the usb stick - it will be the only device in media
+     fs.readdir(usbstickPath, function(err,list){
+     if( list.length!= 0)
+     {
+     list.forEach(function (file) {
+     // Full path of that file
+     var path = usbstickPath ; //       + "/" + file;
+     console.log("path: " + path)
+     fse.rmrf(destinationPath, function (err) {
+     if (err) {
+     console.log("fse.rmrf - error: " + err);
      }
-}
-
-function unmount(){
-    child = exec('sudo umount /media/usbstick/', function (error, stdout, stderr) {
-        console.log('stdout: ' + stdout);
-        console.log('stderr: ' + stderr);
-        if (error !== null) {
-            console.log('exec error: ' + error);
-        }
-    });
+     console.log('we are here dir removed');
+     if(fs.existsSync(path + '/dump')){
+     console.log("path exists: " + path + '/dump');
+     fse.copyRecursive(path + '/dump', destinationPath, function (err) {
+     if (err) {
+     console.log('error -- NO PATH??? '+ err);
+     }
+     console.log('copied from usb');
+     spawn(mongoDirectory + 'mongorestore', ['--db', collectionName, destinationPath + "/" + collectionName, '--drop', '-vvv']).on('exit', function (code) {
+     console.log('finished ' + code);
+     });
+     if(display == true) {
+     comlib.websocketsend("Successfully Copied All Data from USB Stick");
+     console.log("Successfully Copied " + usbstickPath + " to " + destinationPath);
+     display = false;
+     }
+     });
+     }
+     else{
+     comlib.websocketsend("Data not on this USB Stick");
+     console.log("Data not on this USB Stick " + usbstickPath + " to " + destinationPath);
+     }
+     });
+     });
+     }
+     else
+     {
+     comlib.websocketsend("USB stick is not detected.  Please insert USB stick and try again ");
+     console.log("USB stick is not detected.  Please insert USB stick and try again ");
+     }
+     });
+     }
+     */
 }
 
 function copyToInternal(location)
@@ -1224,14 +1332,10 @@ function copyToPublic(){
 
 }
 
-
 exports.getSettings = function(){
-//function getSettings(){
-console.log("(getsettings)");
     usbInputEnabled = 1; //let the usb data through
+    sendOutput('GETTIME'); // get the system time as the startup time
 
-    //sendOutput('GETTIME'); // get the system time as the startup time
-    console.log("Line after gettime in getsettings");
     collectionSettings.findOne({},function(error,result){
         if(result){
             cs4Settings = result;
@@ -1250,6 +1354,12 @@ console.log("(getsettings)");
             cs4Settings.emailAccountPassword = "panema2020!";
             cs4Settings.timezone = "US/Eastern";
             cs4Settings.midisex1 = 0;
+
+            cs4Settings.sysexcuelist1 = 0;
+            cs4Settings.cuelistnumber1a = 0;
+            cs4Settings.cuelistnumber1b = 0
+            cs4Settings.cuelistnumber1c = 0
+
             cs4Settings.nonsysex1 = 0;
             cs4Settings.midisex2 = 0;
             cs4Settings.nonsysex2 = 0;
@@ -1261,17 +1371,18 @@ console.log("(getsettings)");
                 console.log(result);
             })
         }
-      //  setTimeout(function(){sendOutput('GETTIME');}, 7000);
-        var a, b, c, d, e, f
+        //  setTimeout(function(){sendOutput('GETTIME');}, 7000);
+        var a, b, c, d, e, f, g, h, j, k;
         a = setTimeout(function(){sendOutput('          SLAVE DMX_CH ' + cs4Settings.dmx1 +  " " + cs4Settings.dmx2 + " " + cs4Settings.dmx3 + '');}, 500);
         b = setTimeout(function(){sendOutput('          SLAVE ZIGEN ' + cs4Settings.enableZigbee2);}, 1000);
         c = setTimeout(function(){sendOutput('          MIDIFIL1 ' + cs4Settings.midisex1 + " " + cs4Settings.nonsysex1 + " "+ (parseInt(+cs4Settings.deviceIDLow1)*1 + parseInt(+cs4Settings.deviceIDHigh1)*16).toString() + " " + cs4Settings.type1 + " " + cs4Settings.commandformat1 + " " +   cs4Settings.command1 + " " + cs4Settings.nonsysextype1 + " " + cs4Settings.nonsysexchannel1 + " ");}, 2000);
         d = setTimeout(function(){sendOutput('          MIDIFIL2 ' + cs4Settings.midisex2 + " " + cs4Settings.nonsysex2 + " "+ (parseInt(+cs4Settings.deviceIDLow2)*1 + parseInt(+cs4Settings.deviceIDHigh2)*16).toString() + " " + cs4Settings.type2 + " " + cs4Settings.commandformat2 + " " +   cs4Settings.command2 + " " + cs4Settings.nonsysextype2 + " " + cs4Settings.nonsysexchannel2 + " ");}, 3000);
         e = setTimeout(function(){sendOutput('          MIDIFIL3 ' + cs4Settings.midisex3 + " " + cs4Settings.nonsysex3 + " "+ (parseInt(+cs4Settings.deviceIDLow3)*1 + parseInt(+cs4Settings.deviceIDHigh3)*16).toString() + " " + cs4Settings.type3 + " " + cs4Settings.commandformat3 + " " +   cs4Settings.command3 + " " + cs4Settings.nonsysextype3 + " " + cs4Settings.nonsysexchannel3 + " ");}, 4000);
         f = setTimeout(function(){sendOutput('          MIDIFIL4 ' + cs4Settings.midisex4 + " " + cs4Settings.nonsysex4 + " "+ (parseInt(+cs4Settings.deviceIDLow4)*1 + parseInt(+cs4Settings.deviceIDHigh4)*16).toString() + " " + cs4Settings.type4 + " " + cs4Settings.commandformat4 + " " +   cs4Settings.command4 + " " + cs4Settings.nonsysextype4 + " " + cs4Settings.nonsysexchannel4 + " ");}, 5000);
-            setTimeout(function(){  exports.ledOn();},6000)
-
-
+        g = setTimeout(function(){sendOutput('          CLISTFL1 ' + cs4Settings.sysexcuelist1 + " " + cs4Settings.cuelistnumber1a + " " + cs4Settings.cuelistnumber1b + " " + cs4Settings.cuelistnumber1c + " ");}, 6000);
+        h = setTimeout(function(){sendOutput('          CLISTFL2 ' + cs4Settings.sysexcuelist2 + " " + cs4Settings.cuelistnumber2a + " " + cs4Settings.cuelistnumber2b + " " + cs4Settings.cuelistnumber2c + " ");}, 7000);
+        j = setTimeout(function(){sendOutput('          CLISTFL3 ' + cs4Settings.sysexcuelist3 + " " + cs4Settings.cuelistnumber3a + " " + cs4Settings.cuelistnumber3b + " " + cs4Settings.cuelistnumber3c + " ");}, 8000);
+        k = setTimeout(function(){sendOutput('          CLISTFL4 ' + cs4Settings.sysexcuelist4 + " " + cs4Settings.cuelistnumber4a + " " + cs4Settings.cuelistnumber4b + " " + cs4Settings.cuelistnumber4c + " ");}, 9000);
 
         //set up initial mail parameters here
         smtpTransport = nodemailer.createTransport("SMTP",{
@@ -1282,12 +1393,12 @@ console.log("(getsettings)");
             }
         });
 
-     /*   dataToSend = '          SLAVE DMX_CH ' + cs4Settings.dmx1 +  " " + cs4Settings.dmx2 + " " + cs4Settings.dmx3 + ''; //update the DMX channels
-        sendOutput(dataToSend) ;
-        dataToSend = '          SLAVE ZIGEN ' + cs4Settings.enableZigbee2 + ''; //update the DMX channels
-        sendOutput(dataToSend) ;
-     */
-       // exports.ledOn();
+        /*   dataToSend = '          SLAVE DMX_CH ' + cs4Settings.dmx1 +  " " + cs4Settings.dmx2 + " " + cs4Settings.dmx3 + ''; //update the DMX channels
+         sendOutput(dataToSend) ;
+         dataToSend = '          SLAVE ZIGEN ' + cs4Settings.enableZigbee2 + ''; //update the DMX channels
+         sendOutput(dataToSend) ;
+         */
+        exports.ledOn();
 
     });
 };
@@ -1373,7 +1484,6 @@ exports.ledOn = function(){
 
                         // send mail with defined transport object
                         sendMail(mailOptions);
-
                         console.log("READY to start system test in 10 seconds");
                         setTimeout(function(){startSystemTest();}, 10000); // check for results after delay
                         //  setTimeout(function(){setAutoTest(0);}, 20000);
