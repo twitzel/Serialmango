@@ -110,10 +110,13 @@ function init(){
 
         nonsysexchange1();
         midisysexchange2();
+        sysexcuelistchange2();
         nonsysexchange2();
         midisysexchange3();
+        sysexcuelistchange3();
         nonsysexchange3();
         midisysexchange4();
+        sysexcuelistchange4();
         nonsysexchange4();
 
     }
