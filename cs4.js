@@ -437,7 +437,7 @@ exports.websocketDataIn = function(dataSocket, Socket){
             dataToSend = '          SLAVE ZIGEN ' + cs4Settings.enableZigbee2 ; //update the DMX channels
             sendOutput(dataToSend) ;
         */
-
+            console.log("we are ready to send data to the CS4 I/O board");
             autoTest1 = setTimeout(function(){sendOutput('TIMEGET');}, 10000);
             var a, b, c, d, e, f, g, h, j, k;
             a = setTimeout(function(){sendOutput('          SLAVE DMX_CH ' + cs4Settings.dmx1 +  " " + cs4Settings.dmx2 + " " + cs4Settings.dmx3 + '');}, 500);
