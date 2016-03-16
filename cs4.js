@@ -83,7 +83,7 @@ sendOutput = function (dataToSend)
     }
     else
     {
-        var tme = new Date();
+        var tme =  new Date();
         // var test2 = tme.getMilliseconds();
         // var test3 = timerStartTime.getMilliseconds();
         /// var test = timedOutInterval -(tme.getMilliseconds() - timerStartTime.getMilliseconds())+2;

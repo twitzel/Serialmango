@@ -7,8 +7,8 @@
 <script>
    // window.addEventListener("init",onload, false);
 
-   var cs4Settings= "<%=JSON.stringify(cs4Settings)%>" ;// load the settings from the setting collection
-  // var cs4Settings=<%-JSON.stringify(cs4Settings)%>
+  // var cs4Settings= "<%=JSON.stringify(cs4Settings)%>" ;// load the settings from the setting collection
+  var cs4Settings=<%-JSON.stringify(cs4Settings)%>
 
 </script>
 <html>
@@ -63,20 +63,13 @@
     <fieldset id = "setup">
         <legend>Startup Parameters</legend>
         <div>
-            <label>Name of System</label>
+            <label class = setup>Name of System</label>
             <input id=systemname name=systemname type=text value="CS4 System"  style = "width: 13.3em" >
         </div>
-        <div>
-            Ignore Input Source:   Yes <input id=inputsourceyes name=inputsource value= "sourceyes" type=radio checked>
-            No<input id=inputsourceno name=inputsource value = "sourceno" type=radio >
-        </div>
-        <div>
-            Enable Zigbee Monitor:   Yes <input id=zigbeemonitoryes name=zigbeemonitor value= "monitoryes" type=radio checked>
-            No<input id=zigbeemonitorno name=zigbeemonitor value = "monitorno" type=radio >
-        </div>
+
 
         <div>
-            <label>Self Test Start Time
+            <label class = setup>Self Test Start Time
             </label>
             <select id=testtimeselect >
                 <option value='00:00:00' title='00'>00:00:00 (24 hour format)</option>
@@ -105,19 +98,19 @@
                 <option value='23:00:00' title='23'>23:00:00</option>
             </select>
             <div>
-                <label>Email Address For Messages</label>
+                <label class = setup>Email Address For Messages</label>
                 <input id=email name=email  style = "width: 15em" >
             </div>
             <div>
-                <label>Email Account To Send Messages From</label>
+                <label class = setup>Email Account To Send Messages From</label>
                 <input id=emailAccount name=emailAccount  style = "width: 15em" >
             </div>
             <div>
-                <label>Email Address Password</label>
+                <label class = setup>Email Address Password</label>
                 <input id=emailAccountPassword name=emailAccountPassword  style = "width: 15em" >
             </div>
             <div>
-                <label>Select Time Zone</label>
+                <label class = setup>Select Time Zone</label>
                 <select id='timeZoneCombo'>
                     <option value='EST5EDT' title='US/Eastern'>US/Eastern</option>
                     <option value='CST6CDT' title='US/Central'>US/Central</option>
@@ -139,6 +132,14 @@
 
         </div>
         <div>
+            Ignore Input Source:   Yes <input id=inputsourceyes name=inputsource value= "sourceyes" type=radio checked>
+            No<input id=inputsourceno name=inputsource value = "sourceno" type=radio >
+        </div>
+        <div>
+            Enable Zigbee Monitor:   Yes <input id=zigbeemonitoryes name=zigbeemonitor value= "monitoryes" type=radio checked>
+            No<input id=zigbeemonitorno name=zigbeemonitor value = "monitorno" type=radio >
+        </div>
+        <div>
             <fieldset id = dmxsetup>
                 <legend>DMX Channel Monitor</legend>
                     <label>1st Channel</label>
@@ -150,6 +151,800 @@
             </fieldset>
         </div>
 
+        <fieldset id = midifilters>
+            <legend>Midi Input Filters</legend>
+                <fieldset id = midi1>
+                    <legend>Midi Input 1</legend>
+                    <fieldset>
+                        <legend>SYSEX</legend>
+                        <label>SYSEX</label>
+                        <select id = midisysex1 onchange="midisysexchange1()">
+                            <option value =0 >Allow All</option>
+                            <option value =1 >Select Specific</option>
+                            <option value =2>Ignore Specific</option>
+                        </select>
+                        <div id = sysex1>
+                            <fieldset>
+                                <legend>Sysex Command</legend>
+                                <label>Device ID(Byte 2)</label>
+                                <select id = deviceIDLow1>
+                                    <option value = "" >Select</option>
+                                    <option value = 15 >ANY</option>
+                                    <option value = 0 >0</option>
+                                    <option value = 1 >1</option>
+                                    <option value = 2 >2</option>
+                                    <option value = 3 >3</option>
+                                    <option value = 4 >4</option>
+                                    <option value = 5 >5</option>
+                                    <option value = 6 >6</option>
+                                    <option value = 7 >7</option>
+                                    <option value = 8 >8</option>
+                                    <option value = 9 >9</option>
+                                    <option value = 10 >A</option>
+                                    <option value = 11 >B</option>
+                                    <option value = 12 >C</option>
+                                    <option value = 13 >D</option>
+                                    <option value = 14 >E</option>
+                                    <option value = 15 >F</option>
+                                </select>
+                                <select id = deviceIDHigh1>
+                                    <option value = "" >Select</option>
+                                    <option value = 15 >ANY</option>
+                                    <option value = 0 >0</option>
+                                    <option value = 1 >1</option>
+                                    <option value = 2 >2</option>
+                                    <option value = 3 >3</option>
+                                    <option value = 4 >4</option>
+                                    <option value = 5 >5</option>
+                                    <option value = 6 >6</option>
+                                    <option value = 7 >7</option>
+                                    <option value = 8 >8</option>
+                                    <option value = 9 >9</option>
+                                    <option value = 10 >A</option>
+                                    <option value = 11 >B</option>
+                                    <option value = 12 >C</option>
+                                    <option value = 13 >D</option>
+                                    <option value = 14 >E</option>
+                                    <option value = 15 >F</option>
+                                </select>
+                                <label>Sysex Type(Byte 3)</label>
+                                <select id = type1>
+                                    <option value = "" >Select</option>
+                                    <option value = 15 >ANY</option>
+                                    <option value = 01 >Long Form MTC (01)</option>
+                                    <option value = 02 >MIDI Show Control (02)</option>
+                                    <option value = 03 >Notation Information (03)</option>
+                                    <option value = 04 >Device Control (04)</option>
+                                    <option value = 05 >Real Time MTC Cueing (05)</option>
+                                    <option value = 06 >MIDI Machine Control Command (06)</option>
+                                    <option value = 07 >MIDI Machine Control Response (07)</option>
+                                    <option value = 08 >Single Note Retune (08)</option>
+                                </select>
+                                    <div></div>
+                                <label>Command Format(Byte 4)</label>
+                                <select id = commandformat1>
+                                    <option value = "" >Select</option>
+                                    <option value = 15 >ANY</option>
+                                    <option value = 1 >Lighting - General (01)</option>
+                                    <option value = 2 >Moving Lights (02)</option>
+                                    <option value = 3 >Color Changes (03)</option>
+                                    <option value = 4 >Strobes (04)</option>
+                                    <option value = 5 >Lasers (05)</option>
+                                    <option value = 6 >Chasers (06)</option>
+                                    <option value = 16 >Sound General (10)</option>
+                                    <option value = 17 >Music (11)</option>
+                                    <option value = 18 >CD Players (12</option>
+                                    <option value = 19 >EPROM Playback (13)</option>
+                                    <option value = 20 >Audio Tape Machines (14)</option>
+                                    <option value = 21 >Intercoms (15)</option>
+                                    <option value = 22 >Amplifiers (16)</option>
+                                    <option value = 23 >Audio Effects Devices (17)</option>
+                                    <option value = 24 >Equalizers (18)</option>
+                                    <option value = 32 >Machinery - General (20)</option>
+                                    <option value = 32 >Rigging (21)</option>
+                                    <option value = 34 >Flies (22)</option>
+                                    <option value = 35 >Lifts (23)</option>
+                                    <option value = 36 >Turntables (24)</option>
+                                    <option value = 37 >Trusses (25)</option>
+                                    <option value = 38 >Robots (26)</option>
+                                    <option value = 39 >Animation (27)</option>
+                                    <option value = 40 >Floats (28)</option>
+                                    <option value = 41 >Breakaways (29)</option>
+                                    <option value = 42 >Barges (2A)</option>
+                                    <option value = 48 >Video - General (30)</option>
+                                    <option value = 49 >Video Tape Machines (31)</option>
+                                    <option value = 50 >Video Cassette Machines (32)</option>
+                                    <option value = 51 >Video Disk Players (33)</option>
+                                    <option value = 52 >Video Switchers (34)</option>
+                                    <option value = 53 >Video Effects (35)</option>
+                                    <option value = 54 >Video Character Generators (36)</option>
+                                    <option value = 55 >Video Still Stores (37)</option>
+                                    <option value = 56 >Video Monitors (38)</option>
+                                    <option value = 64 >Projection - General (40)</option>
+                                    <option value = 65 >Film Projectors (41)</option>
+                                    <option value = 66 >Slide Projectors (42)</option>
+                                    <option value = 67 >Video Projectors (43)</option>
+                                    <option value = 68 >Dissolvers (44)</option>
+                                    <option value = 69 >Shutter Controls (45)</option>
+                                    <option value = 80 >Process Control - General (50)</option>
+                                    <option value = 81 >Hydraulic Oil (51)</option>
+                                    <option value = 82 >H20 (52)</option>
+                                    <option value = 83 >C02 (53)</option>
+                                    <option value = 84 >Compressed Air (54)</option>
+                                    <option value = 85 >Natural Gas (55)</option>
+                                    <option value = 86 >Fog (56)</option>
+                                    <option value = 87 >Smoke (57)</option>
+                                    <option value = 88 >Cracked Haze (58)</option>
+                                    <option value = 96 >Pyro - General (60)</option>
+                                    <option value = 97 >Fireworks (61)</option>
+                                    <option value = 98 >Explosions (62)</option>
+                                    <option value = 99 >Flames (63)</option>
+                                    <option value = 100 >Smokepots (64)</option>
+                                </select>
+                                <label>Command (Byte 5)</label>
+                                <select id = command1>
+                                    <option value = "" >Select</option>
+                                    <option value = 15 >ANY</option>
+                                    <option value = 1 >Go (01)</option>
+                                    <option value = 2 >Pause (02)</option>
+                                    <option value = 3 >Resume (03)</option>
+                                    <option value = 6 >Set Submaster (06)</option>
+                                    <option value = 7 >Fire (07)</option>
+                                </select>
+                            </fieldset>
+                        </div>
+                    </fieldset>
+
+
+                    <fieldset>
+                        <legend>SYSEX CUE LIST </legend>
+                        <label>Sysex Cue List</label>
+                        <select id = sysexcuelist1 onchange="sysexcuelistchange1()">
+                            <option value = "" >Select</option>
+                            <option value =0>Allow All</option>
+                            <option value =1>Allow One</option>
+                            <option value =2>Allow Range</option>
+                            <option value =3>Ignore One</option>
+                            <option value =4>Ignore Range</option>
+                        </select>
+                        <div id="sysexcuelist1a">
+                            <label>Cue List Number</label>
+                            <input id=cuelistnumber1a name=cuelistnumber1a type=number value="1" min="1" max="512" style = "width: 3.3em" >
+                        </div>
+                        <div id="sysexcuelist1b">
+                            <label>Cue List Start</label>
+                            <input id=cuelistnumber1a name=cuelistnumber1a type=number value="1" min="1" max="512" style = "width: 3.3em" >
+                            <label>Cue List End</label>
+                            <input id=cuelistnumber1c name=cuelistnumber1c type=number value="1" min="1" max="512" style = "width: 3.3em" >
+
+
+
+
+                        </div>
+
+
+                    </fieldset>
+
+
+
+
+                    <fieldset>
+                        <legend>Non Sysex (3 Byte)</legend>
+                        <label>Non Sysex</label>
+                        <select id = nonsysex1 onchange="nonsysexchange1()">
+                            <option value = "" >Select</option>
+                            <option value =0>Allow All</option>
+                            <option value =1>Select Specific</option>
+                            <option value =2>Ignore Specific</option>
+                        </select>
+                        <div id = other1>
+                            <fieldset>
+                            <legend>Non Sysex Command</legend>
+                                <label>Midi Type</label>
+                                <select id = nonsysextype1>
+                                    <option value = "" >Select</option>
+                                    <option value = 15>ANY</option>
+                                    <option value = 1 >Note</option>
+                                    <option value = 2 >All but Note</option>
+                                </select>
+                                <label>Channel</label>
+                                <select id = nonsysexchannel1>
+                                    <option value = "" >Select</option>
+                                    <option value = 15 >ANY</option>
+                                    <option value = 0 >0</option>
+                                    <option value = 1 >1</option>
+                                    <option value = 2 >2</option>
+                                    <option value = 3 >3</option>
+                                    <option value = 4 >4</option>
+                                    <option value = 5 >5</option>
+                                    <option value = 6 >6</option>
+                                    <option value = 7 >7</option>
+                                    <option value = 8 >8</option>
+                                    <option value = 9 >9</option>
+                                    <option value = 10 >A</option>
+                                    <option value = 11 >B</option>
+                                    <option value = 12 >C</option>
+                                    <option value = 13 >D</option>
+                                    <option value = 14 >E</option>
+                                    <option value = 15 >F</option>
+                                </select>
+                            </fieldset>
+                        </div>
+
+                    </fieldset>
+                </fieldset>
+
+                <fieldset id = midi2>
+                    <legend>Midi Input 2</legend>
+                    <fieldset>
+                        <legend>SYSEX</legend>
+                        <label>SYSEX</label>
+                        <select id = midisysex2 onchange="midisysexchange2()">
+                            <option value = "" >Select</option>
+                            <option value =0 >Allow All</option>
+                            <option value =1 >Select Specific</option>
+                            <option value =2>Ignore Specific</option>
+                        </select>
+                        <div id = sysex2>
+                            <fieldset>
+                                <legend>Sysex Command</legend>
+                                <label>Device ID(Byte 2)</label>
+                                <select id = deviceIDLow2>
+                                    <option value = "" >Select</option>
+                                    <option value = 15 >ANY</option>
+                                    <option value = 0 >0</option>
+                                    <option value = 1 >1</option>
+                                    <option value = 2 >2</option>
+                                    <option value = 3 >3</option>
+                                    <option value = 4 >4</option>
+                                    <option value = 5 >5</option>
+                                    <option value = 6 >6</option>
+                                    <option value = 7 >7</option>
+                                    <option value = 8 >8</option>
+                                    <option value = 9 >9</option>
+                                    <option value = 10 >A</option>
+                                    <option value = 11 >B</option>
+                                    <option value = 12 >C</option>
+                                    <option value = 13 >D</option>
+                                    <option value = 14 >E</option>
+                                    <option value = 15 >F</option>
+                                </select>
+                                <select id = deviceIDHigh2>
+                                    <option value = "" >Select</option>
+                                    <option value = 15 >ANY</option>
+                                    <option value = 0 >0</option>
+                                    <option value = 1 >1</option>
+                                    <option value = 2 >2</option>
+                                    <option value = 3 >3</option>
+                                    <option value = 4 >4</option>
+                                    <option value = 5 >5</option>
+                                    <option value = 6 >6</option>
+                                    <option value = 7 >7</option>
+                                    <option value = 8 >8</option>
+                                    <option value = 9 >9</option>
+                                    <option value = 10 >A</option>
+                                    <option value = 11 >B</option>
+                                    <option value = 12 >C</option>
+                                    <option value = 13 >D</option>
+                                    <option value = 14 >E</option>
+                                    <option value = 15 >F</option>
+                                </select>
+                                <label>Sysex Type(Byte 3)</label>
+                                <select id = type2>
+                                    <option value = "" >Select</option>
+                                    <option value = 15 >ANY</option>
+                                    <option value = 01 >Long Form MTC (01)</option>
+                                    <option value = 02 >MIDI Show Control (02)</option>
+                                    <option value = 03 >Notation Information (03)</option>
+                                    <option value = 04 >Device Control (04)</option>
+                                    <option value = 05 >Real Time MTC Cueing (05)</option>
+                                    <option value = 06 >MIDI Machine Control Command (06)</option>
+                                    <option value = 07 >MIDI Machine Control Response (07)</option>
+                                    <option value = 08 >Single Note Retune (08)</option>
+                                </select>
+                                <div></div>
+                                <label>Command Format(Byte 4)</label>
+                                <select id = commandformat2>
+                                    <option value = "" >Select</option>
+                                    <option value = 15 >ANY</option>
+                                    <option value = 1 >Lighting - General (01)</option>
+                                    <option value = 2 >Moving Lights (02)</option>
+                                    <option value = 3 >Color Changes (03)</option>
+                                    <option value = 4 >Strobes (04)</option>
+                                    <option value = 5 >Lasers (05)</option>
+                                    <option value = 6 >Chasers (06)</option>
+                                    <option value = 16 >Sound General (10)</option>
+                                    <option value = 17 >Music (11)</option>
+                                    <option value = 18 >CD Players (12</option>
+                                    <option value = 19 >EPROM Playback (13)</option>
+                                    <option value = 20 >Audio Tape Machines (14)</option>
+                                    <option value = 21 >Intercoms (15)</option>
+                                    <option value = 22 >Amplifiers (16)</option>
+                                    <option value = 23 >Audio Effects Devices (17)</option>
+                                    <option value = 24 >Equalizers (18)</option>
+                                    <option value = 32 >Machinery - General (20)</option>
+                                    <option value = 32 >Rigging (21)</option>
+                                    <option value = 34 >Flies (22)</option>
+                                    <option value = 35 >Lifts (23)</option>
+                                    <option value = 36 >Turntables (24)</option>
+                                    <option value = 37 >Trusses (25)</option>
+                                    <option value = 38 >Robots (26)</option>
+                                    <option value = 39 >Animation (27)</option>
+                                    <option value = 40 >Floats (28)</option>
+                                    <option value = 41 >Breakaways (29)</option>
+                                    <option value = 42 >Barges (2A)</option>
+                                    <option value = 48 >Video - General (30)</option>
+                                    <option value = 49 >Video Tape Machines (31)</option>
+                                    <option value = 50 >Video Cassette Machines (32)</option>
+                                    <option value = 51 >Video Disk Players (33)</option>
+                                    <option value = 52 >Video Switchers (34)</option>
+                                    <option value = 53 >Video Effects (35)</option>
+                                    <option value = 54 >Video Character Generators (36)</option>
+                                    <option value = 55 >Video Still Stores (37)</option>
+                                    <option value = 56 >Video Monitors (38)</option>
+                                    <option value = 64 >Projection - General (40)</option>
+                                    <option value = 65 >Film Projectors (41)</option>
+                                    <option value = 66 >Slide Projectors (42)</option>
+                                    <option value = 67 >Video Projectors (43)</option>
+                                    <option value = 68 >Dissolvers (44)</option>
+                                    <option value = 69 >Shutter Controls (45)</option>
+                                    <option value = 80 >Process Control - General (50)</option>
+                                    <option value = 81 >Hydraulic Oil (51)</option>
+                                    <option value = 82 >H20 (52)</option>
+                                    <option value = 83 >C02 (53)</option>
+                                    <option value = 84 >Compressed Air (54)</option>
+                                    <option value = 85 >Natural Gas (55)</option>
+                                    <option value = 86 >Fog (56)</option>
+                                    <option value = 87 >Smoke (57)</option>
+                                    <option value = 88 >Cracked Haze (58)</option>
+                                    <option value = 96 >Pyro - General (60)</option>
+                                    <option value = 97 >Fireworks (61)</option>
+                                    <option value = 98 >Explosions (62)</option>
+                                    <option value = 99 >Flames (63)</option>
+                                    <option value = 100 >Smokepots (64)</option>
+                                </select>
+                                <label>Command (Byte 5)</label>
+                                <select id = command2>
+                                    <option value = "" >Select</option>
+                                    <option value = 15 >ANY</option>
+                                    <option value = 1 >Go (01)</option>
+                                    <option value = 2 >Pause (02)</option>
+                                    <option value = 3 >Resume (03)</option>
+                                    <option value = 6 >Set Submaster (06)</option>
+                                    <option value = 7 >Fire (07)</option>
+                                </select>
+                            </fieldset>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <legend>Non Sysex (3 Byte)</legend>
+                        <label>Non Sysex</label>
+                        <select id = nonsysex2 onchange="nonsysexchange2()">
+                            <option value = "" >Select</option>
+                            <option value =0>Allow All</option>
+                            <option value =1>Select Specific</option>
+                            <option value =2>Ignore Specific</option>
+                        </select>
+                        <div id = other2>
+                            <fieldset>
+                                <legend>Non Sysex Command</legend>
+                                <label>Midi Type</label>
+                                <select id = nonsysextype2 >
+                                    <option value = "" >Select</option>
+                                    <option value = 15>ANY</option>
+                                    <option value = 1 >Note</option>
+                                    <option value = 2 >All but Note</option>
+                                </select>
+                                <label>Channel</label>
+                                <select id = nonsysexchannel2>
+                                    <option value = "" >Select</option>
+                                    <option value = 15 >ANY</option>
+                                    <option value = 0 >0</option>
+                                    <option value = 1 >1</option>
+                                    <option value = 2 >2</option>
+                                    <option value = 3 >3</option>
+                                    <option value = 4 >4</option>
+                                    <option value = 5 >5</option>
+                                    <option value = 6 >6</option>
+                                    <option value = 7 >7</option>
+                                    <option value = 8 >8</option>
+                                    <option value = 9 >9</option>
+                                    <option value = 10 >A</option>
+                                    <option value = 11 >B</option>
+                                    <option value = 12 >C</option>
+                                    <option value = 13 >D</option>
+                                    <option value = 14 >E</option>
+                                    <option value = 15 >F</option>
+                                </select>
+                            </fieldset>
+                        </div>
+
+                    </fieldset>
+                </fieldset>
+
+
+                <fieldset id = midi3>
+                    <legend>Midi Input 3</legend>
+                    <fieldset>
+                        <legend>SYSEX</legend>
+                        <label>SYSEX</label>
+                        <select id = midisysex3 onchange="midisysexchange3()">
+                            <option value = "" >Select</option>
+                            <option value =0 >Allow All</option>
+                            <option value =1 >Select Specific</option>
+                            <option value =2>Ignore Specific</option>
+                        </select>
+                        <div id = sysex3>
+                            <fieldset>
+                                <legend>Sysex Command</legend>
+                                <label>Device ID(Byte 2)</label>
+                                <select id = deviceIDLow3>
+                                    <option value = "" >Select</option>
+                                    <option value = 15 >ANY</option>
+                                    <option value = 0 >0</option>
+                                    <option value = 1 >1</option>
+                                    <option value = 2 >2</option>
+                                    <option value = 3 >3</option>
+                                    <option value = 4 >4</option>
+                                    <option value = 5 >5</option>
+                                    <option value = 6 >6</option>
+                                    <option value = 7 >7</option>
+                                    <option value = 8 >8</option>
+                                    <option value = 9 >9</option>
+                                    <option value = 10 >A</option>
+                                    <option value = 11 >B</option>
+                                    <option value = 12 >C</option>
+                                    <option value = 13 >D</option>
+                                    <option value = 14 >E</option>
+                                    <option value = 15 >F</option>
+                                </select>
+                                <select id = deviceIDHigh3>
+                                    <option value = "" >Select</option>
+                                    <option value = 15 >ANY</option>
+                                    <option value = 0 >0</option>
+                                    <option value = 1 >1</option>
+                                    <option value = 2 >2</option>
+                                    <option value = 3 >3</option>
+                                    <option value = 4 >4</option>
+                                    <option value = 5 >5</option>
+                                    <option value = 6 >6</option>
+                                    <option value = 7 >7</option>
+                                    <option value = 8 >8</option>
+                                    <option value = 9 >9</option>
+                                    <option value = 10 >A</option>
+                                    <option value = 11 >B</option>
+                                    <option value = 12 >C</option>
+                                    <option value = 13 >D</option>
+                                    <option value = 14 >E</option>
+                                    <option value = 15 >F</option>
+                                </select>
+                                <label>Sysex Type(Byte 3)</label>
+                                <select id = type3>
+                                    <option value = "" >Select</option>
+                                    <option value = 15 >ANY</option>
+                                    <option value = 01 >Long Form MTC (01)</option>
+                                    <option value = 02 >MIDI Show Control (02)</option>
+                                    <option value = 03 >Notation Information (03)</option>
+                                    <option value = 04 >Device Control (04)</option>
+                                    <option value = 05 >Real Time MTC Cueing (05)</option>
+                                    <option value = 06 >MIDI Machine Control Command (06)</option>
+                                    <option value = 07 >MIDI Machine Control Response (07)</option>
+                                    <option value = 08 >Single Note Retune (08)</option>
+                                </select>
+                                <div></div>
+                                <label>Command Format(Byte 4)</label>
+                                <select id = commandformat3>
+                                    <option value = "" >Select</option>
+                                    <option value = 15 >ANY</option>
+                                    <option value = 1 >Lighting - General (01)</option>
+                                    <option value = 2 >Moving Lights (02)</option>
+                                    <option value = 3 >Color Changes (03)</option>
+                                    <option value = 4 >Strobes (04)</option>
+                                    <option value = 5 >Lasers (05)</option>
+                                    <option value = 6 >Chasers (06)</option>
+                                    <option value = 16 >Sound General (10)</option>
+                                    <option value = 17 >Music (11)</option>
+                                    <option value = 18 >CD Players (12</option>
+                                    <option value = 19 >EPROM Playback (13)</option>
+                                    <option value = 20 >Audio Tape Machines (14)</option>
+                                    <option value = 21 >Intercoms (15)</option>
+                                    <option value = 22 >Amplifiers (16)</option>
+                                    <option value = 23 >Audio Effects Devices (17)</option>
+                                    <option value = 24 >Equalizers (18)</option>
+                                    <option value = 32 >Machinery - General (20)</option>
+                                    <option value = 32 >Rigging (21)</option>
+                                    <option value = 34 >Flies (22)</option>
+                                    <option value = 35 >Lifts (23)</option>
+                                    <option value = 36 >Turntables (24)</option>
+                                    <option value = 37 >Trusses (25)</option>
+                                    <option value = 38 >Robots (26)</option>
+                                    <option value = 39 >Animation (27)</option>
+                                    <option value = 40 >Floats (28)</option>
+                                    <option value = 41 >Breakaways (29)</option>
+                                    <option value = 42 >Barges (2A)</option>
+                                    <option value = 48 >Video - General (30)</option>
+                                    <option value = 49 >Video Tape Machines (31)</option>
+                                    <option value = 50 >Video Cassette Machines (32)</option>
+                                    <option value = 51 >Video Disk Players (33)</option>
+                                    <option value = 52 >Video Switchers (34)</option>
+                                    <option value = 53 >Video Effects (35)</option>
+                                    <option value = 54 >Video Character Generators (36)</option>
+                                    <option value = 55 >Video Still Stores (37)</option>
+                                    <option value = 56 >Video Monitors (38)</option>
+                                    <option value = 64 >Projection - General (40)</option>
+                                    <option value = 65 >Film Projectors (41)</option>
+                                    <option value = 66 >Slide Projectors (42)</option>
+                                    <option value = 67 >Video Projectors (43)</option>
+                                    <option value = 68 >Dissolvers (44)</option>
+                                    <option value = 69 >Shutter Controls (45)</option>
+                                    <option value = 80 >Process Control - General (50)</option>
+                                    <option value = 81 >Hydraulic Oil (51)</option>
+                                    <option value = 82 >H20 (52)</option>
+                                    <option value = 83 >C02 (53)</option>
+                                    <option value = 84 >Compressed Air (54)</option>
+                                    <option value = 85 >Natural Gas (55)</option>
+                                    <option value = 86 >Fog (56)</option>
+                                    <option value = 87 >Smoke (57)</option>
+                                    <option value = 88 >Cracked Haze (58)</option>
+                                    <option value = 96 >Pyro - General (60)</option>
+                                    <option value = 97 >Fireworks (61)</option>
+                                    <option value = 98 >Explosions (62)</option>
+                                    <option value = 99 >Flames (63)</option>
+                                    <option value = 100 >Smokepots (64)</option>
+                                </select>
+                                <label>Command (Byte 5)</label>
+                                <select id = command3>
+                                    <option value = "" >Select</option>
+                                    <option value = 15 >ANY</option>
+                                    <option value = 1 >Go (01)</option>
+                                    <option value = 2 >Pause (02)</option>
+                                    <option value = 3 >Resume (03)</option>
+                                    <option value = 6 >Set Submaster (06)</option>
+                                    <option value = 7 >Fire (07)</option>
+                                </select>
+                            </fieldset>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <legend>Non Sysex (3 Byte)</legend>
+                        <label>Non Sysex</label>
+                        <select id = nonsysex3 onchange="nonsysexchange3()">
+                            <option value = "" >Select</option>
+                            <option value =0>Allow All</option>
+                            <option value =1>Select Specific</option>
+                            <option value =2>Ignore Specific</option>
+                        </select>
+                        <div id = other3>
+                            <fieldset>
+                                <legend>Non Sysex Command</legend>
+                                <label>Midi Type</label>
+                                <select id = nonsysextype3>
+                                    <option value = "" >Select</option>
+                                    <option value = 15>ANY</option>
+                                    <option value = 1 >Note</option>
+                                    <option value = 2 >All but Note</option>
+                                </select>
+                                <label>Channel</label>
+                                <select id = nonsysexchannel3>
+                                    <option value = "" >Select</option>
+                                    <option value = 15 >ANY</option>
+                                    <option value = 0 >0</option>
+                                    <option value = 1 >1</option>
+                                    <option value = 2 >2</option>
+                                    <option value = 3 >3</option>
+                                    <option value = 4 >4</option>
+                                    <option value = 5 >5</option>
+                                    <option value = 6 >6</option>
+                                    <option value = 7 >7</option>
+                                    <option value = 8 >8</option>
+                                    <option value = 9 >9</option>
+                                    <option value = 10 >A</option>
+                                    <option value = 11 >B</option>
+                                    <option value = 12 >C</option>
+                                    <option value = 13 >D</option>
+                                    <option value = 14 >E</option>
+                                    <option value = 15 >F</option>
+                                </select>
+                            </fieldset>
+                        </div>
+
+                    </fieldset>
+                </fieldset>
+                <fieldset id = midi4>
+                    <legend>Midi Input 4</legend>
+                    <fieldset>
+                        <legend>SYSEX</legend>
+                        <label>SYSEX</label>
+                        <select id = midisysex4 onchange="midisysexchange4()">
+                            <option value = "" >Select</option>
+                            <option value =0 >Allow All</option>
+                            <option value =1 >Select Specific</option>
+                            <option value =2>Ignore Specific</option>
+                        </select>
+                        <div id = sysex4>
+                            <fieldset>
+                                <legend>Sysex Command</legend>
+                                <label>Device ID(Byte 2)</label>
+                                <select id = deviceIDLow4>
+                                    <option value = "" >Select</option>
+                                    <option value = 15 >ANY</option>
+                                    <option value = 0 >0</option>
+                                    <option value = 1 >1</option>
+                                    <option value = 2 >2</option>
+                                    <option value = 3 >3</option>
+                                    <option value = 4 >4</option>
+                                    <option value = 5 >5</option>
+                                    <option value = 6 >6</option>
+                                    <option value = 7 >7</option>
+                                    <option value = 8 >8</option>
+                                    <option value = 9 >9</option>
+                                    <option value = 10 >A</option>
+                                    <option value = 11 >B</option>
+                                    <option value = 12 >C</option>
+                                    <option value = 13 >D</option>
+                                    <option value = 14 >E</option>
+                                    <option value = 15 >F</option>
+                                </select>
+                                <select id = deviceIDHigh4>
+                                    <option value = "" >Select</option>
+                                    <option value = 15 >ANY</option>
+                                    <option value = 0 >0</option>
+                                    <option value = 1 >1</option>
+                                    <option value = 2 >2</option>
+                                    <option value = 3 >3</option>
+                                    <option value = 4 >4</option>
+                                    <option value = 5 >5</option>
+                                    <option value = 6 >6</option>
+                                    <option value = 7 >7</option>
+                                    <option value = 8 >8</option>
+                                    <option value = 9 >9</option>
+                                    <option value = 10 >A</option>
+                                    <option value = 11 >B</option>
+                                    <option value = 12 >C</option>
+                                    <option value = 13 >D</option>
+                                    <option value = 14 >E</option>
+                                    <option value = 15 >F</option>
+                                </select>
+                                <label>Sysex Type(Byte 3)</label>
+                                <select id = type4>
+                                    <option value = "" >Select</option>
+                                    <option value = 15 >ANY</option>
+                                    <option value = 01 >Long Form MTC (01)</option>
+                                    <option value = 02 >MIDI Show Control (02)</option>
+                                    <option value = 03 >Notation Information (03)</option>
+                                    <option value = 04 >Device Control (04)</option>
+                                    <option value = 05 >Real Time MTC Cueing (05)</option>
+                                    <option value = 06 >MIDI Machine Control Command (06)</option>
+                                    <option value = 07 >MIDI Machine Control Response (07)</option>
+                                    <option value = 08 >Single Note Retune (08)</option>
+                                </select>
+                                <div></div>
+                                <label>Command Format(Byte 4)</label>
+                                <select id = commandformat4>
+                                    <option value = "" >Select</option>
+                                    <option value = 15 >ANY</option>
+                                    <option value = 1 >Lighting - General (01)</option>
+                                    <option value = 2 >Moving Lights (02)</option>
+                                    <option value = 3 >Color Changes (03)</option>
+                                    <option value = 4 >Strobes (04)</option>
+                                    <option value = 5 >Lasers (05)</option>
+                                    <option value = 6 >Chasers (06)</option>
+                                    <option value = 16 >Sound General (10)</option>
+                                    <option value = 17 >Music (11)</option>
+                                    <option value = 18 >CD Players (12</option>
+                                    <option value = 19 >EPROM Playback (13)</option>
+                                    <option value = 20 >Audio Tape Machines (14)</option>
+                                    <option value = 21 >Intercoms (15)</option>
+                                    <option value = 22 >Amplifiers (16)</option>
+                                    <option value = 23 >Audio Effects Devices (17)</option>
+                                    <option value = 24 >Equalizers (18)</option>
+                                    <option value = 32 >Machinery - General (20)</option>
+                                    <option value = 32 >Rigging (21)</option>
+                                    <option value = 34 >Flies (22)</option>
+                                    <option value = 35 >Lifts (23)</option>
+                                    <option value = 36 >Turntables (24)</option>
+                                    <option value = 37 >Trusses (25)</option>
+                                    <option value = 38 >Robots (26)</option>
+                                    <option value = 39 >Animation (27)</option>
+                                    <option value = 40 >Floats (28)</option>
+                                    <option value = 41 >Breakaways (29)</option>
+                                    <option value = 42 >Barges (2A)</option>
+                                    <option value = 48 >Video - General (30)</option>
+                                    <option value = 49 >Video Tape Machines (31)</option>
+                                    <option value = 50 >Video Cassette Machines (32)</option>
+                                    <option value = 51 >Video Disk Players (33)</option>
+                                    <option value = 52 >Video Switchers (34)</option>
+                                    <option value = 53 >Video Effects (35)</option>
+                                    <option value = 54 >Video Character Generators (36)</option>
+                                    <option value = 55 >Video Still Stores (37)</option>
+                                    <option value = 56 >Video Monitors (38)</option>
+                                    <option value = 64 >Projection - General (40)</option>
+                                    <option value = 65 >Film Projectors (41)</option>
+                                    <option value = 66 >Slide Projectors (42)</option>
+                                    <option value = 67 >Video Projectors (43)</option>
+                                    <option value = 68 >Dissolvers (44)</option>
+                                    <option value = 69 >Shutter Controls (45)</option>
+                                    <option value = 80 >Process Control - General (50)</option>
+                                    <option value = 81 >Hydraulic Oil (51)</option>
+                                    <option value = 82 >H20 (52)</option>
+                                    <option value = 83 >C02 (53)</option>
+                                    <option value = 84 >Compressed Air (54)</option>
+                                    <option value = 85 >Natural Gas (55)</option>
+                                    <option value = 86 >Fog (56)</option>
+                                    <option value = 87 >Smoke (57)</option>
+                                    <option value = 88 >Cracked Haze (58)</option>
+                                    <option value = 96 >Pyro - General (60)</option>
+                                    <option value = 97 >Fireworks (61)</option>
+                                    <option value = 98 >Explosions (62)</option>
+                                    <option value = 99 >Flames (63)</option>
+                                    <option value = 100 >Smokepots (64)</option>
+                                </select>
+                                <label>Command (Byte 5)</label>
+                                <select id = command4>
+                                    <option value = "" >Select</option>
+                                    <option value = 15 >ANY</option>
+                                    <option value = 1 >Go (01)</option>
+                                    <option value = 2 >Pause (02)</option>
+                                    <option value = 3 >Resume (03)</option>
+                                    <option value = 6 >Set Submaster (06)</option>
+                                    <option value = 7 >Fire (07)</option>
+                                </select>
+                            </fieldset>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <legend>Non Sysex (3 Byte)</legend>
+                        <label>Non Sysex</label>
+                        <select id = nonsysex4 onchange="nonsysexchange4()">
+                            <option value = "" >Select</option>
+                            <option value =0>Allow All</option>
+                            <option value =1>Select Specific</option>
+                            <option value =2>Ignore Specific</option>
+                        </select>
+                        <div id = other4>
+                            <fieldset>
+                                <legend>Non Sysex Command</legend>
+                                <label>Midi Type</label>
+                                <select id = nonsysextype4 >
+                                    <option value = "" >Select</option>
+                                    <option value = 15>ANY</option>
+                                    <option value = 1 >Note</option>
+                                    <option value = 2 >All but Note</option>
+                                </select>
+                                <label>Channel</label>
+                                <select id = nonsysexchannel4>
+                                    <option value = "" >Select</option>
+                                    <option value = 15 >ANY</option>
+                                    <option value = 0 >0</option>
+                                    <option value = 1 >1</option>
+                                    <option value = 2 >2</option>
+                                    <option value = 3 >3</option>
+                                    <option value = 4 >4</option>
+                                    <option value = 5 >5</option>
+                                    <option value = 6 >6</option>
+                                    <option value = 7 >7</option>
+                                    <option value = 8 >8</option>
+                                    <option value = 9 >9</option>
+                                    <option value = 10 >A</option>
+                                    <option value = 11 >B</option>
+                                    <option value = 12 >C</option>
+                                    <option value = 13 >D</option>
+                                    <option value = 14 >E</option>
+                                    <option value = 15 >F</option>
+                                </select>
+                            </fieldset>
+                        </div>
+
+                    </fieldset>
+                </fieldset>
+
+
+        </fieldset>
+
+
+        <div>
+            <label id = nodisplay>test</label>
+        </div>
 
         <button id = "saveparameters"  onmousedown = "saveParameters()">Save Startup Parameters</button>
         <button id = "closepparameters"  onmousedown = "closeParameters()">Close Startup Parameters</button>
