@@ -18,6 +18,8 @@ var showname =[];
 
 //window.onload = init;
 window.addEventListener("load", init, true);
+
+
 function init()
 {
     output = document.getElementById("websocketlog");
@@ -92,6 +94,25 @@ function init()
     }
 
 }
+
+document.onkeydown=function(){ //added Feb 2016 to allow arrow keys to control cue GO's
+
+    switch(window.event.keyCode){
+        case 37: cueclick1(); // left arrow GO 1
+            break;
+        case 38:cueclick2(); // up arrow  GO 2
+            break;
+        case 40:cueclick2(); // down arrow  GO 2
+            break;
+        case 39: cueclick3(); // right arrow  GO 3
+
+    };
+
+    if(window.event.keyCode == 192 ){
+        cueclick1();
+    }
+
+};
 
 function populateShowName(){
 

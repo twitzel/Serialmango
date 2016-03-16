@@ -18,7 +18,7 @@
 /*                                                                       */
 /*                                                                       */
 
-
+/*todd was here*/
 
 
 var express = require('express');
@@ -46,18 +46,27 @@ app.use(express.bodyParser());
 app.use(express.methodOverride());
 app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
+//moved here
+app.get('/', routes.cs4Home);
+//   app.get('/cs4Start', routes.cs4Start);
+app.get('/cs4Home', routes.cs4Home);
+app.get('/cs4Home/:Test', routes.cs4Home);
+app.get('/cs4Timing', routes.cs4Timing);
+app.get('/cs4Timing/:Test', routes.cs4Timing);
+app.get('/cs4Info', routes.cs4Info);
+app.get('/cs4Info/:Test', routes.cs4Info);
+app.get('/cs4VerticalScroll', routes.cs4VerticalScroll);
+app.get('/cs4VerticalScroll/:Test', routes.cs4VerticalScroll);
+//   app.get('/cs4Help', routes.cs4Help);
+app.get('/cs4Settings', routes.cs4Settings);
+app.get('/cs4Edit', routes.cs4Edit);
 
 //  All route information now is contained in
 //  TWI.js or CS4.js
 
 
 // Set up the server
-function startwebserver(){
-  http.createServer(app).listen(app.get('port'), function(){
-    console.log('Express server listening on port ' + app.get('port'));
-  });
-  
-}
+
 
 /*
     Set up for the desired branch
@@ -79,9 +88,18 @@ else if(branch == 'cs4')
 {
     var cs4 = require('./cs4');
     cs4.ledOff(); // turn off the ready led
-    cs4.setup(startwebserver());
+    cs4.setup();
+    startwebserver();
 }
 
+function startwebserver(){
+  http.createServer(app).listen(app.get('port'), function(){
+    console.log('Express server listening on port ' + app.get('port'));
 
+      comlib.startwebsocketserver();
+
+  });
+  
+}
 
 
