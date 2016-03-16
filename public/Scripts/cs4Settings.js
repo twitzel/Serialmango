@@ -50,6 +50,12 @@ function init(){
         document.getElementById("type1").value = cs4Settings.type1;
         document.getElementById("commandformat1").value = cs4Settings.commandformat1;
         document.getElementById("command1").value = cs4Settings.command1;
+
+        document.getElementById("sysexcuelist1").value = cs4Settings.sysexcuelist1;
+        document.getElementById("cuelistnumber1a").value = cs4Settings.cuelistnumber1a;
+        document.getElementById("cuelistnumber1b").value = cs4Settings.cuelistnumber1b;
+        document.getElementById("cuelistnumber1c").value = cs4Settings.cuelistnumber1c;
+
         document.getElementById("nonsysex1").value = cs4Settings.nonsysex1;
         document.getElementById("nonsysextype1").value = cs4Settings.nonsysextype1;
         document.getElementById("nonsysexchannel1").value = cs4Settings.nonsysexchannel1;
@@ -84,6 +90,9 @@ function init(){
         document.getElementById("nonsysextype4").value = cs4Settings.nonsysextype4;
         document.getElementById("nonsysexchannel4").value = cs4Settings.nonsysexchannel4;
         midisysexchange1();
+
+        sysexcuelistchange1();
+
         nonsysexchange1();
         midisysexchange2();
         nonsysexchange2();
@@ -193,6 +202,16 @@ function saveParameters(){
     cs4Settings.type1 = document.getElementById("type1").value;
     cs4Settings.commandformat1 = document.getElementById("commandformat1").value;
     cs4Settings.command1 = document.getElementById("command1").value;
+
+    cs4Settings.sysexcuelist1 = document.getElementById("sysexcuelist1").value;
+    if(cs4Settings.sysexcuelist1 == null || cs4Settings.sysexcuelist1 == ""){cs4Settings.sysexcuelist1 = "0"}; // always make sure it is a   value
+    cs4Settings.cuelistnumber1a = document.getElementById("cuelistnumber1a").value;
+    if(cs4Settings.cuelistnumber1a == null || cs4Settings.cuelistnumber1a == ""){cs4Settings.cuelistnumber1a = "0"};
+    cs4Settings.cuelistnumber1b = document.getElementById("cuelistnumber1b").value;
+    if(cs4Settings.cuelistnumber1b == null || cs4Settings.cuelistnumber1b == ""){cs4Settings.cuelistnumber1b = "0"};
+    cs4Settings.cuelistnumber1c = document.getElementById("cuelistnumber1c").value;
+    if(cs4Settings.cuelistnumber1c == null || cs4Settings.cuelistnumber1c == ""){cs4Settings.cuelistnumber1c = "0"};
+
     cs4Settings.nonsysex1 = document.getElementById("nonsysex1").value;
     cs4Settings.nonsysextype1 = document.getElementById("nonsysextype1").value;
     cs4Settings.nonsysexchannel1 = document.getElementById("nonsysexchannel1").value;
@@ -725,6 +744,28 @@ function midisysexchange4(){
             break;
         default:
             document.getElementById("sysex4").style.display = "none";
+    }
+}
+
+function sysexcuelistchange1(){
+    switch (document.getElementById("sysexcuelist1").value) {
+        case '0':
+            document.getElementById("sysexcuelist1a").style.display = "none";
+            document.getElementById("sysexcuelist1b").style.display = "none";
+            break;
+        case '1':
+        case '3':
+            document.getElementById("sysexcuelist1a").style.display = "block";
+            document.getElementById("sysexcuelist1b").style.display = "none";
+            break;
+        case '2':
+        case '4':
+            document.getElementById("sysexcuelist1a").style.display = "none";
+            document.getElementById("sysexcuelist1b").style.display = "block";
+            break;
+        default:
+            document.getElementById("sysexcuelist1a").style.display = "none";
+            document.getElementById("sysexcuelist1b").style.display = "none";
     }
 }
 
