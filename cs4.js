@@ -438,16 +438,18 @@ exports.websocketDataIn = function(dataSocket, Socket){
             sendOutput(dataToSend) ;
         */
 
-            autoTest1 = setTimeout(function(){sendOutput('TIMEGET');}, 7000);
-            var a, b, c, d, e, f;
+            autoTest1 = setTimeout(function(){sendOutput('TIMEGET');}, 10000);
+            var a, b, c, d, e, f, g, h, j, k;
             a = setTimeout(function(){sendOutput('          SLAVE DMX_CH ' + cs4Settings.dmx1 +  " " + cs4Settings.dmx2 + " " + cs4Settings.dmx3 + '');}, 500);
             b = setTimeout(function(){sendOutput('          SLAVE ZIGEN ' + cs4Settings.enableZigbee2);}, 1000);
             c = setTimeout(function(){sendOutput('          MIDIFIL1 ' + cs4Settings.midisex1 + " " + cs4Settings.nonsysex1 + " "+ (parseInt(+cs4Settings.deviceIDLow1)*1 + parseInt(+cs4Settings.deviceIDHigh1)*16).toString() + " " + cs4Settings.type1 + " " + cs4Settings.commandformat1 + " " +   cs4Settings.command1 + " " + cs4Settings.nonsysextype1 + " " + cs4Settings.nonsysexchannel1 + " ");}, 2000);
             d = setTimeout(function(){sendOutput('          MIDIFIL2 ' + cs4Settings.midisex2 + " " + cs4Settings.nonsysex2 + " "+ (parseInt(+cs4Settings.deviceIDLow2)*1 + parseInt(+cs4Settings.deviceIDHigh2)*16).toString() + " " + cs4Settings.type2 + " " + cs4Settings.commandformat2 + " " +   cs4Settings.command2 + " " + cs4Settings.nonsysextype2 + " " + cs4Settings.nonsysexchannel2 + " ");}, 3000);
             e = setTimeout(function(){sendOutput('          MIDIFIL3 ' + cs4Settings.midisex3 + " " + cs4Settings.nonsysex3 + " "+ (parseInt(+cs4Settings.deviceIDLow3)*1 + parseInt(+cs4Settings.deviceIDHigh3)*16).toString() + " " + cs4Settings.type3 + " " + cs4Settings.commandformat3 + " " +   cs4Settings.command3 + " " + cs4Settings.nonsysextype3 + " " + cs4Settings.nonsysexchannel3 + " ");}, 4000);
             f = setTimeout(function(){sendOutput('          MIDIFIL4 ' + cs4Settings.midisex4 + " " + cs4Settings.nonsysex4 + " "+ (parseInt(+cs4Settings.deviceIDLow4)*1 + parseInt(+cs4Settings.deviceIDHigh4)*16).toString() + " " + cs4Settings.type4 + " " + cs4Settings.commandformat4 + " " +   cs4Settings.command4 + " " + cs4Settings.nonsysextype4 + " " + cs4Settings.nonsysexchannel4 + " ");}, 5000);
-
-
+            g = setTimeout(function(){sendOutput('          CLISTFL1 ' + cs4Settings.sysexcuelist1 + " " + cs4Settings.cuelistnumber1a + " " + cs4Settings.cuelistnumber1b + " " + cs4Settings.cuelistnumber1c + " ");}, 6000);
+            h = setTimeout(function(){sendOutput('          CLISTFL2 ' + cs4Settings.sysexcuelist2 + " " + cs4Settings.cuelistnumber2a + " " + cs4Settings.cuelistnumber2b + " " + cs4Settings.cuelistnumber2c + " ");}, 7000);
+            j = setTimeout(function(){sendOutput('          CLISTFL3 ' + cs4Settings.sysexcuelist3 + " " + cs4Settings.cuelistnumber3a + " " + cs4Settings.cuelistnumber3b + " " + cs4Settings.cuelistnumber3c + " ");}, 8000);
+            k = setTimeout(function(){sendOutput('          CLISTFL4 ' + cs4Settings.sysexcuelist4 + " " + cs4Settings.cuelistnumber4a + " " + cs4Settings.cuelistnumber4b + " " + cs4Settings.cuelistnumber4c + " ");}, 9000);
         }
 
         else if(dataSocket.Type == "SYSTEMTEST") {
@@ -1352,6 +1354,12 @@ exports.getSettings = function(){
             cs4Settings.emailAccountPassword = "panema2020!";
             cs4Settings.timezone = "US/Eastern";
             cs4Settings.midisex1 = 0;
+
+            cs4Settings.sysexcuelist1 = 0;
+            cs4Settings.cuelistnumber1a = 0;
+            cs4Settings.cuelistnumber1b = 0
+            cs4Settings.cuelistnumber1c = 0
+
             cs4Settings.nonsysex1 = 0;
             cs4Settings.midisex2 = 0;
             cs4Settings.nonsysex2 = 0;
@@ -1364,16 +1372,17 @@ exports.getSettings = function(){
             })
         }
       //  setTimeout(function(){sendOutput('GETTIME');}, 7000);
-        var a, b, c, d, e,f
+        var a, b, c, d, e, f, g, h, j, k;
         a = setTimeout(function(){sendOutput('          SLAVE DMX_CH ' + cs4Settings.dmx1 +  " " + cs4Settings.dmx2 + " " + cs4Settings.dmx3 + '');}, 500);
         b = setTimeout(function(){sendOutput('          SLAVE ZIGEN ' + cs4Settings.enableZigbee2);}, 1000);
         c = setTimeout(function(){sendOutput('          MIDIFIL1 ' + cs4Settings.midisex1 + " " + cs4Settings.nonsysex1 + " "+ (parseInt(+cs4Settings.deviceIDLow1)*1 + parseInt(+cs4Settings.deviceIDHigh1)*16).toString() + " " + cs4Settings.type1 + " " + cs4Settings.commandformat1 + " " +   cs4Settings.command1 + " " + cs4Settings.nonsysextype1 + " " + cs4Settings.nonsysexchannel1 + " ");}, 2000);
         d = setTimeout(function(){sendOutput('          MIDIFIL2 ' + cs4Settings.midisex2 + " " + cs4Settings.nonsysex2 + " "+ (parseInt(+cs4Settings.deviceIDLow2)*1 + parseInt(+cs4Settings.deviceIDHigh2)*16).toString() + " " + cs4Settings.type2 + " " + cs4Settings.commandformat2 + " " +   cs4Settings.command2 + " " + cs4Settings.nonsysextype2 + " " + cs4Settings.nonsysexchannel2 + " ");}, 3000);
         e = setTimeout(function(){sendOutput('          MIDIFIL3 ' + cs4Settings.midisex3 + " " + cs4Settings.nonsysex3 + " "+ (parseInt(+cs4Settings.deviceIDLow3)*1 + parseInt(+cs4Settings.deviceIDHigh3)*16).toString() + " " + cs4Settings.type3 + " " + cs4Settings.commandformat3 + " " +   cs4Settings.command3 + " " + cs4Settings.nonsysextype3 + " " + cs4Settings.nonsysexchannel3 + " ");}, 4000);
         f = setTimeout(function(){sendOutput('          MIDIFIL4 ' + cs4Settings.midisex4 + " " + cs4Settings.nonsysex4 + " "+ (parseInt(+cs4Settings.deviceIDLow4)*1 + parseInt(+cs4Settings.deviceIDHigh4)*16).toString() + " " + cs4Settings.type4 + " " + cs4Settings.commandformat4 + " " +   cs4Settings.command4 + " " + cs4Settings.nonsysextype4 + " " + cs4Settings.nonsysexchannel4 + " ");}, 5000);
-
-
-
+        g = setTimeout(function(){sendOutput('          CLISTFL1 ' + cs4Settings.sysexcuelist1 + " " + cs4Settings.cuelistnumber1a + " " + cs4Settings.cuelistnumber1b + " " + cs4Settings.cuelistnumber1c + " ");}, 6000);
+        h = setTimeout(function(){sendOutput('          CLISTFL2 ' + cs4Settings.sysexcuelist2 + " " + cs4Settings.cuelistnumber2a + " " + cs4Settings.cuelistnumber2b + " " + cs4Settings.cuelistnumber2c + " ");}, 7000);
+        j = setTimeout(function(){sendOutput('          CLISTFL3 ' + cs4Settings.sysexcuelist3 + " " + cs4Settings.cuelistnumber3a + " " + cs4Settings.cuelistnumber3b + " " + cs4Settings.cuelistnumber3c + " ");}, 8000);
+        k = setTimeout(function(){sendOutput('          CLISTFL4 ' + cs4Settings.sysexcuelist4 + " " + cs4Settings.cuelistnumber4a + " " + cs4Settings.cuelistnumber4b + " " + cs4Settings.cuelistnumber4c + " ");}, 9000);
 
         //set up initial mail parameters here
         smtpTransport = nodemailer.createTransport("SMTP",{
@@ -1651,7 +1660,7 @@ function checkForZigbee(auto){
 
 
     });
-    setTimeout(function(){sendOutput('TIMEGET');}, 5000); // this will update ti pi time to CS4 i/o time
+    setTimeout(function(){sendOutput('TIMEGET');}, 10000); // this will update ti pi time to CS4 i/o time
 }
 
 function setAutoTest(){
