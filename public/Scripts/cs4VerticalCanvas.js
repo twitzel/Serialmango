@@ -119,17 +119,19 @@ function movedata(){
 
             }
             else if(pixelData[i].data){
-                var test = pixelData[i].data.substring(0,6);
-                if(pixelData[i].data.substring(0,6) == "  Sent")
+                var test = pixelData[i].data.substring(0,7);
+                if(pixelData[i].data.substring(0,7) == ".  Sent")
                 {
                     context.fillStyle = "blue";
-                    wrapText(context,pixelData[i].data.substring(54, pixelData[i].data.length -2),i+5,lineStart+25,lineStart-25,10);//get rid of extraneous stuff before writing
+                   // wrapText(context,pixelData[i].data.substring(54, pixelData[i].data.length -2),i+5,lineStart+25,lineStart-25,10);//get rid of extraneous stuff before writing
+                    wrapText(context,pixelData[i].data.substring(47, pixelData[i].data.length -2),i+5,lineStart+25,lineStart-25,10);//get rid of extraneous stuff before writing
                 }
                 else
                 {
                     context.fillStyle = "black";
                     //context.fillText(pixelData[i].data.substr(25),lineStart-350, i)
-                    var metrics = context.measureText(pixelData[i].data.substr(25)); // get actual length on line
+                   // var metrics = context.measureText(pixelData[i].data.substr(25)); // get actual length on line
+                    var metrics = context.measureText(pixelData[i].data.substr(30)); // get actual length on line
                     var start;
                     if (metrics.width > lineStart)
                     {
@@ -143,7 +145,8 @@ function movedata(){
                    // context.fillText(pixelData[i].data.substr(25),lineStart-metrics.width-23, i)
 
 
-                   wrapText(context,pixelData[i].data.substring(25),i+5,start,lineStart-25,10);
+                  // wrapText(context,pixelData[i].data.substring(25),i+5,start,lineStart-25,10);
+                    wrapText(context,pixelData[i].data.substring(30),i+5,start,lineStart-25,10);
 
 
 

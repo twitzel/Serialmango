@@ -18,6 +18,7 @@ var timedOutInterval = 250; //time to wait between serial transmitts
 var timedOut = true; // set to false will delay transmission;
 var comlib = require('./comlib');
 var spawn = require('child_process').spawn;
+var exec = require('child_process').exec, child;
 var nodemailer = require("nodemailer");
 var pmp = require('pmp');
 var sudo = require('sudo');
@@ -48,6 +49,7 @@ var extrnalIP ="";
 var fmt = "ddd, MMM DD YYYY, HH:mm:ss.SS"; // format string for momentTZ time strings
 var timerStartTime;
 var waitTime;
+var systemStarted = false;
 var TimeToTest = 1000*60*5;//5 minutes  //1000*60*60*24;
 //var cs4Settings;
 
@@ -55,7 +57,12 @@ var TimeToTest = 1000*60*5;//5 minutes  //1000*60*60*24;
 // every timedOutInterval
 //
 // adds time stamp to Outgoing data and puts it in Log collection
+exports.sendgettime = function(){
+    usbInputEnabled = 1; //let the usb data through
+    sendOutput('GETTIME'); // get the system time as the startup time
 
+
+}
 sendOutput = function (dataToSend)
 {
     var addTime = "{\"Time\":";
@@ -78,7 +85,7 @@ sendOutput = function (dataToSend)
         addTime = JSON.parse(addTime);
         addTime.Time = new Date(addTime.Time); //get to real time format.
         collectionLog.insert(addTime, {w: 1}, function (err, result) {
-           // console.log(result);
+            // console.log(result);
         });
     }
     else
@@ -119,13 +126,25 @@ exports.setup = function()
     global.myuri = addresses[0];
     console.log('My IP Address is: ' + addresses[0]);
 
+    //added to enable mounting of usbstick
+    if(os.type() != 'Windows_NT') {  //This is for pi only
+        child = sudo(['mkdir', '/media/usbstick']);
+        child = exec('sudo mkdir /media.usbstick', function (error, stdout, stderr) {
+            console.log('stdout: ' + stdout);
+            console.log('stderr: ' + stderr);
+            if (error !== null) {
+                console.log('exec error: ' + error);
+            }
+            unmount(); // unmount a drive if it is connected
+        });
+    }
 
 
     //MongoClient.connect("mongodb://localhost:27017/WizDb", function(err, db)
-   // MongoClient.connect("mongodb://192.168.2.10:27017/WizDb", function(err, db)
-
-     MongoClient.connect("mongodb://" + global.myuri + ":27017/" + collectionName, function(err, db)
-    //MongoClient.connect("mongodb://" + "192.168.2.67" + ":27017/" + collectionName, function(err, db)
+    // MongoClient.connect("mongodb://192.168.2.10:27017/WizDb", function(err, db)
+    MongoClient.connect("mongodb://localhost:27017/" + collectionName, function(err, db)
+  //  MongoClient.connect("mongodb://" + global.myuri + ":27017/" + collectionName, function(err, db) // changed to above line 08102015
+        //MongoClient.connect("mongodb://" + "192.168.2.67" + ":27017/" + collectionName, function(err, db)
     {
         if (err)
         {
@@ -135,15 +154,15 @@ exports.setup = function()
         {
             console.log("CS4: We are now connected to MongoDb, Wiz database, log collection");
 
-           try{
-               db.createCollection("log", { capped : true, size : 10000000, max : 25000 },function (err,res){} );
+            try{
+                db.createCollection("log", { capped : true, size : 10000000, max : 25000 },function (err,res){} );
             }
             catch(err){
                 console.log("create collection errer" + err);
             }
 
             global.collectionLog = db.collection('log');
-         //   collectionLog.ensureIndex({Time:1},function (err,res){});
+            //   collectionLog.ensureIndex({Time:1},function (err,res){});
             global.collectionCue = db.collection('cue');
             global.collectionStartup = db.collection('startup');
             global.collectionSettings = db.collection('settings');
@@ -158,12 +177,16 @@ exports.setup = function()
             var baud = 230400;
             if(os.type() == 'Windows_NT')
             {
-               // comlib.openSerialPort('com19', baud); //windows
-                comlib.openSerialPort('com19', baud); //windows
+                // comlib.openSerialPort('com19', baud); //windows
+                // open serial port calls getsettings when done
+               // comlib.openSerialPort('com3', baud, exports.getSettings); //windows
+                comlib.openSerialPort('com3', baud); //windows
+
             }
             else
             {
                 comlib.openSerialPort("/dev/ttyUSB0", baud); //not windows - Raspberry PI
+
             }
         }
     });
@@ -172,14 +195,15 @@ exports.setup = function()
     //set up all routes HERE
     //set up all routes HERE
     //set up all routes HERE
-  //  app.get('/com', routes.com);
+    //  app.get('/com', routes.com);
 
- //   app.get('/users', user.list);
- //   app.get('/data', routes.data);
- //   app.get('/data2', routes.data2);
- //   app.get('/data3', routes.data3);
+    //   app.get('/users', user.list);
+    //   app.get('/data', routes.data);
+    //   app.get('/data2', routes.data2);
+    //   app.get('/data3', routes.data3);
+    /*
     app.get('/', routes.cs4Home);
- //   app.get('/cs4Start', routes.cs4Start);
+    //   app.get('/cs4Start', routes.cs4Start);
     app.get('/cs4Home', routes.cs4Home);
     app.get('/cs4Home/:Test', routes.cs4Home);
     app.get('/cs4Timing', routes.cs4Timing);
@@ -188,32 +212,31 @@ exports.setup = function()
     app.get('/cs4Info/:Test', routes.cs4Info);
     app.get('/cs4VerticalScroll', routes.cs4VerticalScroll);
     app.get('/cs4VerticalScroll/:Test', routes.cs4VerticalScroll);
- //   app.get('/cs4Help', routes.cs4Help);
+    //   app.get('/cs4Help', routes.cs4Help);
     app.get('/cs4Settings', routes.cs4Settings);
     app.get('/cs4Edit', routes.cs4Edit);
+    */
 };
 
 
 
 /*Data in may have a Type.  That Type is a command and handled here:
-    TME                     Sets the CS4 I/O clock
-    TME TZ                  Changes system time zone
-    LOG                     Sends log file out to client
-    SEND                    Sends dommangs to CS$ I/O
-    COPYTOUSB               Copies all mongodb files to usb stick
-    COPYFROMUSB             Copies all mongodb files from usb stick
-    COPYTOINTERNAL          Copies all mongodb files to internal location
-    COPYFROMINTERNAL        Copies all mongodb files from internal location
-    EDIT                    Sends all Cue collection data to client
-    CUECREATE               Makes a copy of all files to internal, deletes the cue file and recreates it form cue editor data.
-    SETTINGS                Saves any changes to the settings collection
-    SYSTEMTEST              Sends a cue and makes sure a received zigbee return channel is logged
-    DELETECUE               Copies all mongodb files to the default directory and then deletes the cue collection
-    DELETEONECUE            Copies all mongodb files to the default directory and then deletes one cue DESC from the collection
-
-dataSocket.Type
-dataSocket.Data
-
+ TME                     Sets the CS4 I/O clock
+ TME TZ                  Changes system time zone
+ LOG                     Sends log file out to client
+ SEND                    Sends dommangs to CS$ I/O
+ COPYTOUSB               Copies all mongodb files to usb stick
+ COPYFROMUSB             Copies all mongodb files from usb stick
+ COPYTOINTERNAL          Copies all mongodb files to internal location
+ COPYFROMINTERNAL        Copies all mongodb files from internal location
+ EDIT                    Sends all Cue collection data to client
+ CUECREATE               Makes a copy of all files to internal, deletes the cue file and recreates it form cue editor data.
+ SETTINGS                Saves any changes to the settings collection
+ SYSTEMTEST              Sends a cue and makes sure a received zigbee return channel is logged
+ DELETECUE               Copies all mongodb files to the default directory and then deletes the cue collection
+ DELETEONECUE            Copies all mongodb files to the default directory and then deletes one cue DESC from the collection
+ dataSocket.Type
+ dataSocket.Data
  */
 exports.websocketDataIn = function(dataSocket, Socket){
     dataSocket = JSON.parse(dataSocket);
@@ -227,8 +250,8 @@ exports.websocketDataIn = function(dataSocket, Socket){
             {
                 datain = dataSocket.Data;
                 time.tzset(datain); // tz string from client: CMD TZ US/Pacific
-              //  collectionStartup.update({'TimeZoneChanged':'Yes'}, {$set:{'TimeZoneSet' : datain}},{upsert:true, w:1},function(err,res){
-                    collectionStartup.update({'TimeZoneSet':{$exists:true}}, {$set:{'TimeZoneSet' : datain}},{upsert:true, w:1},function(err,res){
+                //  collectionStartup.update({'TimeZoneChanged':'Yes'}, {$set:{'TimeZoneSet' : datain}},{upsert:true, w:1},function(err,res){
+                collectionStartup.update({'TimeZoneSet':{$exists:true}}, {$set:{'TimeZoneSet' : datain}},{upsert:true, w:1},function(err,res){
 
                     console.log('Time Zone Updated '+res + " "+ datain);
                 });
@@ -240,7 +263,7 @@ exports.websocketDataIn = function(dataSocket, Socket){
                 datain = SetCS4Time(datain);
                 comlib.write(datain);
                 setTimeout(function(){sendOutput('TIMEGET');}, 500);
-               // setTimeout(function(){setAutoTest();}, 5000); //setup for auto test with new time being set
+                // setTimeout(function(){setAutoTest();}, 5000); //setup for auto test with new time being set
             }
 
         }
@@ -250,32 +273,34 @@ exports.websocketDataIn = function(dataSocket, Socket){
 
             if(dataSocket.Type == "LOG 1000")
             {
-                    comlib.websocketsend("* Preparing Data For Display. \n* Please Wait. \n* (may take several seconds) ", Socket) ;
-                        collectionLog.find({},{_id:0}).sort({"Time": -1}).limit(1000).toArray(function(error,logfile){
-                      //collectionLog.find({},{_id:0}).sort({ $natural: -1 }).limit(1000).toArray(function(error,logfile){
-                        for(var i = 0; i <logfile.length;i++)
-                        {
+                comlib.websocketsend("* Preparing Data For Display. \n* Please Wait. \n* (may take several seconds) ", Socket) ;
+                collectionLog.find({},{_id:0}).sort({"Time": -1}).limit(1000).toArray(function(error,logfile){
+                    //collectionLog.find({},{_id:0}).sort({ $natural: -1 }).limit(1000).toArray(function(error,logfile){
+                    if(error){
+                        console.log(error);
+                    }
+                    else {
+                        for (var i = 0; i < logfile.length; i++) {
                             logfileData = JSON.stringify(logfile[i]);
 
-                            if(logfile[i].Dout)
-                            {
+                            if (logfile[i].Dout) {
                                 //comlib.websocketsend(".    Sent: " + logfileData, Socket) ;
-                                dataToSend = dataToSend + ".    Sent: " +formatLogData(logfileData) + "\n" ;
+                                dataToSend = dataToSend + ".    Sent: " + formatLogData(logfileData) + "\n";
                             }
-                            else
-                            {
+                            else {
                                 //comlib.websocketsend(parseCue(logfileData),Socket);
-                                dataToSend = dataToSend + parseCue(logfileData) + "\n" ;
+                                dataToSend = dataToSend + parseCue(logfileData) + "\n";
                             }
                         }
-                        comlib.websocketsend(dataToSend, Socket) ;
-                    });
+                        comlib.websocketsend(dataToSend, Socket);
+                    }
+                });
             }
             else
             {
                 comlib.websocketsend("* Preparing Data For Display. \n* Please Wait. \n* (may take up to 1 minute) ", Socket) ;
                 collectionLog.find({},{_id:0}).sort({"Time": 1}).toArray(function(error,logfile){
-               // collectionLog.find({},{_id:0}).sort({ $natural: 1 }).toArray(function(error,logfile){
+                    // collectionLog.find({},{_id:0}).sort({ $natural: 1 }).toArray(function(error,logfile){
                     for(var i = 0; i <logfile.length;i++)
                     {
                         logfileData = JSON.stringify(logfile[i]);
@@ -306,7 +331,7 @@ exports.websocketDataIn = function(dataSocket, Socket){
         }
         else if(dataSocket.Type == "COPYFROMUSB")
         {
-           stopIO(1); //stop accesses to mongp
+            stopIO(1); //stop accesses to mongp
             copyFromUSB();
             stopIO(0); //restart all io
         }
@@ -430,20 +455,27 @@ exports.websocketDataIn = function(dataSocket, Socket){
         else if(dataSocket.Type == "SETTINGS") {
             cs4Settings = dataSocket.Data; // get the data
             exports.saveSettings(); // save it
-            dataToSend = '          SLAVE DMX_CH ' + cs4Settings.dmx1 +  " " + cs4Settings.dmx2 + " " + cs4Settings.dmx3 + ''; //update the DMX channels
+         /*   dataToSend = '          SLAVE DMX_CH ' + cs4Settings.dmx1 +  " " + cs4Settings.dmx2 + " " + cs4Settings.dmx3 + ''; //update the DMX channels
             sendOutput(dataToSend) ;
             comlib.websocketsend("Successfully updated settings file");
             dataToSend = '          SLAVE ZIGEN ' + cs4Settings.enableZigbee2 ; //update the DMX channels
             sendOutput(dataToSend) ;
-           // clearInterval(autoTest); // if any previous timers are set, delete them
-           // clearInterval(autoTest1); // if any previous timers are set, delete them
-           // sendOutput('TIMEGET');
-            autoTest1 = setTimeout(function(){sendOutput('TIMEGET');}, 2000);
-            //  setTimeout(function(){setAutoTest();}, 3000); //setup for auto test
+        */
+
+            autoTest1 = setTimeout(function(){sendOutput('TIMEGET');}, 7000);
+            var a, b, c, d, e, f;
+            a = setTimeout(function(){sendOutput('          SLAVE DMX_CH ' + cs4Settings.dmx1 +  " " + cs4Settings.dmx2 + " " + cs4Settings.dmx3 + '');}, 500);
+            b = setTimeout(function(){sendOutput('          SLAVE ZIGEN ' + cs4Settings.enableZigbee2);}, 1000);
+            c = setTimeout(function(){sendOutput('          MIDIFIL1 ' + cs4Settings.midisex1 + " " + cs4Settings.nonsysex1 + " "+ (parseInt(+cs4Settings.deviceIDLow1)*1 + parseInt(+cs4Settings.deviceIDHigh1)*16).toString() + " " + cs4Settings.type1 + " " + cs4Settings.commandformat1 + " " +   cs4Settings.command1 + " " + cs4Settings.nonsysextype1 + " " + cs4Settings.nonsysexchannel1 + " ");}, 2000);
+            d = setTimeout(function(){sendOutput('          MIDIFIL2 ' + cs4Settings.midisex2 + " " + cs4Settings.nonsysex2 + " "+ (parseInt(+cs4Settings.deviceIDLow2)*1 + parseInt(+cs4Settings.deviceIDHigh2)*16).toString() + " " + cs4Settings.type2 + " " + cs4Settings.commandformat2 + " " +   cs4Settings.command2 + " " + cs4Settings.nonsysextype2 + " " + cs4Settings.nonsysexchannel2 + " ");}, 3000);
+            e = setTimeout(function(){sendOutput('          MIDIFIL3 ' + cs4Settings.midisex3 + " " + cs4Settings.nonsysex3 + " "+ (parseInt(+cs4Settings.deviceIDLow3)*1 + parseInt(+cs4Settings.deviceIDHigh3)*16).toString() + " " + cs4Settings.type3 + " " + cs4Settings.commandformat3 + " " +   cs4Settings.command3 + " " + cs4Settings.nonsysextype3 + " " + cs4Settings.nonsysexchannel3 + " ");}, 4000);
+            f = setTimeout(function(){sendOutput('          MIDIFIL4 ' + cs4Settings.midisex4 + " " + cs4Settings.nonsysex4 + " "+ (parseInt(+cs4Settings.deviceIDLow4)*1 + parseInt(+cs4Settings.deviceIDHigh4)*16).toString() + " " + cs4Settings.type4 + " " + cs4Settings.commandformat4 + " " +   cs4Settings.command4 + " " + cs4Settings.nonsysextype4 + " " + cs4Settings.nonsysexchannel4 + " ");}, 5000);
+
+
         }
 
         else if(dataSocket.Type == "SYSTEMTEST") {
-          startSystemTest();
+            startSystemTest();
         }
 
 
@@ -471,22 +503,22 @@ exports.websocketDataIn = function(dataSocket, Socket){
 
         collectionCue.update({'InData': lastCueReceived.InData}, {$push:serialDataSocket},function(err,res){
 
-        console.log('added Dout to collection Cue'+res);
+            console.log('added Dout to collection Cue'+res);
         });
 
         //send the data out to the CS4 I/O
         var dir = serialDataSocket.OutData.Dir;    // ****** needs to ba added to R4-4 Receiver Parsing ****** //
-       // var dir = "";
+        // var dir = "";
         var port = serialDataSocket.OutData.Port;
         var showname = serialDataSocket.OutData.Showname;
         var dataToSend = serialDataSocket.OutData.Dout;
         if(dir =="")
         {
-           var  outstring = port + " " + showname + " " + dataToSend;
+            var  outstring = port + " " + showname + " " + dataToSend;
         }
         else
         {
-           var outstring = port + " " + showname + " " + dir + " " + dataToSend;
+            var outstring = port + " " + showname + " " + dir + " " + dataToSend;
         }
 
         sendOutput(outstring);
@@ -534,7 +566,7 @@ exports.usbSerialDataIn = function (data) {
     // and send output data to log file
 
     //added search fields: must match InData and Source
-    if ((serialData.InData != null) && (serialData.Source != 'zigbee2:')) {// DON't use zigbee2 as source for timing
+    if ((serialData.InData != null) && (serialData.Source != 'zigbee2:') && (systemStarted == true)) {// DON't use zigbee2 as source for timing
 
         if (cs4Settings.ignoreSource == 'NO') { // match source
             collectionCue.find({$and: [{'InData': serialData.InData} ,{'Source': serialData.Source }]}).toArray(function (err, item) {
@@ -554,7 +586,7 @@ exports.usbSerialDataIn = function (data) {
 
                     global.timeoutlist=[];
                     lastCueReceivedInternalTime = new Date().getTime();
-                   // lastCueReceivedTimeOffset=serialData.Time.getTime()-lastCueReceivedInternalTime;
+                    // lastCueReceivedTimeOffset=serialData.Time.getTime()-lastCueReceivedInternalTime;
 
                     for (var i = 0; i < item[0].OutData.length; i++) {
                         dir = item[0].OutData[i].Dir;    // ****** needs to be added to R4-4 Receiver Parsing ****** //
@@ -571,7 +603,7 @@ exports.usbSerialDataIn = function (data) {
                         }
 
                         global.timeoutlist[i]=   setTimeout(sendOutput, delay, outstring);
-                       // console.log(item[0].OutData[i].Dout + "  Delay " + item[0].OutData[i].Delay);
+                        // console.log(item[0].OutData[i].Dout + "  Delay " + item[0].OutData[i].Delay);
                     }
                 }
             });
@@ -594,7 +626,7 @@ exports.usbSerialDataIn = function (data) {
                     global.timeoutlist=[];
                     lastCueReceivedInternalTime = new Date().getTime();
                     testvariaable = serialData.Time.getTime();
-                 //   lastCueReceivedTimeOffset=serialData.Time.getTime()-lastCueReceivedInternalTime;
+                    //   lastCueReceivedTimeOffset=serialData.Time.getTime()-lastCueReceivedInternalTime;
 
                     for (var i = 0; i < item[0].OutData.length; i++) {
                         dir = item[0].OutData[i].Dir;    // ****** needs to ba added to R4-4 Receiver Parsing ****** //
@@ -621,20 +653,26 @@ exports.usbSerialDataIn = function (data) {
     if(data.length >= 35) // this is REAL timing data,
     {
 
-        if(serialData.Source != 'zigbee2:') { //only update if real cue NOT zigbee2
+        if((serialData.Source != 'zigbee2:')  && (systemStarted == true)) { //only update if real cue NOT zigbee2
             lastCueReceived = (JSON.parse(JSON.stringify(serialData))); // store the data here in case of Cue file generation
         }
         //get the internal system time or this event so we and keep track of it
 
-     /*   if(serialData.Source != 'zigbee2:'){ //only update if real cue NOT zigbee2
-            lastCueReceivedInternalTime = new Date().getTime();
-           // lastCueReceivedExternalTime = new Date(lastCueReceived.Time);
-        }
-        */
+        /*   if(serialData.Source != 'zigbee2:'){ //only update if real cue NOT zigbee2
+         lastCueReceivedInternalTime = new Date().getTime();
+         // lastCueReceivedExternalTime = new Date(lastCueReceived.Time);
+         }
+         */
         //Log the data into the collection
 
         collectionLog.insert(serialData, {w: 1}, function (err, result) {
-          //  console.log(result);
+            if(err){
+                console.log(err);
+            }
+            else{
+                console.log(result);
+            }
+            //  console.log(result);
         });
 
         //parse the incoming cue data
@@ -647,7 +685,7 @@ exports.usbSerialDataIn = function (data) {
             comlib.websocketsend(parseCue(data));
         }
 
-      // comlib.websocketsend(parseCue(serialData));
+        // comlib.websocketsend(parseCue(serialData));
     }
     else{ // this is for time data only.  to let GETTIME come through and get logged GETTIME returns a string 34 characters
         if(serialData.Time){
@@ -659,9 +697,18 @@ exports.usbSerialDataIn = function (data) {
                     child = sudo([ 'date', '-s', serialDataTimeOrig ]);
                     child.stdout.on('data', function (data) {
                         console.log(data.toString());
-                       // console.log("SUDO DATE CHANGED");
+                        console.log("SUDO DATE CHANGED");
+                        console.log("calling getsettings");
+                        exports.getSettings();
+
                     });
                 }
+                else{
+                    console.log("Received time bask from CS4 I/0");
+                    console.log("calling getsettings");
+                    exports.getSettings();
+                }
+
                 comlib.websocketsend("CS4 Current tme is: " + momentTZ(serialData.Time).format(fmt));
                 console.log(result);
             });
@@ -673,14 +720,14 @@ exports.usbSerialDataIn = function (data) {
                 console.log("Tme! " + serialData.Tme1.toString());
                 child = sudo([ 'date', '-s', serialData.Tme1 ]);
                 child.stdout.on('data', function (data) {
-                  //  console.log(data.toString());
-                   // comlib.websocketsend("SUDO DATE CHANGED");
+                    //  console.log(data.toString());
+                    // comlib.websocketsend("SUDO DATE CHANGED");
                 });
             }
             serialData.Tme1 = new Date(serialData.Tme1);//convert to real time data
-          //  comlib.websocketsend("CS4 Current time is: " + momentTZ(serialData.Tme1).format(fmt));
+            //  comlib.websocketsend("CS4 Current time is: " + momentTZ(serialData.Tme1).format(fmt));
             comlib.websocketsend("CS4 System time is: " + momentTZ(new Date()).format(fmt));
-           // setTimeout(function(){setAutoTest();}, 5000);//this will restart the system test each time it's run
+            // setTimeout(function(){setAutoTest();}, 5000);//this will restart the system test each time it's run
         }
 
     }
@@ -792,6 +839,7 @@ function makeCueFile(dataSocket, fileName){
                 else{ //This is cue data.  Adjust delay and put data in proper form
                     tempcntoutgoing ++;
                     serialDataSocketEdit.OutData = dataSocket.Data[i].Data;
+                    serialDataSocketEdit.OutData.InCue = lastCueReceivedEdit; // FIX FOR EDITING IN RIGHT ORDER
                     serialDataSocketEdit.OutData.Delay = new Date(dataSocket.Data[i].Time) - new Date(lastCueTime);
 
                     collectionCue.update({'InData':lastCueReceivedEdit.InData}, {$set: lastCueReceivedEdit},{upsert:true, w:1},function(err,res){
@@ -833,13 +881,14 @@ function makeCueFile(dataSocket, fileName){
                 else{ //This is cue data.  Adjust delay and put data in proper form
                     tempcntoutgoing ++;
                     serialDataSocketEdit.OutData = dataSocket.Data[i].Data;
+                    serialDataSocketEdit.OutData.InCue = lastCueReceivedEdit; // FIX FOR EDITING IN RIGHT ORDER
                     serialDataSocketEdit.OutData.Delay = new Date(dataSocket.Data[i].Time) - new Date(lastCueTime);
 
                     collectionCue.update({'InData':lastCueReceivedEdit.InData}, {$set: lastCueReceivedEdit},{upsert:true, w:1},function(err,res){
 
-                       if(err){
-                           console.log('InData to collection Cue -- error: ' + err);
-                       }
+                        if(err){
+                            console.log('InData to collection Cue -- error: ' + err);
+                        }
 
                     });
 
@@ -896,16 +945,16 @@ function copyToUSB()
     if(os.type() == 'Windows_NT')
     {
 
-         usbstickPath = "G:/"; // this is based on particular usbsticl
-         path = usbstickPath ;
-         sourcePath = "d://data/db"; // this is based on system install of mongo
-         destinationPath = "d:/bac/dump"; //this is particular to the system mongo is running on
-         mongoDirectory = 'd:/mongo/bin/'; //this is based on system install of mongo
+        usbstickPath = "E:/"; // this is based on particular usbsticl
+        path = usbstickPath ;
+        sourcePath = "d://data/db"; // this is based on system install of mongo
+        destinationPath = "d:/bac/dump"; //this is particular to the system mongo is running on
+        mongoDirectory = 'd:/mongo/bin/'; //this is based on system install of mongo
         try
         {
             fs.statSync(usbstickPath);
             spawn('d:/mongo/bin/mongodump', ['-o', destinationPath]).on('exit',function(code){
-            console.log('finished ' + code);
+                console.log('finished ' + code);
                 //remove files if they exist or copy will error with 'file exists'
                 fse.rmrf(usbstickPath +'dump', function (err) {
                     if (err) {
@@ -932,86 +981,56 @@ function copyToUSB()
     //this is for the pi
     else
     {
+
         var display = true;
-        usbstickPath = "/media/usb0";
-         path = usbstickPath ;
-         sourcePath = "/data/db";
-         destinationPath = "/home/pi/dump"; // this wass abritrauraly chosen but now fixed
-         mongoDirectory = '/opt/mongo/bin/';
+        usbstickPath = "/media/usbstick";
+        path = usbstickPath ;
+        sourcePath = "/data/db";
+        destinationPath = "/home/pi/dump"; // this wass abritrauraly chosen but now fixed
+        mongoDirectory = '/opt/mongo/bin/';
 
-        //have to find out the 'name' of the usb stick - it will be the only device in media
-        fs.readdir(usbstickPath, function(err,list){
-            if( list.length!= 0)
+        child = exec('sudo mount -t vfat -o uid=pi,gid=pi /dev/sda1 /media/usbstick/',function (error, stdout, stderr) {
+            if (!error)
             {
-               // list.forEach(function (file) {
-                    // Full path of that file
-                    var path = usbstickPath ; //       +  "/" + file;
-                    console.log("path: " + path)
-                    spawn(mongoDirectory + 'mongodump', ['-o', destinationPath]).on('exit',function(code){
-                        console.log('finished ' + code);
-                        comlib.websocketsend("Please Wait ... Preparing Data .......");
-                        fse.rmrf(path +'/dump', function (err) {
+                console.log('stdout mounted: ' + stdout);
+                console.log('stderr mounted: ' + stderr);
+                // Full path of that file
+                var path = usbstickPath; //go to subdirectory which is usb stick
+                console.log("path: " + path)
+                spawn(mongoDirectory + 'mongodump', ['-o', destinationPath]).on('exit', function (code) {
+                    console.log('finished ' + code);
+                    comlib.websocketsend("Please Wait ... Preparing Data .......");
+                    fse.rmrf(path + '/dump', function (err) {
+                        if (err) {
+                            console.error('Error removing files ' + err);
+                        }
+                        console.log("finished at fse.rmrf");
+                        comlib.websocketsend("Please Wait ... Preparing Data 2 .......");
+                        fse.copyRecursive(destinationPath, path + '/dump', function (err) {
                             if (err) {
-                                console.error('Error removing files ' + err);
+                                console.log('error during copy ' + err);
                             }
-                            console.log("finished at fse.rmrf");
-                            comlib.websocketsend("Please Wait ... Preparing Data .......");
-                            fse.copyRecursive(destinationPath , path +'/dump', function (err) {
-                                if (err) {
-                                    console.log('error '+ err);
-                                }
-                                console.log("Finished copying files");
-                                if(display == true) {
-                                    comlib.websocketsend("Successfully Copied All Data to USB Stick");
-                                    console.log("Successfully Copied " + destinationPath + " to " + usbstickPath);
-                                    display = false;
-                                }
-                            });
-                        });
-                    });
-               // });
-            }
-            else
-            {
-                comlib.websocketsend("USB stick is not detected.  Please insert USB stick and try again ");
-                console.log("USB stick is not detected.  Please insert USB stick and try again ");
-            }
-        });
-
-
-
-/*
-        //have to find out the 'name' of the usb stick - it will be the only device in media
-        fs.readdir(usbstickPath, function(err,list){
-            if( list.length!= 0)
-            {
-                list.forEach(function (file) {
-                    // Full path of that file
-                    var path = usbstickPath ; //       +  "/" + file;
-                    console.log("path: " + path)
-                    spawn(mongoDirectory + 'mongodump', ['-o', destinationPath]).on('exit',function(code){
-                        console.log('finished ' + code);
-                        fse.copyRecursive(destinationPath , path + '/dump', function (err) {
-                            if (err) {
-                                console.log('error '+ err);
-                            }
-                            if(display == true) {
+                            console.log("Finished copying files");
+                            if (display == true) {
                                 comlib.websocketsend("Successfully Copied All Data to USB Stick");
                                 console.log("Successfully Copied " + destinationPath + " to " + usbstickPath);
                                 display = false;
                             }
+                            unmount(); // unmount the drive
                         });
                     });
                 });
+
             }
             else
             {
+                console.log('exec error: ' + error);
                 comlib.websocketsend("USB stick is not detected.  Please insert USB stick and try again ");
                 console.log("USB stick is not detected.  Please insert USB stick and try again ");
             }
-        });
+            //have to find out the 'name' of the usb stick - it will be the only device in media
 
-        */
+        });
     }
 }
 
@@ -1023,7 +1042,7 @@ function copyFromUSB()
     if(os.type() == 'Windows_NT')
     {
 
-        usbstickPath = "G:/"; // this is based on particular usb stick
+        usbstickPath = "E:/"; // this is based on particular usb stick
         path = usbstickPath ;
         sourcePath = "d://data/db"; // this is based on system install of mongo
         destinationPath = "d:/bac/dump"; //this is particular to the system mongo is running on
@@ -1031,7 +1050,7 @@ function copyFromUSB()
         try
         {
             fs.statSync(usbstickPath);
-                //remove files from existing directory
+            //remove files from existing directory
             fse.rmrf(destinationPath, function (err) {
                 if (err) {
                     console.error(err);
@@ -1057,21 +1076,22 @@ function copyFromUSB()
     }
     //this is for the pi
     else
-    {
-        var display = true;
-        usbstickPath = "/media/usb0";
+     {
+       var display = true;
+        usbstickPath = "/media/usbstick";
         path = usbstickPath ;
         sourcePath = "/data/db";
-        destinationPath = "/home/pi/dump"; // this wass abritrauraly chosen but now fixed
+        destinationPath = "/home/pi/dump"; // this was abritrauraly chosen but now fixed
         mongoDirectory = '/opt/mongo/bin/';
 
-        //have to find out the 'name' of the usb stick - it will be the only device in media
-        fs.readdir(usbstickPath, function(err,list){
-            if( list.length!= 0)
-            {
-                list.forEach(function (file) {
-                    // Full path of that file
-                    var path = usbstickPath ; //       + "/" + file;
+        //mount the drive first
+
+        child = exec('sudo mount -t vfat -o uid=pi,gid=pi /dev/sda1 /media/usbstick/', function (error, stdout, stderr) {
+                console.log('stdout: ' + stdout);
+                console.log('stderr: ' + stderr);
+                if (!error) {
+                    console.log('exec error: ' + error);
+                    var path = usbstickPath ; //go to subdirectory which is usb stick
                     console.log("path: " + path)
 
                     fse.rmrf(destinationPath, function (err) {
@@ -1081,38 +1101,48 @@ function copyFromUSB()
                         console.log('we are here dir removed');
 
 
-                        if(fs.existsSync(path + '/dump')){
+                        if (fs.existsSync(path + '/dump')) {
                             console.log("path exists: " + path + '/dump');
                             fse.copyRecursive(path + '/dump', destinationPath, function (err) {
                                 if (err) {
-                                    console.log('error -- NO PATH??? '+ err);
+                                    console.log('error -- NO PATH??? ' + err);
                                 }
                                 console.log('copied from usb');
-                                    spawn(mongoDirectory + 'mongorestore', ['--db', collectionName, destinationPath + "/" + collectionName, '--drop', '-vvv']).on('exit', function (code) {
+                                spawn(mongoDirectory + 'mongorestore', ['--db', collectionName, destinationPath + "/" + collectionName, '--drop', '-vvv']).on('exit', function (code) {
                                     console.log('finished ' + code);
                                 });
-                                if(display == true) {
+                                if (display == true) {
                                     comlib.websocketsend("Successfully Copied All Data from USB Stick");
                                     console.log("Successfully Copied " + usbstickPath + " to " + destinationPath);
                                     display = false;
                                 }
+                                unmount();
                             });
                         }
-                       else{
+                        else {
                             comlib.websocketsend("Data not on this USB Stick");
                             console.log("Data not on this USB Stick " + usbstickPath + " to " + destinationPath);
-
+                            unmount();
                         }
                     });
-                });
-            }
-            else
-            {
-                comlib.websocketsend("USB stick is not detected.  Please insert USB stick and try again ");
-                console.log("USB stick is not detected.  Please insert USB stick and try again ");
-            }
+                }
+                else
+                {
+                    comlib.websocketsend("USB stick is not detected.  Please insert USB stick and try again ");
+                    console.log("USB stick is not detected.  Please insert USB stick and try again ");
+                }
         });
-    }
+     }
+}
+
+function unmount(){
+    child = exec('sudo umount /media/usbstick/', function (error, stdout, stderr) {
+        console.log('stdout: ' + stdout);
+        console.log('stderr: ' + stderr);
+        if (error !== null) {
+            console.log('exec error: ' + error);
+        }
+    });
 }
 
 function copyToInternal(location)
@@ -1120,26 +1150,26 @@ function copyToInternal(location)
     // copies database to destinationPath.
     if(os.type() == 'Windows_NT')
     {
-      //  usbstickPath = "G:/"; // this is based on particular usbsticl
-     //   path = usbstickPath ;
-      //  sourcePath = "d://data/db"; // this is based on system install of mongo
+        //  usbstickPath = "G:/"; // this is based on particular usbsticl
+        //   path = usbstickPath ;
+        //  sourcePath = "d://data/db"; // this is based on system install of mongo
         destinationPath = "d:/mongoBackup/dump" + location; //this is particular to the system mongo is running on
         mongoDirectory = 'd:/mongo/bin/'; //this is based on system install of mongo
     }
     //this is for the pi
     else
     {
-      //  usbstickPath = "/media";
-      //  path = usbstickPath ;
-      //  sourcePath = "/data/db";
+        //  usbstickPath = "/media";
+        //  path = usbstickPath ;
+        //  sourcePath = "/data/db";
         destinationPath = "/home/pi/mongoBackup/dump" + location; // this was arbitrarily chosen but now fixed
         mongoDirectory = '/opt/mongo/bin/';
     }
     spawn(mongoDirectory + 'mongodump', ['-o', destinationPath]).on('exit',function(code){
- // spawn('d:/mongo/bin/mongodump', ['-o', destinationPath]).on('exit',function(code){
-    comlib.websocketsend("Successfully copied all data to internal storage location " + location);
-    console.log("Successfully copied all data to internal storage: "+ destinationPath + " " + code);
-    return(1);
+        // spawn('d:/mongo/bin/mongodump', ['-o', destinationPath]).on('exit',function(code){
+        comlib.websocketsend("Successfully copied all data to internal storage location " + location);
+        console.log("Successfully copied all data to internal storage: "+ destinationPath + " " + code);
+        return(1);
     });
 }
 
@@ -1160,9 +1190,9 @@ function copyFromInternal(location)
     }
     if (fs.existsSync(destinationPath)) { //make sure it exists
         spawn(mongoDirectory + 'mongorestore', ['--db',collectionName , destinationPath + "/" + collectionName , '--drop', '-vvv']).on('exit',function(code){
-        console.log('finished ' + code);
-        comlib.websocketsend("Successfully Copied All Data from Internal Storage Location " + location);
-        console.log("Successfully Copied " + destinationPath + " to " + mongoDirectory);
+            console.log('finished ' + code);
+            comlib.websocketsend("Successfully Copied All Data from Internal Storage Location " + location);
+            console.log("Successfully Copied " + destinationPath + " to " + mongoDirectory);
         });
 
     }
@@ -1194,10 +1224,14 @@ function copyToPublic(){
 
 }
 
-exports.getSettings = function(){
-    usbInputEnabled = 1; //let the usb data through
-    sendOutput('GETTIME'); // get the system time as the startup time
 
+exports.getSettings = function(){
+//function getSettings(){
+console.log("(getsettings)");
+    usbInputEnabled = 1; //let the usb data through
+
+    //sendOutput('GETTIME'); // get the system time as the startup time
+    console.log("Line after gettime in getsettings");
     collectionSettings.findOne({},function(error,result){
         if(result){
             cs4Settings = result;
@@ -1215,10 +1249,29 @@ exports.getSettings = function(){
             cs4Settings.emailAccount = "stevewitz@gmail.com";
             cs4Settings.emailAccountPassword = "panema2020!";
             cs4Settings.timezone = "US/Eastern";
+            cs4Settings.midisex1 = 0;
+            cs4Settings.nonsysex1 = 0;
+            cs4Settings.midisex2 = 0;
+            cs4Settings.nonsysex2 = 0;
+            cs4Settings.midisex3 = 0;
+            cs4Settings.nonsysex3 = 0;
+            cs4Settings.midisex4 = 0;
+            cs4Settings.nonsysex4 = 0;
             collectionSettings.insert(cs4Settings, {w: 1}, function (err, result) {
                 console.log(result);
             })
         }
+      //  setTimeout(function(){sendOutput('GETTIME');}, 7000);
+        var a, b, c, d, e, f
+        a = setTimeout(function(){sendOutput('          SLAVE DMX_CH ' + cs4Settings.dmx1 +  " " + cs4Settings.dmx2 + " " + cs4Settings.dmx3 + '');}, 500);
+        b = setTimeout(function(){sendOutput('          SLAVE ZIGEN ' + cs4Settings.enableZigbee2);}, 1000);
+        c = setTimeout(function(){sendOutput('          MIDIFIL1 ' + cs4Settings.midisex1 + " " + cs4Settings.nonsysex1 + " "+ (parseInt(+cs4Settings.deviceIDLow1)*1 + parseInt(+cs4Settings.deviceIDHigh1)*16).toString() + " " + cs4Settings.type1 + " " + cs4Settings.commandformat1 + " " +   cs4Settings.command1 + " " + cs4Settings.nonsysextype1 + " " + cs4Settings.nonsysexchannel1 + " ");}, 2000);
+        d = setTimeout(function(){sendOutput('          MIDIFIL2 ' + cs4Settings.midisex2 + " " + cs4Settings.nonsysex2 + " "+ (parseInt(+cs4Settings.deviceIDLow2)*1 + parseInt(+cs4Settings.deviceIDHigh2)*16).toString() + " " + cs4Settings.type2 + " " + cs4Settings.commandformat2 + " " +   cs4Settings.command2 + " " + cs4Settings.nonsysextype2 + " " + cs4Settings.nonsysexchannel2 + " ");}, 3000);
+        e = setTimeout(function(){sendOutput('          MIDIFIL3 ' + cs4Settings.midisex3 + " " + cs4Settings.nonsysex3 + " "+ (parseInt(+cs4Settings.deviceIDLow3)*1 + parseInt(+cs4Settings.deviceIDHigh3)*16).toString() + " " + cs4Settings.type3 + " " + cs4Settings.commandformat3 + " " +   cs4Settings.command3 + " " + cs4Settings.nonsysextype3 + " " + cs4Settings.nonsysexchannel3 + " ");}, 4000);
+        f = setTimeout(function(){sendOutput('          MIDIFIL4 ' + cs4Settings.midisex4 + " " + cs4Settings.nonsysex4 + " "+ (parseInt(+cs4Settings.deviceIDLow4)*1 + parseInt(+cs4Settings.deviceIDHigh4)*16).toString() + " " + cs4Settings.type4 + " " + cs4Settings.commandformat4 + " " +   cs4Settings.command4 + " " + cs4Settings.nonsysextype4 + " " + cs4Settings.nonsysexchannel4 + " ");}, 5000);
+            setTimeout(function(){  exports.ledOn();},6000)
+
+
 
         //set up initial mail parameters here
         smtpTransport = nodemailer.createTransport("SMTP",{
@@ -1229,11 +1282,12 @@ exports.getSettings = function(){
             }
         });
 
-        dataToSend = '          SLAVE DMX_CH ' + cs4Settings.dmx1 +  " " + cs4Settings.dmx2 + " " + cs4Settings.dmx3 + ''; //update the DMX channels
+     /*   dataToSend = '          SLAVE DMX_CH ' + cs4Settings.dmx1 +  " " + cs4Settings.dmx2 + " " + cs4Settings.dmx3 + ''; //update the DMX channels
         sendOutput(dataToSend) ;
         dataToSend = '          SLAVE ZIGEN ' + cs4Settings.enableZigbee2 + ''; //update the DMX channels
         sendOutput(dataToSend) ;
-        exports.ledOn();
+     */
+       // exports.ledOn();
 
     });
 };
@@ -1251,11 +1305,11 @@ exports.ledOn = function(){
 
     if(os.type() != 'Windows_NT') // this is only for the pi
     {
-       /* var led = require('fastgpio');
-        led.prepareGPIO(4);
-        led.set(4);
-        clearInterval(blink);
-        */
+        /* var led = require('fastgpio');
+         led.prepareGPIO(4);
+         led.set(4);
+         clearInterval(blink);
+         */
         var rpio = require('rpio');
         rpio.setMode('gpio');
         rpio.setOutput(4);
@@ -1265,13 +1319,19 @@ exports.ledOn = function(){
 
     pmp.findGateway("",function(err,gateway){
         var error = 0;
+        var erroratpmp = 0;
         ///console.log(err,gateway.ip);
         if(err){
             console.log('Gateway not found',err);
+            erroratpmp = 1;
         }
         else{
             global.externalIP = gateway.externalIP;
             console.log('gateway found: '+ gateway.ip + ", External IP: "+ gateway.externalIP);
+
+
+
+
             pmp.portMap(gateway,3000,3000,0,'CS4 Main',function(err,rslt){
 
                 if(!err) {
@@ -1298,6 +1358,7 @@ exports.ledOn = function(){
                             console.log(err,rslt);
                         }
 
+
                         /////////////
                         console.log('Ready to send START UP email message');
                         var mailOptions = {
@@ -1312,12 +1373,11 @@ exports.ledOn = function(){
 
                         // send mail with defined transport object
                         sendMail(mailOptions);
+
                         console.log("READY to start system test in 10 seconds");
                         setTimeout(function(){startSystemTest();}, 10000); // check for results after delay
-                      //  setTimeout(function(){setAutoTest(0);}, 20000);
+                        //  setTimeout(function(){setAutoTest(0);}, 20000);
                         /////////////////////
-
-
 
 
                     });
@@ -1325,6 +1385,28 @@ exports.ledOn = function(){
                 });
             });
 
+        }
+        if(erroratpmp) {
+            /////////////
+            console.log('Ready to send START UP email message');
+            var mailOptions = {
+                from: "CS4 @ " + myuri + "✔ " + cs4Settings.emailAccount,
+                //  from: "CS4 192.168.2.10 ✔ <stevewitz@gmail.com>", // sender address
+                to: cs4Settings.emailAddress,
+                // to: "steve@wizcomputing.com      ", // comma seperated list of receivers
+                subject: "Start Up Message from CS4 ✔: " + cs4Settings.systemName, // Subject line
+                text: cs4Settings.systemName + " CS4 has just started.\n  External IP address:  http://" + global.externalIP + ":3000" + " - and internal IP address: " + global.myuri + ":3000", // plaintext body
+                html: cs4Settings.systemName + " CS4 has just started.\n  External IP address:  http://" + global.externalIP + ":3000" + " - and internal IP address: " + global.myuri + ":3000"// html body
+            };
+
+            // send mail with defined transport object
+            sendMail(mailOptions);
+            console.log("READY to start system test in 10 seconds");
+            setTimeout(function () {
+                startSystemTest();
+            }, 10000); // check for results after delay
+            //  setTimeout(function(){setAutoTest(0);}, 20000);
+            /////////////////////
         }
 
     });
@@ -1334,10 +1416,10 @@ exports.ledOff = function(){
 
     if(os.type() != 'Windows_NT') // this is only for the pi
     {
-       /* var led = require('fastgpio');
-        led.prepareGPIO(4);
-        led.unset(4);
-       */ clearInterval(blink);
+        /* var led = require('fastgpio');
+         led.prepareGPIO(4);
+         led.unset(4);
+         */ clearInterval(blink);
 
         var rpio = require('rpio');
         rpio.setMode('gpio');
@@ -1351,10 +1433,10 @@ exports.ledOff = function(){
 function ledInfoOn(GPIOnum){
     if(os.type() != 'Windows_NT') // this is only for the pi
     {
-       /* var led = require('fastgpio');
-        led.prepareGPIO(GPIOnum);
-        led.set(GPIOnum);
-        */
+        /* var led = require('fastgpio');
+         led.prepareGPIO(GPIOnum);
+         led.set(GPIOnum);
+         */
         var rpio = require('rpio');
         rpio.setMode('gpio');
         rpio.setOutput(GPIOnum);
@@ -1365,10 +1447,10 @@ function ledInfoOn(GPIOnum){
 function ledInfoOff(GPIOnum){
     if(os.type() != 'Windows_NT') // this is only for the pi
     {
-       /* var led = require('fastgpio');
-        led.prepareGPIO(GPIOnum);
-        led.unset(GPIOnum);
-        */
+        /* var led = require('fastgpio');
+         led.prepareGPIO(GPIOnum);
+         led.unset(GPIOnum);
+         */
         var rpio = require('rpio');
         rpio.setMode('gpio');
         rpio.setOutput(GPIOnum);
@@ -1387,11 +1469,11 @@ function ledInfoBlink(GPIOnum){
 function startSystemTest(auto){
 
     if(auto){
-      //  clearTimeout(autoTest1); //erase any previous timeouts
-      //  clearTimeout(autoTest); //erase any previous timeouts
-      //  autoTest1 = setTimeout(function(){startSystemTest(1);}, TimeToTest); // start again in 24 hours
-      //  console.log("Starting next System Test");
-      //  comlib.websocketsend("Starting next System Test");
+        //  clearTimeout(autoTest1); //erase any previous timeouts
+        //  clearTimeout(autoTest); //erase any previous timeouts
+        //  autoTest1 = setTimeout(function(){startSystemTest(1);}, TimeToTest); // start again in 24 hours
+        //  console.log("Starting next System Test");
+        //  comlib.websocketsend("Starting next System Test");
     }
     dataToSend = '          SLAVE ZIGEN ' + 'YES' + '\r'; //Enable the zigee2 channel
     comlib.write(dataToSend) ;
@@ -1402,11 +1484,11 @@ function startSystemTest(auto){
         comlib.write(dataToSend) ;
     }
 
-        for(var i = 0; i < 5 ; i++){
-          //  sendOutput('ZIG1' + ' ' + 'TEST '  + "GO slide1111.jpg NEXT slide2222.jpg");
-            setTimeout(function(){sendOutput('ZIG1' + ' ' + 'TEST '  + "GO slide1111.jpg NEXT slide2222.jpg");}, 500*i);
-        }
-        setTimeout(function(){checkForZigbee(auto);}, 5000); // check for results after delay
+    for(var i = 0; i < 5 ; i++){
+        //  sendOutput('ZIG1' + ' ' + 'TEST '  + "GO slide1111.jpg NEXT slide2222.jpg");
+        setTimeout(function(){sendOutput('ZIG1' + ' ' + 'TEST '  + "GO slide1111.jpg NEXT slide2222.jpg");}, 500*i);
+    }
+    setTimeout(function(){checkForZigbee(auto);}, 5000); // check for results after delay
 }
 
 function checkForZigbee(auto){
@@ -1420,12 +1502,12 @@ function checkForZigbee(auto){
     collectionLog.find({},{_id:0}).sort({ $natural: -1}).limit(6).toArray(function(error,logfile) {
 
         for( var i = 0; i < logfile.length; i++){
-                    t = logfile[i].Source;
-                if(logfile[i].Source == 'zigbee2:'){
-                    if(logfile[i].InData.trim().substr(0,4) == 'TEST'){
-                        success = 1;
-                    }
+            t = logfile[i].Source;
+            if(logfile[i].Source == 'zigbee2:'){
+                if(logfile[i].InData.trim().substr(0,4) == 'TEST'){
+                    success = 1;
                 }
+            }
         }
 
         if(success){
@@ -1444,6 +1526,7 @@ function checkForZigbee(auto){
             };
             ledInfoOn(4); // turn on the light
             sendMail(mailOptions);
+            systemStarted = true;
 
         }
         else{
@@ -1462,6 +1545,7 @@ function checkForZigbee(auto){
             };
             ledInfoBlink(4); // blink the light to indicate error
             sendMail(mailOptions);
+            systemStarted = true;
         }
 
 
@@ -1471,7 +1555,7 @@ function checkForZigbee(auto){
 
 function setAutoTest(){
     var offsetTime;
-  //  console.log("STARTING AUTO TEST");
+    //  console.log("STARTING AUTO TEST");
     //get latest time from startup data base and calculate how long to delay before starting test
     collectionStartup.find({},{_id:0}).sort({"Time": -1}).limit(1).toArray(function(error,Startupfile) {
 
@@ -1488,10 +1572,10 @@ function setAutoTest(){
         }
         //calculate milliseconds until start of test
         offsetTime = offsetTime*60*60*1000 - currentMinutes*60*1000 - currentSeconds*1000 - currentMilli;
-     //   clearTimeout(autoTest1); //erase any previous timeouts
+        //   clearTimeout(autoTest1); //erase any previous timeouts
         clearTimeout(autoTest); //erase any previous timeouts
 
-       // offsetTime=60000;
+        // offsetTime=60000;
         autoTest =  setTimeout(function(){startSystemTest(1);}, offsetTime);
         comlib.websocketsend("Auto Test will start in: " + offsetTime/1000 + " seconds");
     });
@@ -1533,4 +1617,5 @@ function stopIO(state){
 
     }
 }
+
 

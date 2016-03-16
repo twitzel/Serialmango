@@ -25,7 +25,21 @@ exports.openSerialPort = function(portname, baud)
        if( branch == 'cs4'){
            //we are now up and working
             //turn status LED on
-           setTimeout(function(){cs4.getSettings();}, 1500); // let things settle for a bit
+           // serial port open now call callback
+          if (!err){
+           //   cs4.sendOutput('GETTIME'); // get the system time as the startup time
+              cs4.sendgettime(); // get the system time as the startup time
+
+
+          } else{
+              // here is what may happen if the port doesnt open
+
+              console.log("Count not open serial port");
+
+
+
+          }
+
        }
 
     });
@@ -53,6 +67,8 @@ exports.write = function(data) {
 };
 
 //Set up the web socket here.. Default port is 8080
+exports.startwebsocketserver = function(){
+    console.log("start webserver socket");
 wss = new WebSocketServer({port: 8080}, function(err,res){
 
     //  console.log(wss.url);
@@ -62,6 +78,7 @@ wss = new WebSocketServer({port: 8080}, function(err,res){
     else
     {
         console.log("Websocket server Listening");
+
     }
 });
 
@@ -106,7 +123,7 @@ wss.on('connection', function(ws) {
         delete websocket[thisId];
     });
 });
-
+}
 
 exports.websocketsend = function(data,id)
 {
@@ -123,7 +140,13 @@ exports.websocketsend = function(data,id)
         {
             if (websocket[i])
             {
-                websocket[i].send(data);
+                try {
+                    websocket[i].send(data);
+                }
+                catch(e){
+                    console.log("Caught Error at Websocket Send");
+                }
+
                 console.info("websocket sending to client "+i);
             }
         }

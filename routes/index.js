@@ -2,8 +2,14 @@
 /*
  * GET home page.
  */
+var momentTZ = require('moment-timezone');
+
 var itemInfoFinal = [];
 var cs4Settings;
+var fmt = "ddd, MMM DD YYYY, HH:mm:ss.SS"; // format string for momentTZ time strings
+
+
+
 exports.index = function(req, res){
     res.render('index.jade', { title: 'Express - Serial Port Sending data' });
 //sending serial data  and a non function to call back with the results
@@ -105,6 +111,11 @@ exports.cs4Info = function(req, res){
     var notindex = 0;
     collectionStartup.find({'Time':{$exists:true}}).sort({"Time": -1}).limit(25).toArray(function(error,startup){
 
+        for(i=0;i<startup.length; i++){ //fix format of startup time
+            startup[i].Time = momentTZ(startup[i].Time).format(fmt);
+        }
+
+
         collectionCue.find().toArray(function(error,countCue){
             var counter = 0;
             for(var i=0; i< countCue.length; i++)
@@ -163,6 +174,8 @@ exports.cs4Timing = function(req, res){
     });
     collectionCue.find().toArray(function(error,countCue) {
         var counter = 0;
+        var notcounted = 0;
+        var notindex = 0;
         for (var i = 0; i < countCue.length; i++) {
             if (countCue[i].OutData) {
                 counter += countCue[i].OutData.length
@@ -263,6 +276,8 @@ exports.cs4Settings = function(req, res){
 };
 
 exports.cs4Edit = function(req, res){
+    var notcounted = 0;
+    var notindex = 0;
     itemInfoFinal = [];
     itemInfoFinal.length=0; // clear the array
     collectionCue.find().toArray(function(error,countCue) {
