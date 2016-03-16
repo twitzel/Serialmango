@@ -56,6 +56,21 @@ function init(){
         document.getElementById("cuelistnumber1b").value = cs4Settings.cuelistnumber1b;
         document.getElementById("cuelistnumber1c").value = cs4Settings.cuelistnumber1c;
 
+        document.getElementById("sysexcuelist2").value = cs4Settings.sysexcuelist2;
+        document.getElementById("cuelistnumber2a").value = cs4Settings.cuelistnumber2a;
+        document.getElementById("cuelistnumber2b").value = cs4Settings.cuelistnumber2b;
+        document.getElementById("cuelistnumber2c").value = cs4Settings.cuelistnumber2c;
+
+        document.getElementById("sysexcuelist3").value = cs4Settings.sysexcuelist3;
+        document.getElementById("cuelistnumber3a").value = cs4Settings.cuelistnumber3a;
+        document.getElementById("cuelistnumber3b").value = cs4Settings.cuelistnumber3b;
+        document.getElementById("cuelistnumber3c").value = cs4Settings.cuelistnumber3c;
+
+        document.getElementById("sysexcuelist4").value = cs4Settings.sysexcuelist4;
+        document.getElementById("cuelistnumber4a").value = cs4Settings.cuelistnumber4a;
+        document.getElementById("cuelistnumber4b").value = cs4Settings.cuelistnumber4b;
+        document.getElementById("cuelistnumber4c").value = cs4Settings.cuelistnumber4c;
+
         document.getElementById("nonsysex1").value = cs4Settings.nonsysex1;
         document.getElementById("nonsysextype1").value = cs4Settings.nonsysextype1;
         document.getElementById("nonsysexchannel1").value = cs4Settings.nonsysexchannel1;
@@ -211,6 +226,33 @@ function saveParameters(){
     if(cs4Settings.cuelistnumber1b == null || cs4Settings.cuelistnumber1b == ""){cs4Settings.cuelistnumber1b = "0"};
     cs4Settings.cuelistnumber1c = document.getElementById("cuelistnumber1c").value;
     if(cs4Settings.cuelistnumber1c == null || cs4Settings.cuelistnumber1c == ""){cs4Settings.cuelistnumber1c = "0"};
+
+    cs4Settings.sysexcuelist2 = document.getElementById("sysexcuelist2").value;
+    if(cs4Settings.sysexcuelist2 == null || cs4Settings.sysexcuelist2 == ""){cs4Settings.sysexcuelist2 = "0"}; // always make sure it is a   value
+    cs4Settings.cuelistnumber2a = document.getElementById("cuelistnumber2a").value;
+    if(cs4Settings.cuelistnumber2a == null || cs4Settings.cuelistnumber2a == ""){cs4Settings.cuelistnumber2a = "0"};
+    cs4Settings.cuelistnumber2b = document.getElementById("cuelistnumber2b").value;
+    if(cs4Settings.cuelistnumber2b == null || cs4Settings.cuelistnumber2b == ""){cs4Settings.cuelistnumber2b = "0"};
+    cs4Settings.cuelistnumber2c = document.getElementById("cuelistnumber2c").value;
+    if(cs4Settings.cuelistnumber2c == null || cs4Settings.cuelistnumber2c == ""){cs4Settings.cuelistnumber2c = "0"};
+
+    cs4Settings.sysexcuelist3 = document.getElementById("sysexcuelist3").value;
+    if(cs4Settings.sysexcuelist3 == null || cs4Settings.sysexcuelist3 == ""){cs4Settings.sysexcuelist3 = "0"}; // always make sure it is a   value
+    cs4Settings.cuelistnumber3a = document.getElementById("cuelistnumber3a").value;
+    if(cs4Settings.cuelistnumber3a == null || cs4Settings.cuelistnumber3a == ""){cs4Settings.cuelistnumber3a = "0"};
+    cs4Settings.cuelistnumber3b = document.getElementById("cuelistnumber3b").value;
+    if(cs4Settings.cuelistnumber3b == null || cs4Settings.cuelistnumber3b == ""){cs4Settings.cuelistnumber3b = "0"};
+    cs4Settings.cuelistnumber3c = document.getElementById("cuelistnumber3c").value;
+    if(cs4Settings.cuelistnumber3c == null || cs4Settings.cuelistnumber3c == ""){cs4Settings.cuelistnumber3c = "0"};
+
+    cs4Settings.sysexcuelist4 = document.getElementById("sysexcuelist4").value;
+    if(cs4Settings.sysexcuelist4 == null || cs4Settings.sysexcuelist4 == ""){cs4Settings.sysexcuelist4 = "0"}; // always make sure it is a   value
+    cs4Settings.cuelistnumber4a = document.getElementById("cuelistnumber4a").value;
+    if(cs4Settings.cuelistnumber4a == null || cs4Settings.cuelistnumber4a == ""){cs4Settings.cuelistnumber4a = "0"};
+    cs4Settings.cuelistnumber4b = document.getElementById("cuelistnumber4b").value;
+    if(cs4Settings.cuelistnumber4b == null || cs4Settings.cuelistnumber4b == ""){cs4Settings.cuelistnumber4b = "0"};
+    cs4Settings.cuelistnumber4c = document.getElementById("cuelistnumber4c").value;
+    if(cs4Settings.cuelistnumber4c == null || cs4Settings.cuelistnumber4c == ""){cs4Settings.cuelistnumber4c = "0"};
 
     cs4Settings.nonsysex1 = document.getElementById("nonsysex1").value;
     cs4Settings.nonsysextype1 = document.getElementById("nonsysextype1").value;
@@ -766,6 +808,72 @@ function sysexcuelistchange1(){
         default:
             document.getElementById("sysexcuelist1a").style.display = "none";
             document.getElementById("sysexcuelist1b").style.display = "none";
+    }
+}
+
+function sysexcuelistchange2(){
+    switch (document.getElementById("sysexcuelist2").value) {
+        case '0':
+            document.getElementById("sysexcuelist2a").style.display = "none";
+            document.getElementById("sysexcuelist2b").style.display = "none";
+            break;
+        case '1':
+        case '3':
+            document.getElementById("sysexcuelist2a").style.display = "block";
+            document.getElementById("sysexcuelist2b").style.display = "none";
+            break;
+        case '2':
+        case '4':
+            document.getElementById("sysexcuelist2a").style.display = "none";
+            document.getElementById("sysexcuelist2b").style.display = "block";
+            break;
+        default:
+            document.getElementById("sysexcuelist2a").style.display = "none";
+            document.getElementById("sysexcuelist2b").style.display = "none";
+    }
+}
+
+function sysexcuelistchange3(){
+    switch (document.getElementById("sysexcuelist3").value) {
+        case '0':
+            document.getElementById("sysexcuelist3a").style.display = "none";
+            document.getElementById("sysexcuelist3b").style.display = "none";
+            break;
+        case '1':
+        case '3':
+            document.getElementById("sysexcuelist3a").style.display = "block";
+            document.getElementById("sysexcuelist3b").style.display = "none";
+            break;
+        case '2':
+        case '4':
+            document.getElementById("sysexcuelist3a").style.display = "none";
+            document.getElementById("sysexcuelist3b").style.display = "block";
+            break;
+        default:
+            document.getElementById("sysexcuelist3a").style.display = "none";
+            document.getElementById("sysexcuelist3b").style.display = "none";
+    }
+}
+
+function sysexcuelistchange4(){
+    switch (document.getElementById("sysexcuelist4").value) {
+        case '0':
+            document.getElementById("sysexcuelist4a").style.display = "none";
+            document.getElementById("sysexcuelist4b").style.display = "none";
+            break;
+        case '1':
+        case '3':
+            document.getElementById("sysexcuelist4a").style.display = "block";
+            document.getElementById("sysexcuelist4b").style.display = "none";
+            break;
+        case '2':
+        case '4':
+            document.getElementById("sysexcuelist4a").style.display = "none";
+            document.getElementById("sysexcuelist4b").style.display = "block";
+            break;
+        default:
+            document.getElementById("sysexcuelist4a").style.display = "none";
+            document.getElementById("sysexcuelist4b").style.display = "none";
     }
 }
 
