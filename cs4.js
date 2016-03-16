@@ -61,6 +61,7 @@ sendOutput = function (dataToSend)
 {
     var addTime = "{\"Time\":";
     console.log("We are at sendOutput");
+    timedOut = true; // temp fix
     if (timedOut)
     {
         timerStartTime = new Date();
