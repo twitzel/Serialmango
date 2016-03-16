@@ -46,6 +46,20 @@ app.use(express.bodyParser());
 app.use(express.methodOverride());
 app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
+//moved here
+app.get('/', routes.cs4Home);
+//   app.get('/cs4Start', routes.cs4Start);
+app.get('/cs4Home', routes.cs4Home);
+app.get('/cs4Home/:Test', routes.cs4Home);
+app.get('/cs4Timing', routes.cs4Timing);
+app.get('/cs4Timing/:Test', routes.cs4Timing);
+app.get('/cs4Info', routes.cs4Info);
+app.get('/cs4Info/:Test', routes.cs4Info);
+app.get('/cs4VerticalScroll', routes.cs4VerticalScroll);
+app.get('/cs4VerticalScroll/:Test', routes.cs4VerticalScroll);
+//   app.get('/cs4Help', routes.cs4Help);
+app.get('/cs4Settings', routes.cs4Settings);
+app.get('/cs4Edit', routes.cs4Edit);
 
 //  All route information now is contained in
 //  TWI.js or CS4.js
