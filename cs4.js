@@ -1339,7 +1339,7 @@ exports.ledOn = function(){
         var rpio = require('rpio');
         rpio.setMode('gpio');
         rpio.setOutput(4);
-        rpio.write(4, rpio.HIGH);
+         rpio.write(4, rpio.HIGH);
         clearInterval(blink);
     }
 
