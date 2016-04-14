@@ -1336,7 +1336,7 @@ exports.ledOn = function(){
          led.set(4);
          clearInterval(blink);
          */
-        var rpio = require('rpio');
+        var rpio = require('rpi-gpio');///var rpio = require('rpio');
         rpio.setMode('gpio');
         rpio.setOutput(4);
         rpio.write(4, rpio.HIGH);
@@ -1447,7 +1447,7 @@ exports.ledOff = function(){
          led.unset(4);
          */ clearInterval(blink);
 
-        var rpio = require('rpio');
+        var rpio = require('rpi-gpio');///var rpio = require('rpio');
         rpio.setmode('gpio');
         rpio.setOutput(4);
         rpio.write(4, rpio.LOW);
@@ -1463,7 +1463,7 @@ function ledInfoOn(GPIOnum){
          led.prepareGPIO(GPIOnum);
          led.set(GPIOnum);
          */
-        var rpio = require('rpio');
+        var rpio = require('rpi-gpio');///var rpio = require('rpio');
         rpio.setMode('gpio');
         rpio.setOutput(GPIOnum);
         rpio.write(GPIOnum, rpio.HIGH);
@@ -1477,7 +1477,7 @@ function ledInfoOff(GPIOnum){
          led.prepareGPIO(GPIOnum);
          led.unset(GPIOnum);
          */
-        var rpio = require('rpio');
+        var rpio = require('rpi-gpio');///var rpio = require('rpio');
         rpio.setMode('gpio');
         rpio.setOutput(GPIOnum);
         rpio.write(GPIOnum, rpio.LOW);
