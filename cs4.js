@@ -1448,7 +1448,7 @@ exports.ledOff = function(){
          */ clearInterval(blink);
 
         var rpio = require('rpio');
-        rpio.setMode('gpio');
+        rpio.setmode('gpio');
         rpio.setOutput(4);
         rpio.write(4, rpio.LOW);
         clearInterval(blink);
