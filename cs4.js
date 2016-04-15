@@ -1152,6 +1152,8 @@ function unmount(){
 
 function copyToInternal(location)
 {
+    console.log ("Running on ....  " + os.platform());
+    console.log ("Operating system   ", + os.type());
     // copies database to destinationPath.
     if(os.type() == 'Windows_NT')
     {
