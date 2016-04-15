@@ -23,6 +23,7 @@ var nodemailer = require("nodemailer");
 var pmp = require('pmp');
 var sudo = require('sudo');
 var momentTZ = require('moment-timezone');
+var rpio = require('rpio');
 
 var lastCueReceived = {"Time" : "10/09/13 15:20:04.20", "Source" : "Midi1", "InData" : "F0 7F 05 02 01 01 31 2E 30 30 F7 "};
 var serialDataSocket;
@@ -1447,10 +1448,14 @@ exports.ledOff = function(){
          led.unset(4);
          */ clearInterval(blink);
 
-        var rpio = require('rpio');
-        rpio.setmode('gpio');
-        rpio.setOutput(4);
+        rpio.init({mapping: 'gpio'});
+        rpio.mode(4, rpio.OUTPUT);
         rpio.write(4, rpio.LOW);
+        /*     var rpio = require('rpio');
+             rpio.setmode('gpio');
+             rpio.setOutput(4);
+             rpio.write(4, rpio.LOW);
+       */
         clearInterval(blink);
     }
 };
