@@ -24,6 +24,7 @@ var pmp = require('pmp');
 var sudo = require('sudo');
 var momentTZ = require('moment-timezone');
 var rpio = require('rpio');
+rpio.init({mapping: 'gpio'});
 
 var lastCueReceived = {"Time" : "10/09/13 15:20:04.20", "Source" : "Midi1", "InData" : "F0 7F 05 02 01 01 31 2E 30 30 F7 "};
 var serialDataSocket;
@@ -1338,7 +1339,7 @@ exports.ledOn = function(){
          clearInterval(blink);
          */
 
-        rpio.init({mapping: 'gpio'});
+      //  rpio.init({mapping: 'gpio'});
         rpio.mode(4, rpio.OUTPUT);
         rpio.write(4, rpio.HIGH);
 
@@ -1454,7 +1455,7 @@ exports.ledOff = function(){
          led.unset(4);
          */ clearInterval(blink);
 
-        rpio.init({mapping: 'gpio'});
+//        rpio.init({mapping: 'gpio'});
         rpio.mode(4, rpio.OUTPUT);
         rpio.write(4, rpio.LOW);
         /*     var rpio = require('rpio');
@@ -1474,7 +1475,7 @@ function ledInfoOn(GPIOnum){
          led.prepareGPIO(GPIOnum);
          led.set(GPIOnum);
          */
-        rpio.init({mapping: 'gpio'});
+//        rpio.init({mapping: 'gpio'});
         rpio.mode(GPIOnum, rpio.OUTPUT);
         rpio.write(GPIOnum, rpio.HIGH);
 
@@ -1493,7 +1494,7 @@ function ledInfoOff(GPIOnum){
          led.unset(GPIOnum);
          */
 
-        rpio.init({mapping: 'gpio'});
+ //       rpio.init({mapping: 'gpio'});
         rpio.mode(GPIOnum, rpio.OUTPUT);
         rpio.write(GPIOnum, rpio.LOW);
 
