@@ -4,7 +4,7 @@
 /**
  * Created by Steve on 9/30/13.
  */
-
+// 04/22/2-16 updated for PI 3
 
 MongoClient = require('mongodb').MongoClient;
 var fs = require('fs');
@@ -23,8 +23,11 @@ var nodemailer = require("nodemailer");
 var pmp = require('pmp');
 var sudo = require('sudo');
 var momentTZ = require('moment-timezone');
-var rpio = require('rpio');
-rpio.init({mapping: 'gpio'});
+if(os.type() != 'Windows_NT') {
+    var rpio = require('rpio');
+    rpio.init({mapping: 'gpio'});
+}
+
 
 var lastCueReceived = {"Time" : "10/09/13 15:20:04.20", "Source" : "Midi1", "InData" : "F0 7F 05 02 01 01 31 2E 30 30 F7 "};
 var serialDataSocket;
