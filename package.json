@@ -15,7 +15,7 @@
     "time": "*",
     "fs.extra": "*",
     "rpio": "*",
-    "nodemailer": "0.7",
+    "nodemailer": "2.5.0",
     "pmp": "*",
     "sudo": "*",
     "moment-timezone": "*"
