@@ -63,6 +63,7 @@ var TimeToTest = 1000*60*5;//5 minutes  //1000*60*60*24;
 //
 // adds time stamp to Outgoing data and puts it in Log collection
 exports.sendgettime = function(){
+    exports.getSettings(); // added July 16 2016
     usbInputEnabled = 1; //let the usb data through
     sendOutput('GETTIME'); // get the system time as the startup time
 
