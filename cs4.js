@@ -1642,14 +1642,17 @@ function sendConsole(){
 
 
 function sendMail(mailOptions){
-    smtpTransport.sendMail(mailOptions, function(error, response){
-        if(error){
-            console.log(error);
-        }
-        else{
-            console.log("Message sent: " + response.message);
-        }
-    });
+    if(smtpTransport){
+
+        smtpTransport.sendMail(mailOptions, function(error, response) {
+            if (error) {
+                console.log(error);
+            }
+            else {
+                console.log("Message sent: " + response.message);
+            }
+        });
+    }
 }
 
 function stopIO(state){
