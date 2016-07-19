@@ -333,8 +333,8 @@ exports.websocketDataIn = function(dataSocket, Socket){
         else if (dataSocket.Type == "SEND") // these are commands to send directly to the CS4I/0
         {
             comlib.write("         " +dataSocket.Data+ '\r'); // send it out the serial port
-            if((enableserialoutput == "YES") && (dataToSend.indexOf("ZIG1") > -1)) { //make sure we only send on zigbee commands
-                setTimeout(function(){comlib.write(cueserialsettings + dataToSend.substring(5,dataToSend.length) + '\n' + '\r');}, 20);
+            if((enableserialoutput == "YES") && (dataSocket.Data.indexOf("ZIG1") > -1)) { //make sure we only send on zigbee commands
+                setTimeout(function(){comlib.write(cueserialsettings + dataSocket.Data.substring(5,dataSocket.Data.length) + '\n' + '\r');}, 20);
             }
             ledInfoOn(27); // light to output light
             setTimeout(function(){ledInfoOff(27);}, 100); // turn it off
