@@ -151,6 +151,38 @@
             </fieldset>
         </div>
 
+        <div>
+            <fieldset id = cueserialsetup>
+                <legend>Serial Cue Setup</legend>
+                <select id='cueserialselect' >
+                    <option value=' SLAVE SER1' title='1'>Serial 1</option>
+                    <option value=' SLAVE SER2' title='2'>Serial 2</option>
+                    <option value=' SLAVE SER3' title='3'>Serial 3</option>
+                </select>
+                <select id= cuebaudselect >
+                    <option value=' 9600' title='9600'>9600 Baud</option>
+                    <option value=' 1200' title='1200'>1200</option>
+                    <option value=' 4800' title='4800'>4800</option>
+                    <option value=' 9600' title='9600'>9600</option>
+                    <option value=' 14400' title='14400'>14400</option>
+                    <option value=' 19200' title='19200'>19200</option>
+                    <option value=' 28800' title='28800'>28800</option>
+                    <option value=' 38400' title='38400'>38400</option>
+                    <option value=' 57600' title='57600'>57600</option>
+                    <option value=' 115200' title='115200'>115200</option>
+                </select>
+                <select id= cueparityselect >
+                    Parity: <option value=' N' title='NONE'>Parity: NONE</option>
+                    <option value=' O' title='ODD'>Parity: ODD</option>
+                    <option value=' E' title='EVEN'>Parity: EVEN</option>
+                </select>
+                <div>
+                    Enable Serial Cue Output:   Yes <input id=serialcueoutputyes name=serialcueoutput value= "monitoryes" type=radio checked>
+                    No<input id=serialcueoutputno name=serialcueoutput value = "monitorno" type=radio >
+                </div>
+            </fieldset>
+        </div>
+
         <fieldset id = midifilters>
             <legend>Midi Input Filters</legend>
                 <fieldset id = midi1>

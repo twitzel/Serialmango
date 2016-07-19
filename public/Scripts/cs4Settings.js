@@ -41,6 +41,16 @@ function init(){
         document.getElementById("systemname").value = cs4Settings.systemName;
         document.getElementById("emailAccount").value = cs4Settings.emailAccount;
         document.getElementById("emailAccountPassword").value = cs4Settings.emailAccountPassword;
+        document.getElementById("cueserialselect").value = cs4Settings.cueserialselect;
+        document.getElementById("cuebaudselect").value = cs4Settings.cuebaudselect;
+        document.getElementById("cueparityselect").value = cs4Settings.cueparityselect;
+        if(cs4Settings.enableserialoutput == "YES"){
+            document.getElementById("serialcueoutputyes").checked = true;
+        }
+        else if(cs4Settings.enableserialoutput == "NO"){
+            document.getElementById("serialcueoutputno").checked = true;
+        }
+
 
         document.getElementById("timeZoneCombo").value = cs4Settings.timezone;
 
@@ -213,6 +223,17 @@ function saveParameters(){
     cs4Settings.emailAccount = document.getElementById("emailAccount").value;
     cs4Settings.emailAccountPassword = document.getElementById("emailAccountPassword").value;
     cs4Settings.timezone = document.getElementById("timeZoneCombo").value;
+    if(document.getElementById('serialcueoutputno').checked){
+        cs4Settings.enableserialoutput = "NO";
+    }
+    else{
+        cs4Settings.enableserialoutput = "YES"
+    }
+    cs4Settings.cueserialselect = document.getElementById('cueserialselect').value;
+    cs4Settings.cuebaudselect = document.getElementById('cuebaudselect').value;
+    cs4Settings.cueparityselect = document.getElementById('cueparityselect').value;
+
+
     
     cs4Settings.midisex1 = document.getElementById("midisysex1").value;
     cs4Settings.deviceIDLow1 = document.getElementById("deviceIDLow1").value;

@@ -57,6 +57,8 @@ var waitTime;
 var systemStarted = false;
 var TimeToTest = 1000*60*5;//5 minutes  //1000*60*60*24;
 //var cs4Settings;
+var cueserialsettings;
+var enableserialoutput;
 
 //routine to ensure that serial data is not sent more than
 // every timedOutInterval
@@ -85,6 +87,10 @@ sendOutput = function (dataToSend)
         console.log("Sending to CS4: " +dataToSend);
         //send it out the socket
         comlib.websocketsend(".  Sent: " + momentTZ(timerStartTime).format(fmt) + "   Dout: "  +  dataToSend) ;
+        // added for sending cue data via serial port 7/16/2016
+        if((enableserialoutput == "YES") && (dataToSend.indexOf("ZIG1") > -1)) { //make sure we only send on zigbee commands
+            setTimeout(function(){comlib.write(cueserialsettings + dataToSend.substring(5,dataToSend.length) + '\n' + '\r');}, 20);
+        }
 
         addTime = addTime + "\""+  (timerStartTime).toISOString() +"\", \"Dout\" : \"" + dataToSend + "\"}";
         //Log the data into the collection
@@ -480,6 +486,9 @@ exports.websocketDataIn = function(dataSocket, Socket){
             h = setTimeout(function(){sendOutput('          CLISTFL2 ' + cs4Settings.sysexcuelist2 + " " + cs4Settings.cuelistnumber2a + " " + cs4Settings.cuelistnumber2b + " " + cs4Settings.cuelistnumber2c + " ");}, 7000);
             s = setTimeout(function(){sendOutput('          CLISTFL3 ' + cs4Settings.sysexcuelist3 + " " + cs4Settings.cuelistnumber3a + " " + cs4Settings.cuelistnumber3b + " " + cs4Settings.cuelistnumber3c + " ");}, 8000);
             t = setTimeout(function(){sendOutput('          CLISTFL4 ' + cs4Settings.sysexcuelist4 + " " + cs4Settings.cuelistnumber4a + " " + cs4Settings.cuelistnumber4b + " " + cs4Settings.cuelistnumber4c + " ");}, 9000);
+
+            cueserialsettings = cs4Settings.cueserialselect + cs4Settings.cuebaudselect + cs4Settings.cueparityselect + ' A ' ;     // a is for ascii sending  Added 07 19 2016
+            enableserialoutput = cs4Settings.enableserialoutput;
 
         }
 
@@ -1305,7 +1314,8 @@ exports.getSettings = function(){
 
         setTimeout(function(){  exports.ledOn();},10000)
 
-
+        cueserialsettings = cs4Settings.cueserialselect + cs4Settings.cuebaudselect + cs4Settings.cueparityselect + ' A ' ;     // a is for ascii sending
+        enableserialoutput = cs4Settings.enableserialoutput;
 
         //set up initial mail parameters here
         smtpTransport = nodemailer.createTransport("SMTP",{
