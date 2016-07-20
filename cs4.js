@@ -673,7 +673,7 @@ exports.usbSerialDataIn = function (data) {
 
     if(data.length >= 35) // this is REAL timing data,
     {
-
+        console.log("Data length greater than 35");
         if((serialData.Source != 'zigbee2:')  && (systemStarted == true)) { //only update if real cue NOT zigbee2
             lastCueReceived = (JSON.parse(JSON.stringify(serialData))); // store the data here in case of Cue file generation
         }
