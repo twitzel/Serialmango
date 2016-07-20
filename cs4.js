@@ -65,7 +65,7 @@ var enableserialoutput;
 //
 // adds time stamp to Outgoing data and puts it in Log collection
 exports.sendgettime = function(){
-    exports.getSettings(); // added July 16 2016
+//    exports.getSettings(); // added July 16 2016
     usbInputEnabled = 1; //let the usb data through
     sendOutput('GETTIME'); // get the system time as the startup time
 
@@ -1315,11 +1315,11 @@ exports.getSettings = function(){
         t = setTimeout(function(){sendOutput('          CLISTFL4 ' + cs4Settings.sysexcuelist4 + " " + cs4Settings.cuelistnumber4a + " " + cs4Settings.cuelistnumber4b + " " + cs4Settings.cuelistnumber4c + " ");}, 9000);
 
 
-        setTimeout(function(){  exports.ledOn();},10000)
+        setTimeout(function(){  exports.ledOn();},10000);
         console.log("middle of settings");
         cueserialsettings = cs4Settings.cueserialselect + cs4Settings.cuebaudselect + cs4Settings.cueparityselect + ' A ' ;     // a is for ascii sending
         enableserialoutput = cs4Settings.enableserialoutput;
-
+        console.log("before stmp transport in settings");
         //set up initial mail parameters here
         smtpTransport = nodemailer.createTransport("SMTP",{
             service: "Gmail",
