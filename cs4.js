@@ -593,10 +593,10 @@ exports.usbSerialDataIn = function (data) {
             collectionCue.find({$and: [{'InData': serialData.InData} ,{'Source': serialData.Source }]}).toArray(function (err, item) {
                 //collectionCue.find({'InData': serialData.InData }).toArray(function (err, item) {
                 if (item.length == 0) {
-                    console.log("not Found");
+                    console.log("not Found in CUE collection");
                 }
                 else {
-
+                    console.log("CUE was Found in CUE collection");
                     //added to stop any pending cues from firing if new cue comes in
                     if (global.timeoutlist != undefined){
                         for (var i=0;i<global.timeoutlist.length;++i){
