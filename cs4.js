@@ -1316,7 +1316,7 @@ exports.getSettings = function(){
 
 
         setTimeout(function(){  exports.ledOn();},10000)
-
+        console.log("middle of settings");
         cueserialsettings = cs4Settings.cueserialselect + cs4Settings.cuebaudselect + cs4Settings.cueparityselect + ' A ' ;     // a is for ascii sending
         enableserialoutput = cs4Settings.enableserialoutput;
 
