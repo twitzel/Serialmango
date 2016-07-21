@@ -5,14 +5,14 @@
  * Created by Steve on 9/30/13.
  */
 // 04/22/2-16 updated for PI 3
-//NOTE  NOTE  NOTE
-//NOTE  NOTE  NOTE
+//NOTE  NOTE  NOTE LINE 76
+//NOTE  NOTE  NOTE LINE 76
 
-//NOTE  NOTE  NOTE
+//NOTE  NOTE  NOTE LINE 76
 
-//NOTE  NOTE  NOTE
+//NOTE  NOTE  NOTE LINE 76
 
-//NOTE  NOTE  NOTE
+//NOTE  NOTE  NOTE LINE 76
 
 MongoClient = require('mongodb').MongoClient;
 var fs = require('fs');
@@ -73,7 +73,7 @@ var enableserialoutput;
 //
 // adds time stamp to Outgoing data and puts it in Log collection
 exports.sendgettime = function(){
-    exports.getSettings();
+  //  exports.getSettings();
     usbInputEnabled = 1; //let the usb data through
     sendOutput('GETTIME'); // get the system time as the startup time
 
