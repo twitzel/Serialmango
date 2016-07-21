@@ -5,14 +5,14 @@
  * Created by Steve on 9/30/13.
  */
 // 04/22/2-16 updated for PI 3
-//NOTE  NOTE  NOTE  Line 76 must be included for pi 3  commented out for pi
-//NOTE  NOTE  NOTE  Line 76 must be included for pi 3  commented out for pi
+//NOTE  NOTE  NOTE
+//NOTE  NOTE  NOTE
 
-//NOTE  NOTE  NOTE  Line 76 must be included for pi 3  commented out for pi
+//NOTE  NOTE  NOTE
 
-//NOTE  NOTE  NOTE  Line 76 must be included for pi 3  commented out for pi
+//NOTE  NOTE  NOTE
 
-//NOTE  NOTE  NOTE  Line 76 must be included for pi 3  commented out for pi
+//NOTE  NOTE  NOTE
 
 MongoClient = require('mongodb').MongoClient;
 var fs = require('fs');
@@ -73,7 +73,7 @@ var enableserialoutput;
 //
 // adds time stamp to Outgoing data and puts it in Log collection
 exports.sendgettime = function(){
-//    exports.getSettings(); // added July 16 2016
+//
     usbInputEnabled = 1; //let the usb data through
     sendOutput('GETTIME'); // get the system time as the startup time
 
@@ -744,7 +744,8 @@ exports.usbSerialDataIn = function (data) {
 
         }
         else if(serialData.Tme1){
-            setAutoTest();
+            setTimeout(function(){setAutoTest();}, 5000);
+           // setAutoTest();
             if(os.type() != 'Windows_NT'){  //This is for pi only
                 console.log("Tme! " + serialData.Tme1.toString());
                 child = sudo([ 'date', '-s', serialData.Tme1 ]);
