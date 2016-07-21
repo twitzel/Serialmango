@@ -5,6 +5,14 @@
  * Created by Steve on 9/30/13.
  */
 // 04/22/2-16 updated for PI 3
+//NOTE  NOTE  NOTE  Line 76 must be included for pi 3  commented out for pi
+//NOTE  NOTE  NOTE  Line 76 must be included for pi 3  commented out for pi
+
+//NOTE  NOTE  NOTE  Line 76 must be included for pi 3  commented out for pi
+
+//NOTE  NOTE  NOTE  Line 76 must be included for pi 3  commented out for pi
+
+//NOTE  NOTE  NOTE  Line 76 must be included for pi 3  commented out for pi
 
 MongoClient = require('mongodb').MongoClient;
 var fs = require('fs');
