@@ -73,7 +73,7 @@ var enableserialoutput;
 //
 // adds time stamp to Outgoing data and puts it in Log collection
 exports.sendgettime = function(){
-  //  exports.getSettings();
+    exports.getSettings();
     usbInputEnabled = 1; //let the usb data through
     sendOutput('GETTIME'); // get the system time as the startup time
 
