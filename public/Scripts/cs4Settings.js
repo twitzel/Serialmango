@@ -51,6 +51,15 @@ function init(){
             document.getElementById("serialcueoutputno").checked = true;
         }
 
+        document.getElementById("midicueoutselect").value = cs4Settings.midicueoutselect;
+        document.getElementById("midicueouttype").value = cs4Settings.midicueouttype;
+        document.getElementById("midicueoutid").value = cs4Settings.midicueoutid;
+        if(cs4Settings.enablemidioutput == "YES"){
+            document.getElementById("midicueoutputyes").checked = true;
+        }
+        else if(cs4Settings.enablemidioutput == "NO"){
+            document.getElementById("midicueoutputno").checked = true;
+        }
 
         document.getElementById("timeZoneCombo").value = cs4Settings.timezone;
 
@@ -233,7 +242,15 @@ function saveParameters(){
     cs4Settings.cuebaudselect = document.getElementById('cuebaudselect').value;
     cs4Settings.cueparityselect = document.getElementById('cueparityselect').value;
 
-
+    if(document.getElementById('midicueoutputno').checked){
+        cs4Settings.enablemidioutput = "NO";
+    }
+    else{
+        cs4Settings.enablemidioutput = "YES"
+    }
+    cs4Settings.midicueoutselect = document.getElementById('midicueoutselect').value;
+    cs4Settings.midicueouttype = document.getElementById('midicueouttype').value;
+    cs4Settings.midicueoutid = document.getElementById('midicueoutid').value;
     
     cs4Settings.midisex1 = document.getElementById("midisysex1").value;
     cs4Settings.deviceIDLow1 = document.getElementById("deviceIDLow1").value;

@@ -66,8 +66,14 @@ var systemStarted = false;
 var TimeToTest = 1000*60*5;//5 minutes  //1000*60*60*24;
 //var cs4Settings;
 var cueserialsettings;
-var enableserialoutput;
-
+var enableserialoutput = "NO";
+var midicueoutselect = "MIDI1 ";
+var enablemidioutput = "N0";
+var midicueouttype = "XXX";
+var midicueoutputstringstart = " F07F"
+var midicueoutputstringmiddle ="023001";
+var midicueoutputcuelist;
+var midicueoutid;
 //routine to ensure that serial data is not sent more than
 // every timedOutInterval
 //
@@ -97,9 +103,24 @@ sendOutput = function (dataToSend)
         comlib.websocketsend(".  Sent: " + momentTZ(timerStartTime).format(fmt) + "   Dout: "  +  dataToSend) ;
         // added for sending cue data via serial port 7/16/2016
         if((enableserialoutput == "YES") && (dataToSend.indexOf("ZIG1") > -1)) { //make sure we only send on zigbee commands
+            console.log("Sending Serial Cues");
             setTimeout(function(){comlib.write(cueserialsettings + dataToSend.substring(5,dataToSend.length) + '\n' + '\r');}, 20);
         }
-
+        if((enablemidioutput == "YES") && (dataToSend.indexOf("ZIG1") > -1) && (dataToSend.indexOf(midicueouttype) > -1)){ //make sure we only send on zigbee commands and proper midi out type
+            var midicuenum = dataToSend.substring(dataToSend.indexOf(midicueouttype)+ midicueouttype.length, dataToSend.indexOf("."));
+            var outputstringmidi = midicueoutselect + midicueoutputstringstart + midicueoutid + midicueoutputstringmiddle;
+            for(var i = 0; i < midicuenum.length; i++){
+                if(midicuenum[i] == "."){
+                    outputstringmidi +="2E";
+                }
+                else{
+                    outputstringmidi += (parseInt(midicuenum[i]) + 0X30).toString(16);
+                }
+            }
+            outputstringmidi += "00" +  midicueoutputcuelist + "F7";
+            console.log("Sending Midi Cues");
+            setTimeout(function(){comlib.write((outputstringmidi) + '\n' + '\r');}, 50); //now send it out delayed a little
+        }
         addTime = addTime + "\""+  (timerStartTime).toISOString() +"\", \"Dout\" : \"" + dataToSend + "\"}";
         //Log the data into the collection
         addTime = JSON.parse(addTime);
@@ -344,6 +365,22 @@ exports.websocketDataIn = function(dataSocket, Socket){
             if((enableserialoutput == "YES") && (dataSocket.Data.indexOf("ZIG1") > -1)) { //make sure we only send on zigbee commands
                 setTimeout(function(){comlib.write(cueserialsettings + dataSocket.Data.substring(5,dataSocket.Data.length) + '\n' + '\r');}, 20);
             }
+            if((enablemidioutput == "YES") && (dataSocket.Data.indexOf("ZIG1") > -1)) { //make sure we only send on zigbee commands
+                var midicuenum = dataSocket.Data.substring(dataSocket.Data.indexOf(midicueouttype)+ midicueouttype.length, dataSocket.Data.indexOf("."));
+                var outputstringmidi = midicueoutselect + midicueoutputstringstart + midicueoutid + midicueoutputstringmiddle;
+                for(var i = 0; i < midicuenum.length; i++){
+                    if(midicuenum[i] == "."){
+                        outputstringmidi +="2E";
+                    }
+                    else{
+                        outputstringmidi += (parseInt(midicuenum[i]) + 0X30).toString(16);
+                    }
+                }
+                outputstringmidi += "00" +  midicueoutputcuelist + "F7";
+                console.log("Sending Midi Cues");
+                setTimeout(function(){comlib.write((outputstringmidi) + '\n' + '\r');}, 50); //now send it out delayed a little
+
+            }
             ledInfoOn(27); // light to output light
             setTimeout(function(){ledInfoOff(27);}, 100); // turn it off
             setTimeout(function(){timedOut = true;}, timedOutInterval);
@@ -500,6 +537,24 @@ exports.websocketDataIn = function(dataSocket, Socket){
 
             cueserialsettings = cs4Settings.cueserialselect + cs4Settings.cuebaudselect + cs4Settings.cueparityselect + ' A ' ;     // a is for ascii sending  Added 07 19 2016
             enableserialoutput = cs4Settings.enableserialoutput;
+
+            midicueoutselect = cs4Settings.midicueoutselect;
+            midicueoutid = cs4Settings.midicueoutid;
+            enablemidioutput = cs4Settings.enablemidioutput;
+            midicueouttype = cs4Settings.midicueouttype;
+            if(midicueouttype == "slide"){
+                midicueoutputcuelist = "01";
+            }
+            else if(midicueouttype == "audA"){
+                midicueoutputcuelist = "02";
+            }
+            else if(midicueouttype == "audB"){
+                midicueoutputcuelist = "03";
+            }
+            else if(midicueouttype == "audC"){
+                midicueoutputcuelist = "04";
+            }
+
 
         }
 
@@ -1327,6 +1382,23 @@ exports.getSettings = function(){
         console.log("middle of settings");
         cueserialsettings = cs4Settings.cueserialselect + cs4Settings.cuebaudselect + cs4Settings.cueparityselect + ' A ' ;     // a is for ascii sending
         enableserialoutput = cs4Settings.enableserialoutput;
+        midicueoutselect = cs4Settings.midicueoutselect;
+        midicueoutid = cs4Settings.midicueoutid;
+        enablemidioutput = cs4Settings.enablemidioutput;
+        midicueouttype = cs4Settings.midicueouttype;
+        if(midicueouttype == "slide"){
+            midicueoutputcuelist = "01";
+        }
+        else if(midicueouttype == "audA"){
+            midicueoutputcuelist = "02";
+        }
+        else if(midicueouttype == "audB"){
+            midicueoutputcuelist = "03";
+        }
+        else if(midicueouttype == "audC"){
+            midicueoutputcuelist = "04";
+        }
+
         console.log("before stmp transport in settings");
         //set up initial mail parameters here
         smtpTransport = nodemailer.createTransport("SMTP",{
