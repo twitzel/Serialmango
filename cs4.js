@@ -79,7 +79,7 @@ var midicueoutid;
 //
 // adds time stamp to Outgoing data and puts it in Log collection
 exports.sendgettime = function(){
-    exports.getSettings();
+   // exports.getSettings();
     usbInputEnabled = 1; //let the usb data through
     sendOutput('GETTIME'); // get the system time as the startup time
 
@@ -790,7 +790,7 @@ exports.usbSerialDataIn = function (data) {
                 else{
                     console.log("Received time bask from CS4 I/0");
                     console.log("calling getsettings");
-                  //  exports.getSettings();
+                    exports.getSettings();
                 }
 
                 comlib.websocketsend("CS4 Current tme is: " + momentTZ(serialData.Time).format(fmt));
