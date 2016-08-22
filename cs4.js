@@ -790,7 +790,7 @@ exports.usbSerialDataIn = function (data) {
                 else{
                     console.log("Received time bask from CS4 I/0");
                     console.log("calling getsettings");
-                    exports.getSettings();
+                  //  exports.getSettings();
                 }
 
                 comlib.websocketsend("CS4 Current tme is: " + momentTZ(serialData.Time).format(fmt));
