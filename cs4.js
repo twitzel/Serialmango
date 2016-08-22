@@ -81,7 +81,7 @@ var midicueoutid;
 exports.sendgettime = function(){
    // exports.getSettings();
     usbInputEnabled = 1; //let the usb data through
-    sendOutput('GETTIME'); // get the system time as the startup time
+    sendOutput('xxxTIME'); // get the system time as the startup time
     sendOutput('GETTIME');
 
 
