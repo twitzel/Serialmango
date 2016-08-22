@@ -28,9 +28,9 @@ exports.openSerialPort = function(portname, baud)
             // serial port open now call callback
             if (!err){
                 //   cs4.sendOutput('GETTIME'); // get the system time as the startup time
-                setTimeout(function(){cs4.sendgettime();}, 5000);
+               // setTimeout(function(){cs4.sendgettime();}, 5000);
 
-              //  cs4.sendgettime(); // get the system time as the startup time
+                cs4.sendgettime(); // get the system time as the startup time
 
 
             } else{
