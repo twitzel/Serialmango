@@ -3,7 +3,7 @@ console.log('start');
 for (var i= 1;i < 15; ++i){
    console.log('line '+i);
    // console.log('\033[1;10H****************');
-
+//
 
 }
 console.log('\033[s');
