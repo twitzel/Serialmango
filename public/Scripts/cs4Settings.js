@@ -52,6 +52,9 @@ function init(){
         }
 
         document.getElementById("midicueoutselect").value = cs4Settings.midicueoutselect;
+        if(cs4Settings.midicueoutshowname) {
+            document.getElementById("midicueoutshowname").value = cs4Settings.midicueoutshowname;
+        }
         document.getElementById("midicueouttype").value = cs4Settings.midicueouttype;
         document.getElementById("midicueoutid").value = cs4Settings.midicueoutid;
         if(cs4Settings.enablemidioutput == "YES"){
@@ -249,6 +252,7 @@ function saveParameters(){
         cs4Settings.enablemidioutput = "YES"
     }
     cs4Settings.midicueoutselect = document.getElementById('midicueoutselect').value;
+    cs4Settings.midicueoutshowname = document.getElementById('midicueoutshowname').value;
     cs4Settings.midicueouttype = document.getElementById('midicueouttype').value;
     cs4Settings.midicueoutid = document.getElementById('midicueoutid').value;
     

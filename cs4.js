@@ -68,6 +68,7 @@ var TimeToTest = 1000*60*5;//5 minutes  //1000*60*60*24;
 var cueserialsettings;
 var enableserialoutput = "NO";
 var midicueoutselect = "MIDI1 ";
+var midicueoutshowname = " ";
 var enablemidioutput = "N0";
 var midicueouttype = "XXX";
 var midicueoutputstringstart = " F07F"
@@ -107,7 +108,7 @@ sendOutput = function (dataToSend)
             console.log("Sending Serial Cues");
             setTimeout(function(){comlib.write(cueserialsettings + dataToSend.substring(5,dataToSend.length) + '\n' + '\r');}, 20);
         }
-        if((enablemidioutput == "YES") && (dataToSend.indexOf("ZIG1") > -1) && (dataToSend.indexOf(midicueouttype) > -1)){ //make sure we only send on zigbee commands and proper midi out type
+        if((enablemidioutput == "YES") && (dataToSend.indexOf("ZIG1") > -1) && (dataToSend.indexOf(midicueouttype) > -1) && (dataToSend.indexOf(midicueoutshowname) > -1)){ //make sure we only send on zigbee commands and proper midi out type & correct showname
             var midicuenum = dataToSend.substring(dataToSend.indexOf(midicueouttype)+ midicueouttype.length, dataToSend.indexOf("."));
             var outputstringmidi = midicueoutselect + midicueoutputstringstart + midicueoutid + midicueoutputstringmiddle;
             for(var i = 0; i < midicuenum.length; i++){
@@ -119,7 +120,7 @@ sendOutput = function (dataToSend)
                 }
             }
             outputstringmidi += "00" +  midicueoutputcuelist + "F7";
-            console.log("Sending Midi Cues");
+            console.log("Sending Midi Cues  " + outputstringmidi);
             setTimeout(function(){comlib.write((outputstringmidi) + '\n' + '\r');}, 50); //now send it out delayed a little
         }
         addTime = addTime + "\""+  (timerStartTime).toISOString() +"\", \"Dout\" : \"" + dataToSend + "\"}";
@@ -540,6 +541,7 @@ exports.websocketDataIn = function(dataSocket, Socket){
             enableserialoutput = cs4Settings.enableserialoutput;
 
             midicueoutselect = cs4Settings.midicueoutselect;
+            midicueoutshowname = cs4Settings.midicueoutshowname;
             midicueoutid = cs4Settings.midicueoutid;
             enablemidioutput = cs4Settings.enablemidioutput;
             midicueouttype = cs4Settings.midicueouttype;
@@ -1384,6 +1386,7 @@ exports.getSettings = function(){
         cueserialsettings = cs4Settings.cueserialselect + cs4Settings.cuebaudselect + cs4Settings.cueparityselect + ' A ' ;     // a is for ascii sending
         enableserialoutput = cs4Settings.enableserialoutput;
         midicueoutselect = cs4Settings.midicueoutselect;
+        midicueoutshowname = cs4Settings.midicueoutshowname;
         midicueoutid = cs4Settings.midicueoutid;
         enablemidioutput = cs4Settings.enablemidioutput;
         midicueouttype = cs4Settings.midicueouttype;
