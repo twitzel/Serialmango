@@ -367,7 +367,8 @@ exports.websocketDataIn = function(dataSocket, Socket){
             if((enableserialoutput == "YES") && (dataSocket.Data.indexOf("ZIG1") > -1)) { //make sure we only send on zigbee commands
                 setTimeout(function(){comlib.write(cueserialsettings + dataSocket.Data.substring(5,dataSocket.Data.length) + '\n' + '\r');}, 20);
             }
-            if((enablemidioutput == "YES") && (dataSocket.Data.indexOf("ZIG1") > -1)) { //make sure we only send on zigbee commands
+
+            if((enablemidioutput == "YES") && (dataSocket.Data.indexOf("ZIG1") > -1)  && (dataSocket.Data.indexOf(midicueoutshowname) > -1)) { //make sure we only send on zigbee commands and selected show
                 var midicuenum = dataSocket.Data.substring(dataSocket.Data.indexOf(midicueouttype)+ midicueouttype.length, dataSocket.Data.indexOf("."));
                 var outputstringmidi = midicueoutselect + midicueoutputstringstart + midicueoutid + midicueoutputstringmiddle;
                 for(var i = 0; i < midicuenum.length; i++){
