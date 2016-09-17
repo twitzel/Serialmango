@@ -81,16 +81,18 @@ var midicueoutid;
 // adds time stamp to Outgoing data and puts it in Log collection
 exports.sendgettime = function(){
    // exports.getSettings();
-    usbInputEnabled = 1; //let the usb data through
+
     sendOutput('xxxTIME'); // get the system time as the startup time
-    sendOutput('GETTIME');
+    usbInputEnabled = 1; //let the usb data through
+    setTimeout(function(){ sendOutput('GETTIME');}, 1000);
+  //  sendOutput('GETTIME');
 
 
 }
 sendOutput = function (dataToSend)
 {
     var addTime = "{\"Time\":";
-    console.log("We are at sendOutput");
+    console.log("We are at sendOutput" + dataToSend);
     if (timedOut)
     {
         timerStartTime = new Date();
