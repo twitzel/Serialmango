@@ -713,7 +713,7 @@ exports.usbSerialDataIn = function (data) {
 
                     global.timeoutlist=[];
                     lastCueReceivedInternalTime = new Date().getTime();
-                    testvariaable = serialData.Time.getTime();
+                 //   testvariaable = serialData.Time.getTime();
                     //   lastCueReceivedTimeOffset=serialData.Time.getTime()-lastCueReceivedInternalTime;
 
                     for (var i = 0; i < item[0].OutData.length; i++) {
