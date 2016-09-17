@@ -657,7 +657,7 @@ exports.usbSerialDataIn = function (data) {
 
     //added search fields: must match InData and Source
     if ((serialData.InData != null) && (serialData.Source != 'zigbee2:') && (systemStarted == true)) {// DON't use zigbee2 as source for timing
-
+        console.log("Line 662 Data: " + serialData.InData);
         if (cs4Settings.ignoreSource == 'NO') { // match source
             collectionCue.find({$and: [{'InData': serialData.InData} ,{'Source': serialData.Source }]}).toArray(function (err, item) {
                 //collectionCue.find({'InData': serialData.InData }).toArray(function (err, item) {
