@@ -92,7 +92,7 @@ exports.sendgettime = function(){
 sendOutput = function (dataToSend)
 {
     var addTime = "{\"Time\":";
-    console.log("We are at sendOutput" + dataToSend);
+    console.log("We are at sendOutput: " + dataToSend);
     if (timedOut)
     {
         timerStartTime = new Date();
