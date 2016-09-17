@@ -84,7 +84,7 @@ exports.sendgettime = function(){
 
     sendOutput('xxxTIME'); // get the system time as the startup time
     usbInputEnabled = 1; //let the usb data through
-    setTimeout(function(){ sendOutput('GETTIME');}, 1000);
+  GetTimeInterval =  setInterval(function(){ sendOutput('GETTIME');}, 1500); // keep sending it until we get good results back
   //  sendOutput('GETTIME');
 
 
@@ -790,6 +790,7 @@ exports.usbSerialDataIn = function (data) {
                         console.log(data.toString());
                         console.log("SUDO DATE CHANGED");
                         console.log("calling getsettings");
+                        clearInterval(GetTimeInterval); // turn off GETTIME sending
                         exports.getSettings();
 
                     });
@@ -797,6 +798,7 @@ exports.usbSerialDataIn = function (data) {
                 else{
                     console.log("Received time bask from CS4 I/0");
                     console.log("calling getsettings");
+                    clearInterval(GetTimeInterval);// turn off GETTIME sending
                     exports.getSettings();
                 }
 
