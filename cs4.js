@@ -717,23 +717,24 @@ exports.usbSerialDataIn = function (data) {
                     lastCueReceivedInternalTime = new Date().getTime();
                  //   testvariaable = serialData.Time.getTime();
                     //   lastCueReceivedTimeOffset=serialData.Time.getTime()-lastCueReceivedInternalTime;
+                    if(item[0].OutData) {
+                        for (var i = 0; i < item[0].OutData.length; i++) {
+                            dir = item[0].OutData[i].Dir;    // ****** needs to ba added to R4-4 Receiver Parsing ****** //
+                            // dir = "xxxx";
+                            port = item[0].OutData[i].Port.toUpperCase();
+                            showname = item[0].OutData[i].Showname;
+                            dataToSend = item[0].OutData[i].Dout;
+                            delay = item[0].OutData[i].Delay;
+                            if (dir == "") {
+                                outstring = port + " " + showname + " " + dataToSend;
+                            }
+                            else {
+                                outstring = port + " " + showname + " " + dir + " " + dataToSend;
+                            }
 
-                    for (var i = 0; i < item[0].OutData.length; i++) {
-                        dir = item[0].OutData[i].Dir;    // ****** needs to ba added to R4-4 Receiver Parsing ****** //
-                        // dir = "xxxx";
-                        port = item[0].OutData[i].Port.toUpperCase();
-                        showname = item[0].OutData[i].Showname;
-                        dataToSend = item[0].OutData[i].Dout;
-                        delay = item[0].OutData[i].Delay;
-                        if (dir == "") {
-                            outstring = port + " " + showname + " " + dataToSend;
+                            global.timeoutlist[i] = setTimeout(sendOutput, delay, outstring);
+                            console.log(item[0].OutData[i].Dout + "  Delay " + item[0].OutData[i].Delay);
                         }
-                        else {
-                            outstring = port + " " + showname + " " + dir + " " + dataToSend;
-                        }
-
-                        global.timeoutlist[i]= setTimeout(sendOutput, delay, outstring);
-                        console.log(item[0].OutData[i].Dout + "  Delay " + item[0].OutData[i].Delay);
                     }
                 }
             });
