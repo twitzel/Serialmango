@@ -717,7 +717,7 @@ exports.usbSerialDataIn = function (data) {
                     lastCueReceivedInternalTime = new Date().getTime();
                  //   testvariaable = serialData.Time.getTime();
                     //   lastCueReceivedTimeOffset=serialData.Time.getTime()-lastCueReceivedInternalTime;
-                    if(item[0].OutData) {
+                    if(if((item[0]) && (item[0].OutData)) {
                         for (var i = 0; i < item[0].OutData.length; i++) {
                             dir = item[0].OutData[i].Dir;    // ****** needs to ba added to R4-4 Receiver Parsing ****** //
                             // dir = "xxxx";
