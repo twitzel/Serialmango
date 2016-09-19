@@ -661,6 +661,7 @@ exports.usbSerialDataIn = function (data) {
         console.log("paarsed Data length: "+ data.length);
         console.log("count: "+n);
         if(data.substring(0,1) != "{"){
+            ignoreData=0;
             return;
         }
 
