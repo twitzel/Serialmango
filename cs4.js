@@ -75,7 +75,7 @@ var midicueoutputstringstart = " F07F"
 var midicueoutputstringmiddle ="023001";
 var midicueoutputcuelist;
 var midicueoutid;
-var ignoreData = 0;
+//var ignoreData = 0;
 
 
 //routine to ensure that serial data is not sent more than
@@ -87,7 +87,7 @@ exports.sendgettime = function(){
 
     sendOutput('xxxTIME'); // get the system time as the startup time
     usbInputEnabled = 1; //let the usb data through
-    GetTimeInterval =  setInterval(function(){ sendOutput('GETTIME');}, 1000); // keep sending it until we get good results back
+    GetTimeInterval =  setInterval(function(){ sendOutput('GETTIME');}, 1500); // keep sending it until we get good results back
     //sendOutput('GETTIME');
 
 
@@ -628,13 +628,13 @@ exports.websocketDataIn = function(dataSocket, Socket){
 
 
 exports.usbSerialDataIn = function (data) {
-    if (ignoreData == 1) {
-        return;
-
-    }
-    if (systemStarted == false) {
-      //  ignoreData = 1;
-    }
+    // if (ignoreData == 1) {
+    //     return;
+    //
+    // }
+    // if (systemStarted == false) {
+    //   //  ignoreData = 1;
+    // }
     var type = "";
     var indata;
     var source;
@@ -662,7 +662,7 @@ exports.usbSerialDataIn = function (data) {
         console.log("count: " + n);
         if (data.substring(0, 1) != "{") {
 
-            ignoreData = 0;
+           // ignoreData = 0;
             return;
         }
 
@@ -1720,7 +1720,7 @@ function checkForZigbee(auto){
             ledInfoOn(4); // turn on the light
             sendMail(mailOptions);
             systemStarted = true;
-            ignoreData = 0;
+           // ignoreData = 0;
 
         }
         else{
@@ -1740,7 +1740,7 @@ function checkForZigbee(auto){
             ledInfoBlink(4); // blink the light to indicate error
             sendMail(mailOptions);
             systemStarted = true;
-            ignoreData = 0;
+           // ignoreData = 0;
         }
 
 
