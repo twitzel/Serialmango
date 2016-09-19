@@ -646,7 +646,7 @@ exports.usbSerialDataIn = function (data) {
         serialDataTimeOrig = serialData.Time;
         serialData.Time = new Date(serialData.Time);//convert to date function
     }
-
+     console.log("USB Input: " + data)   ;
 
     // make sure this is incoming cue data
     // if it is, then search for matching cue
