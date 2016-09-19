@@ -656,10 +656,15 @@ exports.usbSerialDataIn = function (data) {
     if(systemStarted == false){
         var n = data.indexOf("{");
         data = data.substring(n,n+31);
+        console.log("parsed Input: " + data)   ;
+        console.log("paarsed Data length: "+ data.length);
+        console.log("count: "+n);
+        if(data.substring(0,1) != "{"){
+            return;
+        }
+
     }
-    console.log("parsed Input: " + data)   ;
-    console.log("paarsed Data length: "+ data.length);
-    console.log("count: "+n);
+
     console.log("systemStarted: " + systemStarted);
     console.log("serialData before parse: " + serialData);
 
