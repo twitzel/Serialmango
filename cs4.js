@@ -628,12 +628,12 @@ exports.websocketDataIn = function(dataSocket, Socket){
 
 
 exports.usbSerialDataIn = function (data) {
-    if(ignoreData ==1){
+    if (ignoreData == 1) {
         return;
 
     }
-    if(systemStarted == false){
-         ignoreData = 1;
+    if (systemStarted == false) {
+        ignoreData = 1;
     }
     var type = "";
     var indata;
@@ -648,20 +648,21 @@ exports.usbSerialDataIn = function (data) {
     var serialDataTimeOrig; // needed for setting system clock of Pi
 
     // put the time string into proper form
-    if(!usbInputEnabled){ // if we are not ready for data - just get out!!!
+    if (!usbInputEnabled) { // if we are not ready for data - just get out!!!
         return;
     }
 
-    console.log("USB Input: " + data)   ;
-    console.log("Data length: "+ data.length);
-    if(systemStarted == false){
+    console.log("USB Input: " + data);
+    console.log("Data length: " + data.length);
+    if (systemStarted == false) {
         var n = data.indexOf("{");
-        data = data.substring(n,n+33);
-        console.log("parsed Input: " + data)   ;
-        console.log("paarsed Data length: "+ data.length);
-        console.log("count: "+n);
-        if((data.substring(0,1) != "{") && data.substring(33,1 !="}")){
-            ignoreData=0;
+        data = data.substring(n, n + 33);
+        console.log("parsed Input: " + data);
+        console.log("paarsed Data length: " + data.length);
+        console.log("count: " + n);
+        if (data.substring(0, 1) != "{") {
+
+            ignoreData = 0;
             return;
         }
 
@@ -669,8 +670,13 @@ exports.usbSerialDataIn = function (data) {
 
     console.log("systemStarted: " + systemStarted);
     console.log("serialData before parse: " + serialData);
+    try {
 
-    serialData = JSON.parse(data);
+        serialData = JSON.parse(data);
+    }
+    catch(e){
+        return;
+    }
 
     console.log("serialData after parse: " + serialData + " Length: " +serialData.length);
     if(serialData.Time) {
