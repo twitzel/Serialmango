@@ -75,6 +75,9 @@ var midicueoutputstringstart = " F07F"
 var midicueoutputstringmiddle ="023001";
 var midicueoutputcuelist;
 var midicueoutid;
+var ignoreData = 0;
+
+
 //routine to ensure that serial data is not sent more than
 // every timedOutInterval
 //
@@ -625,6 +628,12 @@ exports.websocketDataIn = function(dataSocket, Socket){
 
 
 exports.usbSerialDataIn = function (data) {
+    if(ignoreData ==1){
+        return;
+    }
+    if(systemStarted == false){
+         ignoreData = 1;
+    }
     var type = "";
     var indata;
     var source;
@@ -1691,6 +1700,7 @@ function checkForZigbee(auto){
             ledInfoOn(4); // turn on the light
             sendMail(mailOptions);
             systemStarted = true;
+            ignoreData = 0;
 
         }
         else{
@@ -1710,6 +1720,7 @@ function checkForZigbee(auto){
             ledInfoBlink(4); // blink the light to indicate error
             sendMail(mailOptions);
             systemStarted = true;
+            ignoreData = 0;
         }
 
 
