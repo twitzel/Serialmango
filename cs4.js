@@ -643,9 +643,10 @@ exports.usbSerialDataIn = function (data) {
     }
 
     console.log("USB Input: " + data)   ;
+    console.log("Data length: "+ data.length);
     console.log("systemStarted: " + systemStarted);
     console.log("serialData before parse: " + serialData);
-    console.log("serialData length: "+ serialData.length);
+
     serialData = JSON.parse(data);
 
     console.log("serialData after parse: " + serialData + " Length: " +serialData.length);
