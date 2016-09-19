@@ -630,6 +630,7 @@ exports.websocketDataIn = function(dataSocket, Socket){
 exports.usbSerialDataIn = function (data) {
     if(ignoreData ==1){
         return;
+
     }
     if(systemStarted == false){
          ignoreData = 1;
