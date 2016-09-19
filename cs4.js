@@ -641,12 +641,14 @@ exports.usbSerialDataIn = function (data) {
     if(!usbInputEnabled){ // if we are not ready for data - just get out!!!
         return;
     }
+
+    console.log("USB Input: " + data)   ;
+
     serialData = JSON.parse(data);
     if(serialData.Time) {
         serialDataTimeOrig = serialData.Time;
         serialData.Time = new Date(serialData.Time);//convert to date function
     }
-     console.log("USB Input: " + data)   ;
 
     // make sure this is incoming cue data
     // if it is, then search for matching cue
