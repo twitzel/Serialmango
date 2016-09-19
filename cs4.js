@@ -643,13 +643,14 @@ exports.usbSerialDataIn = function (data) {
     }
 
     console.log("USB Input: " + data)   ;
-
+    console.log("systemStarted: " + systemStarted);
+    console.log("serialData before parse: " + serialData);
     serialData = JSON.parse(data);
     if(serialData.Time) {
         serialDataTimeOrig = serialData.Time;
         serialData.Time = new Date(serialData.Time);//convert to date function
     }
-
+    console.log("serialData after parse: " + serialData);
     // make sure this is incoming cue data
     // if it is, then search for matching cue
     //
@@ -743,7 +744,7 @@ exports.usbSerialDataIn = function (data) {
         }
     }
 
-    if(data.length >= 35) // this is REAL timing data,
+    if((data.length >= 35) && (systemStarted == true)) // this is REAL timing data,
     {
         console.log("Data length greater than 35");
         if((serialData.Source != 'zigbee2:')  && (systemStarted == true)) { //only update if real cue NOT zigbee2
@@ -760,7 +761,7 @@ exports.usbSerialDataIn = function (data) {
 
         collectionLog.insert(serialData, {w: 1}, function (err, result) {
             if(err){
-                console.log(err);
+                console.log("error after insert: " + err);
             }
             else{
                 console.log(result);
