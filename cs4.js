@@ -84,7 +84,7 @@ exports.sendgettime = function(){
 
     sendOutput('xxxTIME'); // get the system time as the startup time
     usbInputEnabled = 1; //let the usb data through
-    GetTimeInterval =  setInterval(function(){ sendOutput('GETTIME');}, 1500); // keep sending it until we get good results back
+    GetTimeInterval =  setInterval(function(){ sendOutput('GETTIME');}, 1000); // keep sending it until we get good results back
     //sendOutput('GETTIME');
 
 
@@ -646,11 +646,14 @@ exports.usbSerialDataIn = function (data) {
     console.log("systemStarted: " + systemStarted);
     console.log("serialData before parse: " + serialData);
     serialData = JSON.parse(data);
+
+    console.log("serialData after parse: " + serialData + " Length: " +serialData.length);
     if(serialData.Time) {
         serialDataTimeOrig = serialData.Time;
         serialData.Time = new Date(serialData.Time);//convert to date function
     }
-    console.log("serialData after parse: " + serialData);
+
+    console.log("After SerialData.Time: " + serialData.Time);
     // make sure this is incoming cue data
     // if it is, then search for matching cue
     //
