@@ -84,8 +84,8 @@ exports.sendgettime = function(){
 
     sendOutput('xxxTIME'); // get the system time as the startup time
     usbInputEnabled = 1; //let the usb data through
-  GetTimeInterval =  setInterval(function(){ sendOutput('GETTIME');}, 1500); // keep sending it until we get good results back
-  //  sendOutput('GETTIME');
+ // GetTimeInterval =  setInterval(function(){ sendOutput('GETTIME');}, 1500); // keep sending it until we get good results back
+    sendOutput('GETTIME');
 
 
 }
