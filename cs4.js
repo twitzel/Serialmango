@@ -633,7 +633,7 @@ exports.usbSerialDataIn = function (data) {
 
     }
     if (systemStarted == false) {
-        ignoreData = 1;
+      //  ignoreData = 1;
     }
     var type = "";
     var indata;
