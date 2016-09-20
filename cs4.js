@@ -834,7 +834,7 @@ exports.usbSerialDataIn = function (data) {
             });
 
         }
-        else if(serialData.Tme1){
+        else if(serialData.Tme1 && systemStarted == true){
             setAutoTest();
             if(os.type() != 'Windows_NT'){  //This is for pi only
                 console.log("Tme! " + serialData.Tme1.toString());
