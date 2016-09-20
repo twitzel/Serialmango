@@ -654,6 +654,9 @@ exports.usbSerialDataIn = function (data) {
 
     console.log("USB Input: " + data);
     console.log("Data length: " + data.length);
+    if(data.indexOf("zigbee2" ) > 10){ //let startup system test thruogh
+        systemStarted = true;
+    }
     if (systemStarted == false) {
         var n = data.indexOf("{");
         data = data.substring(n, n + 33);
