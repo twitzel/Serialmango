@@ -657,17 +657,11 @@ exports.usbSerialDataIn = function (data) {
     if (systemStarted == false) {
         var n = data.indexOf("{");
         data = data.substring(n, n + 33);
-        console.log("parsed Input: " + data);
-        console.log("paarsed Data length: " + data.length);
-        console.log("count: " + n);
         if (data.substring(0, 1) != "{") {
             return;
         }
-
     }
 
-    console.log("systemStarted: " + systemStarted);
-    console.log("serialData before parse: " + serialData);
     try {
 
         serialData = JSON.parse(data);
@@ -676,13 +670,11 @@ exports.usbSerialDataIn = function (data) {
         return;
     }
 
-    console.log("serialData after parse: " + serialData + " Length: " +serialData.length);
     if(serialData.Time) {
         serialDataTimeOrig = serialData.Time;
         serialData.Time = new Date(serialData.Time);//convert to date function
     }
 
-    console.log("After SerialData.Time: " + serialData.Time);
     // make sure this is incoming cue data
     // if it is, then search for matching cue
     //
