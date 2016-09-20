@@ -802,8 +802,7 @@ exports.usbSerialDataIn = function (data) {
         else{
             comlib.websocketsend(parseCue(data));
         }
-
-        // comlib.websocketsend(parseCue(serialData));
+                // comlib.websocketsend(parseCue(serialData));
     }
     else{ // this is for time data only.  to let GETTIME come through and get logged GETTIME returns a string 34 characters
         if(serialData.Time){
