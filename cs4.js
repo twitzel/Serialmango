@@ -654,17 +654,17 @@ exports.usbSerialDataIn = function (data) {
 
    // console.log("USB Input: " + data);
    // console.log("Data length: " + data.length);
-   //  if (systemStarted == false) {
-   //      var n = data.indexOf("{");
-   //      data = data.substring(n, n + 33);
-   //      console.log("parsed Input: " + data);
-   //      console.log("paarsed Data length: " + data.length);
-   //      console.log("count: " + n);
-   //      if (data.substring(0, 1) != "{") {
-   //          return;
-   //      }
-   //
-   //  }
+    if (systemStarted == false) {
+        var n = data.indexOf("{");
+        data = data.substring(n, n + 33);
+        console.log("parsed Input: " + data);
+        console.log("paarsed Data length: " + data.length);
+        console.log("count: " + n);
+        if (data.substring(0, 1) != "{") {
+            return;
+        }
+
+    }
 
     console.log("systemStarted: " + systemStarted);
     console.log("serialData before parse: " + serialData);
