@@ -105,12 +105,12 @@ sendOutput = function (dataToSend)
         setTimeout(function(){ledInfoOff(27);}, 100);
         setTimeout(function(){timedOut = true;}, timedOutInterval);
 
-        console.log("Sending to CS4: " +dataToSend);
+//        console.log("Sending to CS4: " +dataToSend);
         //send it out the socket
         comlib.websocketsend(".  Sent: " + momentTZ(timerStartTime).format(fmt) + "   Dout: "  +  dataToSend) ;
         // added for sending cue data via serial port 7/16/2016
         if((enableserialoutput == "YES") && (dataToSend.indexOf("ZIG1") > -1)) { //make sure we only send on zigbee commands
-            console.log("Sending Serial Cues");
+//            console.log("Sending Serial Cues");
             setTimeout(function(){comlib.write(cueserialsettings + dataToSend.substring(5,dataToSend.length) + '\n' + '\r');}, 20);
         }
         if((enablemidioutput == "YES") && (dataToSend.indexOf("ZIG1") > -1) && (dataToSend.indexOf(midicueouttype) > -1) && (dataToSend.indexOf(midicueoutshowname) > -1)){ //make sure we only send on zigbee commands and proper midi out type & correct showname
@@ -125,7 +125,7 @@ sendOutput = function (dataToSend)
                 }
             }
             outputstringmidi += "00" +  midicueoutputcuelist + "F7";
-            console.log("Sending Midi Cues  " + outputstringmidi);
+//            console.log("Sending Midi Cues  " + outputstringmidi);
             setTimeout(function(){comlib.write((outputstringmidi) + '\n' + '\r');}, 50); //now send it out delayed a little
         }
         addTime = addTime + "\""+  (timerStartTime).toISOString() +"\", \"Dout\" : \"" + dataToSend + "\"}";
@@ -825,8 +825,8 @@ exports.usbSerialDataIn = function (data) {
                     });
                 }
                 else{
-                    console.log("Received time bask from CS4 I/0");
-                    console.log("calling getsettings");
+ //                   console.log("Received time bask from CS4 I/0");
+//                    console.log("calling getsettings");
                     clearInterval(GetTimeInterval);// turn off GETTIME sending
                     exports.getSettings();
                 }
