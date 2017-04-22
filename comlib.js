@@ -12,8 +12,11 @@ exports.openSerialPort = function(portname, baud)
         baudrate: baud,
 // Set the object to fire an event after a \n (chr 13 I think)  is in the serial buffer
         parser: com.parsers.readline("\n"),
-        databits: 8
-
+        databits: 8},
+        function(err){
+            if (err) {
+                return console.log('Error: ', err.message);
+            }
     });
     //serialPort.
 
