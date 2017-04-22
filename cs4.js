@@ -84,12 +84,14 @@ var midicueoutid;
 // adds time stamp to Outgoing data and puts it in Log collection
 exports.sendgettime = function(){
    // exports.getSettings();
-
-    sendOutput('xxxTIME'); // get the system time as the startup time
-    usbInputEnabled = 1; //let the usb data through
-    GetTimeInterval =  setInterval(function(){ sendOutput('GETTIME');}, 1500); // keep sending it until we get good results back
-    //sendOutput('GETTIME');
-
+    if(myuri != "192.168.3.1"){ // if we are not connected to access point then do gettime
+        sendOutput('xxxTIME'); // get the system time as the startup time
+        usbInputEnabled = 1; //let the usb data through
+        GetTimeInterval =  setInterval(function(){ sendOutput('GETTIME');}, 1500); // keep sending it until we get good results back
+        //sendOutput('GETTIME');
+    }
+    else{exports.getSettings();
+    }
 
 }
 sendOutput = function (dataToSend)

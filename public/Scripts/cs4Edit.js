@@ -470,7 +470,7 @@ function canvasPlot(){
 }
 
 function zoomChange(value){
-    zoomFactor = value;
+    zoomFactor = value * 1.1;
     updateCanvas();
 }
 

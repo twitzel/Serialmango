@@ -4,6 +4,7 @@ var twi = require('./twi');
 var WebSocketServer = require('ws').Server;
 exports.openSerialPort = function(portname, baud)
 {
+    var serialportTimout = setTimeout(function(){cs4.sendgettime();}, 5000); // set timer to see if hardware is connected.  if not continue
     console.log("Attempting to open serial port "+portname);
     // serialport declared with the var to make it module global
 
@@ -21,6 +22,8 @@ exports.openSerialPort = function(portname, baud)
 // I dont understand this call 0 but it works
     serialPort.on("open", function (err,res) {
         console.log("Port open success:"+portname);
+        clearTimeout(serialportTimout);
+
         //if CS4 branch then get time from io board
         if( branch == 'cs4'){
             //we are now up and working
