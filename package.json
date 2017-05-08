@@ -10,7 +10,7 @@
     "jade": "*",
     "ws": "*",
     "mongodb": "*",
-    "serialport": "1.1.3",
+    "serialport": "*.*",
     "ejs": "*",
     "time": "*",
     "fs.extra": "*",
