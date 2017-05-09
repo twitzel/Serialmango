@@ -191,8 +191,8 @@ exports.setup = function()
 
 
     //MongoClient.connect("mongodb://localhost:27017/WizDb", function(err, db)
-     MongoClient.connect("mongodb://192.168.2.72:27017/WizDb", function(err, db)
-  //////  MongoClient.connect("mongodb://localhost:27017/" + collectionName, function(err, db)
+    // MongoClient.connect("mongodb://192.168.2.72:27017/WizDb", function(err, db)
+    MongoClient.connect("mongodb://localhost:27017/" + collectionName, function(err, db)
         //  MongoClient.connect("mongodb://" + global.myuri + ":27017/" + collectionName, function(err, db) // changed to above line 08102015
         //MongoClient.connect("mongodb://" + "192.168.2.67" + ":27017/" + collectionName, function(err, db)
     {
