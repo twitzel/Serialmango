@@ -21,7 +21,7 @@ var os = require('os');
 var express = require('express');
 var routes = require('./routes');
 var user = require('./routes/user');
-var time = require('time');
+//var time = require('time');
 var timedOutInterval = 250; //time to wait between serial transmitts
 var timedOut = true; // set to false will delay transmission;
 var comlib = require('./comlib');
@@ -349,7 +349,7 @@ exports.websocketDataIn = function(dataSocket, Socket){
             else
             {
                 comlib.websocketsend("* Preparing Data For Display. \n* Please Wait. \n* (may take up to 1 minute) ", Socket) ;
-                collectionLog.find({},{_id:0}).sort({"Time": 1}).toArray(function(error,logfile){
+                collectionLog.find({},{_id:0}).sort({"Time": -1}).toArray(function(error,logfile){
                     // collectionLog.find({},{_id:0}).sort({ $natural: 1 }).toArray(function(error,logfile){
                     for(var i = 0; i <logfile.length;i++)
                     {
