@@ -347,31 +347,56 @@ exports.websocketDataIn = function(dataSocket, Socket){
                 });
             }
             else
+
             {
-                comlib.websocketsend("* Preparing Data For Display. \n* Please Wait. \n* (may take up to 1 minute) ", Socket) ;
+                comlib.websocketsend("* Preparing Data For Display. \n* Please Wait. \n* (may take several seconds) ", Socket) ;
                 collectionLog.find({},{_id:0}).sort({"Time": -1}).limit(26000).toArray(function(error,logfile){
-                    // collectionLog.find({},{_id:0}).sort({ $natural: 1 }).toArray(function(error,logfile){
+                    //collectionLog.find({},{_id:0}).sort({ $natural: -1 }).limit(1000).toArray(function(error,logfile){
                     if(error){
                         console.log(error);
                     }
+                    else {
+                        for (var i = 0; i < logfile.length; i++) {
+                            logfileData = JSON.stringify(logfile[i]);
 
-                    for(var i = 0; i <logfile.length;i++)
-                    {
-                        logfileData = JSON.stringify(logfile[i]);
-
-                        if(logfile[i].Dout)
-                        {
-                            dataToSend = dataToSend + ".    Sent: " +formatLogData(logfileData) + "\n" ;
+                            if (logfile[i].Dout) {
+                                //comlib.websocketsend(".    Sent: " + logfileData, Socket) ;
+                                dataToSend = dataToSend + ".    Sent: " + formatLogData(logfileData) + "\n";
+                            }
+                            else {
+                                //comlib.websocketsend(parseCue(logfileData),Socket);
+                                dataToSend = dataToSend + parseCue(logfileData) + "\n";
+                            }
                         }
-                        else
-                        {
-                            //dataToSend = parseCue(logfileData) + "\n" + dataToSend;
-                            dataToSend = dataToSend + parseCue(logfileData) + "\n";
-                        }
+                        comlib.websocketsend(dataToSend, Socket);
                     }
-                    comlib.websocketsend(dataToSend, Socket) ;
                 });
             }
+            // {
+            //     comlib.websocketsend("* Preparing Data For Display. \n* Please Wait. \n* (may take up to 1 minute) ", Socket) ;
+            //     collectionLog.find({},{_id:0}).sort({"Time": -1}).limit(26000).toArray(function(error,logfile){
+            //         // collectionLog.find({},{_id:0}).sort({ $natural: 1 }).toArray(function(error,logfile){
+            //         if(error){
+            //             console.log(error);
+            //         }
+            //
+            //         for(var i = 0; i <logfile.length;i++)
+            //         {
+            //             logfileData = JSON.stringify(logfile[i]);
+            //
+            //             if(logfile[i].Dout)
+            //             {
+            //                 dataToSend = dataToSend + ".    Sent: " +formatLogData(logfileData) + "\n" ;
+            //             }
+            //             else
+            //             {
+            //                 //dataToSend = parseCue(logfileData) + "\n" + dataToSend;
+            //                 dataToSend = dataToSend + parseCue(logfileData) + "\n";
+            //             }
+            //         }
+            //         comlib.websocketsend(dataToSend, Socket) ;
+            //     });
+            // }
         }
         else if (dataSocket.Type == "SEND") // these are commands to send directly to the CS4I/0
         {
