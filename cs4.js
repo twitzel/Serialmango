@@ -351,6 +351,10 @@ exports.websocketDataIn = function(dataSocket, Socket){
                 comlib.websocketsend("* Preparing Data For Display. \n* Please Wait. \n* (may take up to 1 minute) ", Socket) ;
                 collectionLog.find({},{_id:0}).sort({"Time": -1}).limit(1000).toArray(function(error,logfile){
                     // collectionLog.find({},{_id:0}).sort({ $natural: 1 }).toArray(function(error,logfile){
+                    if(error){
+                        console.log(error);
+                    }
+
                     for(var i = 0; i <logfile.length;i++)
                     {
                         logfileData = JSON.stringify(logfile[i]);
@@ -361,7 +365,8 @@ exports.websocketDataIn = function(dataSocket, Socket){
                         }
                         else
                         {
-                            dataToSend = parseCue(logfileData) + "\n" + dataToSend;
+                            //dataToSend = parseCue(logfileData) + "\n" + dataToSend;
+                            dataToSend = dataToSend + parseCue(logfileData) + "\n";
                         }
                     }
                     comlib.websocketsend(dataToSend, Socket) ;
