@@ -323,7 +323,7 @@ exports.websocketDataIn = function(dataSocket, Socket){
 
             if(dataSocket.Type == "LOG 1000")
             {
-                comlib.websocketsend("* Preparing Data For Display. \n* Please Wait. \n* (may take several seconds) ", Socket) ;
+                comlib.websocketsend("* Preparing Data For Display. \n* Please Wait. \n* (may take several seconds check 1) ", Socket) ;
                 collectionLog.find({},{_id:0}).sort({"Time": -1}).limit(26000).toArray(function(error,logfile){
                     //collectionLog.find({},{_id:0}).sort({ $natural: -1 }).limit(1000).toArray(function(error,logfile){
                     if(error){
@@ -349,7 +349,7 @@ exports.websocketDataIn = function(dataSocket, Socket){
             else
 
             {
-                comlib.websocketsend("* Preparing Data For Display. \n* Please Wait. \n* (may take several seconds) ", Socket) ;
+                comlib.websocketsend("* Preparing Data For Display. \n* Please Wait. \n* (may take several seconds check 2) ", Socket) ;
                 collectionLog.find({},{_id:0}).sort({"Time": -1}).limit(26000).toArray(function(error,logfile){
                     //collectionLog.find({},{_id:0}).sort({ $natural: -1 }).limit(1000).toArray(function(error,logfile){
                     if(error){
