@@ -1158,6 +1158,14 @@ function relayclick(){
     document.getElementById("insertrelay").innerHTML = "Ready";
     insertReady = 1;
 }
+
+function manualclick(){
+    document.getElementById("fieldset6").style.backgroundColor = 'palegreen';
+    document.getElementById("insertmanual").innerHTML = "Ready";
+    dataToSend = document.getElementById('manualmessage').value.trim();
+    insertReady = 1;
+}
+
 function serialclick(){
     document.getElementById("fieldset2").style.backgroundColor = 'palegreen';
     document.getElementById("insertserial").innerHTML = "Ready";
