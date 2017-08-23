@@ -411,7 +411,8 @@ function buttonRetimeContinue(){
         var cueHistory =document.getElementById("cueinfo");
         var dropdown = document.getElementById("retimeDesc");
         cueHistory.innerHTML =""; // clear div
-        dropdown.options.length = 0;//clear select box
+        dropdown.innerHTML = "";
+       // dropdown.options.length = 0;//clear select box //all of a suddon this shows as error
         for (var i = 0; i < Desc.length; i++) {
             cueStats[i] = Desc[i][0] + TAB + TAB + TAB + Desc[i][1] + TAB + TAB + Desc[i][2] + TAB + TAB + Desc[i][3];
             if (dataPacket.data != Desc[i][0]) {
