@@ -11,8 +11,8 @@ var dataPacket = {};
 
 function init(){
     // Todd - This adds the event listener for the file upload button
-    var selectfiles=document.getElementById('selectfiles')
-    selectfiles.addEventListener("change", fileSelectHandler, false);
+   // var selectfiles=document.getElementById('selectfiles')
+  //  selectfiles.addEventListener("change", fileSelectHandler, false);
     // end Todd
 
 
