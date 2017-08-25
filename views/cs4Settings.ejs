@@ -195,6 +195,7 @@
                     <option value='audA' title='2'>Content: Audio A</option>
                     <option value='audB' title='3'>Content: Audio B</option>
                     <option value='audC' title='3'>Content: Audio C</option>
+                    <option value='all' title='3'>Content: All</option>
                 </select>
                     <label class = setup>Midi Output Cue Showname</label>
                     <input id=midicueoutshowname name=midicueoutshowname  type=text value="Enter Show Name" style = "width: 15em" >
@@ -1126,13 +1127,17 @@
 
 
     <fieldset>
-        <legend id = "legend1">Send To R4</legend>
+        <legend id = "legend1">Send To R Type Receivers</legend>
 
         Show Name: <input id=showname name=showname type=text value="ShowName" required style = "width: 8em"  >
 
         <div>
-            Output:   R4 Slides <input id=r4slidescue name=outputcue value= "r4slidescue" type=radio checked>
-            R4 Audio<input id=r4audiocue name=outputcue value = "r4audiocue" type=radio >
+            Output:    Slides <input id=r4slidescue name=outputcue value= "r4slidescue" type=radio checked>
+            Slides B <input id=r4slidescue name=outputcue value= "r4slidescueB" type=radio>
+            Audio A<input id=r4audiocue name=outputcue value = "r4audiocueA" type=radio >
+            Audio B<input id=r4audiocue name=outputcue value = "r4audiocueB" type=radio >
+            Audio C<input id=r4audiocue name=outputcue value = "r4audiocueC" type=radio >
+            Video<input id=r4audiocue name=outputcue value = "r4videocue" type=radio >
         </div>
 
         <div>

@@ -277,6 +277,12 @@ function cueclick1(message){
     if(dataFormat == 'slide'){
         dataOut =  "GO slide" + counter +".jpg NEXT slide"+(counter +1) +".jpg";
     }
+    else if(dataFormat == 'slideB'){
+        dataOut =  "GO slideB" + counter +".jpg NEXT slideB"+(counter +1) +".jpg";
+    }
+    else if(dataFormat == 'vid'){
+        dataOut =  "GO video" + counter +".mp4";
+    }
     else{
         dataOut = "GO " + dataFormat + counter + ".mp3";
     }
@@ -314,6 +320,12 @@ function cueclick2(message){
     if(dataFormat == 'slide'){
         dataOut =  "GO slide" + counter +".jpg NEXT slide"+(counter +1) +".jpg";
     }
+    else if(dataFormat == 'slideB'){
+        dataOut =  "GO slideB" + counter +".jpg NEXT slideB"+(counter +1) +".jpg";
+    }
+    else if(dataFormat == 'vid'){
+        dataOut =  "GO video" + counter +".mp4";
+    }
     else{
         dataOut = "GO " + dataFormat + counter + ".mp3";
     }
@@ -346,6 +358,12 @@ function cueclick3(message){
 
     if(dataFormat == 'slide'){
         dataOut =  "GO slide" + counter +".jpg NEXT slide"+(counter +1) +".jpg";
+    }
+    else if(dataFormat == 'slideB'){
+        dataOut =  "GO slideB" + counter +".jpg NEXT slideB"+(counter +1) +".jpg";
+    }
+    else if(dataFormat == 'vid'){
+        dataOut =  "GO video" + counter +".mp4";
     }
     else{
         dataOut = "GO " + dataFormat + counter + ".mp3";

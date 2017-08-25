@@ -669,9 +669,22 @@ function cueAuto(type){ //now it's mis named only sends once.
     if(dataFormat == 'r4slidescue'){
         dataOut =  "GO slide" + counter +".jpg NEXT slide"+(counter +1) +".jpg";
     }
-    else if(dataFormat == 'r4audiocue'){
+    else if(dataFormat == 'r4slidescueB'){
+        dataOut =  "GO slideB" + counter +".jpg NEXT slideB"+(counter +1) +".jpg";
+    }
+    else if(dataFormat == 'r4audiocueA'){
         dataOut = "GO audA" + counter + ".mp3";
     }
+    else if(dataFormat == 'r4audiocueB'){
+        dataOut = "GO audB" + counter + ".mp3";
+    }
+    else if(dataFormat == 'r4audiocueC'){
+        dataOut = "GO audC" + counter + ".mp3";
+    }
+    else if(dataFormat == 'r4videocue'){
+        dataOut = "GO video" + counter + ".mp4";
+    }
+
     cue.value = counter +1; //update the cue count
    // delay = (new Date()-lastCueTime);
     dataPacket.Type ='SEND';

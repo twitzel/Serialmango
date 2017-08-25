@@ -98,25 +98,58 @@ sendOutput = function (dataToSend)
 {
     var addTime = "{\"Time\":";
     console.log("We are at sendOutput: " + dataToSend);
-    if (timedOut)
-    {
+    if (timedOut) {
         timerStartTime = new Date();
         timedOut = false;
         comlib.write("         " + dataToSend + "\r"); // add spaces at beginning for R4 zigbee stuff and terminate\n\r
         ledInfoOn(27);
-        setTimeout(function(){ledInfoOff(27);}, 100);
-        setTimeout(function(){timedOut = true;}, timedOutInterval);
+        setTimeout(function () {
+            ledInfoOff(27);
+        }, 100);
+        setTimeout(function () {
+            timedOut = true;
+        }, timedOutInterval);
 
 //        console.log("Sending to CS4: " +dataToSend);
         //send it out the socket
-        comlib.websocketsend(".  Sent: " + momentTZ(timerStartTime).format(fmt) + "   Dout: "  +  dataToSend) ;
+        comlib.websocketsend(".  Sent: " + momentTZ(timerStartTime).format(fmt) + "   Dout: " + dataToSend);
+
+        //send it out a seconed time - delayed by 100 ms - if it's a ZIG1 command added 8/25/2017
+      //  if(dataToSend.indexOf("ZIG1") > -1)
+      //       {setTimeout(function () {comlib.write("         " + dataToSend + "\r");}, 200); //now send it out delayed a little
+      //  }
+
+
         // added for sending cue data via serial port 7/16/2016
-        if((enableserialoutput == "YES") && (dataToSend.indexOf("ZIG1") > -1)) { //make sure we only send on zigbee commands
+        if ((enableserialoutput == "YES") && (dataToSend.indexOf("ZIG1") > -1)) { //make sure we only send on zigbee commands
 //            console.log("Sending Serial Cues");
-            setTimeout(function(){comlib.write(cueserialsettings + dataToSend.substring(5,dataToSend.length) + '\n' + '\r');}, 20);
+            setTimeout(function () {
+                comlib.write(cueserialsettings + dataToSend.substring(5, dataToSend.length) + '\n' + '\r');
+            }, 20);
         }
+        if (midicueouttype == "all" && enablemidioutput == "YES") { //added 'all' feature 8/25/2017
+
+            if ((enablemidioutput == "YES") && (dataToSend.indexOf("ZIG1") > -1) && (dataToSend.indexOf(midicueoutshowname) > -1)) { //make sure we only send on zigbee commands and proper midi out type & correct showname
+                // var midicuenum = dataToSend.substring(dataToSend.indexOf(midicueouttype)+ midicueouttype.length, dataToSend.indexOf("."));
+                var midicuenum = dataToSend.substring(5, dataToSend.indexOf(".")).replace(/\D/g, ''); // this gets rid of everything except the cue number
+                var outputstringmidi = midicueoutselect + midicueoutputstringstart + midicueoutid + midicueoutputstringmiddle;
+                for (var i = 0; i < midicuenum.length; i++) {
+                    if (midicuenum[i] == ".") {
+                        outputstringmidi += "2E";
+                    }
+                    else {
+                        outputstringmidi += (parseInt(midicuenum[i]) + 0X30).toString(16);
+                    }
+                }
+                outputstringmidi += "00" + midicueoutputcuelist + "F7";
+    //            console.log("Sending Midi Cues  " + outputstringmidi);
+                setTimeout(function () {comlib.write((outputstringmidi) + '\n' + '\r');}, 50); //now send it out delayed a little
+            }
+        }
+
         if((enablemidioutput == "YES") && (dataToSend.indexOf("ZIG1") > -1) && (dataToSend.indexOf(midicueouttype) > -1) && (dataToSend.indexOf(midicueoutshowname) > -1)){ //make sure we only send on zigbee commands and proper midi out type & correct showname
-            var midicuenum = dataToSend.substring(dataToSend.indexOf(midicueouttype)+ midicueouttype.length, dataToSend.indexOf("."));
+           // var midicuenum = dataToSend.substring(dataToSend.indexOf(midicueouttype)+ midicueouttype.length, dataToSend.indexOf("."));
+            var midicuenum = dataToSend.substring(5,dataToSend.indexOf(".")).replace(/\D/g,''); // this gets rid of everything except the cue number
             var outputstringmidi = midicueoutselect + midicueoutputstringstart + midicueoutid + midicueoutputstringmiddle;
             for(var i = 0; i < midicuenum.length; i++){
                 if(midicuenum[i] == "."){
@@ -407,7 +440,9 @@ exports.websocketDataIn = function(dataSocket, Socket){
             }
 
             if((enablemidioutput == "YES") && (dataSocket.Data.indexOf("ZIG1") > -1)  && (dataSocket.Data.indexOf(midicueoutshowname) > -1)) { //make sure we only send on zigbee commands and selected show
-                var midicuenum = dataSocket.Data.substring(dataSocket.Data.indexOf(midicueouttype)+ midicueouttype.length, dataSocket.Data.indexOf("."));
+               var midicuenum = dataSocket.Data.substring(5,dataSocket.Data.indexOf(".")).replace(/\D/g,''); // this gets rid of everything except the cue number
+
+               // var midicuenum = dataSocket.Data.substring(dataSocket.Data.indexOf(midicueouttype)+ midicueouttype.length, dataSocket.Data.indexOf(".")); //removet this because with new cut types it didn't find cue number
                 var outputstringmidi = midicueoutselect + midicueoutputstringstart + midicueoutid + midicueoutputstringmiddle;
                 for(var i = 0; i < midicuenum.length; i++){
                     if(midicuenum[i] == "."){
@@ -595,6 +630,9 @@ exports.websocketDataIn = function(dataSocket, Socket){
             }
             else if(midicueouttype == "audC"){
                 midicueoutputcuelist = "04";
+            }
+            else if(midicueouttype == "all"){
+                midicueoutputcuelist = "05";
             }
 
 
@@ -1469,6 +1507,9 @@ exports.getSettings = function(){
         }
         else if(midicueouttype == "audC"){
             midicueoutputcuelist = "04";
+        }
+        else if(midicueouttype == "all"){
+            midicueoutputcuelist = "05";
         }
 
         console.log("before stmp transport in settings");
