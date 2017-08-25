@@ -10,6 +10,12 @@ var dataPacket = {};
 
 
 function init(){
+    // Todd - This adds the event listener for the file upload button
+    var selectfiles=document.getElementById('selectfiles')
+    selectfiles.addEventListener("change", fileSelectHandler, false);
+    // end Todd
+
+
     wsUri = "ws://" + window.location.hostname + ":8080";
     output = document.getElementById("websocketlog");
     //    context.canvas.width  = window.innerWidth;
