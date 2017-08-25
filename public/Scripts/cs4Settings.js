@@ -11,8 +11,8 @@ var dataPacket = {};
 
 function init(){
     // Todd - This adds the event listener for the file upload button
-   // var selectfiles=document.getElementById('selectfiles')
-  //  selectfiles.addEventListener("change", fileSelectHandler, false);
+    var selectfiles=document.getElementById('selectfiles')
+    selectfiles.addEventListener("change",copyFromPublic , false);
     // end Todd
 
 
@@ -737,14 +737,22 @@ function copyToPublic(){
     websocket.send(JSON.stringify(dataPacket));
 }
 
-function copyFromPublic(){
-    if(document.getElementById('internalLocation').value == -1){
-        alert('Please Select Internal Storage Location');
-    }
-    else{
-        dataPacket.Type ="COPYFROMPUBLIC" + document.getElementById('internalLocation').value;
-        websocket.send(JSON.stringify(dataPacket));
-    }
+function copyFromPublic(e){
+
+    files = e.target.files || e.dataTransfer.files;
+        for (var i = 0; i<files.length;++i){
+            console.log(files[i].webkitRelativePath)
+
+        }
+
+
+    // if(document.getElementById('internalLocation').value == -1){
+    //     alert('Please Select Internal Storage Location');
+    // }
+    // else{
+    //     dataPacket.Type ="COPYFROMPUBLIC" + document.getElementById('internalLocation').value;
+    //     websocket.send(JSON.stringify(dataPacket));
+    // }
 }
 
 function downLoadFiles(){
