@@ -731,6 +731,16 @@ function copyToPublic(){
     websocket.send(JSON.stringify(dataPacket));
 }
 
+function copyFromPublic(){
+    if(document.getElementById('internalLocation').value == -1){
+        alert('Please Select Internal Storage Location');
+    }
+    else{
+        dataPacket.Type ="COPYFROMPUBLIC" + document.getElementById('internalLocation').value;
+        websocket.send(JSON.stringify(dataPacket));
+    }
+}
+
 function downLoadFiles(){
     //generate keyclicks to force downloads
    // window.location.href = "/images/sailogo.jpg";

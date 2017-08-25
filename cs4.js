@@ -485,6 +485,11 @@ exports.websocketDataIn = function(dataSocket, Socket){
         {
             copyToPublic();
         }
+        else if(dataSocket.Type.substr(0,14) == "COPYFROMPUBLIC")
+        {
+            copyFromPublic(dataSocket.Type.substr(15,1));
+        }
+
         else if(dataSocket.Type == "EDIT"){
             collectionCue.find({},{}).sort({"Time": 1}).toArray(function(error,cuefile){
                 var packet = {};
@@ -1419,6 +1424,10 @@ function copyToPublic(){
 
 }
 
+function copyFromPublic(location){
+    console.log("AT Copy from Public - line 1428 to Location:" + location);
+
+}
 
 exports.getSettings = function(){
 //function getSettings(){
