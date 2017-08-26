@@ -738,14 +738,27 @@ function copyToPublic(){
 }
 
 function copyFromPublic(e){
+    var wantedFiles = ["cue.bson", "cue.metadata.json", "log.bson", "log.metadata.json","settings.bson","settings.metadata.json","startup.bson","startup.metadata.json", "system.indexes.bson"];
+    var FILES = new Array();
+    wantedFilesJoin = wantedFiles.sort().join();
 
     files = e.target.files || e.dataTransfer.files;
         for (var i = 0; i<files.length;++i){
             console.log(files[i].webkitRelativePath)
 
         }
+        for(var i = 0; i < files.length; i++ ){
+             FILES[i] = (files[i].name);
+        }
 
+    var filesJoin = FILES.sort().join();
 
+    if(wantedFilesJoin === filesJoin){
+        console.log("files are correct");
+    }
+    else{
+        console.log("files are NOT the same");
+    }
     // if(document.getElementById('internalLocation').value == -1){
     //     alert('Please Select Internal Storage Location');
     // }
