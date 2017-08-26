@@ -1277,10 +1277,11 @@
                 <option value=' 4' >Internal Location 4</option>
             </select>
             <button id = "copyToPublic"  onmousedown = "copyToPublic()">Download All Files </button>
-            <fieldset>
-                <legend>Upload Files</legend>
+            <fieldset id = "upload">
+
+                <legend>Remotely Upload Files</legend>
                 <!--* Todd - this is the file select control -->
-                <label for="file">Choose Directory to upload then press "UPLOAD"</label>
+                <label for="file">Choose DIRECTORY to upload then press "UPLOAD"</label>
                 <input style="" type="file" id="selectfiles" multiple="multiple" webkitdirectory="" directory="">
                 <button id = "copyFromPublic"  onmousedown = "copyFromPublic()">UPLOAD  </button>
             </fieldset>
