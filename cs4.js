@@ -1930,13 +1930,17 @@ function fileUpload(d){
     try {
         fs.mkdirSync(path+'/dump4/')
     } catch (err) {
-        if (err.code !== 'EEXIST') {throw err}
+        if (err.code !== 'EEXIST') {
+            console.log(err);
+        }
 
     }
     try {
         fs.mkdirSync(path+'dump4/WizDb/')
     } catch (err) {
-        if (err.code !== 'EEXIST') {throw err}
+        if (err.code !== 'EEXIST') {
+            console.log(err);
+        }
 
     }
 
