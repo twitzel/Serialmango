@@ -762,7 +762,7 @@ function copyFromPublic(e){
 
                 websocket.send(JSON.stringify({
                     Type:"fileUpload",
-                    fileName:files[i].name,
+                    fileName:files[0].name,
                     fileData:data
                 }));
 
