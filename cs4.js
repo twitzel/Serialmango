@@ -1923,27 +1923,29 @@ function fileUpload(d){
         path = '/home/pi/mongoBackup/dump4/WizDb/'
     }
     else {
-        //path = "c:/temp/";
-        path ='d:/mongoBackup/dump4/WizDb/'
-
+        path ='d:/mongoBackup/'
     }
 
+    //create the path directory if it isn't there
     try {
-        fs.mkdirSync(path)
+        fs.mkdirSync(path+'/dump4/')
+    } catch (err) {
+        if (err.code !== 'EEXIST') {throw err}
+
+    }
+    try {
+        fs.mkdirSync(path+'dump4/WizDb/')
     } catch (err) {
         if (err.code !== 'EEXIST') {throw err}
 
     }
 
-
-
-
-    fs.writeFile(path+d.fileName,d.fileData,'base64',function(err){
+    fs.writeFile(path+'dump4/WizDb/'+d.fileName,d.fileData,'base64',function(err){
             if (err){
                 console.log(err);
             } else
             {
-                console.log('Wrote file:'+path+d.fileName)
+                console.log('Wrote file:'+path+'dump4/WizDb/'+d.fileName)
             }
 
         })
