@@ -1917,6 +1917,7 @@ function stopIO(state){
 // Todd - added to proecess the files received from the file upload webpage
 function fileUpload(d){
     console.log('file upload ********************************')
+    console.log('fileName:'+d.fileName)
 
 
 }

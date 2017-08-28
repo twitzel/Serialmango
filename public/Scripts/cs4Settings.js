@@ -754,12 +754,34 @@ function copyFromPublic(e){
     var filesJoin = FILES.sort().join();
 
     if(wantedFilesJoin === filesJoin){
+        // Todd - upload the files
         console.log("files are correct");
-        websocket.send(JSON.stringify({
-            Type:"fileUpload"
+//        for (var i = 0; i<files.length;++i) {
+
+            read(files[0],function(data){
+
+                websocket.send(JSON.stringify({
+                    Type:"fileUpload",
+                    fileName:files[i].name,
+                    fileData:data
+                }));
+
+            })
 
 
-        }));
+
+  //      }
+
+        function read(f,cb){
+
+            var reader = new FileReader();
+            reader.onload = function() {
+            cb(reader.result.substring(reader.result.indexOf(',')+1))
+
+            }
+            reader.readAsDataURL(f);
+
+        }
 
 
 
