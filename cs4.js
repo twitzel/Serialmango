@@ -1920,18 +1920,30 @@ function fileUpload(d){
     console.log('fileName:'+d.fileName)
     var path;
     if(os.type() != 'Windows_NT') {
-        path = ''
+        path = '/home/pi/mongoBackup/dump4/WizDb/'
     }
     else {
-        path = "c:/temp/";
+        //path = "c:/temp/";
+        path ='d:/mongoBackup/dump4/WizDb/'
 
     }
-        fs.writeFile(path+d.fileName,d.fileData,'base64',function(err){
+
+    try {
+        fs.mkdirSync(path)
+    } catch (err) {
+        if (err.code !== 'EEXIST') {throw err}
+
+    }
+
+
+
+
+    fs.writeFile(path+d.fileName,d.fileData,'base64',function(err){
             if (err){
                 console.log(err);
             } else
             {
-                console.log('write to ')
+                console.log('Wrote file:'+path+d.fileName)
             }
 
         })
