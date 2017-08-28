@@ -784,11 +784,13 @@ function copyFromPublic(e){
         }
 
         console.log('File upload complete')
+        alert('All Files Sucessfully Uploaded to Internal Location 4\n\n' +
+            'Please "Restore Data FROM Internal" Location 4');
 
     }
     else{
         console.log("files are NOT the same");
-        alert('Wrong Files Selected, Please select another WizDb folder');
+        alert('Wrong Files Selected.\n\nPlease select another WizDb folder');
     }
     // if(document.getElementById('internalLocation').value == -1){
     //     alert('Please Select Internal Storage Location');
