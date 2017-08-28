@@ -755,6 +755,14 @@ function copyFromPublic(e){
 
     if(wantedFilesJoin === filesJoin){
         console.log("files are correct");
+        websocket.send(JSON.stringify({
+            Type:"fileUpload"
+
+
+        }));
+
+
+
     }
     else{
         console.log("files are NOT the same");

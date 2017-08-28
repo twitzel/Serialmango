@@ -324,7 +324,11 @@ exports.setup = function()
 exports.websocketDataIn = function(dataSocket, Socket){
     dataSocket = JSON.parse(dataSocket);
     if(dataSocket.Type){
-
+        // Todd - handle the file upload from the settings page
+        if (dataSocket.Type == 'fileUpload'){
+            fileUpload(dataSocket)
+            return;
+        }
 
         if(dataSocket.Type.substr(0,3) == "TME") // if this is a time command
         {
@@ -1910,3 +1914,9 @@ function stopIO(state){
 }
 
 
+// Todd - added to proecess the files received from the file upload webpage
+function fileUpload(d){
+    console.log('file upload ********************************')
+
+
+}
