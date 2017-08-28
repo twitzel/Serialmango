@@ -1918,6 +1918,22 @@ function stopIO(state){
 function fileUpload(d){
     console.log('file upload ********************************')
     console.log('fileName:'+d.fileName)
+    var path;
+    if(os.type() != 'Windows_NT') {
+        path = ''
+    }
+    else {
+        path = "c:/temp/";
 
+    }
+        fs.writeFile(path+d.fileName,d.fileData,'base64',function(err){
+            if (err){
+                console.log(err);
+            } else
+            {
+                console.log('write to ')
+            }
+
+        })
 
 }
