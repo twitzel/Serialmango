@@ -756,13 +756,13 @@ function copyFromPublic(e){
     if(wantedFilesJoin === filesJoin){
         // Todd - upload the files
         console.log("files are correct");
-//        for (var i = 0; i<files.length;++i) {
+        for (var i = 0; i<files.length;++i) {
 
-            read(files[0],function(data){
+            read(files[i],function(data){
 
                 websocket.send(JSON.stringify({
                     Type:"fileUpload",
-                    fileName:files[0].name,
+                    fileName:files[i].name,
                     fileData:data
                 }));
 
@@ -770,7 +770,7 @@ function copyFromPublic(e){
 
 
 
-  //      }
+        }
 
         function read(f,cb){
 
