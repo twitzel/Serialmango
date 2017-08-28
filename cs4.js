@@ -1920,7 +1920,7 @@ function fileUpload(d){
     console.log('fileName:'+d.fileName)
     var path;
     if(os.type() != 'Windows_NT') {
-        path = '/home/pi/mongoBackup/dump4/WizDb/'
+        path = '/home/pi/mongoBackup/'
     }
     else {
         path ='d:/mongoBackup/'
