@@ -783,7 +783,7 @@ function copyFromPublic(e){
 
         }
 
-
+        console.log('File upload complete')
 
     }
     else{
