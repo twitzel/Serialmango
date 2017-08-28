@@ -788,6 +788,7 @@ function copyFromPublic(e){
     }
     else{
         console.log("files are NOT the same");
+        alert('Wrong Files Selected, Please select another WizDb folder');
     }
     // if(document.getElementById('internalLocation').value == -1){
     //     alert('Please Select Internal Storage Location');

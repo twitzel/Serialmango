@@ -128,7 +128,7 @@ sendOutput = function (dataToSend)
             }, 20);
         }
         if (midicueouttype == "all" && enablemidioutput == "YES") { //added 'all' feature 8/25/2017
-
+            var outputNumber = 0;
             if ((enablemidioutput == "YES") && (dataToSend.indexOf("ZIG1") > -1) && (dataToSend.indexOf(midicueoutshowname) > -1)) { //make sure we only send on zigbee commands and proper midi out type & correct showname
                 // var midicuenum = dataToSend.substring(dataToSend.indexOf(midicueouttype)+ midicueouttype.length, dataToSend.indexOf("."));
                 var midicuenum = dataToSend.substring(5, dataToSend.indexOf(".")).replace(/\D/g, ''); // this gets rid of everything except the cue number
@@ -141,9 +141,32 @@ sendOutput = function (dataToSend)
                         outputstringmidi += (parseInt(midicuenum[i]) + 0X30).toString(16);
                     }
                 }
-                outputstringmidi += "00" + midicueoutputcuelist + "F7";
-    //            console.log("Sending Midi Cues  " + outputstringmidi);
-                setTimeout(function () {comlib.write((outputstringmidi) + '\n' + '\r');}, 50); //now send it out delayed a little
+                var outputType = dataToSend.substring(dataToSend.indexOf("GO")+3,dataToSend.indexOf(".")).trim();//just find start of
+                if (outputType.substring(0,1)=="s"){
+                    outputNumber = "01";
+                }
+                else if(outputType.substring(0,1) =="a"){
+                    var outputTypeAudio = outputType.substring(3,4);
+                    switch(outputTypeAudio){
+                        case "A":
+                            outputNumber = "02";
+                            break;
+                        case "B":
+                            outputNumber = "03";
+                            break;
+                        case "C":
+                            outputNumber = "04";
+                            break;
+                    }
+                }
+                if(outputNumber !=0) {
+                    // outputstringmidi += "00" + midicueoutputcuelist + "F7";
+                    outputstringmidi += "00" + outputNumber + "F7";
+                    //            console.log("Sending Midi Cues  " + outputstringmidi);
+                    setTimeout(function () {
+                        comlib.write((outputstringmidi) + '\n' + '\r');
+                    }, 50); //now send it out delayed a little
+                }
             }
         }
 
@@ -159,6 +182,7 @@ sendOutput = function (dataToSend)
                     outputstringmidi += (parseInt(midicuenum[i]) + 0X30).toString(16);
                 }
             }
+
             outputstringmidi += "00" +  midicueoutputcuelist + "F7";
 //            console.log("Sending Midi Cues  " + outputstringmidi);
             setTimeout(function(){comlib.write((outputstringmidi) + '\n' + '\r');}, 50); //now send it out delayed a little
@@ -444,6 +468,7 @@ exports.websocketDataIn = function(dataSocket, Socket){
             }
 
             if((enablemidioutput == "YES") && (dataSocket.Data.indexOf("ZIG1") > -1)  && (dataSocket.Data.indexOf(midicueoutshowname) > -1)) { //make sure we only send on zigbee commands and selected show
+              var outputNumber=0;
                var midicuenum = dataSocket.Data.substring(5,dataSocket.Data.indexOf(".")).replace(/\D/g,''); // this gets rid of everything except the cue number
 
                // var midicuenum = dataSocket.Data.substring(dataSocket.Data.indexOf(midicueouttype)+ midicueouttype.length, dataSocket.Data.indexOf(".")); //removet this because with new cut types it didn't find cue number
@@ -456,7 +481,25 @@ exports.websocketDataIn = function(dataSocket, Socket){
                         outputstringmidi += (parseInt(midicuenum[i]) + 0X30).toString(16);
                     }
                 }
-                outputstringmidi += "00" +  midicueoutputcuelist + "F7";
+                var outputType = dataSocket.Data.substring(dataSocket.Data.indexOf("GO")+3,dataSocket.Data.indexOf(".")).trim();//just find start of
+                if (outputType.substring(0,1)=="s"){
+                    outputNumber = "01";
+                }
+                else if(outputType.substring(0,1) =="a"){
+                    var outputTypeAudio = outputType.substring(3,4);
+                    switch(outputTypeAudio){
+                        case "A":
+                            outputNumber = "02";
+                            break;
+                        case "B":
+                            outputNumber = "03";
+                            break;
+                        case "C":
+                            outputNumber = "04";
+                            break;
+                    }
+                }
+                outputstringmidi += "00" +  outputNumber + "F7";
                 console.log("Sending Midi Cues");
                 setTimeout(function(){comlib.write((outputstringmidi) + '\n' + '\r');}, 50); //now send it out delayed a little
 
