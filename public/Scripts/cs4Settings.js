@@ -758,11 +758,11 @@ function copyFromPublic(e){
         console.log("files are correct");
         for (var i = 0; i<files.length;++i) {
 
-            read(files[i],function(data){
+            read(files[i],function(data,name){
 
                 websocket.send(JSON.stringify({
                     Type:"fileUpload",
-                    fileName:files[i].name,
+                    fileName:name,
                     fileData:data
                 }));
 
@@ -776,7 +776,7 @@ function copyFromPublic(e){
 
             var reader = new FileReader();
             reader.onload = function() {
-            cb(reader.result.substring(reader.result.indexOf(',')+1))
+            cb(reader.result.substring(reader.result.indexOf(',')+1),f.name)
 
             }
             reader.readAsDataURL(f);
