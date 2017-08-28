@@ -118,7 +118,7 @@ exports.startwebsocketserver = function(){
             }
             else if(branch == 'cs4')
             {
-                console.log('received: %s', message,thisId);
+             //   console.log('received: %s', message,thisId);
                 cs4.websocketDataIn(message, thisId);
             }
         });
