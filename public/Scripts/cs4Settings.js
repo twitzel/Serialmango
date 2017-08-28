@@ -759,7 +759,7 @@ function copyFromPublic(e){
         for (var i = 0; i<files.length;++i) {
 
             read(files[i],function(data,name){
-
+                console.log('file transfer:'+name)
                 websocket.send(JSON.stringify({
                     Type:"fileUpload",
                     fileName:name,
