@@ -738,7 +738,8 @@ function copyToPublic(){
 }
 
 function copyFromPublic(e){
-    var wantedFiles = ["cue.bson", "cue.metadata.json", "log.bson", "log.metadata.json","settings.bson","settings.metadata.json","startup.bson","startup.metadata.json", "system.indexes.bson"];
+   // var wantedFiles = ["cue.bson", "cue.metadata.json", "log.bson", "log.metadata.json","settings.bson","settings.metadata.json","startup.bson","startup.metadata.json", "system.indexes.bson"];
+    var wantedFiles = ["cue.bson", "cue.metadata.json", "log.bson", "log.metadata.json","settings.bson","settings.metadata.json","startup.bson","startup.metadata.json"];
     var FILES = new Array();
     wantedFilesJoin = wantedFiles.sort().join();
 
