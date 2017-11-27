@@ -696,6 +696,51 @@ exports.websocketDataIn = function(dataSocket, Socket){
 
 
     }
+//     else //This is the real live system timing data
+//     {
+//         serialDataSocket = JSON.parse(dataSocket.Data);
+//         //now we know something is attached to the incoming cue so put it in Cue collection
+//         // incoming cue = lastCueReceived
+//         //lastCueReceived is a json parsed object from my io board
+//         // serialDataSocket is the array data from the websocket
+//
+//         //
+//         //update to keep editing data in proper order
+//         if (serialDataSocket.OutData) {
+//             serialDataSocket.OutData.InCue = lastCueReceived;
+//         }
+//
+//
+//
+//         collectionCue.update({'InData':lastCueReceived.InData}, {$set: lastCueReceived},{upsert:true, w:1},function(err,res){
+//
+//             console.log('InData to collection Cue'+res);
+//         });
+//
+//         collectionCue.update({'InData': lastCueReceived.InData}, {$push:serialDataSocket},function(err,res){
+//
+//             console.log('added Dout to collection Cue'+res);
+//         });
+//
+//         //send the data out to the CS4 I/O
+//         var dir = serialDataSocket.OutData.Dir;    // ****** needs to ba added to R4-4 Receiver Parsing ****** //
+//         // var dir = "";
+//         var port = serialDataSocket.OutData.Port;
+//         var showname = serialDataSocket.OutData.Showname;
+//         var dataToSend = serialDataSocket.OutData.Dout;
+//         if(dir =="")
+//         {
+//             var  outstring = port + " " + showname + " " + dataToSend;
+//         }
+//         else
+//         {
+//             var outstring = port + " " + showname + " " + dir + " " + dataToSend;
+//         }
+//
+//         sendOutput(outstring);
+//     }
+// };
+
     else //This is the real live system timing data
     {
         serialDataSocket = JSON.parse(dataSocket.Data);
@@ -711,34 +756,75 @@ exports.websocketDataIn = function(dataSocket, Socket){
         }
 
 
+        collectionCue.update({'InData': lastCueReceived.InData}, {$set: lastCueReceived}, {
+            upsert: true,
+            w: 1
+        }, function (err, res) {
 
-        collectionCue.update({'InData':lastCueReceived.InData}, {$set: lastCueReceived},{upsert:true, w:1},function(err,res){
+            if(err){
+                collectionLog.insert(err, {w: 1}, function (err, result) {
+                    // console.log(result);
+                });
+            }
 
-            console.log('InData to collection Cue'+res);
+            console.log('InData to collection Cue' + res);
+            collectionCue.update({'InData': lastCueReceived.InData}, {$push: serialDataSocket}, function (err, res) {
+
+                if(err){
+                    collectionLog.insert(err, {w: 1}, function (err, result) {
+                        // console.log(result);
+                    });
+                }
+
+                console.log('added Dout to collection Cue' + res);
+                //send the data out to the CS4 I/O
+                var dir = serialDataSocket.OutData.Dir;    // ****** needs to ba added to R4-4 Receiver Parsing ****** //
+                // var dir = "";
+                var port = serialDataSocket.OutData.Port;
+                var showname = serialDataSocket.OutData.Showname;
+                var dataToSend = serialDataSocket.OutData.Dout;
+                if(dir =="")
+                {
+                    var  outstring = port + " " + showname + " " + dataToSend;
+                }
+                else
+                {
+                    var outstring = port + " " + showname + " " + dir + " " + dataToSend;
+                }
+
+                sendOutput(outstring);
+
+            });
+
         });
 
-        collectionCue.update({'InData': lastCueReceived.InData}, {$push:serialDataSocket},function(err,res){
 
-            console.log('added Dout to collection Cue'+res);
-        });
-
-        //send the data out to the CS4 I/O
-        var dir = serialDataSocket.OutData.Dir;    // ****** needs to ba added to R4-4 Receiver Parsing ****** //
-        // var dir = "";
-        var port = serialDataSocket.OutData.Port;
-        var showname = serialDataSocket.OutData.Showname;
-        var dataToSend = serialDataSocket.OutData.Dout;
-        if(dir =="")
-        {
-            var  outstring = port + " " + showname + " " + dataToSend;
-        }
-        else
-        {
-            var outstring = port + " " + showname + " " + dir + " " + dataToSend;
-        }
-
-        sendOutput(outstring);
     }
+
+
+
+    //     collectionCue.update({'InData': lastCueReceived.InData}, {$push:serialDataSocket},function(err,res){
+    //
+    //         console.log('added Dout to collection Cue'+res);
+    //     });
+    //
+    //     //send the data out to the CS4 I/O
+    //     var dir = serialDataSocket.OutData.Dir;    // ****** needs to ba added to R4-4 Receiver Parsing ****** //
+    //     // var dir = "";
+    //     var port = serialDataSocket.OutData.Port;
+    //     var showname = serialDataSocket.OutData.Showname;
+    //     var dataToSend = serialDataSocket.OutData.Dout;
+    //     if(dir =="")
+    //     {
+    //         var  outstring = port + " " + showname + " " + dataToSend;
+    //     }
+    //     else
+    //     {
+    //         var outstring = port + " " + showname + " " + dir + " " + dataToSend;
+    //     }
+    //
+    //     sendOutput(outstring);
+    // }
 };
 
 // This routine receives serial cue data,
