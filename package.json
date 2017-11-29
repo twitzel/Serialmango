@@ -1,6 +1,7 @@
 {
   "name": "Serialmango",
   "version": "1.17.21",
+  "version Info":"added the version info to this project 11/29/2017",
   "private": true,
   "scripts": {
     "start": "node app.js"
