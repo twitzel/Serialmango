@@ -21,6 +21,7 @@ var os = require('os');
 var express = require('express');
 var routes = require('./routes');
 var user = require('./routes/user');
+var pjson = require('./package.json');
 //var time = require('time');
 var timedOutInterval = 250; //time to wait between serial transmitts
 var timedOut = true; // set to false will delay transmission;
@@ -1724,6 +1725,8 @@ exports.ledOn = function(){
     pmp.findGateway("",function(err,gateway){
         var error = 0;
         var erroratpmp = 0;
+        global.version = pjson.version; // added to get version info to system
+
         ///console.log(err,gateway.ip);
         if(err){
             console.log('Gateway not found',err);

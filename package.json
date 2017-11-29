@@ -1,23 +1,23 @@
 {
   "name": "Serialmango",
-  "version": "0.0.1",
+  "version": "1.17.21",
   "private": true,
   "scripts": {
     "start": "node app.js"
   },
   "dependencies": {
-    "express": "3.4.0",
-    "jade": "*",
-    "ws": "*",
-    "mongodb": "*",
-    "serialport": "*",
     "ejs": "*",
-    "time": "*",
+    "express": "3.4.0",
     "fs.extra": "*",
-    "rpio": "*",
+    "jade": "*",
+    "moment-timezone": "*",
+    "mongodb": "*",
     "nodemailer": "0.7.1",
     "pmp": "*",
+    "rpio": "*",
+    "serialport": "^4.0.7",
     "sudo": "*",
-    "moment-timezone": "*"
+    "time": "*",
+    "ws": "*"
   }
 }
