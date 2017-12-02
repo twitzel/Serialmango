@@ -720,7 +720,7 @@ exports.websocketDataIn = function(dataSocket, Socket){
                         });
 
                     });
-
+                });
             }
         }
     }
@@ -853,7 +853,7 @@ exports.websocketDataIn = function(dataSocket, Socket){
     //
     //     sendOutput(outstring);
     // }
-    }
+    };
 // This routine receives serial cue data,
 // parses it and sends it out the web socket
 // puts it in Log collection.
@@ -2115,4 +2115,4 @@ function fileUpload(d){
 
         })
 
-};
+}
