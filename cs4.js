@@ -72,7 +72,7 @@ var midicueoutselect = "MIDI1 ";
 var midicueoutshowname = " ";
 var enablemidioutput = "N0";
 var midicueouttype = "XXX";
-var midicueoutputstringstart = " F07F"
+var midicueoutputstringstart = " F07F";
 var midicueoutputstringmiddle ="023001";
 var midicueoutputcuelist;
 var midicueoutid;
@@ -94,7 +94,7 @@ exports.sendgettime = function(){
     else{exports.getSettings();
     }
 
-}
+};
 sendOutput = function (dataToSend)
 {
     var addTime = "{\"Time\":";
@@ -351,7 +351,7 @@ exports.websocketDataIn = function(dataSocket, Socket){
     if(dataSocket.Type){
         // Todd - handle the file upload from the settings page
         if (dataSocket.Type == 'fileUpload'){
-            fileUpload(dataSocket)
+            fileUpload(dataSocket);
             return;
         }
 
@@ -697,7 +697,7 @@ exports.websocketDataIn = function(dataSocket, Socket){
 
         else if(dataSocket.Type == "RESTORE") {
             if(dataSocket.Value == "log"){
-                copyToInternal(0,function(err) {
+                copyToInternal(0,function() {
                     console.log("Data Backed UP!");
                     collectionLog.drop({}, function (err, numberLogRemoved) {
                         console.log("inside remove log" + numberLogRemoved);
@@ -1355,7 +1355,7 @@ function copyToUSB()
                 console.log('stderr mounted: ' + stderr);
                 // Full path of that file
                 var path = usbstickPath; //go to subdirectory which is usb stick
-                console.log("path: " + path)
+                console.log("path: " + path);
                 spawn(mongoDirectory + 'mongodump', ['-o', destinationPath]).on('exit', function (code) {
                     console.log('finished ' + code);
                     comlib.websocketsend("Please Wait ... Preparing Data .......");
@@ -1451,7 +1451,7 @@ function copyFromUSB()
             if (!error) {
                 console.log('exec error: ' + error);
                 var path = usbstickPath ; //go to subdirectory which is usb stick
-                console.log("path: " + path)
+                console.log("path: " + path);
 
                 fse.rmrf(destinationPath, function (err) {
                     if (err) {
@@ -1504,7 +1504,7 @@ function unmount(){
     });
 }
 
-function copyToInternal(location)
+function copyToInternal(location,cb)
 {
     console.log ("Running on ....  " + os.platform());
     console.log ("Operating system ..  " + os.type());
@@ -1530,6 +1530,9 @@ function copyToInternal(location)
         // spawn('d:/mongo/bin/mongodump', ['-o', destinationPath]).on('exit',function(code){
         comlib.websocketsend("Successfully copied all data to internal storage location " + location);
         console.log("Successfully copied all data to internal storage: "+ destinationPath + " " + code);
+        if(cb){
+            return cb;
+        }
         return(1);
     });
 }
@@ -1617,34 +1620,34 @@ exports.getSettings = function(){
             cs4Settings.midisex1 = 0;
             cs4Settings.sysexcuelist1 = 0;
             cs4Settings.cuelistnumber1a = 0;
-            cs4Settings.cuelistnumber1b = 0
-            cs4Settings.cuelistnumber1c = 0
+            cs4Settings.cuelistnumber1b = 0;
+            cs4Settings.cuelistnumber1c = 0;
 
             cs4Settings.nonsysex1 = 0;
             cs4Settings.midisex2 = 0;
             cs4Settings.sysexcuelist1 = 0;
             cs4Settings.cuelistnumber2a = 0;
-            cs4Settings.cuelistnumber2b = 0
-            cs4Settings.cuelistnumber2c = 0
+            cs4Settings.cuelistnumber2b = 0;
+            cs4Settings.cuelistnumber2c = 0;
             cs4Settings.nonsysex2 = 0;
             cs4Settings.midisex3 = 0;
             cs4Settings.sysexcuelist3 = 0;
             cs4Settings.cuelistnumber3a = 0;
-            cs4Settings.cuelistnumber3b = 0
-            cs4Settings.cuelistnumber3c = 0
+            cs4Settings.cuelistnumber3b = 0;
+            cs4Settings.cuelistnumber3c = 0;
             cs4Settings.nonsysex3 = 0;
             cs4Settings.midisex4 = 0;
             cs4Settings.sysexcuelist4 = 0;
             cs4Settings.cuelistnumber4a = 0;
-            cs4Settings.cuelistnumber4b = 0
-            cs4Settings.cuelistnumber4c = 0
+            cs4Settings.cuelistnumber4b = 0;
+            cs4Settings.cuelistnumber4c = 0;
             cs4Settings.nonsysex4 = 0;
             collectionSettings.insert(cs4Settings, {w: 1}, function (err, result) {
                 console.log(result);
             })
         }
         //  setTimeout(function(){sendOutput('GETTIME');}, 7000);
-        var a, b, c, d, e, f
+        var a, b, c, d, e, f;
         a = setTimeout(function(){sendOutput('          SLAVE DMX_CH ' + cs4Settings.dmx1 +  " " + cs4Settings.dmx2 + " " + cs4Settings.dmx3 + '');}, 500);
         b = setTimeout(function(){sendOutput('          SLAVE ZIGEN ' + cs4Settings.enableZigbee2);}, 1000);
         c = setTimeout(function(){sendOutput('          MIDIFIL1 ' + cs4Settings.midisex1 + " " + cs4Settings.nonsysex1 + " "+ (parseInt(+cs4Settings.deviceIDLow1)*1 + parseInt(+cs4Settings.deviceIDHigh1)*16).toString() + " " + cs4Settings.type1 + " " + cs4Settings.commandformat1 + " " +   cs4Settings.command1 + " " + cs4Settings.nonsysextype1 + " " + cs4Settings.nonsysexchannel1 + " ");}, 2000);
@@ -1703,7 +1706,7 @@ exports.getSettings = function(){
 };
 
 function sendCS4Parameters() {
-    var a, b, c, d, e, f
+    var a, b, c, d, e, f;
     a = setTimeout(function(){sendOutput('          SLAVE DMX_CH ' + cs4Settings.dmx1 +  " " + cs4Settings.dmx2 + " " + cs4Settings.dmx3 + '');}, 500);
     b = setTimeout(function(){sendOutput('          SLAVE ZIGEN ' + cs4Settings.enableZigbee2);}, 1000);
     c = setTimeout(function(){sendOutput('          MIDIFIL1 ' + cs4Settings.midisex1 + " " + cs4Settings.nonsysex1 + " "+ (parseInt(+cs4Settings.deviceIDLow1)*1 + parseInt(+cs4Settings.deviceIDHigh1)*16).toString() + " " + cs4Settings.type1 + " " + cs4Settings.commandformat1 + " " +   cs4Settings.command1 + " " + cs4Settings.nonsysextype1 + " " + cs4Settings.nonsysexchannel1 + " ");}, 2000);
@@ -2075,8 +2078,8 @@ function stopIO(state){
 
 // Todd - added to proecess the files received from the file upload webpage
 function fileUpload(d){
-    console.log('file upload ********************************')
-    console.log('fileName:'+d.fileName)
+    console.log('file upload ********************************');
+    console.log('fileName:'+d.fileName);
     var path;
     if(os.type() != 'Windows_NT') {
         path = '/home/pi/mongoBackup/'
