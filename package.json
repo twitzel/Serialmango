@@ -1,7 +1,7 @@
 {
   "name": "Serialmango",
-  "version": "1.17.21",
-  "version Info":"added the version info to this project 11/29/2017",
+  "version": "1.17.22",
+  "version Info":"added delete log and restore to factory default 12.2.17",
   "private": true,
   "scripts": {
     "start": "node app.js"
