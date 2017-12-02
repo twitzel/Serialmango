@@ -705,7 +705,7 @@ exports.websocketDataIn = function(dataSocket, Socket){
                 });
             }
             else if(dataSocket.Value == "all") {
-                copyToInternal(0);
+                copyToInternal(0,function() {
                     console.log("Data Backed UP!");
                     collectionCue.remove({}, function (err, numberCueRemoved) {
                         console.log("inside remove cue" + numberCueRemoved);
@@ -853,8 +853,7 @@ exports.websocketDataIn = function(dataSocket, Socket){
     //
     //     sendOutput(outstring);
     // }
-};
-
+    }
 // This routine receives serial cue data,
 // parses it and sends it out the web socket
 // puts it in Log collection.
@@ -1531,7 +1530,7 @@ function copyToInternal(location,cb)
         comlib.websocketsend("Successfully copied all data to internal storage location " + location);
         console.log("Successfully copied all data to internal storage: "+ destinationPath + " " + code);
         if(cb){
-            return cb;
+            return cb();
         }
         return(1);
     });
@@ -2116,4 +2115,4 @@ function fileUpload(d){
 
         })
 
-}
+};
