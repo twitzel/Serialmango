@@ -697,7 +697,7 @@ exports.websocketDataIn = function(dataSocket, Socket){
 
         else if(dataSocket.Type == "RESTORE") {
             if(dataSocket.Value == "log"){
-                copyToInternal(0)({},function(err) {
+                copyToInternal(0,function(err) {
                     console.log("Data Backed UP!");
                     collectionLog.drop({}, function (err, numberLogRemoved) {
                         console.log("inside remove log" + numberLogRemoved);
