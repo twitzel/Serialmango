@@ -737,6 +737,22 @@ function copyToPublic(){
     websocket.send(JSON.stringify(dataPacket));
 }
 
+function deleteLog(){
+    if (confirm('Are you sure you want to PERMANENTLY DELETE the log file? \n\nA copy will be saved in the DEFAULT file Internal Location.\n\nYou must RESTART system if you select OK')) {
+        dataPacket.Type = "RESTORE";
+        dataPacket.Value="log";
+        websocket.send(JSON.stringify(dataPacket));
+    }
+}
+
+function restoreFactory(){
+    if (confirm('Are you sure you want to PERMANENTLY reset this unit?\n\nAll CUE FILES and Logs will be Deleted! \n\nA copy will be saved in the DEFAULT file Internal Location.\n\nYou must RESTART system if you select OK')) {
+        dataPacket.Type = "RESTORE";
+        dataPacket.Value="all";
+        websocket.send(JSON.stringify(dataPacket));
+    }
+}
+
 function copyFromPublic(e){
    // var wantedFiles = ["cue.bson", "cue.metadata.json", "log.bson", "log.metadata.json","settings.bson","settings.metadata.json","startup.bson","startup.metadata.json", "system.indexes.bson"];
     var wantedFiles = ["cue.bson", "cue.metadata.json", "log.bson", "log.metadata.json","settings.bson","settings.metadata.json","startup.bson","startup.metadata.json"];

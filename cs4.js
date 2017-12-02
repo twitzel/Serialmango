@@ -695,7 +695,34 @@ exports.websocketDataIn = function(dataSocket, Socket){
             startSystemTest();
         }
 
+        else if(dataSocket.Type == "RESTORE") {
+            if(dataSocket.Value == "log"){
+                copyToInternal(0)({},function(err) {
+                    console.log("Data Backed UP!");
+                    collectionLog.drop({}, function (err, numberLogRemoved) {
+                        console.log("inside remove log" + numberLogRemoved);
+                    });
+                });
+            }
+            else if(dataSocket.Value == "all") {
+                copyToInternal(0);
+                    console.log("Data Backed UP!");
+                    collectionCue.remove({}, function (err, numberCueRemoved) {
+                        console.log("inside remove cue" + numberCueRemoved);
 
+                        collectionLog.drop({}, function (err, numberLogRemoved) {
+                            console.log("inside remove log" + numberLogRemoved);
+
+                            collectionStartup.remove({}, function (err, numberStartupRemoved) {
+                                console.log("inside remove Startup" + numberStartupRemoved);
+                            });
+
+                        });
+
+                    });
+
+            }
+        }
     }
 //     else //This is the real live system timing data
 //     {
