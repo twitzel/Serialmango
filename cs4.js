@@ -708,13 +708,13 @@ exports.websocketDataIn = function(dataSocket, Socket){
             else if(dataSocket.Value == "all") {
                 copyToInternal(0,function() {
                     console.log("Data Backed UP!");
-                    collectionCue.drop({}, function (err, numberCueRemoved) {
+                    collectionCue.drop( function (err, numberCueRemoved) {
                         console.log("inside remove cue" + numberCueRemoved);
 
-                        collectionLog.drop({}, function (err, numberLogRemoved) {
+                        collectionLog.drop( function (err, numberLogRemoved) {
                             console.log("inside remove log" + numberLogRemoved);
 
-                            collectionStartup.drop({}, function (err, numberStartupRemoved) {
+                            collectionStartup.drop( function (err, numberStartupRemoved) {
                                 console.log("inside remove Startup" + numberStartupRemoved);
                             });
 
