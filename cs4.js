@@ -700,7 +700,7 @@ exports.websocketDataIn = function(dataSocket, Socket){
             if(dataSocket.Value == "log"){
                 copyToInternal(0,function() {
                     console.log("Data Backed UP!");
-                    collectionLog.drop({}, function (err, numberLogRemoved) {
+                    collectionLog.drop( function (err, numberLogRemoved) {
                         console.log("inside remove log" + numberLogRemoved);
                     });
                 });
