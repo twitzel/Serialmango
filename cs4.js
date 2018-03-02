@@ -99,7 +99,8 @@ sendOutput = function (dataToSend)
 {
     var addTime = "{\"Time\":";
     console.log("We are at sendOutput: " + dataToSend);
-    if (timedOut) {
+  //  if (timedOut) {
+    if (1) {
         timerStartTime = new Date();
         timedOut = false;
         comlib.write("         " + dataToSend + "\r"); // add spaces at beginning for R4 zigbee stuff and terminate\n\r
@@ -707,13 +708,13 @@ exports.websocketDataIn = function(dataSocket, Socket){
             else if(dataSocket.Value == "all") {
                 copyToInternal(0,function() {
                     console.log("Data Backed UP!");
-                    collectionCue.remove({}, function (err, numberCueRemoved) {
+                    collectionCue.drop({}, function (err, numberCueRemoved) {
                         console.log("inside remove cue" + numberCueRemoved);
 
                         collectionLog.drop({}, function (err, numberLogRemoved) {
                             console.log("inside remove log" + numberLogRemoved);
 
-                            collectionStartup.remove({}, function (err, numberStartupRemoved) {
+                            collectionStartup.drop({}, function (err, numberStartupRemoved) {
                                 console.log("inside remove Startup" + numberStartupRemoved);
                             });
 
