@@ -1,6 +1,6 @@
 {
   "name": "Serialmango",
-  "version": "1.17.23a",
+  "version": "1.17.23",
   "version Info":"added delete log and restore to factory default 12.2.17",
   "private": true,
   "scripts": {
