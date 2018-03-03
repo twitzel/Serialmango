@@ -99,8 +99,7 @@ sendOutput = function (dataToSend)
 {
     var addTime = "{\"Time\":";
     console.log("We are at sendOutput: " + dataToSend);
-  //  if (timedOut) {
-    if (1) {
+   if (timedOut) {
         timerStartTime = new Date();
         timedOut = false;
         comlib.write("         " + dataToSend + "\r"); // add spaces at beginning for R4 zigbee stuff and terminate\n\r
