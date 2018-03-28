@@ -818,7 +818,7 @@ function copyFromPublic(e){
     // }
 }
 
-function downLoadFiles(){
+function downLoadFiles(){ //changed to accomodate Changes in Chrome browser that stopped multiple downloads 3/28/2018
     //generate keyclicks to force downloads
    // window.location.href = "/images/sailogo.jpg";
  //   window.open("/images/sailogo.jpg",'Download');
