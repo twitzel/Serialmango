@@ -822,19 +822,39 @@ function downLoadFiles(){
     //generate keyclicks to force downloads
    // window.location.href = "/images/sailogo.jpg";
  //   window.open("/images/sailogo.jpg",'Download');
-    document.getElementById('dl1').click();
-    document.getElementById('dl2').click();
-    document.getElementById('dl3').click();
-    document.getElementById('dl4').click();
-    document.getElementById('dl5').click();
-    document.getElementById('dl6').click();
-    document.getElementById('dl7').click();
-    document.getElementById('dl8').click();
-    document.getElementById('dl9').click();
+    setTimeout(function(){document.getElementById('dl1').click();},5000);
+    setTimeout(function(){document.getElementById('dl2').click();},10000);
+    setTimeout(function(){document.getElementById('dl3').click();},15000);
+    setTimeout(function(){document.getElementById('dl4').click();},20000);
+    setTimeout(function(){document.getElementById('dl5').click();},25000);
+    setTimeout(function(){document.getElementById('dl6').click();},30000);
+    setTimeout(function(){document.getElementById('dl7').click();},1000);
+    setTimeout(function(){document.getElementById('dl8').click();},1000);
+    setTimeout(function(){document.getElementById('dl9').click();},1000);
+
     writeToScreen("Download Finished");
 
 
 }
+
+// function downLoadFiles(){
+//     //generate keyclicks to force downloads
+//    // window.location.href = "/images/sailogo.jpg";
+//  //   window.open("/images/sailogo.jpg",'Download');
+//     document.getElementById('dl1').click();
+//     document.getElementById('dl2').click();
+//     document.getElementById('dl3').click();
+//     document.getElementById('dl4').click();
+//     document.getElementById('dl5').click();
+//     document.getElementById('dl6').click();
+//     document.getElementById('dl7').click();
+//     document.getElementById('dl8').click();
+//     document.getElementById('dl9').click();
+//     writeToScreen("Download Finished");
+//
+//
+// }
+
 //************************************  TIME  ******************************
 
 function gettimebutton(){
