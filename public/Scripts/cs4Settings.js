@@ -830,9 +830,9 @@ function downLoadFiles(){
     setTimeout(function(){document.getElementById('dl6').click();},30000);
     setTimeout(function(){document.getElementById('dl7').click();},35000);
     setTimeout(function(){document.getElementById('dl8').click();},40000);
-    setTimeout(function(){document.getElementById('dl9').click();},45000);
+  //  setTimeout(function(){document.getElementById('dl9').click();},45000);
+    setTimeout(function(){writeToScreen("Download Finished");},45000);
 
-    writeToScreen("Download Finished");
 
 
 }
