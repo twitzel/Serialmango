@@ -828,9 +828,9 @@ function downLoadFiles(){
     setTimeout(function(){document.getElementById('dl4').click();},20000);
     setTimeout(function(){document.getElementById('dl5').click();},25000);
     setTimeout(function(){document.getElementById('dl6').click();},30000);
-    setTimeout(function(){document.getElementById('dl7').click();},1000);
-    setTimeout(function(){document.getElementById('dl8').click();},1000);
-    setTimeout(function(){document.getElementById('dl9').click();},1000);
+    setTimeout(function(){document.getElementById('dl7').click();},35000);
+    setTimeout(function(){document.getElementById('dl8').click();},40000);
+    setTimeout(function(){document.getElementById('dl9').click();},45000);
 
     writeToScreen("Download Finished");
 
