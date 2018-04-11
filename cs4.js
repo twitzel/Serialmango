@@ -76,6 +76,7 @@ var midicueoutputstringstart = " F07F";
 var midicueoutputstringmiddle ="023001";
 var midicueoutputcuelist;
 var midicueoutid;
+var timeoutPmpFailure;
 //var ignoreData = 0;
 
 
@@ -1750,12 +1751,17 @@ exports.ledOn = function(){
 
         clearInterval(blink);
     }
+ // Added 4/11/2018 PMP failure with Asus router
+    timeoutPmpFailure = setTimeout(function(){
+        pmpRecovery();
+    },20000);
+
 
     pmp.findGateway("",function(err,gateway){
         var error = 0;
         var erroratpmp = 0;
         global.version = pjson.version; // added to get version info to system
-
+        console.log("HERE 0");
         ///console.log(err,gateway.ip);
         if(err){
             console.log('Gateway not found',err);
@@ -1765,7 +1771,7 @@ exports.ledOn = function(){
             global.externalIP = gateway.externalIP;
             console.log('gateway found: '+ gateway.ip + ", External IP: "+ gateway.externalIP);
 
-
+            console.log("HERE");
 
 
             pmp.portMap(gateway,3000,3000,0,'CS4 Main',function(err,rslt){
@@ -1794,7 +1800,7 @@ exports.ledOn = function(){
                             console.log(err,rslt);
                         }
 
-
+                        clearTimeout(timeoutPmpFailure); // Added 4/11/2018 PMP failure with Asus router
                         /////////////
                         console.log('Ready to send START UP email message');
                         var mailOptions = {
@@ -1823,6 +1829,7 @@ exports.ledOn = function(){
 
         }
         if(erroratpmp) {
+            clearTimeout(timeoutPmpFailure);// Added 4/11/2018 PMP failure with Asus router
             /////////////
             console.log('Ready to send START UP email message');
             var mailOptions = {
@@ -1846,6 +1853,27 @@ exports.ledOn = function(){
         }
 
     });
+};
+
+function  pmpRecovery(){// Added 4/11/2018 PMP failure with Asus  router
+    console.log('PMP Router Failure Routine');
+    console.log('Ready to send START UP email message');
+    var mailOptions = {
+        from: "CS4 @ " + myuri + "✔ " + cs4Settings.emailAccount,
+        //  from: "CS4 192.168.2.10 ✔ <stevewitz@gmail.com>", // sender address
+        to: cs4Settings.emailAddress,
+        // to: "steve@wizcomputing.com      ", // comma seperated list of receivers
+        subject: "Start Up Message from CS4 ✔: " + cs4Settings.systemName, // Subject line
+        text: cs4Settings.systemName + " CS4 has just started.\n  External IP address:  http://" + global.externalIP + ":3000" + " - and internal IP address: " + global.myuri + ":3000", // plaintext body
+        html: cs4Settings.systemName + " CS4 has just started.\n  External IP address:  http://" + global.externalIP + ":3000" + " - and internal IP address: " + global.myuri + ":3000"// html body
+    };
+
+    // send mail with defined transport object
+    sendMail(mailOptions);
+    console.log("READY to start system test in 10 seconds");
+    setTimeout(function () {
+        startSystemTest();
+    }, 10000); // check for results after delay
 };
 
 exports.ledOff = function(){
