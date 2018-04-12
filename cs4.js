@@ -1754,13 +1754,14 @@ exports.ledOn = function(){
  // Added 4/11/2018 PMP failure with Asus router
     timeoutPmpFailure = setTimeout(function(){
         pmpRecovery();
-    },10000);
+    },12000);
 
+    global.version = pjson.version; // added to get version info to system
 
     pmp.findGateway("",function(err,gateway){
         var error = 0;
         var erroratpmp = 0;
-        global.version = pjson.version; // added to get version info to system
+
         console.log("HERE 0");
         ///console.log(err,gateway.ip);
         if(err){
