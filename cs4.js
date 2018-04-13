@@ -290,7 +290,6 @@ exports.setup = function()
                 // open serial port calls getsettings when done
                 // comlib.openSerialPort('com3', baud, exports.getSettings); //windows
                 comlib.openSerialPort('com3', baud); //windows
-
             }
             else
             {
