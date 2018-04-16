@@ -89,7 +89,10 @@ else if(branch == 'cs4')
     var cs4 = require('./cs4');
     cs4.ledOff(); // turn off the ready led
     cs4.setup();
-    startwebserver();
+    setTimeout(function () { // added timer to fix slow startup of router.  Added 20 seconds to startup
+        startwebserver();
+    }, 20000);
+ //   startwebserver();
 }
 
 function startwebserver(){
