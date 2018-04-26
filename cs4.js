@@ -145,7 +145,15 @@ sendOutput = function (dataToSend)
                 }
                 var outputType = dataToSend.substring(dataToSend.indexOf("GO")+3,dataToSend.indexOf(".")).trim();//just find start of
                 if (outputType.substring(0,1)=="s"){
-                    outputNumber = "01";
+                    switch(outputType.substring(5,6)){
+                        case "B":
+                            outputNumber = "05";
+                            break;
+                        defdault:
+                            outputNumber = "01";
+                            break;
+                    }
+
                 }
                 else if(outputType.substring(0,1) =="a"){
                     var outputTypeAudio = outputType.substring(3,4);
@@ -160,6 +168,9 @@ sendOutput = function (dataToSend)
                             outputNumber = "04";
                             break;
                     }
+                }
+                else if(outputType.substring(0,1) =="v") {
+                    outputNumber = "06";
                 }
                 if(outputNumber !=0) {
                     // outputstringmidi += "00" + midicueoutputcuelist + "F7";
@@ -290,7 +301,6 @@ exports.setup = function()
                 // open serial port calls getsettings when done
                 // comlib.openSerialPort('com3', baud, exports.getSettings); //windows
                 comlib.openSerialPort('com3', baud); //windows
-
             }
             else
             {
