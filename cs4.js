@@ -149,7 +149,7 @@ sendOutput = function (dataToSend)
                         case "B":
                             outputNumber = "05";
                             break;
-                        defdault:
+                        default:
                             outputNumber = "01";
                             break;
                     }
