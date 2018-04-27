@@ -175,7 +175,7 @@ sendOutput = function (dataToSend)
                 if(outputNumber !=0) {
                     // outputstringmidi += "00" + midicueoutputcuelist + "F7";
                     outputstringmidi += "00" + outputNumber + "F7";
-                    //            console.log("Sending Midi Cues  " + outputstringmidi);
+                                console.log("Sending Midi Cues  " + outputstringmidi);
                     setTimeout(function () {
                         comlib.write((outputstringmidi) + '\n' + '\r');
                     }, 50); //now send it out delayed a little
@@ -183,7 +183,7 @@ sendOutput = function (dataToSend)
             }
         }
 
-        if((enablemidioutput == "YES") && (dataToSend.indexOf("ZIG1") > -1) && (dataToSend.indexOf(midicueouttype) > -1) && (dataToSend.indexOf(midicueoutshowname) > -1)){ //make sure we only send on zigbee commands and proper midi out type & correct showname
+        if((midicueouttype != "all") && (enablemidioutput == "YES") && (dataToSend.indexOf("ZIG1") > -1) && (dataToSend.indexOf(midicueouttype) > -1) && (dataToSend.indexOf(midicueoutshowname) > -1)){ //make sure we only send on zigbee commands and proper midi out type & correct showname
            // var midicuenum = dataToSend.substring(dataToSend.indexOf(midicueouttype)+ midicueouttype.length, dataToSend.indexOf("."));
             var midicuenum = dataToSend.substring(5,dataToSend.indexOf(".")).replace(/\D/g,''); // this gets rid of everything except the cue number
             var outputstringmidi = midicueoutselect + midicueoutputstringstart + midicueoutid + midicueoutputstringmiddle;
@@ -495,7 +495,14 @@ exports.websocketDataIn = function(dataSocket, Socket){
                 }
                 var outputType = dataSocket.Data.substring(dataSocket.Data.indexOf("GO")+3,dataSocket.Data.indexOf(".")).trim();//just find start of
                 if (outputType.substring(0,1)=="s"){
-                    outputNumber = "01";
+                    switch(outputType.substring(5,6)){
+                        case "B":
+                            outputNumber = "05";
+                            break;
+                        default:
+                            outputNumber = "01";
+                            break;
+                    }
                 }
                 else if(outputType.substring(0,1) =="a"){
                     var outputTypeAudio = outputType.substring(3,4);
@@ -510,6 +517,9 @@ exports.websocketDataIn = function(dataSocket, Socket){
                             outputNumber = "04";
                             break;
                     }
+                }
+                else if(outputType.substring(0,1) =="v") {
+                    outputNumber = "06";
                 }
                 outputstringmidi += "00" +  outputNumber + "F7";
                 console.log("Sending Midi Cues");
