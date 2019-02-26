@@ -1,7 +1,7 @@
 {
   "name": "Serialmango",
-  "version": "1.18.03",
-  "version Info":"added delete log and restore to factory default 12.2.17",
+  "version": "1.18.04",
+  "version Info":"changed sorting of log file 2/26/2019",
   "private": true,
   "scripts": {
     "start": "node app.js"
