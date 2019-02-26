@@ -261,7 +261,7 @@ exports.setup = function()
 
 
     //MongoClient.connect("mongodb://localhost:27017/WizDb", function(err, db)
-    // MongoClient.connect("mongodb://192.168.2.72:27017/WizDb", function(err, db)
+   // MongoClient.connect("mongodb://192.168.2.63:27017/" + collectionName, function(err, db)
     MongoClient.connect("mongodb://localhost:27017/" + collectionName, function(err, db)
         //  MongoClient.connect("mongodb://" + global.myuri + ":27017/" + collectionName, function(err, db) // changed to above line 08102015
         //MongoClient.connect("mongodb://" + "192.168.2.67" + ":27017/" + collectionName, function(err, db)
@@ -424,12 +424,14 @@ exports.websocketDataIn = function(dataSocket, Socket){
             {
                 comlib.websocketsend("* Preparing Data For Display. \n* Please Wait. \n* (may take up to 1 minute) ", Socket) ;
              //   collectionLog.find({},{_id:0}).sort({"Time": -1}).limit(26000).toArray(function(error,logfile){
-                collectionLog.find({},{_id:0}).toArray(function(error,logfile){
+               // collectionLog.find({},{_id:0}).limit(50000).toArray(function(error,logfile){
+                collectionLog.find({}).toArray(function(error,logfile){
+                // collectionLog.find({},{_id:0}).toArray(function(error,logfile){
                     //collectionLog.find({},{_id:0}).sort({ $natural: -1 }).limit(1000).toArray(function(error,logfile){
                     if(error){
                         console.log(error);
                     }
-                    else {
+                    else { console.log("count "+ logfile.length)
                         for (var i = 0; i < logfile.length; i++) {
                             logfileData = JSON.stringify(logfile[i]);
 
