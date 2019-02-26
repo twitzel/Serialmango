@@ -423,8 +423,8 @@ exports.websocketDataIn = function(dataSocket, Socket){
 
             {
                 comlib.websocketsend("* Preparing Data For Display. \n* Please Wait. \n* (may take up to 1 minute) ", Socket) ;
-                collectionLog.find({},{_id:0}).sort({"Time": -1}).limit(26000).toArray(function(error,logfile){
-               // collectionLog.find({},{_id:0}).sort({"Time": -1}).toArray(function(error,logfile){
+             //   collectionLog.find({},{_id:0}).sort({"Time": -1}).limit(26000).toArray(function(error,logfile){
+                collectionLog.find({},{_id:0}).toArray(function(error,logfile){
                     //collectionLog.find({},{_id:0}).sort({ $natural: -1 }).limit(1000).toArray(function(error,logfile){
                     if(error){
                         console.log(error);
