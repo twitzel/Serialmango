@@ -102,8 +102,8 @@ exports.sendgettime = function(){
     }
     else{exports.getSettings();
     }
-
 };
+
 sendOutput = function (dataToSend)
 {
     var addTime = "{\"Time\":";
