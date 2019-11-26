@@ -182,50 +182,53 @@
                 </div>
             </fieldset>
         </div>
-
         <div>
-            <fieldset id = midioutputsetup>
-                <legend>Midi  Output Cue Setup</legend>
-                <select id='midicueoutselect' >
-                    <option value='MIDI1' >Output Channel: Midi 1</option>
-                    <option value='MIDI2' >Output Channel: Midi 2</option>
-                </select>
-                <select id= midicueouttype >
-                    <option value='slide' title='1'>Content: Slides</option>
-                    <option value='audA' title='2'>Content: Audio A</option>
-                    <option value='audB' title='3'>Content: Audio B</option>
-                    <option value='audC' title='3'>Content: Audio C</option>
-                    <option value='all' title='3'>Content: All</option>
-                </select>
-                    <label class = setup>Midi Output Cue Showname</label>
-                    <input id=midicueoutshowname name=midicueoutshowname  type=text value="Enter Show Name" style = "width: 15em" >
-
-
-                <select id= midicueoutid >
-                    <option value = "00" >Device ID: 0</option>
-                    <option value = "01" >Device ID: 1</option>
-                    <option value = "02" >Device ID: 2</option>
-                    <option value = "03" >Device ID: 3</option>
-                    <option value = "04" >Device ID: 4</option>
-                    <option value = "05" >Device ID: 5</option>
-                    <option value = "06" >Device ID: 6</option>
-                    <option value = "07" >Device ID: 7</option>
-                    <option value = "08" >Device ID: 8</option>
-                    <option value = "09" >Device ID: 9</option>
-                    <option value = "0A" >Device ID: 10</option>
-                    <option value = "0B" >Device ID: 11</option>
-                    <option value = "0C" >Device ID: 12</option>
-                    <option value = "0D" >Device ID: 13</option>
-                    <option value = "0E" >Device ID: 14</option>
-                    <option value = "0F" >Device ID: 15</option>
-                </select>
+            <fieldset id = midioutput >
                 <div>
-                    Enable Midi Cue Output:   Yes <input id=midicueoutputyes name=midicueoutput value= "monitoryes" type=radio checked>
-                    No<input id=midicueoutputno name=midicueoutput value = "monitorno" type=radio >
+                    <legend>Midi Output Setup1</legend>
+                    <fieldset id = midioutputsetup>
+                        <legend>Midi  Output Cue Setup</legend>
+                        <select id='midicueoutselect' >
+                            <option value='MIDI1' >Output Channel: Midi 1</option>
+                            <option value='MIDI2' >Output Channel: Midi 2</option>
+                        </select>
+                        <select id= midicueouttype >
+                            <option value='slide' title='1'>Content: Slides</option>
+                            <option value='audA' title='2'>Content: Audio A</option>
+                            <option value='audB' title='3'>Content: Audio B</option>
+                            <option value='audC' title='3'>Content: Audio C</option>
+                            <option value='all' title='3'>Content: All</option>
+                        </select>
+                            <label class = setup>Midi Output Cue Showname</label>
+                            <input id=midicueoutshowname name=midicueoutshowname  type=text value="Enter Show Name" style = "width: 15em" >
+
+
+                        <select id= midicueoutid >
+                            <option value = "00" >Device ID: 0</option>
+                            <option value = "01" >Device ID: 1</option>
+                            <option value = "02" >Device ID: 2</option>
+                            <option value = "03" >Device ID: 3</option>
+                            <option value = "04" >Device ID: 4</option>
+                            <option value = "05" >Device ID: 5</option>
+                            <option value = "06" >Device ID: 6</option>
+                            <option value = "07" >Device ID: 7</option>
+                            <option value = "08" >Device ID: 8</option>
+                            <option value = "09" >Device ID: 9</option>
+                            <option value = "0A" >Device ID: 10</option>
+                            <option value = "0B" >Device ID: 11</option>
+                            <option value = "0C" >Device ID: 12</option>
+                            <option value = "0D" >Device ID: 13</option>
+                            <option value = "0E" >Device ID: 14</option>
+                            <option value = "0F" >Device ID: 15</option>
+                        </select>
+                        <div>
+                            Enable Midi Cue Output:   Yes <input id=midicueoutputyes name=midicueoutput value= "monitoryes" type=radio checked>
+                            No<input id=midicueoutputno name=midicueoutput value = "monitorno" type=radio >
+                        </div>
+                    </fieldset>
                 </div>
             </fieldset>
         </div>
-
 
         <fieldset id = midifilters>
             <legend>Midi Input Filters</legend>
