@@ -70,6 +70,19 @@ function init(){
             document.getElementById("midicueoutputno").checked = true;
         }
 
+        document.getElementById("midicueoutselect1").value = cs4Settings.midicueoutselect1;
+        if(cs4Settings.midicueoutshowname1) {
+            document.getElementById("midicueoutshowname1").value = cs4Settings.midicueoutshowname1;
+        }
+        document.getElementById("midicueouttype1").value = cs4Settings.midicueouttype1;
+        document.getElementById("midicueoutid1").value = cs4Settings.midicueoutid1;
+        if(cs4Settings.enablemidioutput1 == "YES"){
+            document.getElementById("midicueoutputyes1").checked = true;
+        }
+        else if(cs4Settings.enablemidioutput1 == "NO"){
+            document.getElementById("midicueoutputno1").checked = true;
+        }
+
         document.getElementById("timeZoneCombo").value = cs4Settings.timezone;
 
         document.getElementById("midisysex1").value = cs4Settings.midisex1;
@@ -261,6 +274,17 @@ function saveParameters(){
     cs4Settings.midicueoutshowname = document.getElementById('midicueoutshowname').value;
     cs4Settings.midicueouttype = document.getElementById('midicueouttype').value;
     cs4Settings.midicueoutid = document.getElementById('midicueoutid').value;
+
+    if(document.getElementById('midicueoutputno1').checked){
+        cs4Settings.enablemidioutput1 = "NO";
+    }
+    else{
+        cs4Settings.enablemidioutput1 = "YES"
+    }
+    cs4Settings.midicueoutselect1 = document.getElementById('midicueoutselect1').value;
+    cs4Settings.midicueoutshowname1 = document.getElementById('midicueoutshowname1').value;
+    cs4Settings.midicueouttype1 = document.getElementById('midicueouttype1').value;
+    cs4Settings.midicueoutid1 = document.getElementById('midicueoutid1').value;
     
     cs4Settings.midisex1 = document.getElementById("midisysex1").value;
     cs4Settings.deviceIDLow1 = document.getElementById("deviceIDLow1").value;
@@ -737,8 +761,25 @@ function copyToPublic(){
     websocket.send(JSON.stringify(dataPacket));
 }
 
+function deleteLog(){
+    if (confirm('Are you sure you want to PERMANENTLY DELETE the log file? \n\nA copy will be saved in the DEFAULT file Internal Location.\n\nYou must RESTART system if you select OK')) {
+        dataPacket.Type = "RESTORE";
+        dataPacket.Value="log";
+        websocket.send(JSON.stringify(dataPacket));
+    }
+}
+
+function restoreFactory(){
+    if (confirm('Are you sure you want to PERMANENTLY reset this unit?\n\nAll CUE FILES and Logs will be Deleted! \n\nA copy will be saved in the DEFAULT file Internal Location.\n\nYou must RESTART system if you select OK')) {
+        dataPacket.Type = "RESTORE";
+        dataPacket.Value="all";
+        websocket.send(JSON.stringify(dataPacket));
+    }
+}
+
 function copyFromPublic(e){
-    var wantedFiles = ["cue.bson", "cue.metadata.json", "log.bson", "log.metadata.json","settings.bson","settings.metadata.json","startup.bson","startup.metadata.json", "system.indexes.bson"];
+   // var wantedFiles = ["cue.bson", "cue.metadata.json", "log.bson", "log.metadata.json","settings.bson","settings.metadata.json","startup.bson","startup.metadata.json", "system.indexes.bson"];
+    var wantedFiles = ["cue.bson", "cue.metadata.json", "log.bson", "log.metadata.json","settings.bson","settings.metadata.json","startup.bson","startup.metadata.json"];
     var FILES = new Array();
     wantedFilesJoin = wantedFiles.sort().join();
 
@@ -801,23 +842,43 @@ function copyFromPublic(e){
     // }
 }
 
-function downLoadFiles(){
+function downLoadFiles(){ //changed to accomodate Changes in Chrome browser that stopped multiple downloads 3/28/2018
     //generate keyclicks to force downloads
    // window.location.href = "/images/sailogo.jpg";
  //   window.open("/images/sailogo.jpg",'Download');
-    document.getElementById('dl1').click();
-    document.getElementById('dl2').click();
-    document.getElementById('dl3').click();
-    document.getElementById('dl4').click();
-    document.getElementById('dl5').click();
-    document.getElementById('dl6').click();
-    document.getElementById('dl7').click();
-    document.getElementById('dl8').click();
-    document.getElementById('dl9').click();
-    writeToScreen("Download Finished");
+    setTimeout(function(){document.getElementById('dl1').click();},5000);
+    setTimeout(function(){document.getElementById('dl2').click();},10000);
+    setTimeout(function(){document.getElementById('dl3').click();},15000);
+    setTimeout(function(){document.getElementById('dl4').click();},20000);
+    setTimeout(function(){document.getElementById('dl5').click();},25000);
+    setTimeout(function(){document.getElementById('dl6').click();},30000);
+    setTimeout(function(){document.getElementById('dl7').click();},35000);
+    setTimeout(function(){document.getElementById('dl8').click();},40000);
+  //  setTimeout(function(){document.getElementById('dl9').click();},45000);
+    setTimeout(function(){writeToScreen("Download Finished");},45000);
+
 
 
 }
+
+// function downLoadFiles(){
+//     //generate keyclicks to force downloads
+//    // window.location.href = "/images/sailogo.jpg";
+//  //   window.open("/images/sailogo.jpg",'Download');
+//     document.getElementById('dl1').click();
+//     document.getElementById('dl2').click();
+//     document.getElementById('dl3').click();
+//     document.getElementById('dl4').click();
+//     document.getElementById('dl5').click();
+//     document.getElementById('dl6').click();
+//     document.getElementById('dl7').click();
+//     document.getElementById('dl8').click();
+//     document.getElementById('dl9').click();
+//     writeToScreen("Download Finished");
+//
+//
+// }
+
 //************************************  TIME  ******************************
 
 function gettimebutton(){

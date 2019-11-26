@@ -89,7 +89,8 @@ else if(branch == 'cs4')
     var cs4 = require('./cs4');
     cs4.ledOff(); // turn off the ready led
     cs4.setup();
-    startwebserver();
+
+   startwebserver();
 }
 
 function startwebserver(){

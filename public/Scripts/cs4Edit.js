@@ -921,6 +921,7 @@ function zoomcanvasMousedown(event){
             incremental = new Date(startTimeZoom);
             incremental = new Date(incremental.setMilliseconds(incremental.getMilliseconds() +  event.offsetX*msPerPixelZoom)).toISOString();
             itemToInsert.Time = new Date(incremental);
+            itemToInsert.Data.Desc = oneCueFileName;
             itemToInsert.Data.Delay = 100;
             itemToInsert.Data.Port = "";
             itemToInsert.Data.Showname = "";

@@ -21,6 +21,7 @@ var os = require('os');
 var express = require('express');
 var routes = require('./routes');
 var user = require('./routes/user');
+var pjson = require('./package.json');
 //var time = require('time');
 var timedOutInterval = 250; //time to wait between serial transmitts
 var timedOut = true; // set to false will delay transmission;
@@ -71,10 +72,19 @@ var midicueoutselect = "MIDI1 ";
 var midicueoutshowname = " ";
 var enablemidioutput = "N0";
 var midicueouttype = "XXX";
-var midicueoutputstringstart = " F07F"
+var midicueoutputstringstart = " F07F";
 var midicueoutputstringmiddle ="023001";
 var midicueoutputcuelist;
 var midicueoutid;
+var midicueoutselect1 = "MIDI1 ";
+var midicueoutshowname1 = " ";
+var enablemidioutput1 = "N0";
+var midicueouttype1 = "XXX";
+var midicueoutputstringstart1 = " F07F";
+var midicueoutputstringmiddle1 ="023001";
+var midicueoutputcuelist1;
+var midicueoutid1;
+var timeoutPmpFailure;
 //var ignoreData = 0;
 
 
@@ -92,13 +102,13 @@ exports.sendgettime = function(){
     }
     else{exports.getSettings();
     }
+};
 
-}
 sendOutput = function (dataToSend)
 {
     var addTime = "{\"Time\":";
     console.log("We are at sendOutput: " + dataToSend);
-    if (timedOut) {
+   if (timedOut) {
         timerStartTime = new Date();
         timedOut = false;
         comlib.write("         " + dataToSend + "\r"); // add spaces at beginning for R4 zigbee stuff and terminate\n\r
@@ -143,7 +153,15 @@ sendOutput = function (dataToSend)
                 }
                 var outputType = dataToSend.substring(dataToSend.indexOf("GO")+3,dataToSend.indexOf(".")).trim();//just find start of
                 if (outputType.substring(0,1)=="s"){
-                    outputNumber = "01";
+                    switch(outputType.substring(5,6)){
+                        case "B":
+                            outputNumber = "05";
+                            break;
+                        default:
+                            outputNumber = "01";
+                            break;
+                    }
+
                 }
                 else if(outputType.substring(0,1) =="a"){
                     var outputTypeAudio = outputType.substring(3,4);
@@ -159,10 +177,13 @@ sendOutput = function (dataToSend)
                             break;
                     }
                 }
+                else if(outputType.substring(0,1) =="v") {
+                    outputNumber = "06";
+                }
                 if(outputNumber !=0) {
                     // outputstringmidi += "00" + midicueoutputcuelist + "F7";
                     outputstringmidi += "00" + outputNumber + "F7";
-                    //            console.log("Sending Midi Cues  " + outputstringmidi);
+                                console.log("Sending Midi Cues  " + outputstringmidi);
                     setTimeout(function () {
                         comlib.write((outputstringmidi) + '\n' + '\r');
                     }, 50); //now send it out delayed a little
@@ -170,7 +191,7 @@ sendOutput = function (dataToSend)
             }
         }
 
-        if((enablemidioutput == "YES") && (dataToSend.indexOf("ZIG1") > -1) && (dataToSend.indexOf(midicueouttype) > -1) && (dataToSend.indexOf(midicueoutshowname) > -1)){ //make sure we only send on zigbee commands and proper midi out type & correct showname
+        if((midicueouttype != "all") && (enablemidioutput == "YES") && (dataToSend.indexOf("ZIG1") > -1) && (dataToSend.indexOf(midicueouttype) > -1) && (dataToSend.indexOf(midicueoutshowname) > -1)){ //make sure we only send on zigbee commands and proper midi out type & correct showname
            // var midicuenum = dataToSend.substring(dataToSend.indexOf(midicueouttype)+ midicueouttype.length, dataToSend.indexOf("."));
             var midicuenum = dataToSend.substring(5,dataToSend.indexOf(".")).replace(/\D/g,''); // this gets rid of everything except the cue number
             var outputstringmidi = midicueoutselect + midicueoutputstringstart + midicueoutid + midicueoutputstringmiddle;
@@ -187,6 +208,81 @@ sendOutput = function (dataToSend)
 //            console.log("Sending Midi Cues  " + outputstringmidi);
             setTimeout(function(){comlib.write((outputstringmidi) + '\n' + '\r');}, 50); //now send it out delayed a little
         }
+
+        //Output for second MIDI  Added 4/9/2019
+       if (midicueouttype1 == "all" && enablemidioutput1 == "YES") { //added 'all' feature 8/25/2017
+           var outputNumber1 = 0;
+           if ((enablemidioutput1 == "YES") && (dataToSend.indexOf("ZIG1") > -1) && (dataToSend.indexOf(midicueoutshowname1) > -1)) { //make sure we only send on zigbee commands and proper midi out type & correct showname
+               // var midicuenum = dataToSend.substring(dataToSend.indexOf(midicueouttype)+ midicueouttype.length, dataToSend.indexOf("."));
+               var midicuenum = dataToSend.substring(5, dataToSend.indexOf(".")).replace(/\D/g, ''); // this gets rid of everything except the cue number
+               var outputstringmidi1 = midicueoutselect1 + midicueoutputstringstart1 + midicueoutid1 + midicueoutputstringmiddle1;
+               for (var i = 0; i < midicuenum.length; i++) {
+                   if (midicuenum[i] == ".") {
+                       outputstringmidi1 += "2E";
+                   }
+                   else {
+                       outputstringmidi1 += (parseInt(midicuenum[i]) + 0X30).toString(16);
+                   }
+               }
+               var outputType = dataToSend.substring(dataToSend.indexOf("GO")+3,dataToSend.indexOf(".")).trim();//just find start of
+               if (outputType.substring(0,1)=="s"){
+                   switch(outputType.substring(5,6)){
+                       case "B":
+                           outputNumber = "05";
+                           break;
+                       default:
+                           outputNumber = "01";
+                           break;
+                   }
+
+               }
+               else if(outputType.substring(0,1) =="a"){
+                   var outputTypeAudio = outputType.substring(3,4);
+                   switch(outputTypeAudio){
+                       case "A":
+                           outputNumber = "02";
+                           break;
+                       case "B":
+                           outputNumber = "03";
+                           break;
+                       case "C":
+                           outputNumber = "04";
+                           break;
+                   }
+               }
+               else if(outputType.substring(0,1) =="v") {
+                   outputNumber = "06";
+               }
+               if(outputNumber !=0) {
+                   // outputstringmidi += "00" + midicueoutputcuelist + "F7";
+                   outputstringmidi1 += "00" + outputNumber + "F7";
+                   console.log("Sending Midi Cues  " + outputstringmidi1);
+                   setTimeout(function () {
+                       comlib.write((outputstringmidi1) + '\n' + '\r');
+                   }, 100); //now send it out delayed a little
+               }
+           }
+       }
+
+       if((midicueouttype1 != "all") && (enablemidioutput1 == "YES") && (dataToSend.indexOf("ZIG1") > -1) && (dataToSend.indexOf(midicueouttype1) > -1) && (dataToSend.indexOf(midicueoutshowname1) > -1)){ //make sure we only send on zigbee commands and proper midi out type & correct showname
+           // var midicuenum = dataToSend.substring(dataToSend.indexOf(midicueouttype)+ midicueouttype.length, dataToSend.indexOf("."));
+           var midicuenum1 = dataToSend.substring(5,dataToSend.indexOf(".")).replace(/\D/g,''); // this gets rid of everything except the cue number
+           var outputstringmidi1 = midicueoutselect + midicueoutputstringstart + midicueoutid + midicueoutputstringmiddle;
+           for(var i = 0; i < midicuenum.length; i++){
+               if(midicuenum[i] == "."){
+                   outputstringmidi +="2E";
+               }
+               else{
+                   outputstringmidi1 += (parseInt(midicuenum[i]) + 0X30).toString(16);
+               }
+           }
+
+           outputstringmidi1 += "00" +  midicueoutputcuelist + "F7";
+//            console.log("Sending Midi Cues  " + outputstringmidi);
+           setTimeout(function(){comlib.write((outputstringmidi1) + '\n' + '\r');}, 50); //now send it out delayed a little
+       }
+       //End of second Midi out
+
         addTime = addTime + "\""+  (timerStartTime).toISOString() +"\", \"Dout\" : \"" + dataToSend + "\"}";
         //Log the data into the collection
         addTime = JSON.parse(addTime);
@@ -248,7 +344,7 @@ exports.setup = function()
 
 
     //MongoClient.connect("mongodb://localhost:27017/WizDb", function(err, db)
-    // MongoClient.connect("mongodb://192.168.2.72:27017/WizDb", function(err, db)
+   // MongoClient.connect("mongodb://192.168.2.63:27017/" + collectionName, function(err, db)
     MongoClient.connect("mongodb://localhost:27017/" + collectionName, function(err, db)
         //  MongoClient.connect("mongodb://" + global.myuri + ":27017/" + collectionName, function(err, db) // changed to above line 08102015
         //MongoClient.connect("mongodb://" + "192.168.2.67" + ":27017/" + collectionName, function(err, db)
@@ -288,7 +384,6 @@ exports.setup = function()
                 // open serial port calls getsettings when done
                 // comlib.openSerialPort('com3', baud, exports.getSettings); //windows
                 comlib.openSerialPort('com3', baud); //windows
-
             }
             else
             {
@@ -350,7 +445,7 @@ exports.websocketDataIn = function(dataSocket, Socket){
     if(dataSocket.Type){
         // Todd - handle the file upload from the settings page
         if (dataSocket.Type == 'fileUpload'){
-            fileUpload(dataSocket)
+            fileUpload(dataSocket);
             return;
         }
 
@@ -412,12 +507,14 @@ exports.websocketDataIn = function(dataSocket, Socket){
             {
                 comlib.websocketsend("* Preparing Data For Display. \n* Please Wait. \n* (may take up to 1 minute) ", Socket) ;
              //   collectionLog.find({},{_id:0}).sort({"Time": -1}).limit(26000).toArray(function(error,logfile){
-                collectionLog.find({},{_id:0}).toArray(function(error,logfile){
+               // collectionLog.find({},{_id:0}).limit(50000).toArray(function(error,logfile){
+                collectionLog.find({}).toArray(function(error,logfile){
+                // collectionLog.find({},{_id:0}).toArray(function(error,logfile){
                     //collectionLog.find({},{_id:0}).sort({ $natural: -1 }).limit(1000).toArray(function(error,logfile){
                     if(error){
                         console.log(error);
                     }
-                    else {
+                    else { console.log("count "+ logfile.length)
                         for (var i = 0; i < logfile.length; i++) {
                             logfileData = JSON.stringify(logfile[i]);
 
@@ -483,7 +580,14 @@ exports.websocketDataIn = function(dataSocket, Socket){
                 }
                 var outputType = dataSocket.Data.substring(dataSocket.Data.indexOf("GO")+3,dataSocket.Data.indexOf(".")).trim();//just find start of
                 if (outputType.substring(0,1)=="s"){
-                    outputNumber = "01";
+                    switch(outputType.substring(5,6)){
+                        case "B":
+                            outputNumber = "05";
+                            break;
+                        default:
+                            outputNumber = "01";
+                            break;
+                    }
                 }
                 else if(outputType.substring(0,1) =="a"){
                     var outputTypeAudio = outputType.substring(3,4);
@@ -499,11 +603,65 @@ exports.websocketDataIn = function(dataSocket, Socket){
                             break;
                     }
                 }
+                else if(outputType.substring(0,1) =="v") {
+                    outputNumber = "06";
+                }
                 outputstringmidi += "00" +  outputNumber + "F7";
                 console.log("Sending Midi Cues");
                 setTimeout(function(){comlib.write((outputstringmidi) + '\n' + '\r');}, 50); //now send it out delayed a little
 
             }
+
+            // Midi 2 output 4/9/2019
+            if((enablemidioutput1 == "YES") && (dataSocket.Data.indexOf("ZIG1") > -1)  && (dataSocket.Data.indexOf(midicueoutshowname1) > -1)) { //make sure we only send on zigbee commands and selected show
+                var outputNumber=0;
+                var midicuenum1 = dataSocket.Data.substring(5,dataSocket.Data.indexOf(".")).replace(/\D/g,''); // this gets rid of everything except the cue number
+
+                // var midicuenum = dataSocket.Data.substring(dataSocket.Data.indexOf(midicueouttype)+ midicueouttype.length, dataSocket.Data.indexOf(".")); //removet this because with new cut types it didn't find cue number
+                var outputstringmidi1 = midicueoutselect1 + midicueoutputstringstart1 + midicueoutid1 + midicueoutputstringmiddle1;
+                for(var i = 0; i < midicuenum1.length; i++){
+                    if(midicuenum1[i] == "."){
+                        outputstringmidi1 +="2E";
+                    }
+                    else{
+                        outputstringmidi1 += (parseInt(midicuenum1[i]) + 0X30).toString(16);
+                    }
+                }
+                var outputType = dataSocket.Data.substring(dataSocket.Data.indexOf("GO")+3,dataSocket.Data.indexOf(".")).trim();//just find start of
+                if (outputType.substring(0,1)=="s"){
+                    switch(outputType.substring(5,6)){
+                        case "B":
+                            outputNumber = "05";
+                            break;
+                        default:
+                            outputNumber = "01";
+                            break;
+                    }
+                }
+                else if(outputType.substring(0,1) =="a"){
+                    var outputTypeAudio = outputType.substring(3,4);
+                    switch(outputTypeAudio){
+                        case "A":
+                            outputNumber = "02";
+                            break;
+                        case "B":
+                            outputNumber = "03";
+                            break;
+                        case "C":
+                            outputNumber = "04";
+                            break;
+                    }
+                }
+                else if(outputType.substring(0,1) =="v") {
+                    outputNumber = "06";
+                }
+                outputstringmidi1 += "00" +  outputNumber + "F7";
+                console.log("Sending Midi 2 Cues");
+                setTimeout(function(){comlib.write((outputstringmidi1) + '\n' + '\r');}, 100); //now send it out delayed a little
+
+            }
+            //end midi 2 out
+
             ledInfoOn(27); // light to output light
             setTimeout(function(){ledInfoOff(27);}, 100); // turn it off
             setTimeout(function(){timedOut = true;}, timedOutInterval);
@@ -666,7 +824,7 @@ exports.websocketDataIn = function(dataSocket, Socket){
             cueserialsettings = cs4Settings.cueserialselect + cs4Settings.cuebaudselect + cs4Settings.cueparityselect + ' A ' ;     // a is for ascii sending  Added 07 19 2016
             enableserialoutput = cs4Settings.enableserialoutput;
 
-            midicueoutselect = cs4Settings.midicueoutselect;
+                       midicueoutselect = cs4Settings.midicueoutselect;
             midicueoutshowname = cs4Settings.midicueoutshowname;
             midicueoutid = cs4Settings.midicueoutid;
             enablemidioutput = cs4Settings.enablemidioutput;
@@ -687,6 +845,28 @@ exports.websocketDataIn = function(dataSocket, Socket){
                 midicueoutputcuelist = "05";
             }
 
+            midicueoutselect1 = cs4Settings.midicueoutselect1;
+            midicueoutshowname1 = cs4Settings.midicueoutshowname1;
+            midicueoutid1 = cs4Settings.midicueoutid1;
+            enablemidioutput1 = cs4Settings.enablemidioutput1;
+            midicueouttype1 = cs4Settings.midicueouttype1;
+            if(midicueouttype1 == "slide"){
+                midicueoutputcuelist1 = "01";
+            }
+            else if(midicueouttype1 == "audA"){
+                midicueoutputcuelist1 = "02";
+            }
+            else if(midicueouttype1 == "audB"){
+                midicueoutputcuelist1 = "03";
+            }
+            else if(midicueouttype1 == "audC"){
+                midicueoutputcuelist1 = "04";
+            }
+            else if(midicueouttype1 == "all"){
+                midicueoutputcuelist1 = "05";
+            }
+
+
 
         }
 
@@ -694,8 +874,80 @@ exports.websocketDataIn = function(dataSocket, Socket){
             startSystemTest();
         }
 
+        else if(dataSocket.Type == "RESTORE") {
+            if(dataSocket.Value == "log"){
+                copyToInternal(0,function() {
+                    console.log("Data Backed UP!");
+                    collectionLog.drop( function (err, numberLogRemoved) {
+                        console.log("inside remove log" + numberLogRemoved);
+                    });
+                });
+            }
+            else if(dataSocket.Value == "all") {
+                copyToInternal(0,function() {
+                    console.log("Data Backed UP!");
+                    collectionCue.drop( function (err, numberCueRemoved) {
+                        console.log("inside remove cue" + numberCueRemoved);
 
+                        collectionLog.drop( function (err, numberLogRemoved) {
+                            console.log("inside remove log" + numberLogRemoved);
+
+                            collectionStartup.drop( function (err, numberStartupRemoved) {
+                                console.log("inside remove Startup" + numberStartupRemoved);
+                            });
+
+                        });
+
+                    });
+                });
+            }
+        }
     }
+//     else //This is the real live system timing data
+//     {
+//         serialDataSocket = JSON.parse(dataSocket.Data);
+//         //now we know something is attached to the incoming cue so put it in Cue collection
+//         // incoming cue = lastCueReceived
+//         //lastCueReceived is a json parsed object from my io board
+//         // serialDataSocket is the array data from the websocket
+//
+//         //
+//         //update to keep editing data in proper order
+//         if (serialDataSocket.OutData) {
+//             serialDataSocket.OutData.InCue = lastCueReceived;
+//         }
+//
+//
+//
+//         collectionCue.update({'InData':lastCueReceived.InData}, {$set: lastCueReceived},{upsert:true, w:1},function(err,res){
+//
+//             console.log('InData to collection Cue'+res);
+//         });
+//
+//         collectionCue.update({'InData': lastCueReceived.InData}, {$push:serialDataSocket},function(err,res){
+//
+//             console.log('added Dout to collection Cue'+res);
+//         });
+//
+//         //send the data out to the CS4 I/O
+//         var dir = serialDataSocket.OutData.Dir;    // ****** needs to ba added to R4-4 Receiver Parsing ****** //
+//         // var dir = "";
+//         var port = serialDataSocket.OutData.Port;
+//         var showname = serialDataSocket.OutData.Showname;
+//         var dataToSend = serialDataSocket.OutData.Dout;
+//         if(dir =="")
+//         {
+//             var  outstring = port + " " + showname + " " + dataToSend;
+//         }
+//         else
+//         {
+//             var outstring = port + " " + showname + " " + dir + " " + dataToSend;
+//         }
+//
+//         sendOutput(outstring);
+//     }
+// };
+
     else //This is the real live system timing data
     {
         serialDataSocket = JSON.parse(dataSocket.Data);
@@ -711,36 +963,76 @@ exports.websocketDataIn = function(dataSocket, Socket){
         }
 
 
+        collectionCue.update({'InData': lastCueReceived.InData}, {$set: lastCueReceived}, {
+            upsert: true,
+            w: 1
+        }, function (err, res) {
 
-        collectionCue.update({'InData':lastCueReceived.InData}, {$set: lastCueReceived},{upsert:true, w:1},function(err,res){
+            if(err){
+                collectionLog.insert(err, {w: 1}, function (err, result) {
+                    // console.log(result);
+                });
+            }
 
-            console.log('InData to collection Cue'+res);
+            console.log('InData to collection Cue' + res);
+            collectionCue.update({'InData': lastCueReceived.InData}, {$push: serialDataSocket}, function (err, res) {
+
+                if(err){
+                    collectionLog.insert(err, {w: 1}, function (err, result) {
+                        // console.log(result);
+                    });
+                }
+
+                console.log('added Dout to collection Cue' + res);
+                //send the data out to the CS4 I/O
+                var dir = serialDataSocket.OutData.Dir;    // ****** needs to ba added to R4-4 Receiver Parsing ****** //
+                // var dir = "";
+                var port = serialDataSocket.OutData.Port;
+                var showname = serialDataSocket.OutData.Showname;
+                var dataToSend = serialDataSocket.OutData.Dout;
+                if(dir =="")
+                {
+                    var  outstring = port + " " + showname + " " + dataToSend;
+                }
+                else
+                {
+                    var outstring = port + " " + showname + " " + dir + " " + dataToSend;
+                }
+
+                sendOutput(outstring);
+
+            });
+
         });
 
-        collectionCue.update({'InData': lastCueReceived.InData}, {$push:serialDataSocket},function(err,res){
 
-            console.log('added Dout to collection Cue'+res);
-        });
-
-        //send the data out to the CS4 I/O
-        var dir = serialDataSocket.OutData.Dir;    // ****** needs to ba added to R4-4 Receiver Parsing ****** //
-        // var dir = "";
-        var port = serialDataSocket.OutData.Port;
-        var showname = serialDataSocket.OutData.Showname;
-        var dataToSend = serialDataSocket.OutData.Dout;
-        if(dir =="")
-        {
-            var  outstring = port + " " + showname + " " + dataToSend;
-        }
-        else
-        {
-            var outstring = port + " " + showname + " " + dir + " " + dataToSend;
-        }
-
-        sendOutput(outstring);
     }
-};
 
+
+
+    //     collectionCue.update({'InData': lastCueReceived.InData}, {$push:serialDataSocket},function(err,res){
+    //
+    //         console.log('added Dout to collection Cue'+res);
+    //     });
+    //
+    //     //send the data out to the CS4 I/O
+    //     var dir = serialDataSocket.OutData.Dir;    // ****** needs to ba added to R4-4 Receiver Parsing ****** //
+    //     // var dir = "";
+    //     var port = serialDataSocket.OutData.Port;
+    //     var showname = serialDataSocket.OutData.Showname;
+    //     var dataToSend = serialDataSocket.OutData.Dout;
+    //     if(dir =="")
+    //     {
+    //         var  outstring = port + " " + showname + " " + dataToSend;
+    //     }
+    //     else
+    //     {
+    //         var outstring = port + " " + showname + " " + dir + " " + dataToSend;
+    //     }
+    //
+    //     sendOutput(outstring);
+    // }
+    };
 // This routine receives serial cue data,
 // parses it and sends it out the web socket
 // puts it in Log collection.
@@ -1241,7 +1533,7 @@ function copyToUSB()
                 console.log('stderr mounted: ' + stderr);
                 // Full path of that file
                 var path = usbstickPath; //go to subdirectory which is usb stick
-                console.log("path: " + path)
+                console.log("path: " + path);
                 spawn(mongoDirectory + 'mongodump', ['-o', destinationPath]).on('exit', function (code) {
                     console.log('finished ' + code);
                     comlib.websocketsend("Please Wait ... Preparing Data .......");
@@ -1337,7 +1629,7 @@ function copyFromUSB()
             if (!error) {
                 console.log('exec error: ' + error);
                 var path = usbstickPath ; //go to subdirectory which is usb stick
-                console.log("path: " + path)
+                console.log("path: " + path);
 
                 fse.rmrf(destinationPath, function (err) {
                     if (err) {
@@ -1390,7 +1682,7 @@ function unmount(){
     });
 }
 
-function copyToInternal(location)
+function copyToInternal(location,cb)
 {
     console.log ("Running on ....  " + os.platform());
     console.log ("Operating system ..  " + os.type());
@@ -1416,6 +1708,9 @@ function copyToInternal(location)
         // spawn('d:/mongo/bin/mongodump', ['-o', destinationPath]).on('exit',function(code){
         comlib.websocketsend("Successfully copied all data to internal storage location " + location);
         console.log("Successfully copied all data to internal storage: "+ destinationPath + " " + code);
+        if(cb){
+            return cb();
+        }
         return(1);
     });
 }
@@ -1503,34 +1798,34 @@ exports.getSettings = function(){
             cs4Settings.midisex1 = 0;
             cs4Settings.sysexcuelist1 = 0;
             cs4Settings.cuelistnumber1a = 0;
-            cs4Settings.cuelistnumber1b = 0
-            cs4Settings.cuelistnumber1c = 0
+            cs4Settings.cuelistnumber1b = 0;
+            cs4Settings.cuelistnumber1c = 0;
 
             cs4Settings.nonsysex1 = 0;
             cs4Settings.midisex2 = 0;
             cs4Settings.sysexcuelist1 = 0;
             cs4Settings.cuelistnumber2a = 0;
-            cs4Settings.cuelistnumber2b = 0
-            cs4Settings.cuelistnumber2c = 0
+            cs4Settings.cuelistnumber2b = 0;
+            cs4Settings.cuelistnumber2c = 0;
             cs4Settings.nonsysex2 = 0;
             cs4Settings.midisex3 = 0;
             cs4Settings.sysexcuelist3 = 0;
             cs4Settings.cuelistnumber3a = 0;
-            cs4Settings.cuelistnumber3b = 0
-            cs4Settings.cuelistnumber3c = 0
+            cs4Settings.cuelistnumber3b = 0;
+            cs4Settings.cuelistnumber3c = 0;
             cs4Settings.nonsysex3 = 0;
             cs4Settings.midisex4 = 0;
             cs4Settings.sysexcuelist4 = 0;
             cs4Settings.cuelistnumber4a = 0;
-            cs4Settings.cuelistnumber4b = 0
-            cs4Settings.cuelistnumber4c = 0
+            cs4Settings.cuelistnumber4b = 0;
+            cs4Settings.cuelistnumber4c = 0;
             cs4Settings.nonsysex4 = 0;
             collectionSettings.insert(cs4Settings, {w: 1}, function (err, result) {
                 console.log(result);
             })
         }
         //  setTimeout(function(){sendOutput('GETTIME');}, 7000);
-        var a, b, c, d, e, f
+        var a, b, c, d, e, f;
         a = setTimeout(function(){sendOutput('          SLAVE DMX_CH ' + cs4Settings.dmx1 +  " " + cs4Settings.dmx2 + " " + cs4Settings.dmx3 + '');}, 500);
         b = setTimeout(function(){sendOutput('          SLAVE ZIGEN ' + cs4Settings.enableZigbee2);}, 1000);
         c = setTimeout(function(){sendOutput('          MIDIFIL1 ' + cs4Settings.midisex1 + " " + cs4Settings.nonsysex1 + " "+ (parseInt(+cs4Settings.deviceIDLow1)*1 + parseInt(+cs4Settings.deviceIDHigh1)*16).toString() + " " + cs4Settings.type1 + " " + cs4Settings.commandformat1 + " " +   cs4Settings.command1 + " " + cs4Settings.nonsysextype1 + " " + cs4Settings.nonsysexchannel1 + " ");}, 2000);
@@ -1568,6 +1863,28 @@ exports.getSettings = function(){
             midicueoutputcuelist = "05";
         }
 
+        midicueoutselect1 = cs4Settings.midicueoutselect1;
+        midicueoutshowname1 = cs4Settings.midicueoutshowname1;
+        midicueoutid1 = cs4Settings.midicueoutid1;
+        enablemidioutput1 = cs4Settings.enablemidioutput1;
+        midicueouttype1 = cs4Settings.midicueouttype1;
+        if(midicueouttype1 == "slide"){
+            midicueoutputcuelist1 = "01";
+        }
+        else if(midicueouttype1 == "audA"){
+            midicueoutputcuelist1 = "02";
+        }
+        else if(midicueouttype1 == "audB"){
+            midicueoutputcuelist1 = "03";
+        }
+        else if(midicueouttype1 == "audC"){
+            midicueoutputcuelist1 = "04";
+        }
+        else if(midicueouttype1 == "all"){
+            midicueoutputcuelist1 = "05";
+        }
+
+
         console.log("before stmp transport in settings");
         //set up initial mail parameters here
         smtpTransport = nodemailer.createTransport("SMTP",{
@@ -1589,7 +1906,7 @@ exports.getSettings = function(){
 };
 
 function sendCS4Parameters() {
-    var a, b, c, d, e, f
+    var a, b, c, d, e, f;
     a = setTimeout(function(){sendOutput('          SLAVE DMX_CH ' + cs4Settings.dmx1 +  " " + cs4Settings.dmx2 + " " + cs4Settings.dmx3 + '');}, 500);
     b = setTimeout(function(){sendOutput('          SLAVE ZIGEN ' + cs4Settings.enableZigbee2);}, 1000);
     c = setTimeout(function(){sendOutput('          MIDIFIL1 ' + cs4Settings.midisex1 + " " + cs4Settings.nonsysex1 + " "+ (parseInt(+cs4Settings.deviceIDLow1)*1 + parseInt(+cs4Settings.deviceIDHigh1)*16).toString() + " " + cs4Settings.type1 + " " + cs4Settings.commandformat1 + " " +   cs4Settings.command1 + " " + cs4Settings.nonsysextype1 + " " + cs4Settings.nonsysexchannel1 + " ");}, 2000);
@@ -1634,10 +1951,18 @@ exports.ledOn = function(){
 
         clearInterval(blink);
     }
+ // Added 4/11/2018 PMP failure with Asus router
+    timeoutPmpFailure = setTimeout(function(){
+        pmpRecovery();
+    },12000);
+
+    global.version = pjson.version; // added to get version info to system
 
     pmp.findGateway("",function(err,gateway){
         var error = 0;
         var erroratpmp = 0;
+
+        console.log("HERE 0");
         ///console.log(err,gateway.ip);
         if(err){
             console.log('Gateway not found',err);
@@ -1647,7 +1972,7 @@ exports.ledOn = function(){
             global.externalIP = gateway.externalIP;
             console.log('gateway found: '+ gateway.ip + ", External IP: "+ gateway.externalIP);
 
-
+            console.log("HERE");
 
 
             pmp.portMap(gateway,3000,3000,0,'CS4 Main',function(err,rslt){
@@ -1676,7 +2001,7 @@ exports.ledOn = function(){
                             console.log(err,rslt);
                         }
 
-
+                        clearTimeout(timeoutPmpFailure); // Added 4/11/2018 PMP failure with Asus router
                         /////////////
                         console.log('Ready to send START UP email message');
                         var mailOptions = {
@@ -1705,6 +2030,7 @@ exports.ledOn = function(){
 
         }
         if(erroratpmp) {
+            clearTimeout(timeoutPmpFailure);// Added 4/11/2018 PMP failure with Asus router
             /////////////
             console.log('Ready to send START UP email message');
             var mailOptions = {
@@ -1728,6 +2054,27 @@ exports.ledOn = function(){
         }
 
     });
+};
+
+function  pmpRecovery(){// Added 4/11/2018 PMP failure with Asus  router
+    console.log('PMP Router Failure Routine');
+    console.log('Ready to send START UP email message');
+    var mailOptions = {
+        from: "CS4 @ " + myuri + "✔ " + cs4Settings.emailAccount,
+        //  from: "CS4 192.168.2.10 ✔ <stevewitz@gmail.com>", // sender address
+        to: cs4Settings.emailAddress,
+        // to: "steve@wizcomputing.com      ", // comma seperated list of receivers
+        subject: "Start Up Message from CS4 ✔: " + cs4Settings.systemName, // Subject line
+        text: cs4Settings.systemName + " CS4 has just started.\n  External IP address:  http://" + global.externalIP + ":3000" + " - and internal IP address: " + global.myuri + ":3000", // plaintext body
+        html: cs4Settings.systemName + " CS4 has just started.\n  External IP address:  http://" + global.externalIP + ":3000" + " - and internal IP address: " + global.myuri + ":3000"// html body
+    };
+
+    // send mail with defined transport object
+    sendMail(mailOptions);
+    console.log("READY to start system test in 10 seconds");
+    setTimeout(function () {
+        startSystemTest();
+    }, 10000); // check for results after delay
 };
 
 exports.ledOff = function(){
@@ -1959,8 +2306,8 @@ function stopIO(state){
 
 // Todd - added to proecess the files received from the file upload webpage
 function fileUpload(d){
-    console.log('file upload ********************************')
-    console.log('fileName:'+d.fileName)
+    console.log('file upload ********************************');
+    console.log('fileName:'+d.fileName);
     var path;
     if(os.type() != 'Windows_NT') {
         path = '/home/pi/mongoBackup/'

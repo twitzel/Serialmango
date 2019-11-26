@@ -16,7 +16,8 @@ function init(){
         systemStatus.style.fontSize = "1.1em";
         systemStatus.style.color = "#5c5c5c";
         systemStatus.innerHTML = "&nbsp&nbsp&nbsp&nbspExternal IP address:&nbsp&nbsp".bold() + externalIP.bold();
-        systemStatus.innerHTML = systemStatus.innerHTML + "<BR>"+ "&nbsp&nbsp&nbsp&nbspInternal IP address:&nbsp&nbsp".bold() + internalIP.bold();
+        systemStatus.innerHTML = systemStatus.innerHTML + "<BR>"+ "&nbsp&nbsp&nbsp&nbspInternal IP address:&nbsp&nbsp&nbsp".bold() + internalIP.bold();
+        systemStatus.innerHTML = systemStatus.innerHTML + "<BR>"+ "&nbsp&nbsp&nbsp&nbspFirmware Version:&nbsp&nbsp&nbsp&nbsp&nbsp".bold() + version.bold();
     }
     else{
         document.getElementById('test').style.display = "none";
