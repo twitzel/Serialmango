@@ -268,12 +268,12 @@ sendOutput = function (dataToSend)
            // var midicuenum = dataToSend.substring(dataToSend.indexOf(midicueouttype)+ midicueouttype.length, dataToSend.indexOf("."));
            var midicuenum1 = dataToSend.substring(5,dataToSend.indexOf(".")).replace(/\D/g,''); // this gets rid of everything except the cue number
            var outputstringmidi1 = midicueoutselect + midicueoutputstringstart + midicueoutid + midicueoutputstringmiddle;
-           for(var i = 0; i < midicuenum.length; i++){
-               if(midicuenum[i] == "."){
+           for(var i = 0; i < midicuenum1.length; i++){
+               if(midicuenum1[i] == "."){
                    outputstringmidi +="2E";
                }
                else{
-                   outputstringmidi1 += (parseInt(midicuenum[i]) + 0X30).toString(16);
+                   outputstringmidi1 += (parseInt(midicuenum1[i]) + 0X30).toString(16);
                }
            }
 
